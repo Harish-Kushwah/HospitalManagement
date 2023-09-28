@@ -7,7 +7,7 @@ import myutil.PatientDetails;
 
 public class Database {
     
-    private final String url = "jdbc:mysql://localhost/guru1";
+    private final String url = "jdbc:mysql://localhost/guru";
     private final String user = "root";
     private final String password = " ";
    

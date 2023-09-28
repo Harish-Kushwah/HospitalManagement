@@ -505,9 +505,13 @@
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jSeparator2" max="32767" attributes="0"/>
+                                  </Group>
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
                                               <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
@@ -516,6 +520,8 @@
                                                       <Component id="prescription_save_btn" min="-2" pref="80" max="-2" attributes="0"/>
                                                       <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                                                       <Component id="next_btn1" min="-2" pref="90" max="-2" attributes="0"/>
+                                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                      <Component id="prescription_delete_btn" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -523,22 +529,18 @@
                                               <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                                               <Component id="name_label16" min="-2" pref="75" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="name_input1" min="-2" pref="212" max="-2" attributes="0"/>
+                                              <Component id="prescription_name_input" min="-2" pref="212" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                                               <Component id="name_label17" min="-2" pref="88" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                              <Component id="mobile_number_input1" min="-2" pref="132" max="-2" attributes="0"/>
+                                              <Component id="prescription_mobile_number_input" min="-2" pref="132" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                                               <Component id="name_label23" min="-2" pref="68" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="date_input1" min="-2" pref="104" max="-2" attributes="0"/>
+                                              <Component id="prescription_date_input" min="-2" pref="104" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jSeparator2" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -550,12 +552,12 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="date_input1" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="prescription_date_input" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="name_label23" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                                      <Component id="mobile_number_input1" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                                      <Component id="prescription_mobile_number_input" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="name_label17" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                                      <Component id="name_input1" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                                      <Component id="prescription_name_input" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="name_label16" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -588,6 +590,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="prescription_save_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                                   <Component id="next_btn1" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                                  <Component id="prescription_delete_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                           </Group>
@@ -595,8 +598,11 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JTextField" name="mobile_number_input1">
+                    <Component class="javax.swing.JTextField" name="prescription_mobile_number_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="12" style="1"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -606,9 +612,9 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="mobile_number_input1MouseEntered"/>
-                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="mobile_number_input1MouseExited"/>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mobile_number_input1ActionPerformed"/>
+                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_mobile_number_inputMouseEntered"/>
+                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_mobile_number_inputMouseExited"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prescription_mobile_number_inputActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="name_label16">
@@ -619,8 +625,11 @@
                         <Property name="text" type="java.lang.String" value="Name :-"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="name_input1">
+                    <Component class="javax.swing.JTextField" name="prescription_name_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="12" style="1"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -630,9 +639,9 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="name_input1MouseEntered"/>
-                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="name_input1MouseExited"/>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="name_input1ActionPerformed"/>
+                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_name_inputMouseEntered"/>
+                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_name_inputMouseExited"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prescription_name_inputActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="name_label17">
@@ -707,7 +716,7 @@
                         </Property>
                       </Properties>
                     </Component>
-                    <Component class="com.toedter.calendar.JDateChooser" name="date_input1">
+                    <Component class="com.toedter.calendar.JDateChooser" name="prescription_date_input">
                       <Properties>
                         <Property name="dateFormatString" type="java.lang.String" value="dd-MM-yyyy"/>
                       </Properties>
@@ -729,6 +738,8 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="medicine_input">
                       <Events>
+                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="medicine_inputMouseEntered"/>
+                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="medicine_inputMouseExited"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="medicine_inputActionPerformed"/>
                       </Events>
                     </Component>
@@ -752,6 +763,9 @@
                               <Color PropertyName="color" blue="ff" green="ff" red="ff" type="rgb"/>
                             </LineBorder>
                           </Border>
+                        </Property>
+                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                          <Color id="Hand Cursor"/>
                         </Property>
                         <Property name="focusPainted" type="boolean" value="false"/>
                       </Properties>
@@ -778,6 +792,14 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
                     </Container>
+                    <Component class="javax.swing.JButton" name="prescription_delete_btn">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Delete"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prescription_delete_btnActionPerformed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
               </SubComponents>

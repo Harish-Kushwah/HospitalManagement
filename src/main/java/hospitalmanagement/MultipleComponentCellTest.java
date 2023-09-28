@@ -11,6 +11,7 @@ package hospitalmanagement;
 import myutil.GradientPanel;
 
 import java.awt.*;
+import static java.awt.Cursor.HAND_CURSOR;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -50,6 +51,7 @@ public class MultipleComponentCellTest {
     table.getTableHeader().setBackground(TABLE_HEADER_BACKGROUND_COLOR);
     table.getTableHeader().setForeground(TABLE_HEADER_FORGROUND_COLOR);
     table.getTableHeader().setBorder(new LineBorder(Color.black,1,false));
+    
       // ((TreeCellEditor)table.getDefaultEditor(Object.class)).setClickCountToStart(1);
 
 //   table.addPropertyChangeListener("tableCellEditor", new PropertyChangeListener(){
@@ -211,67 +213,7 @@ class BandTypePanel extends JPanel {
     before.setBackground(new Color(0xE7EAF3));
     after.setBackground(new Color(0xE7EAF3));
     comboBox.setBackground(new Color(0xE7EAF3));
-    before.addMouseListener(new MouseListener(){
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-             if(before.isSelected()){
-               System.out.println("before Selected");
-              before.setSelected(true);
-           }
-           else{
-                  before.setSelected(false);
-               System.out.println("before Not Slected");
-           }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
-    
-    });
-    after.addMouseListener(new MouseListener(){
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-             if(after.isSelected()){
-               System.out.println("after Selected");
-              after.setSelected(true);
-           }
-           else{
-                  after.setSelected(false);
-               System.out.println("before Not Slected");
-           }
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
-    
-    });
-
+   
     name.add(medicine_name);
     p.add(morning_chk);
     p.add(afternoon_chk);
@@ -346,6 +288,7 @@ class BandTypeEditor extends BandTypePanel implements TableCellEditor {
   public BandTypeEditor()
   {
       System.out.println("call");
+      this.setCursor(new Cursor(HAND_CURSOR));
       
   }
   @Override public Component getTableCellEditorComponent(
