@@ -7,7 +7,7 @@ import myutil.PatientDetails;
 
 public class Database {
     
-    private final String url = "jdbc:mysql://localhost/guru1";
+    private final String url = "jdbc:mysql://localhost/guru";
     private final String user = "root";
     private final String password = "";
    
@@ -20,10 +20,10 @@ public class Database {
     private static final String GET_TOTAL_TODAY_PATIENT="SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
 //    private static final String GET_TOTAL_TODAY_PATIENT="select * from pdetail where DAY(date) = DAY(now()) MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now()); ";
     Connection connection = null;
-     private static final String GET_MAX_INDEX="SELECT MAX(pno) FROM pdetail";
+     private static final String GET_MAX_INDEX="SELECT MAX(pno) FROM pdetail;";
    static Database singletone_database = null;
    
-   private static final String INSERT_MEDECINE_INFO ="INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES ('', '', '', '', '', '', '')";
+   private static final String INSERT_MEDECINE_INFO ="INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
 
 
    
@@ -284,11 +284,12 @@ public class Database {
          Connection conn = connect();
          PreparedStatement preparedStatement = conn.prepareStatement(GET_MAX_INDEX);
           ResultSet rs = preparedStatement.executeQuery();
-          //while(rs.next()){
+//          while(rs.next()){
              rs.next();
             int i = rs.getInt(1);
             return i;
-          //}
+//            System.out.println(rs.getInt(1));
+//          }
           
         }
         catch(SQLException e)
@@ -297,16 +298,14 @@ public class Database {
         }
         return -1;
     }
-    public void insertRecord(PatientDetails patientdetails)
+    public int insertRecord(PatientDetails patientdetails)
     {
+        int id=-1;
         try{
             Connection conn = connect();
-            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDECINE_INFO);
-
-//            `date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `sugar`, `pdis`
-
-            
-            preparedStatement.setInt(1,getMaxIndex()+1);
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_RECORD_SQL);
+             id = getMaxIndex() + 1;
+            preparedStatement.setInt(1,id);
            
             preparedStatement.setDate(2, new Date(patientdetails.getDate().getTime()));
             preparedStatement.setString(3,patientdetails.getName());
@@ -326,28 +325,25 @@ public class Database {
         {
             System.out.println(e);
         }
+        return id;
     }
-    public void insertRecordInMedicine(PatientDetails patientdetails)
+    public void insertRecordInMedicine(MedicineDetails medicineDetails)
     {
         try{
             Connection conn = connect();
-            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_RECORD_SQL);
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDECINE_INFO);
 
-//            `date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `sugar`, `pdis`
+//`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`
 
-            
-            preparedStatement.setInt(1,getMaxIndex()+1);
+            PatientDetails patientDetails = medicineDetails.getPatientDetails();
+            preparedStatement.setInt(1,patientDetails.getPid());
            
-            preparedStatement.setDate(2, new Date(patientdetails.getDate().getTime()));
-            preparedStatement.setString(3,patientdetails.getName());
-            preparedStatement.setString(4, patientdetails.getMobileNo());
-            preparedStatement.setString(5, patientdetails.getGender());
-            preparedStatement.setInt(6, patientdetails.getAge());
-            preparedStatement.setInt(7, patientdetails.getWeight());
-            preparedStatement.setString(8, patientdetails.getBloodPressure());
-            preparedStatement.setString(9,patientdetails.getPulse() );
-//            preparedStatement.setString(9, patientdetails.getSugar());
-            preparedStatement.setString(10, patientdetails.getSymptoms());
+            preparedStatement.setString(2,patientDetails.getName() );
+            preparedStatement.setString(3,medicineDetails.getMedicineName());
+            preparedStatement.setString(4, medicineDetails.getMedicineQuantity());
+            preparedStatement.setString(5, medicineDetails.getMedicineTime());
+            preparedStatement.setString(6, medicineDetails.getMedicineMealTime());
+            preparedStatement.setString(7, medicineDetails.getTotalQuantity());
             
             preparedStatement.executeUpdate();
             conn.commit();

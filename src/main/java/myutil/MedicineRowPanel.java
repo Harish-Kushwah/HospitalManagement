@@ -134,7 +134,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
                 evening_chk.isSelected(),
                 before.isSelected(),
                 after.isSelected(),
-                Integer.parseInt(total_tablet.getText()),
+               total_tablet.getText(),
                 (String) comboBox.getSelectedItem(), delete_chk.isSelected());
     }
 

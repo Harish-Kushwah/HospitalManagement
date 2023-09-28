@@ -279,7 +279,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
     {
 
 
-        
+        System.out.println("Max patient is :" + database.getMaxIndex());
         ArrayList<PatientDetails> patientDetailsArrayList = database.getTodayPatient();
         int row = patientDetailsArrayList.size();
 
