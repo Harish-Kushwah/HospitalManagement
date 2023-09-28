@@ -279,7 +279,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
     {
 
 
-
+        
         ArrayList<PatientDetails> patientDetailsArrayList = database.getTodayPatient();
         int row = patientDetailsArrayList.size();
 

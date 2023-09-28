@@ -20,7 +20,11 @@ public class Database {
     private static final String GET_TOTAL_TODAY_PATIENT="SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
 //    private static final String GET_TOTAL_TODAY_PATIENT="select * from pdetail where DAY(date) = DAY(now()) MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now()); ";
     Connection connection = null;
+     private static final String GET_MAX_INDEX="SELECT MAX(pno) FROM pdetail";
    static Database singletone_database = null;
+   
+   private static final String INSERT_MEDECINE_INFO ="INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES ('', '', '', '', '', '', '')";
+
 
    
     public Connection connect(){ 
@@ -47,6 +51,7 @@ public class Database {
         }
         return singletone_database;         
     }
+    
     public  String getTotalNumberOfUser()
     {
         try
@@ -273,14 +278,65 @@ public class Database {
         return  null;
     }
 
+    public int getMaxIndex()
+    {
+        try{
+         Connection conn = connect();
+         PreparedStatement preparedStatement = conn.prepareStatement(GET_MAX_INDEX);
+          ResultSet rs = preparedStatement.executeQuery();
+          //while(rs.next()){
+             rs.next();
+            int i = rs.getInt(1);
+            return i;
+          //}
+          
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e);
+        }
+        return -1;
+    }
     public void insertRecord(PatientDetails patientdetails)
+    {
+        try{
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDECINE_INFO);
+
+//            `date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `sugar`, `pdis`
+
+            
+            preparedStatement.setInt(1,getMaxIndex()+1);
+           
+            preparedStatement.setDate(2, new Date(patientdetails.getDate().getTime()));
+            preparedStatement.setString(3,patientdetails.getName());
+            preparedStatement.setString(4, patientdetails.getMobileNo());
+            preparedStatement.setString(5, patientdetails.getGender());
+            preparedStatement.setInt(6, patientdetails.getAge());
+            preparedStatement.setInt(7, patientdetails.getWeight());
+            preparedStatement.setString(8, patientdetails.getBloodPressure());
+            preparedStatement.setString(9,patientdetails.getPulse() );
+//            preparedStatement.setString(9, patientdetails.getSugar());
+            preparedStatement.setString(10, patientdetails.getSymptoms());
+            
+            preparedStatement.executeUpdate();
+            conn.commit();
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e);
+        }
+    }
+    public void insertRecordInMedicine(PatientDetails patientdetails)
     {
         try{
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_RECORD_SQL);
 
 //            `date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `sugar`, `pdis`
-            preparedStatement.setInt(1,5558);
+
+            
+            preparedStatement.setInt(1,getMaxIndex()+1);
            
             preparedStatement.setDate(2, new Date(patientdetails.getDate().getTime()));
             preparedStatement.setString(3,patientdetails.getName());
@@ -309,9 +365,8 @@ public class Database {
         try {
             Connection conn =connect();
                 StringBuffer GET_LIKE_MEDICINE= new StringBuffer("SELECT * FROM `medilist` WHERE medicine LIKE ");
-
                  GET_LIKE_MEDICINE.append("\'");
-                 GET_LIKE_MEDICINE.append("TAB ");
+                 GET_LIKE_MEDICINE.append("%");
                 GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
                  GET_LIKE_MEDICINE.append("%';");
 
