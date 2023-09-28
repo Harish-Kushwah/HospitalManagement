@@ -552,7 +552,7 @@ public class Home extends javax.swing.JFrame {
         selected_medicine_panel.setBackground(new java.awt.Color(255, 255, 255));
         selected_medicine_panel.setLayout(new java.awt.BorderLayout());
 
-        prescription_delete_btn.setBackground(new java.awt.Color(153, 153, 255));
+        prescription_delete_btn.setBackground(new java.awt.Color(255, 51, 51));
         prescription_delete_btn.setForeground(new java.awt.Color(255, 255, 255));
         prescription_delete_btn.setText("Delete");
         prescription_delete_btn.setFocusPainted(false);
