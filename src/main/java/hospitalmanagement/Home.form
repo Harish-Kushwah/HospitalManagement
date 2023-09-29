@@ -505,36 +505,43 @@
                                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <Component id="medicine_input" min="-2" pref="167" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="add_medicine_btn" min="-2" pref="65" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Component id="medicine_list_panel" min="-2" pref="268" max="-2" attributes="0"/>
                                                   <Component id="jLabel10" alignment="1" min="-2" pref="219" max="-2" attributes="0"/>
-                                                  <Component id="prescription_status_label" alignment="0" min="-2" pref="238" max="-2" attributes="0"/>
+                                                  <Group type="102" attributes="0">
+                                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                          <Group type="102" attributes="0">
+                                                              <Component id="medicine_input" min="-2" pref="167" max="-2" attributes="0"/>
+                                                              <EmptySpace max="-2" attributes="0"/>
+                                                              <Component id="add_medicine_btn" min="-2" pref="65" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <Component id="prescription_status_label" alignment="0" max="32767" attributes="0"/>
+                                                          <Component id="medicine_list_panel" alignment="0" max="32767" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                                                  </Group>
                                               </Group>
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Group type="102" attributes="0">
-                                                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
-                                                      <Component id="jLabel6" min="-2" pref="78" max="-2" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                                                      <Component id="jLabel7" min="-2" pref="51" max="-2" attributes="0"/>
-                                                  </Group>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                                                       <Component id="prescription_save_btn" min="-2" pref="80" max="-2" attributes="0"/>
                                                       <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                                                       <Component id="prescription_next_btn" min="-2" pref="90" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
+                                                  <Group type="102" attributes="0">
                                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Component id="selected_medicine_panel" min="-2" pref="602" max="-2" attributes="0"/>
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="selected_medicine_panel" min="-2" pref="616" max="-2" attributes="0"/>
+                                                          <Group type="102" alignment="0" attributes="0">
+                                                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                                                              <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
+                                                              <Component id="jLabel6" min="-2" pref="78" max="-2" attributes="0"/>
+                                                              <EmptySpace max="32767" attributes="0"/>
+                                                              <Component id="jLabel7" min="-2" pref="51" max="-2" attributes="0"/>
+                                                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                                          </Group>
+                                                      </Group>
                                                   </Group>
                                                   <Group type="102" alignment="1" attributes="0">
-                                                      <EmptySpace max="32767" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="prescription_delete_btn" min="-2" pref="62" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -855,6 +862,9 @@
                               <Color id="Hand Cursor"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="medicine_listMouseClicked"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
@@ -1260,7 +1270,7 @@
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jScrollPane2" min="-2" pref="100" max="-2" attributes="0"/>
-                                      <EmptySpace pref="31" max="32767" attributes="0"/>
+                                      <EmptySpace pref="29" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="next_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                                           <Component id="save_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
@@ -1275,6 +1285,9 @@
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="mobile_number_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -1299,6 +1312,9 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="age_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -1315,6 +1331,9 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="blood_pressure_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -1331,6 +1350,9 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="name_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -1355,6 +1377,9 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="pulse_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -1379,6 +1404,9 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="weight_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -1523,6 +1551,9 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="sugar_input">
                       <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">

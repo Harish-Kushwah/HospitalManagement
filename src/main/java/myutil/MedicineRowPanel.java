@@ -108,6 +108,8 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         comboBox.addMouseListener(this);
         delete_chk.setBackground(new Color(0xccccff));
         delete_chk.addItemListener(this);
+        
+        total_tablet.addMouseListener(this);
 
         name.add(medicine_name);
         p.add(morning_chk);

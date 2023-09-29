@@ -5,9 +5,17 @@ import java.util.Date;
 public class PatientDetails
 {
     
-    private String name_input,gender,symptoms,others,mobileno_input,bloodpressure_input,pulse_input,sugar_input;
-            int pid,age_input;
-            int weight_input;
+    private String 
+            name_input,
+            gender ="Male",
+            symptoms=" ",
+            others=" ",
+            mobileno_input,
+            bloodpressure_input="120/80",
+            pulse_input="60",
+            sugar_input="0";
+            int pid,age_input=0;
+            int weight_input=0;
             
             Date date;
     
@@ -22,15 +30,23 @@ public class PatientDetails
     }
     public void setPid(int pid){this.pid=pid;};
    
-    public void setAge(int age) {this.age_input = age;}
+    public void setAge(String age) {
+         if(age.length()>0){
+         this.age_input = Integer.parseInt(age);
+        }
+    }
     public void setBloodPressure(String bp) {this.bloodpressure_input = bp;}
     public void setPulse(String pulse) {this.pulse_input=pulse;}
     public  void setSugar(String sugar){this.sugar_input = sugar;}
-    public  void setWeight(int weight){this.weight_input = weight;}
+    public  void setWeight(String weight){
+        if(weight.length()>0){
+         this.weight_input = Integer.parseInt(weight);
+        }
+    }
     public  void setMobileNo(String mobile_no){this.mobileno_input = mobile_no;}
     public  void setGender(String gender){this.gender= gender;}
     public  void setSymptoms(String symptoms){this.symptoms = symptoms;}
-    public void setOther(String other){this.others=other;}
+    public void  setOther(String other){this.others=other;}
     public  void setDate(Date date){this.date = date;}
   
 
