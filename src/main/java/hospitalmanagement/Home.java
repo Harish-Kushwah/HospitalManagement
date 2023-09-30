@@ -6,6 +6,8 @@ package hospitalmanagement;
 
 import java.awt.CardLayout;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -295,7 +297,32 @@ public class Home extends javax.swing.JFrame {
 
         //set cuurent date on the prescription page when loads
         prescription_date_input.setDate(getCurrentDate());
-
+           addShortKeyForRefreshPage();
+    }
+    public void addShortKeyForRefreshPage()
+    {
+        Action refresh  = new AbstractAction("Refresh"){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(page_showing.equalsIgnoreCase("patient"))
+                resetPatientInfoForm();
+                else if(page_showing.equalsIgnoreCase("prescription"))
+                 resetPrescriptionPage();
+            }
+            
+        };
+        KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R,KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke f5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5,0);
+        String k = "Refresh";
+        refresh.putValue(Action.MNEMONIC_KEY,KeyEvent.VK_R);
+        
+        Patient.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
+        Patient.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
+        Patient.getActionMap().put(k,refresh);
+        
+        Prescription.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
+        Prescription.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
+        Prescription.getActionMap().put(k,refresh);
     }
 
     /**
@@ -1967,6 +1994,7 @@ public class Home extends javax.swing.JFrame {
     }
     private void prescription_save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_save_btnActionPerformed
 
+        if(valid_prescription_inputes.get("is_all_inputes_valid")==1){
         boolean is_patient_exists = true;
         if (PATIENT_DETAILS == null) {
 
@@ -2010,11 +2038,15 @@ public class Home extends javax.swing.JFrame {
 
                 medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
                 database.insertRecordInMedicine(medicineDetails);
-                prescription_status_label.setForeground(new Color(0, 153, 0));
+                prescription_status_label.setForeground(SUCCESS_COLOR);
                 prescription_status_label.setText("Saved Susscessfuly..!");
             }
         }
-
+        }
+        else{
+            prescription_status_label.setForeground(WARNING_COLOR);
+            prescription_status_label.setText("Enter correct details..!");
+        }
 
          }//GEN-LAST:event_prescription_save_btnActionPerformed
 
