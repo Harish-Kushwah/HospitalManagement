@@ -21,6 +21,7 @@ public class Database {
     private static final String GET_TOTAL_MONTH_PATIENT = "select * from pdetail where MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now());";
     private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
 
+    private static final String GET_MEDI_PEDI ="SELECT* FROM pdetail,medi;";
     Connection connection = null;
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
     static Database singletone_database = null;
@@ -331,6 +332,49 @@ public class Database {
             System.out.println(e);
         }
         return null;
+    }
+    
+    public void getMediPedi()
+    {
+        try{
+        Connection conn = connect();
+            // Step 2:Create a statement using connection object
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_MEDI_PEDI);
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+            // Step 4: Process the ResultSet object.
+            int i = 0;
+            while (rs.next()) {
+      
+                PatientDetails patientdetails = new PatientDetails();
+                patientdetails.setPid(rs.getInt("pno"));
+                patientdetails.setName(rs.getString("name"));
+                patientdetails.setGender(rs.getString("gen"));
+                patientdetails.setAge(rs.getString("age"));
+                patientdetails.setPulse(rs.getString("pls"));
+                patientdetails.setSymptoms(rs.getString("pdis"));
+                patientdetails.setWeight(rs.getString("wht"));
+              
+
+                Date date = rs.getDate("date");
+                patientdetails.setDate(date);
+
+                System.out.println(patientdetails.getPid());
+                 System.out.println(patientdetails.getName());
+                  System.out.println(patientdetails.getGender());
+                   System.out.println(patientdetails.getSymptoms());
+                  System.out.println( rs.getString("mqty"));
+                   
+               
+                i++;
+                System.out.println(i);
+            }
+ 
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
 }

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
+	<queryString>
+		<![CDATA[SELECT * FROM pdetail,medi limit 10;]]>
+	</queryString>
+	<field name="pno" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pname" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="medicin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mqty" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mtime" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ba" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qty" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gen" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="age" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="wht" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bp" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pls" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pdis" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="90" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="96" splitType="Stretch">
+			<textField>
+				<reportElement x="71" y="28" width="155" height="20" uuid="ca0d0eac-adfc-4041-bb3f-b5831d293944"/>
+				<textFieldExpression><![CDATA[$F{pname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement x="315" y="8" width="55" height="20" uuid="4e33c50d-0bc4-4d52-8770-9e09208a5c96"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="8" width="44" height="20" uuid="d8ec4b7b-54ed-433e-aabf-f7b240445ee4"/>
+				<textFieldExpression><![CDATA[$F{pno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="71" y="50" width="90" height="20" uuid="3065e972-7a32-4c8c-92bb-5148d4bb71d7"/>
+				<textFieldExpression><![CDATA[$F{mno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="30" width="36" height="20" uuid="c58fed8d-c7c1-4a9b-ad78-0a8139694e4f"/>
+				<textFieldExpression><![CDATA[$F{age}>0?$F{age}:"---"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="30" width="36" height="20" uuid="87e6f038-c5fd-4858-93d4-04e68565d620"/>
+				<textFieldExpression><![CDATA[$F{wht}>0?$F{wht}:"---"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="278" y="8" width="37" height="20" uuid="efac5722-9a6a-442f-939d-c217c92283e8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="28" width="71" height="20" uuid="2186800d-5db9-4846-9092-86efd8662bfb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Patient Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="71" height="20" uuid="cf3214bb-ffb7-4d30-b8cf-3e949304378e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mobile No      :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="226" y="30" width="26" height="20" uuid="3586c968-421e-4c4e-babc-5cc7a2e71abc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Age :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="30" width="37" height="20" uuid="432095ca-1258-4e08-942e-4137f1d179e6"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Wigth :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="70" width="33" height="26" uuid="2ca24b32-802f-4467-9d8f-0450c18cca1b"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rx]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="33" y="2" width="89" height="20" uuid="073cdef3-97f2-4227-b2f3-6b7d1fc3c669"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Medicine Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="2" width="50" height="20" uuid="76ef329d-7be4-4649-84b4-52332eef9bac"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dosages]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="261" y="2" width="64" height="20" uuid="612e0d40-0c6e-4789-9a70-30b667f3f6c7"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Instruction]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="325" y="2" width="45" height="20" uuid="9f778267-9627-4520-b6be-3c0dd5d09e7d"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField>
+				<reportElement x="33" y="0" width="148" height="20" uuid="f02909d4-fd25-40ec-bae4-12df27095580"/>
+				<textFieldExpression><![CDATA[$F{medicin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="218" y="0" width="34" height="20" uuid="71fe3a65-a6ed-485b-8ddb-447c37a19614"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mtime}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="2" width="65" height="20" uuid="70a720d6-8305-456e-a2e2-5685bd32a492"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ba}>0?"जेवणाआधी":"जेवणानंतर"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="2" width="40" height="20" uuid="4ae48a66-b18f-4fd8-92bf-00f9f5f9d760"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="181" y="0" width="37" height="20" uuid="91c6c88a-66d6-4ded-a17d-fbcdf378eb38"/>
+				<textFieldExpression><![CDATA[$F{mqty}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="15" y="2" width="18" height="20" uuid="2408cd1c-109c-451e-a1df-198b418b7c37"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[■]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="11" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch"/>
+	</summary>
+</jasperReport>
