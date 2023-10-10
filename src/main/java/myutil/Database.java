@@ -27,7 +27,7 @@ public class Database {
     static Database singletone_database = null;
 
     private static final String INSERT_MEDECINE_INFO = "INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
-
+    private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     //creates the database connection
     public Connection connect() {
         try {
@@ -160,6 +160,44 @@ public class Database {
         return null;
     }
 
+    public PatientDetails getPatientDetails(int patient_report_number)
+    {  
+                try {
+            // Step 1: Establishing a Connection
+            Connection conn = connect();
+            // Step 2:Create a statement using connection object
+            PreparedStatement preparedStatement = conn.prepareStatement(FIND_PATIENT_BY_PNO);
+             preparedStatement.setInt(1, patient_report_number);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+            // Step 4: Process the ResultSet object.
+            PatientDetails patientdetails=null;
+            while (rs.next()) {
+      
+                patientdetails = new PatientDetails();
+                patientdetails.setPid(rs.getInt("pno"));
+                patientdetails.setName(rs.getString("name"));
+                patientdetails.setGender(rs.getString("gen"));
+                patientdetails.setAge(rs.getString("age"));
+                patientdetails.setPulse(rs.getString("pls"));
+                patientdetails.setSymptoms(rs.getString("pdis"));
+                patientdetails.setWeight(rs.getString("wht"));
+               
+
+                Date date = rs.getDate("date");
+                patientdetails.setDate(date);
+
+              
+                          
+            }
+            return patientdetails;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+                
+    }
     public ArrayList<PatientDetails> getAllUsers() {
 
         ArrayList<PatientDetails> patientDetailsList = new ArrayList<PatientDetails>();
@@ -169,7 +207,6 @@ public class Database {
             Connection conn = connect();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(SELECT_ALL_QUERY);
-            System.out.println(preparedStatement);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
             // Step 4: Process the ResultSet object.

@@ -4,8 +4,9 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
+	<parameter name="pno" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM pdetail,medi limit 10;]]>
+		<![CDATA[SELECT * FROM medi INNER join pdetail on medi.pno =$P{pno} and pdetail.pno=$P{pno};]]>
 	</queryString>
 	<field name="pno" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
