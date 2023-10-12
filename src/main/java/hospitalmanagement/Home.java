@@ -72,8 +72,8 @@ public class Home extends javax.swing.JFrame {
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
 
         card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "reports");
-        page_showing = "reports";
+        card.show(main_panel, "patient");
+        page_showing = "patient";
         setPageShowingLabelColor();
 
         addMedicineRowInPanelForm();
