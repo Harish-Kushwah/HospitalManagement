@@ -84,4 +84,3 @@ If you have any questions or need assistance, please feel free to contact us:
 - Project Link: [click here](https://github.com/Harish-Kushwah/HospitalManagement)
 
 We hope this Hospital Management System is helpful for managing hospital operations efficiently.
-```
