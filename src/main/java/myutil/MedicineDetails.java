@@ -59,7 +59,7 @@ public class MedicineDetails {
     }
     public String getMedicineMealTime()
     {
-        if(this.before)
+        if(this.before==true)
         {
             return "1";
         }
@@ -67,6 +67,7 @@ public class MedicineDetails {
             return "0";
         }
     }
+   
     
     public void setMedicineTime(boolean morning,boolean afternoon,boolean evening)
     {

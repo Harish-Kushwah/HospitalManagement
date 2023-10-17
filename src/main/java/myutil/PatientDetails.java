@@ -10,7 +10,7 @@ public class PatientDetails
             gender ="Male",
             symptoms=" ",
             others=" ",
-            mobileno_input,
+            mobileno_input="",
             bloodpressure_input="120/80",
             pulse_input="60",
             sugar_input="0";

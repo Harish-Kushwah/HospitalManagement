@@ -303,7 +303,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         Color row2  = new Color(0xE8E8EC);
         new_books_table.setRowColor(Color.white,Color.white);
         JScrollPane tableScrollPane = new JScrollPane(new_books_table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
+        tableScrollPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         new_books_table.setFillsViewportHeight(true);
 
         TableModel tableModel = new_books_table.getModel();
@@ -367,6 +367,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         new_memeber_table.setRowColor(Color.white,Color.white);
 
         JScrollPane tableScrollPane = new JScrollPane(new_memeber_table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+       tableScrollPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return  tableScrollPane;
     }
     
