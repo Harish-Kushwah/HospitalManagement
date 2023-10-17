@@ -38,6 +38,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
 
     private static String DEFAULT = "0";
 
+    public final String []medicine_quantity = {"1 TAB", "1 CAP", "1/2 TAB", "10 ML", "5 ML"};
     public final JLabel medicine_name = new JLabel("none");
     public final JCheckBox morning_chk = new JCheckBox("M");
     public final JCheckBox afternoon_chk = new JCheckBox("A");
@@ -51,7 +52,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
     // public final JButton save = new JButton("Save");
     public final JTextField total_tablet = new JTextField(5);
     public final JComboBox<String> comboBox = new JComboBox<>(
-            new String[]{"1 TAB", "1 CAP", "1/2 TAB", "10 ML", "5 ML"}
+          medicine_quantity
     );
     public GradientPanel name, p;
 
@@ -61,32 +62,8 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         before.setSelected(true);
     }
 
-    public MedicineRowPanel(String m_name) {
-
-        super(new BorderLayout(5, 10));
-        medicine_name.setText(m_name);
-        total_tablet.setText("4");
-        this.setBackground(new Color(0xC5C5EF));
-        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btg.add(before);
-        btg.add(after);
-        setDefaultValues();
-
-//    comboBox.addItemListener(new ItemListener() {
-//      @Override public void itemStateChanged(ItemEvent e) {
-//        if (e.getStateChange() == ItemEvent.SELECTED) {
-//
-//            if("1 TAB".equals(e.getItem()))
-//            {
-//                  total_tablet.setText("1");
-//            }
-//            else if("2 TAB".equals(e.getItem()))
-//            {
-//                total_tablet.setText("2");
-//            }
-//        }
-//      }
-//    });
+    public void initComponents()
+    {
         name = new GradientPanel(new Color(0xC5C5EF), new Color(0xFFFFFF), 170, 35);
 //    name.setBackground(new Color(0x9C9CE7));
         p = new GradientPanel(new Color(0xFFFFFF), new Color(0xC5C5EF), 400, 35);
@@ -123,7 +100,78 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         //p.add(save);
         add(name, BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
+    }
+    public MedicineRowPanel(String m_name) {
 
+        super(new BorderLayout(5, 10));
+        initComponents();
+        
+        medicine_name.setText(m_name);
+        total_tablet.setText("4");
+        this.setBackground(new Color(0xC5C5EF));
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btg.add(before);
+        btg.add(after);
+        setDefaultValues();
+
+//    comboBox.addItemListener(new ItemListener() {
+//      @Override public void itemStateChanged(ItemEvent e) {
+//        if (e.getStateChange() == ItemEvent.SELECTED) {
+//
+//            if("1 TAB".equals(e.getItem()))
+//            {
+//                  total_tablet.setText("1");
+//            }
+//            else if("2 TAB".equals(e.getItem()))
+//            {
+//                total_tablet.setText("2");
+//            }
+//        }
+//      }
+//    });
+        
+
+    }
+    public MedicineRowPanel(MedicineDetails medicineDetails) {
+
+        super(new BorderLayout(5, 10));
+        initComponents();
+        
+        setDefaultValues();
+       
+        medicine_name.setText(medicineDetails.getMedicineName());
+        total_tablet.setText(medicineDetails.getTotalQuantity());
+       
+        morning_chk.setSelected(medicineDetails.morning);
+        afternoon_chk.setSelected(medicineDetails.afternoon);
+        evening_chk.setSelected(medicineDetails.evening);
+        
+        String meal_time = medicineDetails.getMedicineMealTime();
+        if(meal_time.equalsIgnoreCase("1"))
+        {
+            before.setSelected(true);
+            after.setSelected(false);
+        }
+        else{
+            before.setSelected(false);
+            after.setSelected(true);
+        }
+        
+        this.setBackground(new Color(0xC5C5EF));
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btg.add(before);
+        btg.add(after);
+        
+        
+        for(int i=0;i<medicine_quantity.length;i++)
+        {
+            if(medicine_quantity[i].equalsIgnoreCase(medicineDetails.getMedicineQuantity()))
+            {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+        
     }
 
     public M_BandType getDetials() {

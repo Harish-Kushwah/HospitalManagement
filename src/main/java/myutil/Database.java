@@ -4,10 +4,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import myutil.PatientDetails;
+
 /*
 In Database Singletone Design pattern used for reducing the instance of databases and their connection
 
-*/
+ */
 public class Database {
 
     private final String url = "jdbc:mysql://localhost/guru";
@@ -21,13 +22,18 @@ public class Database {
     private static final String GET_TOTAL_MONTH_PATIENT = "select * from pdetail where MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now());";
     private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
 
-    private static final String GET_MEDI_PEDI ="SELECT* FROM pdetail,medi;";
+    private static final String GET_MEDI_PEDI = "SELECT* FROM pdetail,medi;";
     Connection connection = null;
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
     static Database singletone_database = null;
 
     private static final String INSERT_MEDECINE_INFO = "INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
+    private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
+    private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
+    
+    private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
+
     //creates the database connection
     public Connection connect() {
         try {
@@ -56,7 +62,7 @@ public class Database {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_TOTAL_NO_OF_ROWS);
-            ResultSet rs = preparedStatement.executeQuery();           
+            ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             return Integer.toString(rs.getInt(1));
 
@@ -65,7 +71,7 @@ public class Database {
         }
 
     }
-    
+
     //return total monthly patinets
     public String getTotalMonthlyPatient() {
         try {
@@ -160,20 +166,19 @@ public class Database {
         return null;
     }
 
-    public PatientDetails getPatientDetails(int patient_report_number)
-    {  
-                try {
+    public PatientDetails getPatientDetails(int patient_report_number) {
+        try {
             // Step 1: Establishing a Connection
             Connection conn = connect();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(FIND_PATIENT_BY_PNO);
-             preparedStatement.setInt(1, patient_report_number);
+            preparedStatement.setInt(1, patient_report_number);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
             // Step 4: Process the ResultSet object.
-            PatientDetails patientdetails=null;
+            PatientDetails patientdetails = null;
             while (rs.next()) {
-      
+
                 patientdetails = new PatientDetails();
                 patientdetails.setPid(rs.getInt("pno"));
                 patientdetails.setName(rs.getString("name"));
@@ -182,13 +187,10 @@ public class Database {
                 patientdetails.setPulse(rs.getString("pls"));
                 patientdetails.setSymptoms(rs.getString("pdis"));
                 patientdetails.setWeight(rs.getString("wht"));
-               
 
                 Date date = rs.getDate("date");
                 patientdetails.setDate(date);
 
-              
-                          
             }
             return patientdetails;
 
@@ -196,8 +198,9 @@ public class Database {
             System.out.println(e);
         }
         return null;
-                
+
     }
+
     public ArrayList<PatientDetails> getAllUsers() {
 
         ArrayList<PatientDetails> patientDetailsList = new ArrayList<PatientDetails>();
@@ -212,7 +215,7 @@ public class Database {
             // Step 4: Process the ResultSet object.
             int i = 0;
             while (rs.next()) {
-      
+
                 PatientDetails patientdetails = new PatientDetails();
                 patientdetails.setPid(rs.getInt("pno"));
                 patientdetails.setName(rs.getString("name"));
@@ -227,7 +230,7 @@ public class Database {
                 patientdetails.setDate(date);
 
                 patientDetailsList.add(patientdetails);
-                i++;            
+                i++;
             }
             return patientDetailsList;
 
@@ -238,12 +241,28 @@ public class Database {
     }
 
     public void updateRecord() {
-       
+
         try {
             Connection conn = DriverManager.getConnection(url, user, password);
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USERS_SQL);
             preparedStatement.setString(1, "Ram");
             preparedStatement.setInt(2, 3);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+     public void updatePatientDate(PatientDetails patientdetails) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_DATE);
+          
+            preparedStatement.setDate(1, new Date(patientdetails.getDate().getTime()));
+            preparedStatement.setInt(2, patientdetails.getPid());
+
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -370,11 +389,10 @@ public class Database {
         }
         return null;
     }
-    
-    public void getMediPedi()
-    {
-        try{
-        Connection conn = connect();
+
+    public void getMediPedi() {
+        try {
+            Connection conn = connect();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(GET_MEDI_PEDI);
             System.out.println(preparedStatement);
@@ -383,7 +401,7 @@ public class Database {
             // Step 4: Process the ResultSet object.
             int i = 0;
             while (rs.next()) {
-      
+
                 PatientDetails patientdetails = new PatientDetails();
                 patientdetails.setPid(rs.getInt("pno"));
                 patientdetails.setName(rs.getString("name"));
@@ -392,26 +410,87 @@ public class Database {
                 patientdetails.setPulse(rs.getString("pls"));
                 patientdetails.setSymptoms(rs.getString("pdis"));
                 patientdetails.setWeight(rs.getString("wht"));
-              
 
                 Date date = rs.getDate("date");
                 patientdetails.setDate(date);
 
                 System.out.println(patientdetails.getPid());
-                 System.out.println(patientdetails.getName());
-                  System.out.println(patientdetails.getGender());
-                   System.out.println(patientdetails.getSymptoms());
-                  System.out.println( rs.getString("mqty"));
-                   
-               
+                System.out.println(patientdetails.getName());
+                System.out.println(patientdetails.getGender());
+                System.out.println(patientdetails.getSymptoms());
+                System.out.println(rs.getString("mqty"));
+
                 i++;
                 System.out.println(i);
             }
- 
 
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
+    public ArrayList<MedicineDetails> getMedicineList(int patient_number) {
+
+        ArrayList<MedicineDetails> medicineDetailsList = new ArrayList<MedicineDetails>();
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(FIND_MEDICINE_BY_PNO);
+            preparedStatement.setInt(1, patient_number);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                MedicineDetails medicineDetails = new MedicineDetails();
+                medicineDetails.setMedicineName(rs.getString("medicin"));
+                medicineDetails.setMedicineQuantity(rs.getString("mqty"));
+                String before = rs.getString("ba");
+                if (before.equalsIgnoreCase("1")) {
+                    medicineDetails.setMedicineMealTime(true);
+                } else {
+                    medicineDetails.setMedicineMealTime(false);
+                }
+                String doses_time = rs.getString("mtime");
+                boolean morning_status = false;
+                boolean afternoon_status = false;
+                boolean evening_status = false;
+                if (doses_time.charAt(0) == '1') {
+                    morning_status = true;
+                }
+                if (doses_time.charAt(3) == '1') {
+                    afternoon_status = true;
+                }
+                if (doses_time.charAt(6) == '1') {
+                    evening_status = true;
+                }
+
+                medicineDetails.setPatientDetails(getPatientDetails(patient_number));
+                medicineDetails.setMedicineTime(morning_status, afternoon_status, evening_status);
+                medicineDetails.setTotalQuantity(rs.getString("qty"));
+                medicineDetailsList.add(medicineDetails);
+
+                i++;
+            }
+            return medicineDetailsList;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public void removeAllMedicinesOf(int patient_number) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_MEDICINE_BY_PNO);
+            preparedStatement.setInt(1, patient_number);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }
 }

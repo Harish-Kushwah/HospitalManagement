@@ -17,7 +17,7 @@ import net.sf.jasperreports.engine.JasperReport;
  */
 public class MultithredingReports extends Thread {
    
-    String reportPath = "D:\\HospitalManagement\\src\\main\\java\\hospitalmanagement\\report2.jrxml";
+    String reportPath = ".\\report\\report2.jrxml";
     JasperReport jr ;
     Database DB = Database.getInstance();
     public void run()
