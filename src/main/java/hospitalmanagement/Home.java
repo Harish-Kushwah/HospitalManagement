@@ -2399,8 +2399,9 @@ public class Home extends javax.swing.JFrame {
             reports_label.setForeground(Color.cyan);
 
             resetPrescriptionPage();
-
-            setReportPageInfo(PATIENT_DETAILS);
+            PatientDetails temp_patient = PATIENT_DETAILS;
+            resetReportPage();
+            setReportPageInfo(temp_patient);
             setReportPrint();
         } else {
 
