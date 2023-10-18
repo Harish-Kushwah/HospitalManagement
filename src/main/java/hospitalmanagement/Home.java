@@ -152,6 +152,7 @@ public class Home extends javax.swing.JFrame {
                     resetPrescriptionPage();
                 } else if (page_showing.equalsIgnoreCase("reports")) {
                     resetReportPage();
+                    PATIENT_DETAILS = null; //remove old patient details from all pages
                 }
             }
 
@@ -1969,6 +1970,8 @@ public class Home extends javax.swing.JFrame {
         patient_label.setForeground(Color.white);
         prescription_label.setForeground(Color.cyan);
         reports_label.setForeground(Color.white);
+        
+        PATIENT_DETAILS = null; 
 
     }//GEN-LAST:event_prescription_labelMouseClicked
 
@@ -2133,7 +2136,7 @@ public class Home extends javax.swing.JFrame {
     }
     private void save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_btnActionPerformed
 
-        if (valid_patients_inputes.get("is_all_inputes_valid") == 1) {
+        if (valid_patients_inputes.size() == 0 || valid_patients_inputes.get("is_all_inputes_valid") == 1) {
             String name = name_input.getText();
             String mobile = mobile_number_input.getText();
             String age = age_input.getText();
@@ -2213,6 +2216,8 @@ public class Home extends javax.swing.JFrame {
         patient_label.setForeground(Color.white);
         prescription_label.setForeground(Color.cyan);
         reports_label.setForeground(Color.white);
+        
+        PATIENT_DETAILS = null; 
 
     }//GEN-LAST:event_prescription_iconMouseClicked
 
@@ -2357,19 +2362,24 @@ public class Home extends javax.swing.JFrame {
 
         if (PATIENT_DETAILS != null) {
 
-            card = (CardLayout) main_panel.getLayout();
-            card.show(main_panel, "prescription");
-            page_showing = "prescription";
-            resetPrescriptionPage();
+            if (status_label.getText().startsWith("Patient Details Saved Successfully")) {
+                card = (CardLayout) main_panel.getLayout();
+                card.show(main_panel, "prescription");
+                page_showing = "prescription";
+                resetPrescriptionPage();
 
-            setPrescriptionPagePatient(PATIENT_DETAILS);
-            // redirectOnPrecriptionPage();
-            dashboard_label.setForeground(Color.white);
-            patient_label.setForeground(Color.white);
-            prescription_label.setForeground(Color.cyan);
-            reports_label.setForeground(Color.white);
+                setPrescriptionPagePatient(PATIENT_DETAILS);
+                // redirectOnPrecriptionPage();
+                dashboard_label.setForeground(Color.white);
+                patient_label.setForeground(Color.white);
+                prescription_label.setForeground(Color.cyan);
+                reports_label.setForeground(Color.white);
 
-            resetPatientInfoForm();
+                resetPatientInfoForm();
+            } else {
+                status_label.setText("Save Patient details first");
+                status_label.setForeground(WARNING_COLOR);
+            }
         } else {
             status_label.setText("Insert Patient details first");
             status_label.setForeground(WARNING_COLOR);
@@ -2385,24 +2395,38 @@ public class Home extends javax.swing.JFrame {
     private void prescription_next_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_next_btnActionPerformed
 
         if (PATIENT_DETAILS != null) {
-            //after updating change the button name to save
-            prescription_save_btn.setText("Save");
 
-            //show the reports and rest the prescription page
-            card = (CardLayout) main_panel.getLayout();
-            card.show(main_panel, "reports");
-            page_showing = "reports";
+            if (prescription_status_label.getText().startsWith("Saved") || prescription_status_label.getText().startsWith("Updated")) {
+                //after updating change the button name to save
+                prescription_save_btn.setText("Save");
 
-            dashboard_label.setForeground(Color.white);
-            patient_label.setForeground(Color.white);
-            prescription_label.setForeground(Color.white);
-            reports_label.setForeground(Color.cyan);
+                //show the reports and rest the prescription page
+                card = (CardLayout) main_panel.getLayout();
+                card.show(main_panel, "reports");
+                page_showing = "reports";
 
-            resetPrescriptionPage();
-            PatientDetails temp_patient = PATIENT_DETAILS;
-            resetReportPage();
-            setReportPageInfo(temp_patient);
-            setReportPrint();
+                dashboard_label.setForeground(Color.white);
+                patient_label.setForeground(Color.white);
+                prescription_label.setForeground(Color.white);
+                reports_label.setForeground(Color.cyan);
+
+                resetPrescriptionPage();
+                PatientDetails temp_patient = PATIENT_DETAILS;
+                resetReportPage();
+                setReportPageInfo(temp_patient);
+                setReportPrint();
+
+                resetReportLables();
+            } else {
+
+                if (prescription_status_label.getText().startsWith("Saved")) {
+                    prescription_status_label.setText("Please Save details first");
+                } else {
+                    prescription_status_label.setText("Please Update details first");
+                }
+                prescription_status_label.setForeground(WARNING_COLOR);
+
+            }
         } else {
 
             if (prescription_save_btn.getText().equalsIgnoreCase("update")) {
@@ -2414,7 +2438,6 @@ public class Home extends javax.swing.JFrame {
             }
 
         }
-        //PATIENT_DETAILS = null; //global patient object removes beacase this is final page;
 
     }//GEN-LAST:event_prescription_next_btnActionPerformed
 
@@ -2433,7 +2456,6 @@ public class Home extends javax.swing.JFrame {
         prescription_date_input.setDate(getCurrentDate());
         prescription_status_label.setText("");
         prescription_save_btn.setText("Save");
-        // PATIENT_DETAILS = null;
 
         validate();
         repaint();
@@ -2449,6 +2471,8 @@ public class Home extends javax.swing.JFrame {
         if (valid_prescription_inputes.get("is_all_inputes_valid") == 1) {
 
             boolean is_patient_exists = true;
+            
+            if (isPrescriptionPageSavingMode()) {
             if (PATIENT_DETAILS == null) {
 
                 String p_name_input = prescription_name_input.getText();
@@ -2482,8 +2506,7 @@ public class Home extends javax.swing.JFrame {
                 }
 
             }
-
-            if (isPrescriptionPageSavingMode()) {
+            
                 //Issue
                 //add medicine details
                 for (int i = 0; i < medicine_arraylist.size(); i++) {
@@ -2503,15 +2526,19 @@ public class Home extends javax.swing.JFrame {
                         prescription_status_label.setText("Saved Susscessfuly..!");
                     }
                 }
-            } else {
+            } 
+            else {
 
                 Database database = Database.getInstance();
                 //remove all the medicine info of pno and add new pno medicine
 
                 database.removeAllMedicinesOf(PATIENT_DETAILS.getPid());
 
+                PATIENT_DETAILS.setDate(prescription_date_input.getDate());
+
                 //here updatong the the date of patient for editing the recipt
-                database.updatePatientDate(PATIENT_DETAILS); 
+                database.updatePatientDate(PATIENT_DETAILS);
+
                 for (int i = 0; i < medicine_arraylist.size(); i++) {
                     M_BandType row = medicine_arraylist.get(i).getDetials();
                     if (is_patient_exists && row != null) {
@@ -2548,7 +2575,7 @@ public class Home extends javax.swing.JFrame {
 //---------------------------------------------------------------------------------------------
     private void prescription_name_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_name_inputActionPerformed
         // TODO add your handling code here:
-        System.out.println(" ");
+
     }//GEN-LAST:event_prescription_name_inputActionPerformed
 
     private void prescription_name_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_name_inputMouseExited
@@ -2700,7 +2727,9 @@ public class Home extends javax.swing.JFrame {
             name_report_input.setText(patientDetails.getName());
             date_report_input.setDate(patientDetails.getDate());
         } else {
-            System.out.println("Patient is null");
+
+            report_status.setText("No patient details available");
+            report_status.setForeground(WARNING_COLOR);
         }
 
     }
@@ -2712,8 +2741,7 @@ public class Home extends javax.swing.JFrame {
         report_show_panel.removeAll();
         report_show_panel.revalidate();
         report_show_panel.repaint();
-
-        PATIENT_DETAILS = null;  //because it is last page
+        
     }
 
     private void setReportPrint() {
@@ -2794,7 +2822,9 @@ public class Home extends javax.swing.JFrame {
                         prescription_label.setForeground(Color.cyan);
                         reports_label.setForeground(Color.white);
 
+                        
                         resetReportPage();
+                        
                     } else {
 
                         report_status.setText("Medicine list is empty");
@@ -2812,7 +2842,11 @@ public class Home extends javax.swing.JFrame {
                 cancle_click_here.setText("Click here");
                 click_here.setText("Click here");
                 cancle_previous_editing_report_label.setText("Cancle Report :");
+
             }
+            validate();
+            repaint();
+
             //  setReportPrint();
         } catch (NumberFormatException exp) {
             report_status.setText("Enter Patient Number");
@@ -2914,14 +2948,14 @@ public class Home extends javax.swing.JFrame {
         patient_label.setForeground(Color.white);
         prescription_label.setForeground(Color.cyan);
         reports_label.setForeground(Color.white);
-        
-        if(prescription_save_btn.getText().equalsIgnoreCase("save")){
-         resetReportLables();
+
+        if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
+            resetReportLables();
         }
     }//GEN-LAST:event_click_hereMouseClicked
 
     private void search_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseEntered
-                           
+
         search_report.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_search_reportMouseEntered
 
@@ -2930,11 +2964,11 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_search_reportMouseExited
 
     private void edit_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseEntered
-             edit_report.setBorder(HOVER_BORDER);
+        edit_report.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_edit_reportMouseEntered
 
     private void edit_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseExited
-       edit_report.setBorder(DEFAULT_BTN_BORDER);
+        edit_report.setBorder(DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_edit_reportMouseExited
 
     /**

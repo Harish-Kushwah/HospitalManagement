@@ -122,7 +122,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         scrollPane.setWheelScrollingEnabled(true);
 
         this.add(scrollPane);
-        System.out.println("Dashbored chnaged");
+        
     }
     public void refresh()
     {
@@ -135,7 +135,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         head_title_panel.setBackground(BACKGROUND_COLOR);
         int head_title_height = 100;
 
-        System.out.println(width);
+       
         head_title_panel.setPreferredSize(new Dimension(width,head_title_height));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -279,7 +279,6 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
     {
 
 
-        System.out.println("Max patient is :" + database.getMaxIndex());
         ArrayList<PatientDetails> patientDetailsArrayList = database.getTodayPatient();
         int row = patientDetailsArrayList.size();
 
@@ -323,7 +322,6 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
                // super.mouseClicked(e);
                 int rowIndex = new_books_table.getSelectedRow();
 
-                System.out.println(rowIndex);
 
 //                System.out.println(tableModel.getValueAt(rowIndex,0));
 //                System.out.println(tableModel.getValueAt(rowIndex,1));
@@ -344,7 +342,6 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
     public  JScrollPane getAllMonthlyTable()
     {
 
-        System.out.println("Total patient is :" + TOTAL_PATIENT);
 
         ArrayList<PatientDetails> patientDetailsArrayList = database.getMonthlyPatient();
         int row = patientDetailsArrayList.size();
