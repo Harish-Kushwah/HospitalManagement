@@ -337,7 +337,7 @@ public class Database {
             preparedStatement.setString(10, patientdetails.getSymptoms());
 
             preparedStatement.executeUpdate();
-            conn.commit();
+            //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
