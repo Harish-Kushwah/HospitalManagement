@@ -264,9 +264,11 @@ public class Database {
             preparedStatement.setInt(2, patientdetails.getPid());
 
             preparedStatement.executeUpdate();
+           
 
         } catch (SQLException e) {
             System.out.println(e);
+           
         }
     }
 
@@ -335,7 +337,7 @@ public class Database {
             preparedStatement.setString(10, patientdetails.getSymptoms());
 
             preparedStatement.executeUpdate();
-            conn.commit();
+            //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -357,7 +359,7 @@ public class Database {
             preparedStatement.setString(7, medicineDetails.getTotalQuantity());
 
             preparedStatement.executeUpdate();
-            conn.commit();
+            //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -395,7 +397,7 @@ public class Database {
             Connection conn = connect();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(GET_MEDI_PEDI);
-            System.out.println(preparedStatement);
+           
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
             // Step 4: Process the ResultSet object.
@@ -414,14 +416,8 @@ public class Database {
                 Date date = rs.getDate("date");
                 patientdetails.setDate(date);
 
-                System.out.println(patientdetails.getPid());
-                System.out.println(patientdetails.getName());
-                System.out.println(patientdetails.getGender());
-                System.out.println(patientdetails.getSymptoms());
-                System.out.println(rs.getString("mqty"));
-
                 i++;
-                System.out.println(i);
+            
             }
 
         } catch (SQLException e) {

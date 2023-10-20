@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package hospitalmanagement;
 
 import java.awt.CardLayout;
@@ -9,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
-import java.sql.DriverManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,18 +23,17 @@ import myutil.Database;
 import myutil.GradientPanel;
 import myutil.*;
 import myutil.M_BandType;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
-import net.sf.jasperreports.view.JasperViewer;
+//import net.sf.jasperreports.extension.simple.font.families.1.normal=fonts/YourMarathiFont.ttf;
 
 public class Home extends javax.swing.JFrame {
 
     PatientDetails PATIENT_DETAILS = null;
-    CardLayout card, reports_card;
-    String page_showing = null;
+    MultithredingReports REPORTS_THREAD = new MultithredingReports();
+    static int total_medicine_selected = 0;
 
     final LineBorder HOVER_BTN_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
     final LineBorder DEFAULT_BTN_BORDER = new LineBorder(Color.WHITE, 1, true);
@@ -47,21 +41,23 @@ public class Home extends javax.swing.JFrame {
     final LineBorder INPUT_BORDER = new LineBorder(new Color(0x7c7cf1), 1, true);
     final LineBorder HOVER_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
     final LineBorder WARNING_BORDER = new LineBorder(new Color(0xff3333), 2, true);
+
     final Color WARNING_COLOR = new Color(16724787);
     final Color SUCCESS_COLOR = new Color(0, 153, 0);
     final Color CLICKED_LABEL_COLOR = new Color(0, 0, 204);
     final Color REPORT_LABEL_COLOR = new Color(0, 0, 102);
 
     JPanel newDashboardPanel = new NewDashboardPanel();
-    static int total_medicine_selected = 0;
     JPanel main_list;
+    CardLayout card, reports_card;
+    String page_showing = null;
 
     ArrayList<MedicineRowPanel> medicine_arraylist = new ArrayList<MedicineRowPanel>();
     Dictionary<String, Integer> valid_patients_inputes = new Hashtable();
     Dictionary<String, Integer> valid_prescription_inputes = new Hashtable();
     Dictionary<String, Integer> valid_reports_inputes = new Hashtable();
-    MultithredingReports REPORTS_THREAD = new MultithredingReports();
 
+//=============================================[CONSTRUCTOR WORK START]====================================================
     public Home() {
         ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
         this.setIconImage(icon.getImage());
@@ -77,7 +73,6 @@ public class Home extends javax.swing.JFrame {
         card.show(main_panel, "patient");
         page_showing = "patient";
         setPageShowingLabelColor();
-
         addMedicineRowInPanelForm();
         setMedicineOnMedicineInputField();
 
@@ -98,80 +93,17 @@ public class Home extends javax.swing.JFrame {
 
     }
 
+//=============================================[CONSTRUCTOR WORK ENDS]====================================================
+//=============================================[GENERAL FUNCTIONS WORK START]====================================================
     public void setPageShowingLabelColor() {
         JLabel pages[] = {reports_label, dashboard_label, prescription_label, patient_label};
-        for (int i = 0; i < pages.length; i++) {
-            if (page_showing.equalsIgnoreCase(pages[i].getText())) {
-                pages[i].setForeground(Color.CYAN);
+        for (JLabel page : pages) {
+            if (page_showing.equalsIgnoreCase(page.getText())) {
+                page.setForeground(Color.CYAN);
             } else {
-                pages[i].setForeground(Color.white);
+                page.setForeground(Color.white);
             }
         }
-    }
-
-    public void setMedicineOnMedicineInputField() {
-        DocumentListener dl = new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
-
-            void updateFieldState() {
-                Database database = Database.getInstance();
-                String text = medicine_input.getText();
-                ArrayList<String> medi = database.getLikeMedicine(text);
-                DefaultListModel lm = new DefaultListModel();
-                for (String m : medi) {
-                    lm.addElement(m);
-                }
-                medicine_list.setModel(lm);
-            }
-        };
-        medicine_input.getDocument().addDocumentListener(dl);
-        medicine_list_panel.add(new JScrollPane(medicine_list));
-
-    }
-
-    public void addShortKeyForRefreshPage() {
-        Action refresh = new AbstractAction("Refresh") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (page_showing.equalsIgnoreCase("patient")) {
-                    resetPatientInfoForm();
-                } else if (page_showing.equalsIgnoreCase("prescription")) {
-                    resetPrescriptionPage();
-                } else if (page_showing.equalsIgnoreCase("reports")) {
-                    resetReportPage();
-                }
-            }
-
-        };
-        KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
-        KeyStroke f5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
-        String k = "Refresh";
-        refresh.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
-
-        Patient.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
-        Patient.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
-        Patient.getActionMap().put(k, refresh);
-
-        Prescription.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
-        Prescription.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
-        Prescription.getActionMap().put(k, refresh);
-
-        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
-        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
-        Reports.getActionMap().put(k, refresh);
     }
 
     public void setValidationListenerOnInputs() {
@@ -386,6 +318,102 @@ public class Home extends javax.swing.JFrame {
         pno_report_input.getDocument().addDocumentListener(dl);
     }
 
+    public void addShortKeyForRefreshPage() {
+        Action refresh = new AbstractAction("Refresh") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (page_showing.equalsIgnoreCase("patient")) {
+                    resetPatientPage();
+                    PATIENT_PAGE_PATIENT_DETAILS_OBJECT = null;
+                } else if (page_showing.equalsIgnoreCase("prescription")) {
+                    resetPrescriptionPage();
+                    PRESCRIPTION_PAGE_PATIENT_DETAILS_OBJECT = null;
+                } else if (page_showing.equalsIgnoreCase("reports")) {
+                    resetReportPage();
+                    REPORT_PAGE_PATIENT_DETAILS_OBJECT = null;
+                    //PATIENT_DETAILS = null; //remove old patient details from all pages
+                }
+            }
+
+        };
+       
+        KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+        KeyStroke f5 = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
+        String k = "Refresh";
+        refresh.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
+
+        Patient.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
+        Patient.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
+        Patient.getActionMap().put(k, refresh);
+
+        Prescription.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
+        Prescription.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
+        Prescription.getActionMap().put(k, refresh);
+
+        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(f5, k);
+        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
+        Reports.getActionMap().put(k, refresh);
+    }
+
+    private Date getCurrentDate() {
+        SimpleDateFormat fr = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = new Date();
+        fr.format(date);
+        return date;
+
+    }
+
+    private void showPageOnWindow(String page_name) {
+        card = (CardLayout) main_panel.getLayout();
+        card.show(main_panel, page_name);
+        page_showing = page_name;
+
+        JLabel menu_panel_label_list[] = {dashboard_label, patient_label, prescription_label, reports_label};
+
+        for (int i = 0; i < menu_panel_label_list.length; i++) {
+            if (menu_panel_label_list[i].getText().equalsIgnoreCase(page_showing)) {
+                menu_panel_label_list[i].setForeground(Color.CYAN);
+            } else {
+                menu_panel_label_list[i].setForeground(Color.white);
+            }
+        }
+    }
+//=============================================[GENERAL FUNCTIONS WORK ENDS]====================================================
+
+//=============================================[MEDICINE RELATED WORK START]====================================================
+    public void setMedicineOnMedicineInputField() {
+        DocumentListener dl = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            void updateFieldState() {
+                Database database = Database.getInstance();
+                String text = medicine_input.getText();
+                ArrayList<String> medi = database.getLikeMedicine(text);
+                DefaultListModel lm = new DefaultListModel();
+                for (String m : medi) {
+                    lm.addElement(m);
+                }
+                medicine_list.setModel(lm);
+            }
+        };
+        medicine_input.getDocument().addDocumentListener(dl);
+        medicine_list_panel.add(new JScrollPane(medicine_list));
+
+    }
+
     public void addMedicineRowInPanelForm() {
         main_list = new JPanel();
         main_list.setLayout(new GridBagLayout());
@@ -416,6 +444,39 @@ public class Home extends javax.swing.JFrame {
         repaint();
 
     }
+
+    private void addMedicine() {
+        String medicine_name = medicine_list.getSelectedValue();
+
+        if (medicine_name == null) {
+            medicine_name = medicine_input.getText();
+        }
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        medicine_arraylist.add(new MedicineRowPanel(medicine_name.toUpperCase()));
+
+        main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
+        total_medicine_selected++;
+        validate();
+        repaint();
+    }
+
+    public void addMedicineForEditing(MedicineDetails medicineDetail) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        medicine_arraylist.add(new MedicineRowPanel(medicineDetail));
+
+        main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
+        total_medicine_selected++;
+        validate();
+        repaint();
+    }
+//=============================================[MEDICINE RELATED WORK ENDS]====================================================
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -792,11 +853,6 @@ public class Home extends javax.swing.JFrame {
                 prescription_name_inputMouseExited(evt);
             }
         });
-        prescription_name_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prescription_name_inputActionPerformed(evt);
-            }
-        });
 
         name_label17.setBackground(new java.awt.Color(251, 252, 224));
         name_label17.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
@@ -857,11 +913,6 @@ public class Home extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 medicine_inputMouseExited(evt);
-            }
-        });
-        medicine_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                medicine_inputActionPerformed(evt);
             }
         });
 
@@ -939,11 +990,6 @@ public class Home extends javax.swing.JFrame {
         prescription_female_btn.setBackground(new java.awt.Color(251, 252, 224));
         prescription_radio_btn_grp.add(prescription_female_btn);
         prescription_female_btn.setText("Female");
-        prescription_female_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prescription_female_btnActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout prescription_formLayout = new javax.swing.GroupLayout(prescription_form);
         prescription_form.setLayout(prescription_formLayout);
@@ -1442,11 +1488,6 @@ public class Home extends javax.swing.JFrame {
                 mobile_number_inputMouseExited(evt);
             }
         });
-        mobile_number_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mobile_number_inputActionPerformed(evt);
-            }
-        });
 
         name_label7.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
         name_label7.setText("Name :-");
@@ -1461,11 +1502,6 @@ public class Home extends javax.swing.JFrame {
                 age_inputMouseExited(evt);
             }
         });
-        age_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                age_inputActionPerformed(evt);
-            }
-        });
 
         blood_pressure_input.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         blood_pressure_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
@@ -1477,11 +1513,6 @@ public class Home extends javax.swing.JFrame {
                 blood_pressure_inputMouseExited(evt);
             }
         });
-        blood_pressure_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                blood_pressure_inputActionPerformed(evt);
-            }
-        });
 
         name_input.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         name_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
@@ -1491,11 +1522,6 @@ public class Home extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 name_inputMouseExited(evt);
-            }
-        });
-        name_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                name_inputActionPerformed(evt);
             }
         });
 
@@ -1513,11 +1539,6 @@ public class Home extends javax.swing.JFrame {
                 pulse_inputMouseExited(evt);
             }
         });
-        pulse_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pulse_inputActionPerformed(evt);
-            }
-        });
 
         name_label9.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
         name_label9.setText("Age :-");
@@ -1530,11 +1551,6 @@ public class Home extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 weight_inputMouseExited(evt);
-            }
-        });
-        weight_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                weight_inputActionPerformed(evt);
             }
         });
 
@@ -1556,22 +1572,12 @@ public class Home extends javax.swing.JFrame {
         male_radio_btn.setToolTipText("");
         male_radio_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         male_radio_btn.setFocusPainted(false);
-        male_radio_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                male_radio_btnActionPerformed(evt);
-            }
-        });
 
         female_radio_btn.setBackground(new java.awt.Color(251, 252, 224));
         gender_radio_group.add(female_radio_btn);
         female_radio_btn.setText("Female");
         female_radio_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         female_radio_btn.setFocusPainted(false);
-        female_radio_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                female_radio_btnActionPerformed(evt);
-            }
-        });
 
         save_btn.setBackground(new java.awt.Color(51, 102, 255));
         save_btn.setForeground(new java.awt.Color(255, 255, 255));
@@ -1625,21 +1631,11 @@ public class Home extends javax.swing.JFrame {
                 sugar_inputMouseExited(evt);
             }
         });
-        sugar_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sugar_inputActionPerformed(evt);
-            }
-        });
 
         vomiting_chk.setBackground(new java.awt.Color(251, 252, 224));
         vomiting_chk.setText("Vomiting");
         vomiting_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         vomiting_chk.setFocusPainted(false);
-        vomiting_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                vomiting_chkActionPerformed(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jLabel1.setText("Symptoms");
@@ -1648,81 +1644,41 @@ public class Home extends javax.swing.JFrame {
         cold_and_flue_chk.setText("Cold and Flue");
         cold_and_flue_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cold_and_flue_chk.setFocusPainted(false);
-        cold_and_flue_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cold_and_flue_chkActionPerformed(evt);
-            }
-        });
 
         fever_chk.setBackground(new java.awt.Color(251, 252, 224));
         fever_chk.setText("Fever");
         fever_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         fever_chk.setFocusPainted(false);
-        fever_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fever_chkActionPerformed(evt);
-            }
-        });
 
         runny_nose_chk.setBackground(new java.awt.Color(251, 252, 224));
         runny_nose_chk.setText("Runny Nose");
         runny_nose_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         runny_nose_chk.setFocusable(false);
-        runny_nose_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runny_nose_chkActionPerformed(evt);
-            }
-        });
 
         headache_chk.setBackground(new java.awt.Color(251, 252, 224));
         headache_chk.setText("Headache");
         headache_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         headache_chk.setFocusPainted(false);
-        headache_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                headache_chkActionPerformed(evt);
-            }
-        });
 
         cough_chk.setBackground(new java.awt.Color(251, 252, 224));
         cough_chk.setText("Cough");
         cough_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cough_chk.setFocusPainted(false);
-        cough_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cough_chkActionPerformed(evt);
-            }
-        });
 
         diarrhea_chk.setBackground(new java.awt.Color(251, 252, 224));
         diarrhea_chk.setText("Diarrhea");
         diarrhea_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         diarrhea_chk.setFocusPainted(false);
-        diarrhea_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                diarrhea_chkActionPerformed(evt);
-            }
-        });
 
         weakness_chk.setBackground(new java.awt.Color(251, 252, 224));
         weakness_chk.setText("Weakness");
         weakness_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         weakness_chk.setFocusPainted(false);
-        weakness_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                weakness_chkActionPerformed(evt);
-            }
-        });
 
         bodyache_chk.setBackground(new java.awt.Color(251, 252, 224));
         bodyache_chk.setText("Bodyache");
         bodyache_chk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bodyache_chk.setFocusPainted(false);
-        bodyache_chk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bodyache_chkActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Javanese Text", 0, 14)); // NOI18N
         jLabel2.setText("Other :-");
@@ -1929,6 +1885,7 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+//=============================================[MOUSE LISTENERS FOR MAIN PANEL LABEL WORK START]====================================================
 
     private void dashboard_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboard_labelMouseClicked
         Dashboard.remove(newDashboardPanel);
@@ -1948,120 +1905,17 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboard_labelMouseClicked
 
     private void patient_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_labelMouseClicked
-
-        resetPatientInfoForm();
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "patient");
-        page_showing = "patient";
-
-        dashboard_label.setForeground(Color.white);
-        patient_label.setForeground(Color.CYAN);
-        prescription_label.setForeground(Color.white);
-        reports_label.setForeground(Color.white);
-
+        showPageOnWindow("patient");
     }//GEN-LAST:event_patient_labelMouseClicked
 
     private void prescription_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_labelMouseClicked
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "prescription");
-        page_showing = "prescription";
-        dashboard_label.setForeground(Color.white);
-        patient_label.setForeground(Color.white);
-        prescription_label.setForeground(Color.cyan);
-        reports_label.setForeground(Color.white);
-
+        showPageOnWindow("prescription");
     }//GEN-LAST:event_prescription_labelMouseClicked
 
     private void reports_labelMouseClicked(java.awt.event.MouseEvent evt)
     {//GEN-FIRST:event_reports_labelMouseClicked
-
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "reports");
-        page_showing = "reports";
-        dashboard_label.setForeground(Color.white);
-        patient_label.setForeground(Color.white);
-        prescription_label.setForeground(Color.white);
-        reports_label.setForeground(Color.cyan);
+        showPageOnWindow("reports");
     }//GEN-LAST:event_reports_labelMouseClicked
-
-    private void mobile_number_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mobile_number_inputActionPerformed
-    }//GEN-LAST:event_mobile_number_inputActionPerformed
-
-    private void age_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_age_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_age_inputActionPerformed
-
-    private void blood_pressure_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blood_pressure_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_blood_pressure_inputActionPerformed
-
-    private void name_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_name_inputActionPerformed
-
-    private void pulse_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pulse_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pulse_inputActionPerformed
-
-    private void weight_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weight_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_weight_inputActionPerformed
-
-    private void male_radio_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_male_radio_btnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_male_radio_btnActionPerformed
-
-    private void female_radio_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_female_radio_btnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_female_radio_btnActionPerformed
-
-    private void sugar_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sugar_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sugar_inputActionPerformed
-
-    private void vomiting_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vomiting_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_vomiting_chkActionPerformed
-
-    private void cold_and_flue_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cold_and_flue_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cold_and_flue_chkActionPerformed
-
-    private void fever_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fever_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fever_chkActionPerformed
-
-    private void runny_nose_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runny_nose_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_runny_nose_chkActionPerformed
-
-    private void headache_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_headache_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_headache_chkActionPerformed
-
-    private void cough_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cough_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cough_chkActionPerformed
-
-    private void diarrhea_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_diarrhea_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_diarrhea_chkActionPerformed
-
-    private void weakness_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weakness_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_weakness_chkActionPerformed
-
-    private void bodyache_chkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bodyache_chkActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bodyache_chkActionPerformed
-
-    private Date getCurrentDate() {
-        SimpleDateFormat fr = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = new Date();
-        fr.format(date);
-        return date;
-
-    }
 
     private StringBuffer getAllSymptoms() {
         StringBuffer symptoms = new StringBuffer();
@@ -2100,7 +1954,7 @@ public class Home extends javax.swing.JFrame {
         return symptoms;
     }
 
-    private void resetPatientInfoForm() {
+    private void resetPatientPage() {
         name_input.setText("");
         mobile_number_input.setText("");
         age_input.setText("");
@@ -2129,11 +1983,50 @@ public class Home extends javax.swing.JFrame {
 
     //this method will use to set the one patient details global to acess detials on any page
     public void setGlobalPatientDetails(PatientDetails patientDetails) {
-        this.PATIENT_DETAILS = patientDetails;
+        //this.PATIENT_DETAILS = patientDetails;
     }
+
+    //===================================================[ALL PAGES PATIENT DETAILS OBJECT START]============================================================
+    private PatientDetails PATIENT_PAGE_PATIENT_DETAILS_OBJECT = null;
+    private PatientDetails PRESCRIPTION_PAGE_PATIENT_DETAILS_OBJECT = null;
+    private PatientDetails REPORT_PAGE_PATIENT_DETAILS_OBJECT = null;
+
+    public void setPatientPagePatientDetailsObject(PatientDetails patientDetails) {
+        this.PATIENT_PAGE_PATIENT_DETAILS_OBJECT = patientDetails;
+    }
+
+    public void setPrescriptionPagePatientDetailsObject(PatientDetails patientDetails) {
+        this.PRESCRIPTION_PAGE_PATIENT_DETAILS_OBJECT = patientDetails;
+    }
+
+    public void setReportPagePatientDetailsObject(PatientDetails patientDetails) {
+        this.REPORT_PAGE_PATIENT_DETAILS_OBJECT = patientDetails;
+    }
+
+    public PatientDetails getPatientPagePatientDetailsObject() {
+        return this.PATIENT_PAGE_PATIENT_DETAILS_OBJECT;
+    }
+
+    public PatientDetails getPrescriptionPagePatientDetailsObject() {
+        return this.PRESCRIPTION_PAGE_PATIENT_DETAILS_OBJECT;
+    }
+
+    public PatientDetails getReportPagePatientDetailsObject() {
+        return this.REPORT_PAGE_PATIENT_DETAILS_OBJECT;
+    }
+
+    //===================================================[ALL PAGES PATIENT DETAILS OBJECT ENDS]============================================================
+    //===================================================[PATIENT PAGE SAVE BUTTONSSTART]============================================================
+    /*
+    This is for the patient information page on 
+    all the information is saved by clicinking this save button
+     */
     private void save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_btnActionPerformed
 
+        
+
         if (valid_patients_inputes.get("is_all_inputes_valid") == 1) {
+
             String name = name_input.getText();
             String mobile = mobile_number_input.getText();
             String age = age_input.getText();
@@ -2165,11 +2058,20 @@ public class Home extends javax.swing.JFrame {
 
                 int patient_id = patient_table.insertRecord(patient_details);
                 patient_details.setPid(patient_id);
+                
+                
+
+                if(patient_details!=null){
+                setPatientPagePatientDetailsObject(patient_details);
+                
+                setPrescriptionPagePatientDetailsObject(patient_details);
+                
+                
+                
                 status_label.setForeground(SUCCESS_COLOR);
                 status_label.setText("Patient Details Saved Successfully.!!");
-
-                setDetailsOnPrecriptionPage(patient_details);
-                setGlobalPatientDetails(patient_details);
+                }
+               
             } else {
                 status_label.setForeground(WARNING_COLOR);
                 status_label.setText("Please Add Basic Details of Patients");
@@ -2177,53 +2079,25 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_save_btnActionPerformed
 
+    //===================================================[ICONS MOUSE LISTENER STARTS]============================================================
     private void dashboard_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboard_iconMouseClicked
         Dashboard.remove(newDashboardPanel);
         newDashboardPanel = new NewDashboardPanel();
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
 
-        page_showing = "dashboard";
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "dashboard");
-        dashboard_label.setForeground(Color.CYAN);
-
-        patient_label.setForeground(Color.white);
-        prescription_label.setForeground(Color.white);
-        reports_label.setForeground(Color.white);
+        showPageOnWindow("dashboard");
     }//GEN-LAST:event_dashboard_iconMouseClicked
 
     private void patient_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_iconMouseClicked
-
-        resetPatientInfoForm();
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "patient");
-        page_showing = "patient";
-        dashboard_label.setForeground(Color.white);
-        patient_label.setForeground(Color.CYAN);
-        prescription_label.setForeground(Color.white);
-        reports_label.setForeground(Color.white);
-
+        showPageOnWindow("patient");
     }//GEN-LAST:event_patient_iconMouseClicked
 
     private void prescription_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_iconMouseClicked
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "prescription");
-        page_showing = "prescription";
-        dashboard_label.setForeground(Color.white);
-        patient_label.setForeground(Color.white);
-        prescription_label.setForeground(Color.cyan);
-        reports_label.setForeground(Color.white);
-
+        showPageOnWindow("prescription");
     }//GEN-LAST:event_prescription_iconMouseClicked
 
     private void reports_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reports_iconMouseClicked
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "reports");
-        page_showing = "reports";
-        dashboard_label.setForeground(Color.white);
-        patient_label.setForeground(Color.white);
-        prescription_label.setForeground(Color.white);
-        reports_label.setForeground(Color.cyan);
+        showPageOnWindow("reports");
     }//GEN-LAST:event_reports_iconMouseClicked
 
     private void save_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_save_btnMouseEntered
@@ -2349,27 +2223,38 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_blood_pressure_inputMouseExited
 
-    private void setDetailsOnPrecriptionPage(PatientDetails patientDetails) {
-        // patient_name.setText(patientDetails.getName());
+    //===================================================[MOUSE LISTENER ENDS]============================================================
+    //===================================================[PATIENT PAGE NEXT BUTTON START]============================================================
 
-    }
     private void next_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_next_btnActionPerformed
 
-        if (PATIENT_DETAILS != null) {
+        PatientDetails patient_page_obj = getPatientPagePatientDetailsObject();
+        if (patient_page_obj != null) {
 
-            card = (CardLayout) main_panel.getLayout();
-            card.show(main_panel, "prescription");
-            page_showing = "prescription";
-            resetPrescriptionPage();
+            if (status_label.getText().startsWith("Patient Details Saved Successfully")) {
+                showPageOnWindow("prescription");
+                resetPrescriptionPage();
 
-            setPrescriptionPagePatient(PATIENT_DETAILS);
-            // redirectOnPrecriptionPage();
-            dashboard_label.setForeground(Color.white);
-            patient_label.setForeground(Color.white);
-            prescription_label.setForeground(Color.cyan);
-            reports_label.setForeground(Color.white);
+                PatientDetails pd= getPatientPagePatientDetailsObject();
+                if(pd!=null){
+                // setPrescriptionPagePatientDetails(patient_page_obj);
+                setPrescriptionPagePatientDetailsObject(getPatientPagePatientDetailsObject());
 
-            resetPatientInfoForm();
+                setPrescriptionPagePatientDetails(getPatientPagePatientDetailsObject());
+
+                // redirectOnPrecriptionPage();
+                resetPatientPage();
+                
+                //erase the current patient object because data pased to next pages 
+                setPatientPagePatientDetailsObject(null);
+                }
+                else{
+                    System.out.println("Patient details are null");
+                }
+            } else {
+                status_label.setText("Save Patient details first");
+                status_label.setForeground(WARNING_COLOR);
+            }
         } else {
             status_label.setText("Insert Patient details first");
             status_label.setForeground(WARNING_COLOR);
@@ -2377,32 +2262,88 @@ public class Home extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_next_btnActionPerformed
+    //===================================================[PATIENT PAGE NEXT BUTTON ENDS]============================================================
 
-    private void medicine_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicine_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_medicine_inputActionPerformed
+    //===================================================[PRESCRIPTION PAGE STARTS]============================================================
+    public void resetPrescriptionPage() {
+        removeAllSelectedMedicine();
+        medicine_input.setText("");
+        prescription_name_input.setText("");
+        prescription_date_input.setDate(getCurrentDate());
+        prescription_status_label.setText("");
+        prescription_save_btn.setText("Save");
+
+        validate();
+        repaint();
+    }
+
+    public void createNewPatientFromPrescriptionPage() {
+
+    }
+
+    public boolean isPrescriptionPageSavingMode() {
+        if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setPrescriptionPagePatientDetails(PatientDetails patientDetails) {
+
+        if (patientDetails != null) {
+            prescription_name_input.setText(patientDetails.getName());
+            prescription_date_input.setDate(patientDetails.getDate());
+            String gender = patientDetails.getGender();
+            if (gender.equalsIgnoreCase("Male")) {
+                prescription_male_btn.setSelected(true);
+            } else {
+                prescription_female_btn.setSelected(true);
+            }
+        } else {
+            report_status.setText("No Patient Details found");
+            report_status.setForeground(Color.red);
+        }
+
+    }
+
+    //===================================================[PRESCRIPTION PAGE NEXT BUTTON STARTS]============================================================
 
     private void prescription_next_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_next_btnActionPerformed
 
-        if (PATIENT_DETAILS != null) {
-            //after updating change the button name to save
-            prescription_save_btn.setText("Save");
+        PatientDetails prescription_patient_object = getPrescriptionPagePatientDetailsObject();
 
-            //show the reports and rest the prescription page
-            card = (CardLayout) main_panel.getLayout();
-            card.show(main_panel, "reports");
-            page_showing = "reports";
+        if (prescription_patient_object != null) {
 
-            dashboard_label.setForeground(Color.white);
-            patient_label.setForeground(Color.white);
-            prescription_label.setForeground(Color.white);
-            reports_label.setForeground(Color.cyan);
+           if (prescription_status_label.getText().startsWith("Saved") || prescription_status_label.getText().startsWith("Updated")) {
+          
+           //after updating change the button name to save
+                prescription_save_btn.setText("Save");
+                //show the reports and rest the prescription page
+                showPageOnWindow("reports");
+                resetPrescriptionPage();
 
-            resetPrescriptionPage();
-            PatientDetails temp_patient = PATIENT_DETAILS;
-            resetReportPage();
-            setReportPageInfo(temp_patient);
-            setReportPrint();
+                setReportPagePatientDetailsObject(prescription_patient_object);
+
+                PatientDetails temp_patient = prescription_patient_object;
+                resetReportPage();
+
+                setReportPageInfo(prescription_patient_object);
+
+                setReportPrint();
+
+                resetReportLables();
+                
+                setPrescriptionPagePatientDetailsObject(null);
+            } else {
+
+                if (prescription_status_label.getText().startsWith("Saved")) {
+                    prescription_status_label.setText("Please Save details first");
+                } else {
+                    prescription_status_label.setText("Please Update details first");
+                }
+                prescription_status_label.setForeground(WARNING_COLOR);
+
+            }
         } else {
 
             if (prescription_save_btn.getText().equalsIgnoreCase("update")) {
@@ -2414,7 +2355,6 @@ public class Home extends javax.swing.JFrame {
             }
 
         }
-        //PATIENT_DETAILS = null; //global patient object removes beacase this is final page;
 
     }//GEN-LAST:event_prescription_next_btnActionPerformed
 
@@ -2425,65 +2365,58 @@ public class Home extends javax.swing.JFrame {
     private void prescription_next_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_next_btnMouseEntered
         prescription_next_btn.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_prescription_next_btnMouseEntered
+    //===================================================[PRESCRIPTION PAGE NEXT BUTTON ENDS]============================================================
 
-    public void resetPrescriptionPage() {
-        removeAllSelectedMedicine();
-        medicine_input.setText("");
-        prescription_name_input.setText("");
-        prescription_date_input.setDate(getCurrentDate());
-        prescription_status_label.setText("");
-        prescription_save_btn.setText("Save");
-        // PATIENT_DETAILS = null;
+    //===================================================[PRESCRIPTION SAVE NEXT BUTTON STARTS]============================================================
 
-        validate();
-        repaint();
-    }
-
-    public void createNewPatientFromPrescriptionPage() {
-
-    }
-
-    //--------------------------------------------------------------------------------------
     private void prescription_save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_save_btnActionPerformed
 
+        //the patient object details passed onto the prescrtion page when we click on next button of patient page
+        PatientDetails prescription_patient_object = getPrescriptionPagePatientDetailsObject();
+        
         if (valid_prescription_inputes.get("is_all_inputes_valid") == 1) {
 
             boolean is_patient_exists = true;
-            if (PATIENT_DETAILS == null) {
-
-                String p_name_input = prescription_name_input.getText();
-                //    String p_mobile_input = prescription_mobile_number_input.getText();
-                Date p_date = prescription_date_input.getDate();
-
-                String gender = "Female";
-                if (prescription_male_btn.isSelected()) {
-                    gender = "Male";
-                }
-                //add new patient
-                if (p_name_input.length() > 0) {
-                    PATIENT_DETAILS = new PatientDetails();
-                    PATIENT_DETAILS.setName(p_name_input);
-                    //   PATIENT_DETAILS.setMobileNo(p_mobile_input);
-                    PATIENT_DETAILS.setDate(p_date);
-                    PATIENT_DETAILS.setGender(gender);
-
-                    Database database = Database.getInstance();
-                    int id = database.insertRecord(PATIENT_DETAILS);
-                    if (id > 0) {
-                        PATIENT_DETAILS.setPid(id);
-                        prescription_status_label.setText("Patient Added Sussfully.");
-                        prescription_status_label.setForeground(SUCCESS_COLOR);
-                    }
-
-                } else {
-                    prescription_status_label.setText("Please Add Patient Details first.");
-                    prescription_status_label.setForeground(Color.red);
-                    is_patient_exists = false;
-                }
-
-            }
 
             if (isPrescriptionPageSavingMode()) {
+                
+                if (prescription_patient_object == null) {
+
+                    String p_name_input = prescription_name_input.getText();
+                    //    String p_mobile_input = prescription_mobile_number_input.getText();
+                    Date p_date = prescription_date_input.getDate();
+
+                    String gender = "Female";
+                    if (prescription_male_btn.isSelected()) {
+                        gender = "Male";
+                    }
+                    //add new patient
+                    if (p_name_input.length() > 0) {
+                        prescription_patient_object = new PatientDetails();
+                        prescription_patient_object.setName(p_name_input);
+                        //   PATIENT_DETAILS.setMobileNo(p_mobile_input);
+                        prescription_patient_object.setDate(p_date);
+                        prescription_patient_object.setGender(gender);
+
+                        Database database = Database.getInstance();
+                        int id = database.insertRecord(prescription_patient_object);
+                        if (id > 0) {
+                            prescription_patient_object.setPid(id);
+                            prescription_status_label.setText("Patient Added Sussfully.");
+                            prescription_status_label.setForeground(SUCCESS_COLOR);
+                            
+                            setPrescriptionPagePatientDetailsObject(prescription_patient_object);
+                        }
+
+                    } else {
+                        prescription_status_label.setText("Please Add Patient Details first.");
+                        prescription_status_label.setForeground(Color.red);
+                        is_patient_exists = false;
+                    }
+
+                }
+
+                if(prescription_patient_object!=null){
                 //Issue
                 //add medicine details
                 for (int i = 0; i < medicine_arraylist.size(); i++) {
@@ -2495,23 +2428,32 @@ public class Home extends javax.swing.JFrame {
                         medicineDetails.setMedicineMealTime(row.before);
                         medicineDetails.setMedicineQuantity(row.selected_combo);
                         medicineDetails.setTotalQuantity(row.tab);
-                        medicineDetails.setPatientDetails(PATIENT_DETAILS);
+                        medicineDetails.setPatientDetails(prescription_patient_object);
 
                         medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
                         database.insertRecordInMedicine(medicineDetails);
                         prescription_status_label.setForeground(SUCCESS_COLOR);
                         prescription_status_label.setText("Saved Susscessfuly..!");
                     }
+                 }
+                }
+                else{
+                       prescription_status_label.setForeground(SUCCESS_COLOR);
+                        prescription_status_label.setText("Patient is not created..!");
                 }
             } else {
 
+                //if updating the patient details
                 Database database = Database.getInstance();
                 //remove all the medicine info of pno and add new pno medicine
 
-                database.removeAllMedicinesOf(PATIENT_DETAILS.getPid());
+                database.removeAllMedicinesOf(prescription_patient_object.getPid());
+
+                prescription_patient_object.setDate(prescription_date_input.getDate());
 
                 //here updatong the the date of patient for editing the recipt
-                database.updatePatientDate(PATIENT_DETAILS); 
+                database.updatePatientDate(prescription_patient_object);
+
                 for (int i = 0; i < medicine_arraylist.size(); i++) {
                     M_BandType row = medicine_arraylist.get(i).getDetials();
                     if (is_patient_exists && row != null) {
@@ -2521,7 +2463,7 @@ public class Home extends javax.swing.JFrame {
                         medicineDetails.setMedicineMealTime(row.before);
                         medicineDetails.setMedicineQuantity(row.selected_combo);
                         medicineDetails.setTotalQuantity(row.tab);
-                        medicineDetails.setPatientDetails(PATIENT_DETAILS);
+                        medicineDetails.setPatientDetails(prescription_patient_object);
 
                         medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
 
@@ -2539,17 +2481,6 @@ public class Home extends javax.swing.JFrame {
 
          }//GEN-LAST:event_prescription_save_btnActionPerformed
 
-    public boolean isPrescriptionPageSavingMode() {
-        if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
-            return true;
-        }
-        return false;
-    }
-//---------------------------------------------------------------------------------------------
-    private void prescription_name_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_name_inputActionPerformed
-        // TODO add your handling code here:
-        System.out.println(" ");
-    }//GEN-LAST:event_prescription_name_inputActionPerformed
 
     private void prescription_name_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_name_inputMouseExited
         if (prescription_name_input.getBorder() != WARNING_BORDER) {
@@ -2611,6 +2542,9 @@ public class Home extends javax.swing.JFrame {
     private void prescription_save_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_save_btnMouseExited
         prescription_save_btn.setBorder(HOVER_BTN_BORDER);
     }//GEN-LAST:event_prescription_save_btnMouseExited
+    //===================================================[PRESCRIPTION PAGE SAVE BUTTON ENDS]============================================================
+
+    //===================================================[PRESCRIPTION DELETE  BUTTON STARTS]============================================================
 
     private void prescription_delete_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_delete_btnMouseEntered
         prescription_delete_btn.setBorder(DEFAULT_BTN_BORDER);
@@ -2620,37 +2554,8 @@ public class Home extends javax.swing.JFrame {
         prescription_delete_btn.setBorder(new LineBorder(new Color(10066329), 1, true));
     }//GEN-LAST:event_prescription_delete_btnMouseExited
 
-    private void addMedicine() {
-        String medicine_name = medicine_list.getSelectedValue();
+    //===================================================[PRESCRIPTION PAGE NEXT BUTTON ENDS]============================================================
 
-        if (medicine_name == null) {
-            medicine_name = medicine_input.getText();
-        }
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        medicine_arraylist.add(new MedicineRowPanel(medicine_name.toUpperCase()));
-
-        main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
-        total_medicine_selected++;
-        validate();
-        repaint();
-    }
-
-    public void addMedicineForEditing(MedicineDetails medicineDetail) {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        medicine_arraylist.add(new MedicineRowPanel(medicineDetail));
-
-        main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
-        total_medicine_selected++;
-        validate();
-        repaint();
-    }
     private void medicine_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_listMouseClicked
 
         if (evt.getClickCount() == 2) {
@@ -2668,6 +2573,9 @@ public class Home extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_medical_report_labelMouseClicked
+//===============================================[PRESCRIPTION PAGE WORKS ENDS]==========================================================
+
+//===============================================[REPORT PAGE WORKS STARTS]==========================================================
 
     private void prescription_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_report_labelMouseClicked
         reports_card = (CardLayout) reports_card_panel.getLayout();
@@ -2677,6 +2585,7 @@ public class Home extends javax.swing.JFrame {
         test_report_label.setForeground(REPORT_LABEL_COLOR);
         medical_report_label.setForeground(REPORT_LABEL_COLOR);
     }//GEN-LAST:event_prescription_report_labelMouseClicked
+
 
     private void test_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test_report_labelMouseClicked
         reports_card = (CardLayout) reports_card_panel.getLayout();
@@ -2700,7 +2609,9 @@ public class Home extends javax.swing.JFrame {
             name_report_input.setText(patientDetails.getName());
             date_report_input.setDate(patientDetails.getDate());
         } else {
-            System.out.println("Patient is null");
+
+            report_status.setText("No patient details available");
+            report_status.setForeground(WARNING_COLOR);
         }
 
     }
@@ -2713,7 +2624,6 @@ public class Home extends javax.swing.JFrame {
         report_show_panel.revalidate();
         report_show_panel.repaint();
 
-        PATIENT_DETAILS = null;  //because it is last page
     }
 
     private void setReportPrint() {
@@ -2774,6 +2684,7 @@ public class Home extends javax.swing.JFrame {
                 prescription_save_btn.setText("Update");
 
                 PatientDetails patientDetails = database.getPatientDetails(patient_report_number);
+               
                 if (patientDetails != null) {
                     ArrayList<MedicineDetails> medi = database.getMedicineList(patient_report_number);
                     if (medi != null) {
@@ -2783,18 +2694,16 @@ public class Home extends javax.swing.JFrame {
                             addMedicineForEditing(m);
                         }
 
-                        setPrescriptionPagePatient(patientDetails);
-                        setGlobalPatientDetails(patientDetails);
-
-                        card = (CardLayout) main_panel.getLayout();
-                        card.show(main_panel, "prescription");
-                        page_showing = "prescription";
-                        dashboard_label.setForeground(Color.white);
-                        patient_label.setForeground(Color.white);
-                        prescription_label.setForeground(Color.cyan);
-                        reports_label.setForeground(Color.white);
-
+                        setPrescriptionPagePatientDetailsObject(patientDetails);
+                        
+                        setPrescriptionPagePatientDetails(patientDetails);
+                      
+                      
+                        //setGlobalPatientDetails(patientDetails);
+                        
+                        showPageOnWindow("prescription");
                         resetReportPage();
+
                     } else {
 
                         report_status.setText("Medicine list is empty");
@@ -2812,7 +2721,11 @@ public class Home extends javax.swing.JFrame {
                 cancle_click_here.setText("Click here");
                 click_here.setText("Click here");
                 cancle_previous_editing_report_label.setText("Cancle Report :");
+
             }
+            validate();
+            repaint();
+
             //  setReportPrint();
         } catch (NumberFormatException exp) {
             report_status.setText("Enter Patient Number");
@@ -2828,25 +2741,7 @@ public class Home extends javax.swing.JFrame {
         cancle_previous_editing_report_label.setText("");
     }
 
-    public void setPrescriptionPagePatient(PatientDetails patientDetails) {
 
-        if (patientDetails != null) {
-            prescription_name_input.setText(patientDetails.getName());
-
-            prescription_date_input.setDate(patientDetails.getDate());
-
-            String gender = patientDetails.getGender();
-            if (gender.equalsIgnoreCase("Male")) {
-                prescription_male_btn.setSelected(true);
-            } else {
-                prescription_female_btn.setSelected(true);
-            }
-        } else {
-            report_status.setText("No Patient Details found");
-            report_status.setForeground(Color.red);
-        }
-
-    }
     private void pno_report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_report_inputMouseEntered
         if (pno_report_input.getBorder() != WARNING_BORDER) {
             pno_report_input.setBorder(HOVER_BORDER);
@@ -2873,15 +2768,13 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_name_report_inputMouseExited
 
-    private void prescription_female_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_female_btnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_prescription_female_btnActionPerformed
-
     private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
+        
+        PatientDetails report_patient_details = getReportPagePatientDetailsObject();
         try {
 
             int patient_report_number = Integer.parseInt(pno_report_input.getText());
-            if (PATIENT_DETAILS == null || PATIENT_DETAILS.getPid() != patient_report_number) {
+            if (report_patient_details == null || report_patient_details.getPid() != patient_report_number) {
                 Database db = Database.getInstance();
                 PatientDetails patientDetails = db.getPatientDetails(patient_report_number);
 
@@ -2907,21 +2800,16 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_cancle_click_hereMouseClicked
 
     private void click_hereMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_click_hereMouseClicked
-        card = (CardLayout) main_panel.getLayout();
-        card.show(main_panel, "prescription");
-        page_showing = "prescription";
-        dashboard_label.setForeground(Color.white);
-        patient_label.setForeground(Color.white);
-        prescription_label.setForeground(Color.cyan);
+        showPageOnWindow("prescription");
         reports_label.setForeground(Color.white);
-        
-        if(prescription_save_btn.getText().equalsIgnoreCase("save")){
-         resetReportLables();
+
+        if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
+            resetReportLables();
         }
     }//GEN-LAST:event_click_hereMouseClicked
 
     private void search_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseEntered
-                           
+
         search_report.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_search_reportMouseEntered
 
@@ -2930,11 +2818,11 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_search_reportMouseExited
 
     private void edit_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseEntered
-             edit_report.setBorder(HOVER_BORDER);
+        edit_report.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_edit_reportMouseEntered
 
     private void edit_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseExited
-       edit_report.setBorder(DEFAULT_BTN_BORDER);
+        edit_report.setBorder(DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_edit_reportMouseExited
 
     /**
