@@ -133,7 +133,7 @@
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="28" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<staticText>
 				<reportElement x="33" y="2" width="89" height="20" uuid="073cdef3-97f2-4227-b2f3-6b7d1fc3c669"/>
 				<textElement>
@@ -179,8 +179,10 @@
 			</textField>
 			<textField>
 				<reportElement x="260" y="2" width="65" height="20" uuid="70a720d6-8305-456e-a2e2-5685bd32a492"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{ba}>0?"जेवणाआधी":"जेवणानंतर"]]></textFieldExpression>
+				<textElement textAlignment="Center">
+					<font fontName="Mangal" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ba}>0?"जेवणापूर्वी":"जेवणानंतर"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="330" y="2" width="40" height="20" uuid="4ae48a66-b18f-4fd8-92bf-00f9f5f9d760"/>

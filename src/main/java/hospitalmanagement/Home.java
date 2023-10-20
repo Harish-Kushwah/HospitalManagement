@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
+//import net.sf.jasperreports.extension.simple.font.families.1.normal=fonts/YourMarathiFont.ttf;
 
 public class Home extends javax.swing.JFrame {
 
@@ -96,11 +97,11 @@ public class Home extends javax.swing.JFrame {
 //=============================================[GENERAL FUNCTIONS WORK START]====================================================
     public void setPageShowingLabelColor() {
         JLabel pages[] = {reports_label, dashboard_label, prescription_label, patient_label};
-        for (int i = 0; i < pages.length; i++) {
-            if (page_showing.equalsIgnoreCase(pages[i].getText())) {
-                pages[i].setForeground(Color.CYAN);
+        for (JLabel page : pages) {
+            if (page_showing.equalsIgnoreCase(page.getText())) {
+                page.setForeground(Color.CYAN);
             } else {
-                pages[i].setForeground(Color.white);
+                page.setForeground(Color.white);
             }
         }
     }
