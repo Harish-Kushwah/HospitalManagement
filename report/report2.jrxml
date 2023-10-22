@@ -121,7 +121,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Wigth :]]></text>
+				<text><![CDATA[Weigth :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="70" width="33" height="26" uuid="2ca24b32-802f-4467-9d8f-0450c18cca1b"/>
