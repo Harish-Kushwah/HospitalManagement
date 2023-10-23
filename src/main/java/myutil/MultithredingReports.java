@@ -18,12 +18,15 @@ import net.sf.jasperreports.engine.JasperReport;
 public class MultithredingReports extends Thread {
    
     String reportPath = ".\\report\\report2.jrxml";
+    String testReportPath = ".\\report\\test_report.jrxml";
     JasperReport jr ;
+    JasperReport testReportJr;
     Database DB = Database.getInstance();
     public void run()
     {
         try {
            this.jr = JasperCompileManager.compileReport(reportPath);
+           this.testReportJr = JasperCompileManager.compileReport(testReportPath);
            System.out.println("hello");
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -33,6 +36,11 @@ public class MultithredingReports extends Thread {
     {
         return this.jr;
     }
+    public JasperReport getCompiledTestReport()
+    {
+        return this.testReportJr;
+    }
+    
     public Connection getConnection()
     {
         return DB.connect();

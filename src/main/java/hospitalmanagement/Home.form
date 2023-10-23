@@ -1199,10 +1199,10 @@
                                                               <Component id="edit_report" min="-2" pref="68" max="-2" attributes="0"/>
                                                               <Component id="save" min="-2" pref="68" max="-2" attributes="0"/>
                                                           </Group>
-                                                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                                                          <EmptySpace type="separate" max="-2" attributes="0"/>
                                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                              <Component id="search_report" pref="71" max="32767" attributes="0"/>
-                                                              <Component id="print" max="32767" attributes="0"/>
+                                                              <Component id="search_report" pref="68" max="32767" attributes="0"/>
+                                                              <Component id="print" pref="68" max="32767" attributes="0"/>
                                                           </Group>
                                                       </Group>
                                                   </Group>
@@ -1251,17 +1251,17 @@
                                               <Component id="jLabel13" min="-2" pref="24" max="-2" attributes="0"/>
                                               <Component id="date_report_input" min="-2" pref="24" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="edit_report" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                                              <Component id="search_report" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="search_report" pref="32" max="32767" attributes="0"/>
+                                              <Component id="edit_report" max="32767" attributes="0"/>
                                           </Group>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="save" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
-                                              <Component id="print" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="save" max="32767" attributes="0"/>
+                                              <Component id="print" pref="31" max="32767" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
                                           <Component id="report_status" min="-2" pref="30" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1273,7 +1273,7 @@
                                               <Component id="cancle_previous_editing_report_label" min="-2" pref="25" max="-2" attributes="0"/>
                                               <Component id="cancle_click_here" min="-2" pref="26" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace pref="296" max="32767" attributes="0"/>
+                                          <EmptySpace pref="258" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -1545,18 +1545,7 @@
                         </Constraint>
                       </Constraints>
 
-                      <Layout>
-                        <DimensionLayout dim="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="1100" max="32767" attributes="0"/>
-                          </Group>
-                        </DimensionLayout>
-                        <DimensionLayout dim="1">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="660" max="32767" attributes="0"/>
-                          </Group>
-                        </DimensionLayout>
-                      </Layout>
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
                     </Container>
                   </SubComponents>
                 </Container>
