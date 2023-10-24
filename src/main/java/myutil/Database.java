@@ -489,4 +489,64 @@ public class Database {
         }
 
     }
+    public ArrayList<String> getBookmark() {
+
+        ArrayList<String> medi = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT DISTINCT bname FROM bookmark;");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                medi.add(rs.getString("bname"));
+                i++;
+            }
+            return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+     public ArrayList<String> getLikeBookmarkMedicine(String str) {
+
+        ArrayList<String> medi = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `bookmark` WHERE bname =");
+            GET_LIKE_MEDICINE.append("\'");
+            GET_LIKE_MEDICINE.append(new StringBuffer(str));
+            GET_LIKE_MEDICINE.append("\';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                medi.add(rs.getString("medicin"));
+                i++;
+            }
+            return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+      public void removeBookmark(String name) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM `bookmark` WHERE `bname`=`"+name+"`;");
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }
+
 }
