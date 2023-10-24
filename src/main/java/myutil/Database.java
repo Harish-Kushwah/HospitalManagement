@@ -33,6 +33,9 @@ public class Database {
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
     
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
+    
+    private final String DELETE_BOOKMARK_BY_NAME ="DELETE FROM `bookmark` WHERE bname=?";
+    private final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
 
     //creates the database connection
     public Connection connect() {
@@ -501,7 +504,7 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                medi.add(rs.getString("bname"));
+                medi.add(rs.getString("bname").toUpperCase());
                 i++;
             }
             return medi;
@@ -536,11 +539,41 @@ public class Database {
         }
         return null;
     }
-      public void removeBookmark(String name) {
+       public ArrayList<String> getLikeBookmark(String str) {
+
+        ArrayList<String> medi = new ArrayList<String>();
 
         try {
             Connection conn = connect();
-            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM `bookmark` WHERE `bname`=`"+name+"`;");
+            StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  bname FROM `bookmark` WHERE bname LIKE ");
+            
+            GET_LIKE_BOOKMARK.append("\'");
+            GET_LIKE_BOOKMARK.append("%");
+            GET_LIKE_BOOKMARK.append(new StringBuffer(str.toUpperCase()));
+            GET_LIKE_BOOKMARK.append("%';");
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_BOOKMARK));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                medi.add(rs.getString("bname").toUpperCase());
+                i++;
+            }
+            return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+       
+      
+      public void removeBookmark(String name) {
+
+      
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_BOOKMARK_BY_NAME);
+            preparedStatement.setString(1, name);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -548,5 +581,26 @@ public class Database {
         }
 
     }
+      
+      public void addBookmark(String bookmark_name , MedicineDetails medicineDetails)
+      {
+          try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_BOOKMARK);
+         
+            
+            preparedStatement.setString(1, bookmark_name);
+            preparedStatement.setString(2, medicineDetails.getMedicineName());
+            preparedStatement.setString(3, medicineDetails.getMedicineQuantity());
+            preparedStatement.setString(4, medicineDetails.getMedicineTime());
+            preparedStatement.setString(5, medicineDetails.getMedicineMealTime());
+            preparedStatement.setString(6, medicineDetails.getTotalQuantity());
+
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+      }
 
 }
