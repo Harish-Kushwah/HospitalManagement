@@ -100,7 +100,9 @@ public class Home extends javax.swing.JFrame {
        // bookmarks_holding_panel.add(bookmark_panel , FlowLayout.TRAILING);
        
        prescription_form_panel.add(new BookmarkPanel());
+
        displayBookmark();
+
 
     }
 
@@ -679,6 +681,7 @@ public class Home extends javax.swing.JFrame {
         prescription_male_btn = new javax.swing.JRadioButton();
         prescription_female_btn = new javax.swing.JRadioButton();
         save_and_print_btn = new javax.swing.JButton();
+
         bookmark_panel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -693,6 +696,7 @@ public class Home extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+
         prescription_panel_head1 = new javax.swing.JPanel();
         patient_panel_header_title1 = new javax.swing.JLabel();
         Reports = new javax.swing.JPanel();
@@ -1167,10 +1171,12 @@ public class Home extends javax.swing.JFrame {
             .addGroup(prescription_formLayout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
                     .addGroup(prescription_formLayout.createSequentialGroup()
                         .addComponent(jSeparator2)
                         .addGap(25, 25, 25))
                     .addGroup(prescription_formLayout.createSequentialGroup()
+
                         .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, prescription_formLayout.createSequentialGroup()
@@ -1187,6 +1193,7 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+
                                 .addGap(137, 137, 137))
                             .addGroup(prescription_formLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
@@ -1207,6 +1214,7 @@ public class Home extends javax.swing.JFrame {
                                 .addGap(37, 37, 37)
                                 .addComponent(selected_medicine_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addContainerGap())))))
+
             .addGroup(prescription_formLayout.createSequentialGroup()
                 .addContainerGap(48, Short.MAX_VALUE)
                 .addComponent(name_label16, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3354,6 +3362,7 @@ public class Home extends javax.swing.JFrame {
         prescription_save_btn.setBorder(new LineBorder(Color.BLACK, 2, true));
     }//GEN-LAST:event_prescription_save_btnMouseEntered
 
+
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
        if (evt.getClickCount() == 1) {
             addBookmarkMedicine();
@@ -3369,6 +3378,7 @@ public void displayBookmark()
         }
         jList1.setModel(lm);
     }
+1
     /**
      * @param args the command line arguments
      */
@@ -3451,7 +3461,6 @@ public void displayBookmark()
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;

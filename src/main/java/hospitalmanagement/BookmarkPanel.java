@@ -4,9 +4,11 @@
  */
 package hospitalmanagement;
 
+
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import myutil.Database;
+
 
 /**
  *
@@ -19,6 +21,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
      */
     public BookmarkPanel() {
         initComponents();
+
         displayBookmark();
     }
     public void displayBookmark()
@@ -31,6 +34,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
         }
         jList1.setModel(lm);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
