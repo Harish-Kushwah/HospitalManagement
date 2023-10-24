@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-build myproject</actionName>
+            <displayName>build myproject</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>compile</goal>
+                <goal>assembly:single</goal>
+            </goals>
+        </action>
+    </actions>

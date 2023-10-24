@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HospitalManagement:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HospitalManagement_jar</output-path>
+    <root id="archive" name="HospitalManagement.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="HospitalManagement" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.21.9/protobuf-java-3.21.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/toedter/jcalendar/1.4/jcalendar-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/unknown/binary/AbsoluteLayout/SNAPSHOT/AbsoluteLayout-SNAPSHOT.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/mysql/mysql-connector-j/8.1.0/mysql-connector-j-8.1.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
