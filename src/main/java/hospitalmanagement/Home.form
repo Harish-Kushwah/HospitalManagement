@@ -27,7 +27,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,4,74,0,0,6,85"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,4,122,0,0,9,65"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -56,7 +56,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="heade_label" min="-2" pref="230" max="-2" attributes="0"/>
-                  <EmptySpace pref="669" max="32767" attributes="0"/>
+                  <EmptySpace pref="1940" max="32767" attributes="0"/>
                   <Component id="doctor_icon_panel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel3" max="-2" attributes="0"/>
@@ -140,7 +140,7 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel5" min="-2" pref="90" max="-2" attributes="0"/>
-                  <EmptySpace pref="1403" max="32767" attributes="0"/>
+                  <EmptySpace pref="2151" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
@@ -257,7 +257,7 @@
                       <Component id="reports_label" min="-2" pref="24" max="-2" attributes="0"/>
                       <Component id="reports_icon" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="828" max="32767" attributes="0"/>
+                  <EmptySpace pref="876" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -274,11 +274,14 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Dashbord"/>
+            <Property name="text" type="java.lang.String" value="Dashboard"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
           </Properties>
+          <AccessibilityProperties>
+            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Dashborad"/>
+          </AccessibilityProperties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dashboard_labelMouseClicked"/>
           </Events>
@@ -452,11 +455,13 @@
             <Container class="javax.swing.JPanel" name="prescription_form_panel">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                  <Color blue="ff" green="ff" red="cc" type="rgb"/>
                 </Property>
+                <Property name="autoscrolls" type="boolean" value="true"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[1100, 700]"/>
                 </Property>
+                <Property name="requestFocusEnabled" type="boolean" value="false"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="prescription_form_panel = new GradientPanel(new Color(0xe8feff),new Color(0xe8f3ff) , 300,600);"/>
@@ -480,7 +485,7 @@
                       </Border>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[910, 530]"/>
+                      <Dimension value="[910, 541]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -491,77 +496,83 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
+                              <EmptySpace pref="48" max="32767" attributes="0"/>
+                              <Component id="name_label16" min="-2" pref="75" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="prescription_name_input" min="-2" pref="212" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                              <Component id="name_label17" min="-2" pref="68" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <Component id="prescription_male_btn" min="-2" pref="60" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="prescription_female_btn" min="-2" pref="98" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                              <Component id="name_label23" min="-2" pref="68" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="prescription_date_input" min="-2" pref="104" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="43" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jSeparator2" pref="896" max="32767" attributes="0"/>
-                                  </Group>
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                                      <Component id="name_label16" min="-2" pref="75" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="prescription_name_input" min="-2" pref="212" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                      <Component id="name_label17" min="-2" pref="68" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                      <Component id="prescription_male_btn" min="-2" pref="60" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="prescription_female_btn" min="-2" pref="98" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
-                                      <Component id="name_label23" min="-2" pref="68" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="prescription_date_input" min="-2" pref="104" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" attributes="0">
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Component id="jLabel10" alignment="1" min="-2" pref="219" max="-2" attributes="0"/>
-                                                  <Group type="102" attributes="0">
-                                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                          <Group type="102" attributes="0">
-                                                              <Component id="medicine_input" min="-2" pref="167" max="-2" attributes="0"/>
-                                                              <EmptySpace max="-2" attributes="0"/>
-                                                              <Component id="add_medicine_btn" min="-2" pref="65" max="-2" attributes="0"/>
-                                                          </Group>
-                                                          <Component id="prescription_status_label" alignment="0" max="32767" attributes="0"/>
-                                                          <Component id="medicine_list_panel" alignment="0" max="32767" attributes="0"/>
-                                                      </Group>
-                                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                                                  </Group>
+                                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Component id="medicine_input" min="-2" pref="167" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="add_medicine_btn" min="-2" pref="65" max="-2" attributes="0"/>
                                               </Group>
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                                                      <Component id="prescription_save_btn" min="-2" pref="80" max="-2" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                                                      <Component id="prescription_next_btn" min="-2" pref="90" max="-2" attributes="0"/>
-                                                  </Group>
+                                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                                  <Component id="prescription_status_label" alignment="1" min="-2" pref="238" max="-2" attributes="0"/>
+                                                  <Component id="medicine_list_panel" min="-2" pref="238" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="jLabel6" min="-2" pref="78" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                                              <Component id="jLabel7" min="-2" pref="57" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" attributes="0">
-                                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                       <Group type="103" groupAlignment="0" attributes="0">
-                                                          <Component id="selected_medicine_panel" min="-2" pref="616" max="-2" attributes="0"/>
+                                                          <Group type="102" attributes="0">
+                                                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                                              <Component id="jLabel10" min="-2" pref="219" max="-2" attributes="0"/>
+                                                          </Group>
                                                           <Group type="102" alignment="0" attributes="0">
-                                                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                                              <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
-                                                              <Component id="jLabel6" min="-2" pref="78" max="-2" attributes="0"/>
+                                                              <Component id="prescription_delete_btn" min="-2" pref="62" max="-2" attributes="0"/>
                                                               <EmptySpace max="32767" attributes="0"/>
-                                                              <Component id="jLabel7" min="-2" pref="51" max="-2" attributes="0"/>
-                                                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                                              <Component id="prescription_save_btn" min="-2" pref="80" max="-2" attributes="0"/>
                                                           </Group>
                                                       </Group>
+                                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                                      <Component id="prescription_next_btn" min="-2" pref="90" max="-2" attributes="0"/>
+                                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                                      <Component id="save_and_print_btn" min="-2" pref="78" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <Group type="102" alignment="1" attributes="0">
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="prescription_delete_btn" min="-2" pref="62" max="-2" attributes="0"/>
-                                                  </Group>
+                                                  <Component id="selected_medicine_panel" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
                                   </Group>
+                                  <Component id="jSeparator2" max="32767" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="back" min="-2" pref="25" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="refresh" min="-2" pref="29" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -571,8 +582,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="prescription_date_input" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
+                                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                       <Component id="name_label23" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="name_label17" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="prescription_name_input" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
@@ -580,50 +590,54 @@
                                       <Component id="prescription_male_btn" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="prescription_female_btn" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="prescription_date_input" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jSeparator2" min="-2" pref="17" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                              <EmptySpace pref="26" max="32767" attributes="0"/>
+                              <Component id="jSeparator2" min="-2" pref="9" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jLabel8" min="-2" pref="27" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="medicine_input" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                                           <Component id="add_medicine_btn" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                                      <Component id="medicine_list_panel" min="-2" pref="272" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="jLabel9" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
                                           <Component id="jLabel6" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                          <Component id="jLabel7" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                          <Component id="jLabel7" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="selected_medicine_panel" min="-2" pref="274" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="medicine_list_panel" max="32767" attributes="0"/>
+                                  <Component id="selected_medicine_panel" alignment="0" min="-2" pref="274" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="prescription_delete_btn" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <EmptySpace pref="14" max="32767" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="prescription_next_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                                          <Component id="prescription_save_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                                  </Group>
+                              <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="prescription_status_label" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="prescription_save_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                                          <Component id="prescription_next_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                                          <Component id="save_and_print_btn" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                                          <Component id="prescription_delete_btn" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
+                                  <Component id="prescription_status_label" min="-2" pref="28" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="refresh" min="-2" pref="29" max="-2" attributes="0"/>
+                                  <Component id="back" min="-2" pref="25" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -698,7 +712,7 @@
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="99" green="ff" red="99" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Next"/>
+                        <Property name="text" type="java.lang.String" value="Save&amp;Next"/>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder roundedCorners="true">
@@ -835,14 +849,6 @@
                         <Property name="text" type="java.lang.String" value="Doses"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel7">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI" size="14" style="0"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="remove"/>
-                      </Properties>
-                    </Component>
                     <Container class="javax.swing.JPanel" name="medicine_list_panel">
                       <Properties>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -854,6 +860,9 @@
                       <SubComponents>
                         <Component class="javax.swing.JList" name="medicine_list">
                           <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Segoe UI" size="14" style="1"/>
+                            </Property>
                             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                               <Color id="Hand Cursor"/>
                             </Property>
@@ -893,6 +902,7 @@
                           <ComponentRef name="prescription_radio_btn_grp"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Male"/>
+                        <Property name="focusPainted" type="boolean" value="false"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JRadioButton" name="prescription_female_btn">
@@ -904,8 +914,81 @@
                           <ComponentRef name="prescription_radio_btn_grp"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Female"/>
+                        <Property name="focusPainted" type="boolean" value="false"/>
                       </Properties>
                     </Component>
+                    <Component class="javax.swing.JButton" name="save_and_print_btn">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="ff" green="66" red="33" type="rgb"/>
+                        </Property>
+                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="save&amp;print"/>
+                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                            <LineBorder roundedCorners="true">
+                              <Color PropertyName="color" blue="ff" green="ff" red="ff" type="rgb"/>
+                            </LineBorder>
+                          </Border>
+                        </Property>
+                        <Property name="focusable" type="boolean" value="false"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="save_and_print_btnMouseEntered"/>
+                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="save_and_print_btnMouseExited"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="save_and_print_btnActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabel7">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="remove"/>
+                      </Properties>
+                    </Component>
+                    <Container class="javax.swing.JPanel" name="refresh">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="e0" green="fc" red="fb" type="rgb"/>
+                        </Property>
+                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                          <Color id="Hand Cursor"/>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[29, 29]"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="refreshMouseClicked"/>
+                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="refreshMouseExited"/>
+                        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="refreshMouseReleased"/>
+                      </Events>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="back">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="e0" green="fc" red="fb" type="rgb"/>
+                        </Property>
+                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                          <Color id="Hand Cursor"/>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[25, 25]"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="backMouseClicked"/>
+                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="backMouseExited"/>
+                        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="backMouseReleased"/>
+                      </Events>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                    </Container>
                   </SubComponents>
                 </Container>
               </SubComponents>
@@ -1132,7 +1215,7 @@
                       </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                          <CardConstraints cardName="prescription_report_panel"/>
+                          <CardConstraints cardName="Prescription"/>
                         </Constraint>
                       </Constraints>
 
@@ -1184,17 +1267,23 @@
                                                               <Component id="redirect_to_prescription_page_label" pref="109" max="32767" attributes="0"/>
                                                               <Component id="cancle_previous_editing_report_label" max="32767" attributes="0"/>
                                                           </Group>
-                                                          <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                           <Group type="103" groupAlignment="0" attributes="0">
                                                               <Component id="click_here" min="-2" pref="78" max="-2" attributes="0"/>
                                                               <Component id="cancle_click_here" min="-2" pref="78" max="-2" attributes="0"/>
                                                           </Group>
                                                       </Group>
                                                       <Group type="102" alignment="0" attributes="0">
-                                                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                                          <Component id="edit_report" min="-2" pref="60" max="-2" attributes="0"/>
-                                                          <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                                                          <Component id="search_report" min="-2" pref="71" max="-2" attributes="0"/>
+                                                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="1" attributes="0">
+                                                              <Component id="edit_report" min="-2" pref="68" max="-2" attributes="0"/>
+                                                              <Component id="save" min="-2" pref="68" max="-2" attributes="0"/>
+                                                          </Group>
+                                                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                              <Component id="search_report" pref="71" max="32767" attributes="0"/>
+                                                              <Component id="print" max="32767" attributes="0"/>
+                                                          </Group>
                                                       </Group>
                                                   </Group>
                                               </Group>
@@ -1247,19 +1336,24 @@
                                               <Component id="edit_report" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                                               <Component id="search_report" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="save" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                                              <Component id="print" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                           <Component id="report_status" min="-2" pref="30" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="redirect_to_prescription_page_label" min="-2" pref="26" max="-2" attributes="0"/>
-                                              <Component id="click_here" min="-2" pref="25" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="click_here" min="-2" pref="25" max="-2" attributes="0"/>
+                                              <Component id="redirect_to_prescription_page_label" min="-2" pref="26" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
                                               <Component id="cancle_previous_editing_report_label" min="-2" pref="25" max="-2" attributes="0"/>
                                               <Component id="cancle_click_here" min="-2" pref="26" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace pref="654" max="32767" attributes="0"/>
+                                          <EmptySpace pref="636" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -1283,6 +1377,7 @@
                                     <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pno_report_inputMouseEntered"/>
                                     <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="pno_report_inputMouseExited"/>
                                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pno_report_inputActionPerformed"/>
+                                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="pno_report_inputKeyPressed"/>
                                   </Events>
                                 </Component>
                                 <Component class="javax.swing.JLabel" name="jLabel14">
@@ -1411,6 +1506,51 @@
                                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="click_hereMouseClicked"/>
                                   </Events>
                                 </Component>
+                                <Component class="javax.swing.JButton" name="print">
+                                  <Properties>
+                                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                      <Color blue="66" green="ff" red="66" type="rgb"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Print"/>
+                                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                                        <LineBorder>
+                                          <Color PropertyName="color" blue="ff" green="ff" red="ff" type="rgb"/>
+                                        </LineBorder>
+                                      </Border>
+                                    </Property>
+                                    <Property name="focusable" type="boolean" value="false"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="printMouseEntered"/>
+                                    <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="printMouseExited"/>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="printActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="save">
+                                  <Properties>
+                                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                      <Color blue="ff" green="0" red="0" type="rgb"/>
+                                    </Property>
+                                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Save"/>
+                                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                                        <LineBorder roundedCorners="true">
+                                          <Color PropertyName="color" blue="ff" green="33" red="0" type="rgb"/>
+                                        </LineBorder>
+                                      </Border>
+                                    </Property>
+                                    <Property name="focusable" type="boolean" value="false"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="saveMouseEntered"/>
+                                    <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="saveMouseExited"/>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveActionPerformed"/>
+                                  </Events>
+                                </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="report_show_panel">
@@ -1428,7 +1568,7 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="850" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="1969" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
@@ -1445,7 +1585,7 @@
                     <Container class="javax.swing.JPanel" name="medical_report_panel">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="99" red="99" type="rgb"/>
+                          <Color blue="ff" green="ff" red="cc" type="rgb"/>
                         </Property>
                       </Properties>
                       <AccessibilityProperties>
@@ -1453,19 +1593,19 @@
                       </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                          <CardConstraints cardName="medical_report_panel"/>
+                          <CardConstraints cardName="Medical"/>
                         </Constraint>
                       </Constraints>
 
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="1100" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="2219" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="970" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="1000" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -1473,7 +1613,7 @@
                     <Container class="javax.swing.JPanel" name="test_report_panel">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="66" green="ff" red="ff" type="rgb"/>
+                          <Color blue="ff" green="ff" red="99" type="rgb"/>
                         </Property>
                       </Properties>
                       <AccessibilityProperties>
@@ -1481,19 +1621,19 @@
                       </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                          <CardConstraints cardName="test_report_panel"/>
+                          <CardConstraints cardName="Test"/>
                         </Constraint>
                       </Constraints>
 
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="1100" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="2219" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="970" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="1000" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                       </Layout>
@@ -1518,19 +1658,19 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="dashboard"/>
+              <CardConstraints cardName="Dashboard"/>
             </Constraint>
           </Constraints>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1471" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="2219" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1027" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1075" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -1614,9 +1754,6 @@
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder roundedCorners="true"/>
                       </Border>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[830, 530]"/>
                     </Property>
                   </Properties>
                   <AuxValues>

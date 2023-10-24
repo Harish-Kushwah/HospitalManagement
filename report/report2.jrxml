@@ -121,7 +121,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Wigth :]]></text>
+				<text><![CDATA[Weigth :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="70" width="33" height="26" uuid="2ca24b32-802f-4467-9d8f-0450c18cca1b"/>
@@ -182,7 +182,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Mangal" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ba}>0?"जेवणापूर्वी":"जेवणानंतर"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ba}>0?"जेवणाआधी":"जेवणानंतर"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="330" y="2" width="40" height="20" uuid="4ae48a66-b18f-4fd8-92bf-00f9f5f9d760"/>
