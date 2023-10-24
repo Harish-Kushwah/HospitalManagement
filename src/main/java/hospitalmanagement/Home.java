@@ -3378,7 +3378,6 @@ public void displayBookmark()
         }
         jList1.setModel(lm);
     }
-1
     /**
      * @param args the command line arguments
      */
@@ -3547,5 +3546,6 @@ public void displayBookmark()
     private javax.swing.JCheckBox vomiting_chk;
     private javax.swing.JCheckBox weakness_chk;
     private javax.swing.JTextField weight_input;
+    private javax.swing.JLabel jLabel7;
     // End of variables declaration//GEN-END:variables
 }
