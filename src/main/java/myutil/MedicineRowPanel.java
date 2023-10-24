@@ -38,7 +38,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
 
     private static String DEFAULT = "0";
 
-    public final String []medicine_quantity = {"1 TAB", "1 CAP", "1/2 TAB", "10 ML", "5 ML","_____"};
+    public final String[] medicine_quantity = {"1 TAB", "1 CAP", "1/2 TAB", "10 ML", "5 ML", "_____"};
     public final JLabel medicine_name = new JLabel("none");
     public final JCheckBox morning_chk = new JCheckBox("M");
     public final JCheckBox afternoon_chk = new JCheckBox("A");
@@ -52,7 +52,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
     // public final JButton save = new JButton("Save");
     public final JTextField total_tablet = new JTextField(5);
     public final JComboBox<String> comboBox = new JComboBox<>(
-          medicine_quantity
+            medicine_quantity
     );
     public GradientPanel name, p;
 
@@ -63,8 +63,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         after.setSelected(true);
     }
 
-    public void initComponents()
-    {
+    public void initComponents() {
         name = new GradientPanel(new Color(0xC5C5EF), new Color(0xFFFFFF), 170, 35);
 //    name.setBackground(new Color(0x9C9CE7));
         p = new GradientPanel(new Color(0xFFFFFF), new Color(0xC5C5EF), 400, 35);
@@ -74,19 +73,31 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
 
         morning_chk.setBackground(new Color(0xFFFFFF));
         morning_chk.addMouseListener(this);
+        morning_chk.setFocusPainted(false);
+
         afternoon_chk.setBackground(new Color(0xFFFFFF));
         afternoon_chk.addMouseListener(this);
+        afternoon_chk.setFocusPainted(false);
+
         evening_chk.setBackground(new Color(0xFFFFFF));
         evening_chk.addMouseListener(this);
+        evening_chk.setFocusPainted(false);
+
         before.setBackground(new Color(0xE7EAF3));
         before.addMouseListener(this);
+        before.setFocusPainted(false);
+
         after.setBackground(new Color(0xE7EAF3));
         after.addMouseListener(this);
+        after.setFocusPainted(false);
+
         comboBox.setBackground(new Color(0xE7EAF3));
         comboBox.addMouseListener(this);
+
         delete_chk.setBackground(new Color(0xccccff));
         delete_chk.addItemListener(this);
-        
+        delete_chk.setFocusPainted(false);
+
         total_tablet.addMouseListener(this);
 
         name.add(medicine_name);
@@ -102,11 +113,12 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         add(name, BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
     }
+
     public MedicineRowPanel(String m_name) {
 
         super(new BorderLayout(5, 10));
         initComponents();
-        
+
         medicine_name.setText(m_name);
         total_tablet.setText("4");
         this.setBackground(new Color(0xC5C5EF));
@@ -130,49 +142,43 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
 //        }
 //      }
 //    });
-        
-
     }
+
     public MedicineRowPanel(MedicineDetails medicineDetails) {
 
         super(new BorderLayout(5, 10));
         initComponents();
-        
+
         setDefaultValues();
-       
+
         medicine_name.setText(medicineDetails.getMedicineName());
         total_tablet.setText(medicineDetails.getTotalQuantity());
-       
+
         morning_chk.setSelected(medicineDetails.morning);
         afternoon_chk.setSelected(medicineDetails.afternoon);
         evening_chk.setSelected(medicineDetails.evening);
-        
+
         String meal_time = medicineDetails.getMedicineMealTime();
-        if(meal_time.equalsIgnoreCase("1"))
-        {
+        if (meal_time.equalsIgnoreCase("1")) {
             before.setSelected(true);
             after.setSelected(false);
-        }
-        else{
+        } else {
             before.setSelected(false);
             after.setSelected(true);
         }
-        
+
         this.setBackground(new Color(0xC5C5EF));
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btg.add(before);
         btg.add(after);
-        
-        
-        for(int i=0;i<medicine_quantity.length;i++)
-        {
-            if(medicine_quantity[i].equalsIgnoreCase(medicineDetails.getMedicineQuantity()))
-            {
+
+        for (int i = 0; i < medicine_quantity.length; i++) {
+            if (medicine_quantity[i].equalsIgnoreCase(medicineDetails.getMedicineQuantity())) {
                 comboBox.setSelectedIndex(i);
                 break;
             }
         }
-        
+
     }
 
     public M_BandType getDetials() {
@@ -185,7 +191,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
                 evening_chk.isSelected(),
                 before.isSelected(),
                 after.isSelected(),
-               total_tablet.getText(),
+                total_tablet.getText(),
                 (String) comboBox.getSelectedItem(), delete_chk.isSelected());
     }
 
@@ -235,11 +241,11 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
     public void mouseExited(MouseEvent e) {
         //((MedicineRowPanel)e.getSource()).setBackground(new Color(255, 51, 51));
         //chnageBackgroundColor(new Color(0xC5C5EF));
-         if (!delete_chk.isSelected()) {
-         p.setEndColor(new Color(0xC5C5EF));
-          this.setBackground(new Color(0xC5C5EF));
-          System.out.println("exit");
-         }
+        if (!delete_chk.isSelected()) {
+            p.setEndColor(new Color(0xC5C5EF));
+            this.setBackground(new Color(0xC5C5EF));
+            System.out.println("exit");
+        }
     }
 
     @Override
