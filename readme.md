@@ -66,7 +66,7 @@ Reports
 
 ## Contributing
 
-Contributions are welcome! If you'd like to contribute to this project, please follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+Contributions are welcome! If you'd like to contribute to this project, please follow the guidelines in the [CONTRIBUTING.md](./contribute.md) file.
 
 ## License
 
