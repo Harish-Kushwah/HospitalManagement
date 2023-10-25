@@ -261,7 +261,7 @@ String  next_page_icon  = "./images/right_arrow.png";
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, bookmark_panelLayout.createSequentialGroup()
-                        .addContainerGap(18, Short.MAX_VALUE)
+                        .addContainerGap()
                         .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
                                 .addComponent(bookmark_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -446,6 +446,7 @@ String  next_page_icon  = "./images/right_arrow.png";
 
     private void nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nextMouseClicked
         home.showPageOnWindow("reports");
+        home.showReportOnWindow("Prescription");
     }//GEN-LAST:event_nextMouseClicked
 
     private void nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nextMouseExited
