@@ -31,11 +31,13 @@ public class Database {
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
-    
+
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
-    
-    private final String DELETE_BOOKMARK_BY_NAME ="DELETE FROM `bookmark` WHERE bname=?";
+
+    private final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
     private final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
+
+    private final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
 
     //creates the database connection
     public Connection connect() {
@@ -128,6 +130,14 @@ public class Database {
                 Date date = rs.getDate("date");
                 patientdetails.setDate(date);
 
+                String fees = rs.getString("fees_paid");
+                if (fees != null) {
+                    patientdetails.setFees(Float.parseFloat(fees));
+                } else {
+                    float f = 0.0f;
+                    patientdetails.setFees(f);
+                }
+
                 patientDetailsList.add(patientdetails);
                 i++;
             }
@@ -157,6 +167,14 @@ public class Database {
 
                 Date date = rs.getDate("date");
                 patientdetails.setDate(date);
+
+                String fees = rs.getString("fees_paid");
+                if (fees != null) {
+                    patientdetails.setFees(Float.parseFloat(fees));
+                } else {
+                    float f = 0.0f;
+                    patientdetails.setFees(f);
+                }
 
                 patientDetailsList.add(patientdetails);
                 i++;
@@ -191,6 +209,13 @@ public class Database {
                 patientdetails.setSymptoms(rs.getString("pdis"));
                 patientdetails.setWeight(rs.getString("wht"));
 
+                String fees = rs.getString("fees_paid");
+                if (fees != null) {
+                    patientdetails.setFees(Float.parseFloat(fees));
+                } else {
+                    float f = 0.0f;
+                    patientdetails.setFees(f);
+                }
                 Date date = rs.getDate("date");
                 patientdetails.setDate(date);
 
@@ -256,22 +281,44 @@ public class Database {
             System.out.println(e);
         }
     }
-    
-     public void updatePatientDate(PatientDetails patientdetails) {
+
+    public void updatePatientDate(PatientDetails patientdetails) {
 
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_DATE);
-          
+
             preparedStatement.setDate(1, new Date(patientdetails.getDate().getTime()));
             preparedStatement.setInt(2, patientdetails.getPid());
 
             preparedStatement.executeUpdate();
-           
 
         } catch (SQLException e) {
             System.out.println(e);
-           
+
+        }
+    }
+
+    public boolean updatePatientFees(int pno, float fees) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_FEES);
+
+            preparedStatement.setFloat(1, fees);
+            preparedStatement.setInt(2, pno);
+
+            int a = preparedStatement.executeUpdate();
+            if (a > 0) {
+                return true;
+            }
+            return false;
+
+        } catch (SQLException e) {
+
+            System.out.println(e);
+            return false;
+
         }
     }
 
@@ -395,12 +442,39 @@ public class Database {
         return null;
     }
 
+    public ArrayList<String> getAllMedicine() {
+
+        ArrayList<String> medi = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `medilist`");
+//            GET_LIKE_MEDICINE.append("\'");
+//            GET_LIKE_MEDICINE.append("%");
+//            GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
+//            GET_LIKE_MEDICINE.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                medi.add(rs.getString("medicine"));
+                i++;
+            }
+            return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public void getMediPedi() {
         try {
             Connection conn = connect();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(GET_MEDI_PEDI);
-           
+
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
             // Step 4: Process the ResultSet object.
@@ -420,7 +494,7 @@ public class Database {
                 patientdetails.setDate(date);
 
                 i++;
-            
+
             }
 
         } catch (SQLException e) {
@@ -492,6 +566,7 @@ public class Database {
         }
 
     }
+
     public ArrayList<String> getBookmark() {
 
         ArrayList<String> medi = new ArrayList<String>();
@@ -514,7 +589,8 @@ public class Database {
         }
         return null;
     }
-     public ArrayList<String> getLikeBookmarkMedicine(String str) {
+
+    public ArrayList<String> getLikeBookmarkMedicine(String str) {
 
         ArrayList<String> medi = new ArrayList<String>();
 
@@ -539,14 +615,15 @@ public class Database {
         }
         return null;
     }
-       public ArrayList<String> getLikeBookmark(String str) {
+
+    public ArrayList<String> getLikeBookmark(String str) {
 
         ArrayList<String> medi = new ArrayList<String>();
 
         try {
             Connection conn = connect();
             StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  bname FROM `bookmark` WHERE bname LIKE ");
-            
+
             GET_LIKE_BOOKMARK.append("\'");
             GET_LIKE_BOOKMARK.append("%");
             GET_LIKE_BOOKMARK.append(new StringBuffer(str.toUpperCase()));
@@ -565,11 +642,9 @@ public class Database {
         }
         return null;
     }
-       
-      
-      public void removeBookmark(String name) {
 
-      
+    public void removeBookmark(String name) {
+
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_BOOKMARK_BY_NAME);
@@ -581,14 +656,12 @@ public class Database {
         }
 
     }
-      
-      public void addBookmark(String bookmark_name , MedicineDetails medicineDetails)
-      {
-          try {
+
+    public void addBookmark(String bookmark_name, MedicineDetails medicineDetails) {
+        try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_BOOKMARK);
-         
-            
+
             preparedStatement.setString(1, bookmark_name);
             preparedStatement.setString(2, medicineDetails.getMedicineName());
             preparedStatement.setString(3, medicineDetails.getMedicineQuantity());
@@ -601,6 +674,6 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e);
         }
-      }
+    }
 
 }

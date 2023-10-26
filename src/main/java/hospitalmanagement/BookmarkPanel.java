@@ -33,7 +33,8 @@ public class BookmarkPanel extends javax.swing.JPanel {
      * Creates new form BookmarkPanel
      */
     Home home;
-String  next_page_icon  = "./images/right_arrow.png";
+    String next_page_icon = "./images/right_arrow.png";
+
     public BookmarkPanel(JFrame home) {
         initComponents();
 
@@ -41,8 +42,8 @@ String  next_page_icon  = "./images/right_arrow.png";
 
         setBookmarkOnInputField();
         displayBookmark();
-        
-        next.add(new SetImageIcon(new ImageIcon(next_page_icon),25,25) , BorderLayout.CENTER );
+
+        next.add(new SetImageIcon(new ImageIcon(next_page_icon), 25, 25), BorderLayout.CENTER);
     }
 
     public void displayBookmark() {
@@ -81,13 +82,18 @@ String  next_page_icon  = "./images/right_arrow.png";
                 try {
                     Database database = Database.getInstance();
                     String text = bookmark_input.getText();
-                    ArrayList<String> bookmark = database.getLikeBookmark(text);
-                    DefaultListModel lm = new DefaultListModel();
+                    if (text.length() > 0) {
+                        ArrayList<String> bookmark = database.getLikeBookmark(text);
+                        DefaultListModel lm = new DefaultListModel();
 
-                    for (String m : bookmark) {
-                        lm.addElement(m);
+                        for (String m : bookmark) {
+                            lm.addElement(m);
+                        }
+                        bookmark_list.setModel(lm);
                     }
-                    bookmark_list.setModel(lm);
+                   else{
+                      displayBookmark();  
+                    }
                 } catch (Exception exp) {
                     System.out.println("No bookmark found");
                 }
@@ -130,12 +136,12 @@ String  next_page_icon  = "./images/right_arrow.png";
 
         setBackground(new java.awt.Color(251, 252, 224));
         setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        setPreferredSize(new java.awt.Dimension(300, 540));
-        setLayout(new java.awt.CardLayout());
+        setPreferredSize(new java.awt.Dimension(200, 528));
+        setLayout(new java.awt.BorderLayout());
 
         bookmark_panel.setBackground(new java.awt.Color(251, 252, 224));
         bookmark_panel.setAutoscrolls(true);
-        bookmark_panel.setPreferredSize(new java.awt.Dimension(299, 528));
+        bookmark_panel.setPreferredSize(new java.awt.Dimension(200, 528));
 
         jLabel7.setText("Bookmark");
 
@@ -155,6 +161,8 @@ String  next_page_icon  = "./images/right_arrow.png";
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        bookmark_list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        bookmark_list.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bookmark_list.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bookmark_listMouseClicked(evt);
@@ -165,6 +173,7 @@ String  next_page_icon  = "./images/right_arrow.png";
         add_bookmark_btn.setBackground(new java.awt.Color(0, 51, 255));
         add_bookmark_btn.setForeground(new java.awt.Color(255, 255, 255));
         add_bookmark_btn.setText("Add");
+        add_bookmark_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         add_bookmark_btn.setFocusPainted(false);
         add_bookmark_btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -184,6 +193,7 @@ String  next_page_icon  = "./images/right_arrow.png";
         bookmark_delete_btn.setForeground(new java.awt.Color(255, 255, 255));
         bookmark_delete_btn.setText("Delete");
         bookmark_delete_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 51, 51), 1, true));
+        bookmark_delete_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bookmark_delete_btn.setFocusPainted(false);
         bookmark_delete_btn.setPreferredSize(new java.awt.Dimension(27, 18));
         bookmark_delete_btn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -219,6 +229,8 @@ String  next_page_icon  = "./images/right_arrow.png";
         save_bookmark_btn.setForeground(new java.awt.Color(255, 255, 255));
         save_bookmark_btn.setText("Save");
         save_bookmark_btn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 255)));
+        save_bookmark_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        save_bookmark_btn.setFocusPainted(false);
         save_bookmark_btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 save_bookmark_btnMouseEntered(evt);
@@ -255,45 +267,50 @@ String  next_page_icon  = "./images/right_arrow.png";
         bookmark_panel.setLayout(bookmark_panelLayout);
         bookmark_panelLayout.setHorizontalGroup(
             bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
-                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(bookmark_panelLayout.createSequentialGroup()
+                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bookmark_panelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, bookmark_panelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
-                                .addComponent(bookmark_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(save_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSeparator3)
-                            .addGroup(bookmark_panelLayout.createSequentialGroup()
-                                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(add_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(bookmark_list_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
-                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(new_bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jSeparator4)
-                            .addComponent(bookmark_delete_btn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, bookmark_panelLayout.createSequentialGroup()
                         .addGap(89, 89, 89)
-                        .addComponent(jLabel15)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(33, 33, 33))
+                        .addComponent(jLabel15))
+                    .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
+                            .addGap(12, 12, 12)
+                            .addComponent(save_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(bookmark_panelLayout.createSequentialGroup()
+                            .addGap(16, 16, 16)
+                            .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(bookmark_panelLayout.createSequentialGroup()
+                                        .addGap(94, 94, 94)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
+                                        .addComponent(bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(add_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jSeparator3)
+                                    .addComponent(bookmark_delete_btn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bookmark_list_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(bookmark_panelLayout.createSequentialGroup()
+                                            .addComponent(jLabel16)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(new_bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
+                                        .addComponent(bookmark_status_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(12, 12, 12)))))))
+                .addGap(10, 10, 10))
         );
         bookmark_panelLayout.setVerticalGroup(
             bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bookmark_panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -309,20 +326,24 @@ String  next_page_icon  = "./images/right_arrow.png";
                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(new_bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(new_bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel17)
-                .addGap(18, 18, 18)
-                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(save_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bookmark_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(save_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(bookmark_panelLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bookmark_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30))))
         );
 
-        add(bookmark_panel, "card2");
+        add(bookmark_panel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void add_bookmark_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_bookmark_btnActionPerformed
@@ -341,7 +362,7 @@ String  next_page_icon  = "./images/right_arrow.png";
             database.removeBookmark(bookmark_list.getSelectedValue());
             lm.remove(index);
 
-            bookmark_status_label.setText("Bookmark Removed Sucessfuly.");
+            bookmark_status_label.setText("Bookmark Removed Successfuly.");
             bookmark_status_label.setForeground(home.SUCCESS_COLOR);
             validate();
             repaint();
@@ -357,33 +378,33 @@ String  next_page_icon  = "./images/right_arrow.png";
         repaint();
         try {
             ArrayList<MedicineRowPanel> medicine_arraylist = home.getMedicineList();
-          
+
             String bookmark_name = new_bookmark_input.getText();
-            if(!medicine_arraylist.isEmpty() && bookmark_name.length()>0){
-            Database database = Database.getInstance();
-            for (int i = 0; i < medicine_arraylist.size(); i++) {
-                M_BandType row = medicine_arraylist.get(i).getDetials();
-                if (row != null) {
+            if (!medicine_arraylist.isEmpty() && bookmark_name.length() > 0) {
+                Database database = Database.getInstance();
+                for (int i = 0; i < medicine_arraylist.size(); i++) {
+                    M_BandType row = medicine_arraylist.get(i).getDetials();
+                    if (row != null) {
 
-                    MedicineDetails medicineDetails = new MedicineDetails();
-                    medicineDetails.setMedicineName(row.medicine_name);
-                    medicineDetails.setMedicineMealTime(row.before);
-                    medicineDetails.setMedicineQuantity(row.selected_combo);
-                    medicineDetails.setTotalQuantity(row.tab);
-                    medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
-                    database.addBookmark(bookmark_name, medicineDetails);
+                        MedicineDetails medicineDetails = new MedicineDetails();
+                        medicineDetails.setMedicineName(row.medicine_name);
+                        medicineDetails.setMedicineMealTime(row.before);
+                        medicineDetails.setMedicineQuantity(row.selected_combo);
+                        medicineDetails.setTotalQuantity(row.tab);
+                        medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
+                        database.addBookmark(bookmark_name, medicineDetails);
 
+                    }
                 }
-            }
 
-            bookmark_status_label.setText("Bookmark added Sucessfully.");
-            bookmark_status_label.setForeground(home.SUCCESS_COLOR);
+                bookmark_status_label.setText("Bookmark added Successfuly.");
+                bookmark_status_label.setForeground(home.SUCCESS_COLOR);
+                new_bookmark_input.setText("");
 
-            displayBookmark();
-            validate();
-            repaint();
-            }
-            else{
+                displayBookmark();
+                validate();
+                repaint();
+            } else {
                 throw new NullPointerException();
             }
         } catch (NullPointerException expt) {
@@ -394,19 +415,19 @@ String  next_page_icon  = "./images/right_arrow.png";
     }//GEN-LAST:event_save_bookmark_btnActionPerformed
 
     private void bookmark_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_inputMouseEntered
-         bookmark_input.setBorder(home.HOVER_BORDER);
+        bookmark_input.setBorder(home.HOVER_BORDER);
     }//GEN-LAST:event_bookmark_inputMouseEntered
 
     private void add_bookmark_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_bookmark_btnMouseEntered
-         add_bookmark_btn.setBorder(home.HOVER_BTN_BORDER);
-    }                                             
+        add_bookmark_btn.setBorder(home.HOVER_BTN_BORDER);
+    }
 
-    private void add_medicine_btnMouseExited(java.awt.event.MouseEvent evt) {                                             
+    private void add_medicine_btnMouseExited(java.awt.event.MouseEvent evt) {
         add_bookmark_btn.setBorder(home.DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_add_bookmark_btnMouseEntered
 
     private void bookmark_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_inputMouseExited
-          bookmark_input.setBorder(home.INPUT_BORDER);
+        bookmark_input.setBorder(home.INPUT_BORDER);
     }//GEN-LAST:event_bookmark_inputMouseExited
 
     private void add_bookmark_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_bookmark_btnMouseExited
@@ -414,11 +435,11 @@ String  next_page_icon  = "./images/right_arrow.png";
     }//GEN-LAST:event_add_bookmark_btnMouseExited
 
     private void new_bookmark_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_new_bookmark_inputMouseEntered
-          new_bookmark_input.setBorder(home.HOVER_BORDER);
+        new_bookmark_input.setBorder(home.HOVER_BORDER);
     }//GEN-LAST:event_new_bookmark_inputMouseEntered
 
     private void new_bookmark_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_new_bookmark_inputMouseExited
-                new_bookmark_input.setBorder(home.INPUT_BORDER);
+        new_bookmark_input.setBorder(home.INPUT_BORDER);
 
     }//GEN-LAST:event_new_bookmark_inputMouseExited
 
@@ -427,7 +448,7 @@ String  next_page_icon  = "./images/right_arrow.png";
     }//GEN-LAST:event_save_bookmark_btnMouseEntered
 
     private void save_bookmark_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_save_bookmark_btnMouseExited
-         save_bookmark_btn.setBorder(home.HOVER_BTN_BORDER);
+        save_bookmark_btn.setBorder(home.HOVER_BTN_BORDER);
     }//GEN-LAST:event_save_bookmark_btnMouseExited
 
     private void bookmark_delete_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_delete_btnMouseEntered
@@ -435,12 +456,15 @@ String  next_page_icon  = "./images/right_arrow.png";
     }//GEN-LAST:event_bookmark_delete_btnMouseEntered
 
     private void bookmark_delete_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_delete_btnMouseExited
-      bookmark_delete_btn.setBorder(new LineBorder(new Color(10066329), 1, true));
+        bookmark_delete_btn.setBorder(new LineBorder(new Color(10066329), 1, true));
     }//GEN-LAST:event_bookmark_delete_btnMouseExited
 
     private void bookmark_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_listMouseClicked
         if (evt.getClickCount() == 1) {
             home.addBookmarkMedicine(bookmark_list);
+            bookmark_input.setText("");
+           //resetBookmarkPanel();
+
         }
     }//GEN-LAST:event_bookmark_listMouseClicked
 
@@ -457,8 +481,7 @@ String  next_page_icon  = "./images/right_arrow.png";
         // TODO add your handling code here:
     }//GEN-LAST:event_nextMouseReleased
 
-    public void resetBookmarkPanel()
-    {
+    public void resetBookmarkPanel() {
         bookmark_input.setText("");
         new_bookmark_input.setText("");
         bookmark_status_label.setText("");

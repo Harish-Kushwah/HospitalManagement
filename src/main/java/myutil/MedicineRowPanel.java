@@ -4,6 +4,7 @@
  */
 package myutil;
 
+import hospitalmanagement.Home;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -112,8 +113,12 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         //p.add(save);
         add(name, BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
+        
+       
     }
 
+    
+    
     public MedicineRowPanel(String m_name) {
 
         super(new BorderLayout(5, 10));
@@ -202,6 +207,10 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
     public void chnageBackgroundColor(Color c1) {
         p.setEndColor(c1);
     }
+    public boolean getDeleteCheckStatus()
+    {
+        return delete_chk.isSelected()==true;
+    }
 //   public void updateValue(BandType bt) {
 //        medicine_name.setText(bt.medicine_name);
 //        morning_chk.setSelected(bt.morning_status);
@@ -253,6 +262,8 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         if (delete_chk.isSelected()) {
             p.setEndColor(new Color(0xff6666));
             this.setBackground(new Color(0xff3333));
+            
+            //Home.removeMedicine(this);
         } else {
             p.setEndColor(new Color(0xC5C5EF));
             this.setBackground(new Color(0xC5C5EF));

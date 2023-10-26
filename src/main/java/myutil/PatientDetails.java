@@ -18,12 +18,15 @@ public class PatientDetails
             int weight_input=0;
             
             Date date;
-    
+    private float fees;
     public PatientDetails(){
 
     }
 
-    
+    public void setFees(Float fees)
+    {
+        this.fees = fees;
+    }
     public   void setName(String name)
     {
         this.name_input = name;
@@ -65,6 +68,10 @@ public class PatientDetails
    
     public int getPid(){
         return this.pid;
+    }
+    public float getFees()
+    {
+        return this.fees;
     }
    
     public  String getName(){return this.name_input;}
