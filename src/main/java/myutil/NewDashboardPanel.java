@@ -282,18 +282,19 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         ArrayList<PatientDetails> patientDetailsArrayList = database.getTodayPatient();
         int row = patientDetailsArrayList.size();
 
-        String data[][] = new String[row][3];
+        String data[][] = new String[row][4];
         int i=0;
         for(PatientDetails patient : patientDetailsArrayList)
         {
            // System.out.println(patient.getName() + " " + patient.getGender());
             data[i][0] = Integer.toString(patient.getPid());
-            data[i][1] = patient.getName();
-            data[i][2] = patient.getDate().toString();
+            data[i][1] = patient.getDate().toString();
+            data[i][2] = patient.getName();
+            data[i][3]=  Float.toString(patient.getFees());
             i++;
         }
 
-        String column[] = {"PID" ,"NAME" , "Date" };
+        String column[] = {"PID" ,"NAME" , "Date","Fees(Rs.)" };
 
 
         LibraryTable new_books_table=new LibraryTable(data,column);
@@ -344,20 +345,23 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
 
 
         ArrayList<PatientDetails> patientDetailsArrayList = database.getMonthlyPatient();
+       
         int row = patientDetailsArrayList.size();
 
-        String data[][] = new String[row][3];
+        String data[][] = new String[row][4];
         int i=0;
         for(PatientDetails patient : patientDetailsArrayList)
         {
+           
             // System.out.println(patient.getName() + " " + patient.getGender());
             data[i][0] = Integer.toString(patient.getPid());
-            data[i][1] = patient.getName();
-            data[i][2] = patient.getDate().toString();
+            data[i][1] = patient.getDate().toString();
+            data[i][2] = patient.getName();
+            data[i][3]=  Float.toString(patient.getFees());
             i++;
         }
 
-        String column[] = {"PID" ,"NAME" , "Date" };
+        String column[] = {"PID" ,"NAME" , "Date" ,"Fees(Rs.)"};
         LibraryTable new_memeber_table = new LibraryTable(data,column);
        // new_memeber_table.setTextColor(new Color(0x363659));
 
