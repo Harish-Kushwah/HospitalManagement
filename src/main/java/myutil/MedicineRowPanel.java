@@ -11,6 +11,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -113,6 +114,9 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         //p.add(save);
         add(name, BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
+        
+        Font marathi_bold = new Font("Mangal", Font.BOLD , 13);
+        medicine_name.setFont(marathi_bold);
         
        
     }

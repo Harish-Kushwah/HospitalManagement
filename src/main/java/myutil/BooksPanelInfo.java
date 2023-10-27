@@ -7,6 +7,7 @@ public class BooksPanelInfo
 {
     String title_name;
     String total;
+   
 
     ImageIcon icon;
     Color color;
@@ -25,6 +26,7 @@ public class BooksPanelInfo
         this.icon = icon;
         this.color  =color;
     }
+    
     public  void setColor(Color color)
     {
         this.color = color;

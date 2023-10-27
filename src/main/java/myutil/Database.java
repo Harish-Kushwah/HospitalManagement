@@ -468,7 +468,32 @@ public class Database {
         }
         return null;
     }
+public ArrayList<String> getLikeReport(String str) {
 
+        ArrayList<String> report = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_REPORT = new StringBuffer("SELECT * FROM `reports` WHERE report_name LIKE ");
+            GET_LIKE_REPORT.append("\'");
+            GET_LIKE_REPORT.append("%");
+            GET_LIKE_REPORT.append(new StringBuffer(str.toUpperCase()));
+            GET_LIKE_REPORT.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_REPORT));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                report.add(rs.getString("report_name"));
+                i++;
+            }
+            return report;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
     public void getMediPedi() {
         try {
             Connection conn = connect();
@@ -551,6 +576,7 @@ public class Database {
         }
         return null;
     }
+    
 
     public void removeAllMedicinesOf(int patient_number) {
 
