@@ -112,6 +112,10 @@ public class Home extends javax.swing.JFrame {
 
         //make the male radio button auto selected on prescriotion page
         prescription_male_btn.setSelected(true);
+        
+       
+        //test_report_panel.removeAll();
+        test_report_panel.add(new TestReport(getPatientPagePatientDetailsObject()) ,BorderLayout.CENTER);
 
         prescription_save_btn.setVisible(false);
 
@@ -1954,18 +1958,7 @@ public class Home extends javax.swing.JFrame {
         medical_report_panel.getAccessibleContext().setAccessibleName("");
 
         test_report_panel.setBackground(new java.awt.Color(153, 255, 255));
-
-        javax.swing.GroupLayout test_report_panelLayout = new javax.swing.GroupLayout(test_report_panel);
-        test_report_panel.setLayout(test_report_panelLayout);
-        test_report_panelLayout.setHorizontalGroup(
-            test_report_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1100, Short.MAX_VALUE)
-        );
-        test_report_panelLayout.setVerticalGroup(
-            test_report_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
-        );
-
+        test_report_panel.setLayout(new java.awt.BorderLayout());
         reports_card_panel.add(test_report_panel, "Test");
         test_report_panel.getAccessibleContext().setAccessibleName("");
 
