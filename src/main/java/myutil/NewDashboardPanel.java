@@ -115,7 +115,19 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         dashboardPanel.add(setBooksPanel(),BorderLayout.CENTER);
 
         //set the foot panel
+        
+        JPanel temp = new JPanel(new BorderLayout());
+        temp.add(setFootPanel(),BorderLayout.CENTER);
+        
+        JPanel fees_panel = new JPanel();
+        fees_panel.setPreferredSize(new Dimension(1100,30));
+        fees_panel.setBackground(Color.red);
+        
+        temp.add(fees_panel , BorderLayout.PAGE_END);
+        
         dashboardPanel.add(setFootPanel(),BorderLayout.PAGE_END);
+
+       // dashboardPanel.add(new JPanel() , BorderLayout.PAGE_END);
 
         //scroll bar added on dashboard panle
         JScrollPane scrollPane =  new JScrollPane(dashboardPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED , JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -177,6 +189,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         ImageIcon icon =new ImageIcon("images/patient_icon5.png");
         BooksPanelInfo booksPanelInfo = new BooksPanelInfo();
         booksPanelInfo.setInfo("Total Patient",TOTAL_PATIENT,icon);
+      
         booksPanelInfo.setColor(new Color(0x8C7EEF));
         total_books =  InfoBoxPanel.getCardPanel(booksPanelInfo);
 
@@ -235,11 +248,28 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
          Color c2  = new Color(0xb3f1f2);
         GradientPanel today_patient_panel = new GradientPanel(c1,c2,650,new_books_height);
         today_patient_panel.setLayout(new BorderLayout());
+       
         JLabel today_patient_label = new JLabel("Todays Patients", SwingConstants.CENTER);
         today_patient_label.setPreferredSize(new Dimension(300,40));
         today_patient_label.setFont(new Font("arial",Font.BOLD,13));
         today_patient_label.setForeground(new Color(0x020d28));
-        today_patient_panel.add(today_patient_label,BorderLayout.PAGE_START);
+        
+        /*
+         This is for showing total fees in the heading with todays fees 
+        */
+        String total_fees = "Total Fees:Rs." + getTodaysTotalFees(); 
+        JLabel today_patient_label_fees = new JLabel(total_fees, SwingConstants.CENTER);
+        today_patient_label_fees.setPreferredSize(new Dimension(300,40));
+        today_patient_label_fees.setFont(new Font("arial",Font.BOLD,13));
+        today_patient_label_fees.setForeground(new Color(0x020d28));
+        
+        GradientPanel today_patient_panel_head =  new GradientPanel(c1,c2,650,40);
+        today_patient_panel_head.setLayout(new BorderLayout());
+        
+        today_patient_panel_head.add(today_patient_label , BorderLayout.WEST);
+        today_patient_panel_head.add(today_patient_label_fees , BorderLayout.EAST);
+       
+        today_patient_panel.add(today_patient_panel_head,BorderLayout.PAGE_START);
 
         //add the table
         today_patient_panel.add(getAllTodayPatientTable(),BorderLayout.CENTER);
@@ -263,7 +293,21 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         monthly_patients_label.setPreferredSize(new Dimension(300,40));
         monthly_patients_label.setFont(new Font("arial",Font.BOLD,13));
         monthly_patients_label.setForeground(new Color(0x020d28));
-        monthly_patients_panel.add(monthly_patients_label,BorderLayout.PAGE_START);
+        
+        String month_total_fees = "Total Fees:Rs." + getMonthlyTotalFees(); 
+        JLabel month_patient_label_fees = new JLabel(month_total_fees, SwingConstants.CENTER);
+        month_patient_label_fees.setPreferredSize(new Dimension(300,40));
+        month_patient_label_fees.setFont(new Font("arial",Font.BOLD,13));
+        month_patient_label_fees.setForeground(new Color(0x020d28));
+        
+        GradientPanel month_patient_panel_head =  new GradientPanel(c1,c2,650,40);
+        month_patient_panel_head.setLayout(new BorderLayout());
+        
+        month_patient_panel_head.add(monthly_patients_label , BorderLayout.WEST);
+        month_patient_panel_head.add(month_patient_label_fees , BorderLayout.EAST);
+       
+        
+        monthly_patients_panel.add(month_patient_panel_head,BorderLayout.PAGE_START);
         //add the table
         monthly_patients_panel.add(getAllMonthlyTable(),BorderLayout.CENTER);
 
@@ -422,6 +466,28 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
             not_return_today.setBorder(PANEL_BORDER);
         }
 
+    }
+    public String getTodaysTotalFees()
+    {
+        
+        float fees=0.0f;
+        ArrayList<PatientDetails> pdetails  = database.getTodayPatient();
+        for(PatientDetails patient : pdetails)
+        {
+            fees+=patient.getFees();
+        }
+        return Float.toString(fees);
+    }
+     public String getMonthlyTotalFees()
+    {
+        
+        float fees=0.0f;
+        ArrayList<PatientDetails> pdetails  = database.getMonthlyPatient();
+        for(PatientDetails patient : pdetails)
+        {
+            fees+=patient.getFees();
+        }
+        return Float.toString(fees);
     }
 
 //    public static void main(String[] args) {
