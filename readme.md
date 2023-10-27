@@ -62,7 +62,12 @@ Prescription
 ![Screenshot 3](screenshots/prescription.png)
 
 Reports
+
+Prescription Report
 ![Screenshot 4](screenshots/new_reports.png)
+
+Test Report
+![Screenshot 4](screenshots/test_report.png)
 
 ## Contributing
 
