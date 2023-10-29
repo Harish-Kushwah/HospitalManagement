@@ -1,41 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package myutil;
 
-import hospitalmanagement.Home;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
-/**
- *
- * @author haris
- */
 public class MedicineRowPanel extends JPanel implements MouseListener, ItemListener {
 
     private static String DEFAULT = "0";
@@ -114,15 +95,12 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         //p.add(save);
         add(name, BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
-        
-        Font marathi_bold = new Font("Mangal", Font.BOLD , 13);
+
+        Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
         medicine_name.setFont(marathi_bold);
-        
-       
+
     }
 
-    
-    
     public MedicineRowPanel(String m_name) {
 
         super(new BorderLayout(5, 10));
@@ -211,9 +189,9 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
     public void chnageBackgroundColor(Color c1) {
         p.setEndColor(c1);
     }
-    public boolean getDeleteCheckStatus()
-    {
-        return delete_chk.isSelected()==true;
+
+    public boolean getDeleteCheckStatus() {
+        return delete_chk.isSelected() == true;
     }
 //   public void updateValue(BandType bt) {
 //        medicine_name.setText(bt.medicine_name);
@@ -266,7 +244,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         if (delete_chk.isSelected()) {
             p.setEndColor(new Color(0xff6666));
             this.setBackground(new Color(0xff3333));
-            
+
             //Home.removeMedicine(this);
         } else {
             p.setEndColor(new Color(0xC5C5EF));

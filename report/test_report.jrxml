@@ -4,7 +4,12 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
+	<subDataset name="dataset2" uuid="29214fe6-41af-4804-9cf4-dad3acbd14da">
+		<parameter name="report" class="java.util.Collection"/>
+		<field name="list" class="java.util.Collection"/>
+	</subDataset>
 	<parameter name="pno" class="java.lang.String"/>
+	<parameter name="report" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT * FROM medi INNER join pdetail on medi.pno =$P{pno} and pdetail.pno=$P{pno};]]>
 	</queryString>
@@ -135,64 +140,20 @@
 	<columnHeader>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement x="33" y="2" width="89" height="20" uuid="073cdef3-97f2-4227-b2f3-6b7d1fc3c669"/>
+				<reportElement x="44" y="2" width="89" height="20" uuid="073cdef3-97f2-4227-b2f3-6b7d1fc3c669"/>
 				<textElement>
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Medicine Name]]></text>
+				<text><![CDATA[Reports Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="191" y="2" width="50" height="20" uuid="76ef329d-7be4-4649-84b4-52332eef9bac"/>
-				<textElement>
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Dosages]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="261" y="2" width="64" height="20" uuid="612e0d40-0c6e-4789-9a70-30b667f3f6c7"/>
-				<textElement>
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Instruction]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="325" y="2" width="45" height="20" uuid="9f778267-9627-4520-b6be-3c0dd5d09e7d"/>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Quantity]]></text>
+				<reportElement x="85" y="2" width="100" height="20" uuid="1494fb96-67e6-428d-adad-bffe7cab373e"/>
+				<text><![CDATA[list]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="32" splitType="Stretch">
-			<textField>
-				<reportElement x="33" y="0" width="148" height="20" uuid="f02909d4-fd25-40ec-bae4-12df27095580"/>
-				<textFieldExpression><![CDATA[$F{medicin}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="218" y="0" width="34" height="20" uuid="71fe3a65-a6ed-485b-8ddb-447c37a19614"/>
-				<textElement textAlignment="Center">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{mtime}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="260" y="2" width="65" height="20" uuid="70a720d6-8305-456e-a2e2-5685bd32a492"/>
-				<textElement textAlignment="Center">
-					<font fontName="Mangal" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{ba}>0?"जेवणाआधी":"जेवणानंतर"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="330" y="2" width="40" height="20" uuid="4ae48a66-b18f-4fd8-92bf-00f9f5f9d760"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="181" y="0" width="37" height="20" uuid="91c6c88a-66d6-4ded-a17d-fbcdf378eb38"/>
-				<textFieldExpression><![CDATA[$F{mqty}]]></textFieldExpression>
-			</textField>
+		<band height="42" splitType="Stretch">
 			<staticText>
 				<reportElement x="15" y="2" width="18" height="20" uuid="2408cd1c-109c-451e-a1df-198b418b7c37"/>
 				<textElement>
@@ -200,6 +161,20 @@
 				</textElement>
 				<text><![CDATA[■]]></text>
 			</staticText>
+			<componentElement>
+				<reportElement x="44" y="2" width="194" height="40" uuid="63096da6-b1da-45df-965a-d4134b407eff"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataset2" uuid="81817e83-431f-44bf-beca-c6e6a6636d94">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="40" width="194">
+						<textField>
+							<reportElement x="0" y="0" width="100" height="20" uuid="7892f9ba-86ef-46ff-ac65-8c01c8200c9a"/>
+							<textFieldExpression><![CDATA[""+$P{report}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
 		</band>
 	</detail>
 	<columnFooter>

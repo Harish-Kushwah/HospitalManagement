@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package hospitalmanagement;
 
 import java.awt.BorderLayout;
@@ -544,18 +540,20 @@ public class TestReport extends javax.swing.JPanel {
         try {
 
             HashMap a = new HashMap();
+            
+            ArrayList<String> arr = new ArrayList<String>();
+            arr.add("abdomen");
+            arr.add("heart");
+            arr.add("dib");
+         
             a.put("pno", Integer.parseInt(pno_report_input.getText()));
-
+           a.put("report", arr);
+            
             Connection con = REPORTS_THREAD.getConnection();
             if (con != null) {
                 JasperReport jr = REPORTS_THREAD.getCompiledTestReport();
-                if (jr != null) {
-                    System.out.println(jr);
-                     System.out.println(a);
-                      System.out.println(con);
-                    
+                if (jr != null) {                  
                     JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
-
                     JRViewer v = new JRViewer(jp);
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
