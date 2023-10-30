@@ -28,11 +28,13 @@ public class Database {
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
+     private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
     private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
     private static final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
 
     private static final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
 
+    private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
      static Database singletone_database = null;
      Connection connection = null;
     //creates the database connection
@@ -204,6 +206,7 @@ public class Database {
                 patientdetails.setPulse(rs.getString("pls"));
                 patientdetails.setSymptoms(rs.getString("pdis"));
                 patientdetails.setWeight(rs.getString("wht"));
+                patientdetails.setMobileNo(rs.getString("mno"));
 
                 String fees = rs.getString("fees_paid");
                 if (fees != null) {
@@ -285,6 +288,22 @@ public class Database {
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_DATE);
 
             preparedStatement.setDate(1, new Date(patientdetails.getDate().getTime()));
+            preparedStatement.setInt(2, patientdetails.getPid());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+    }
+    public void updatePatientMobileNo(PatientDetails patientdetails) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_MOBILE_NO);
+
+            preparedStatement.setString(1, patientdetails.getMobileNo());
             preparedStatement.setInt(2, patientdetails.getPid());
 
             preparedStatement.executeUpdate();
@@ -394,6 +413,18 @@ public class Database {
             preparedStatement.setString(6, medicineDetails.getMedicineMealTime());
             preparedStatement.setString(7, medicineDetails.getTotalQuantity());
 
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    public void insertMedicine(String medicine_name) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDICINE);
+            preparedStatement.setString(1, medicine_name);
+            
             preparedStatement.executeUpdate();
             //conn.commit();
         } catch (SQLException e) {
