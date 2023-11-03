@@ -97,6 +97,23 @@ public class TestReport extends javax.swing.JPanel {
         try {
             pno_report_input.setText(Integer.toString(TEST_REPORT_PATIENT_DETAILS.getPid()));
 
+            Database db = Database.getInstance();
+            ArrayList<String> tests = db.getAllTestReportts(TEST_REPORT_PATIENT_DETAILS.getPid());
+
+            if (tests != null) {
+                lm.removeAllElements();
+                for (String t : tests) {
+                    lm.addElement(t);
+                }
+                selected_report_list.setModel(lm);
+            }
+            else{
+                lm.removeAllElements();
+                
+            }
+            revalidate();
+            repaint();
+
         } catch (NullPointerException exp) {
             System.out.println("Enter integer value only");
         }
@@ -160,7 +177,7 @@ public class TestReport extends javax.swing.JPanel {
         report_status = new javax.swing.JLabel();
         search_report = new javax.swing.JButton();
         print = new javax.swing.JButton();
-        save = new javax.swing.JButton();
+        update = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         report_input = new javax.swing.JTextField();
         add_report_btn = new javax.swing.JButton();
@@ -275,23 +292,23 @@ public class TestReport extends javax.swing.JPanel {
             }
         });
 
-        save.setBackground(new java.awt.Color(0, 0, 255));
-        save.setForeground(new java.awt.Color(255, 255, 255));
-        save.setText("Save");
-        save.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 51, 255), 1, true));
-        save.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        save.setFocusable(false);
-        save.addMouseListener(new java.awt.event.MouseAdapter() {
+        update.setBackground(new java.awt.Color(0, 0, 255));
+        update.setForeground(new java.awt.Color(255, 255, 255));
+        update.setText("Update");
+        update.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 51, 255), 1, true));
+        update.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        update.setFocusable(false);
+        update.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                saveMouseEntered(evt);
+                updateMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                saveMouseExited(evt);
+                updateMouseExited(evt);
             }
         });
-        save.addActionListener(new java.awt.event.ActionListener() {
+        update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveActionPerformed(evt);
+                updateActionPerformed(evt);
             }
         });
 
@@ -473,7 +490,7 @@ public class TestReport extends javax.swing.JPanel {
                         .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -531,7 +548,7 @@ public class TestReport extends javax.swing.JPanel {
                     .addComponent(report_refresh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, test_report_formLayout.createSequentialGroup()
                         .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -623,14 +640,42 @@ public class TestReport extends javax.swing.JPanel {
 
     private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
 
+       try{        
         Database database = Database.getInstance();
         int pno = Integer.parseInt(pno_report_input.getText());
         setTestReportPatientDetailsObject(database.getPatientDetails(pno));
+        
+        resetTestReportLists();
         setTestReportDetails();
+
+        ArrayList<String> tests = database.getAllTestReportts(pno);
+        if(tests!=null){
+         setReportPrint();
+        }
+       }catch(NumberFormatException exp)
+       {
+           report_status.setText("Enter valid patient number");
+           report_status.setForeground(WARNING_COLOR);
+       }
+        
 
 
     }//GEN-LAST:event_search_reportActionPerformed
-
+    public void resetTestReportLists()
+    {
+        report_input.setText("");
+        report_list.clearSelection();
+        selected_report_list.setModel(new DefaultListModel());
+        
+        report_show_panel.removeAll();
+        report_show_panel.revalidate();
+        report_show_panel.repaint();
+        
+        report_status.setText("");
+        
+        
+        
+    }
     private void printMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseEntered
         print.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_printMouseEntered
@@ -651,25 +696,17 @@ public class TestReport extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_printActionPerformed
 
-    private void saveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseEntered
-        save.setBorder(HOVER_BORDER);
-    }//GEN-LAST:event_saveMouseEntered
+    private void updateMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateMouseEntered
+        update.setBorder(HOVER_BORDER);
+    }//GEN-LAST:event_updateMouseEntered
 
-    private void saveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseExited
-        save.setBorder(DEFAULT_BTN_BORDER);
-    }//GEN-LAST:event_saveMouseExited
+    private void updateMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateMouseExited
+        update.setBorder(DEFAULT_BTN_BORDER);
+    }//GEN-LAST:event_updateMouseExited
 
-    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        try {
-            printReport(getTestReportPatientDetailsObject(), true);
-            report_status.setText("Rport printed Succesfully");
-            report_status.setForeground(SUCCESS_COLOR);
-        } catch (JRException ex) {
-            report_status.setText("Rport not printed");
-            report_status.setForeground(WARNING_COLOR);
-
-        }
-    }//GEN-LAST:event_saveActionPerformed
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        updateTestReport();
+    }//GEN-LAST:event_updateActionPerformed
 
     private void report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_inputMouseEntered
         report_input.setBorder(HOVER_BORDER);
@@ -712,6 +749,8 @@ public class TestReport extends javax.swing.JPanel {
 
         setReportsIntoDatabase();
         setReportPrint();
+       
+
     }//GEN-LAST:event_generate_reportActionPerformed
 
     private void report_refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseClicked
@@ -748,15 +787,15 @@ public class TestReport extends javax.swing.JPanel {
     }//GEN-LAST:event_remove_selected_report_btnActionPerformed
 
     private void remove_selected_report_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remove_selected_report_btnMouseEntered
-       remove_selected_report_btn.setBorder(HOVER_BORDER);
+        remove_selected_report_btn.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_remove_selected_report_btnMouseEntered
 
     private void remove_selected_report_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_remove_selected_report_btnMouseExited
-       remove_selected_report_btn.setBorder(DEFAULT_BTN_BORDER);
+        remove_selected_report_btn.setBorder(DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_remove_selected_report_btnMouseExited
 
     private void report_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_report_inputKeyPressed
-       if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             addReport();
             report_input.setText("");
             report_input.grabFocus();
@@ -764,18 +803,17 @@ public class TestReport extends javax.swing.JPanel {
 
         if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
             report_list.grabFocus();
-           report_list.setSelectedIndex(0);
-           
+            report_list.setSelectedIndex(0);
+
         }
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
-           
-            if(report_list.getSelectedIndex()==0){
+
+            if (report_list.getSelectedIndex() == 0) {
                 report_input.grabFocus();
+            } else {
+                report_list.grabFocus();
             }
-            else{
-            report_list.grabFocus();
-            }
-                  
+
         }
     }//GEN-LAST:event_report_inputKeyPressed
 
@@ -785,16 +823,15 @@ public class TestReport extends javax.swing.JPanel {
             report_input.setText("");
             report_input.grabFocus();
         }
-        
+
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
-           
-            if(report_list.getSelectedIndex()==0){
+
+            if (report_list.getSelectedIndex() == 0) {
                 report_input.grabFocus();
+            } else {
+                report_list.grabFocus();
             }
-            else{
-            report_list.grabFocus();
-            }
-                  
+
         }
     }//GEN-LAST:event_report_listKeyPressed
     public void removeSelectedReport() {
@@ -816,8 +853,9 @@ public class TestReport extends javax.swing.JPanel {
         revalidate();
         repaint();
     }
-    
+
     DefaultListModel lm = new DefaultListModel();
+
     public void addReport() {
         String str = report_list.getSelectedValue();
 
@@ -850,7 +888,7 @@ public class TestReport extends javax.swing.JPanel {
         int size = selected_report_list.getModel().getSize();
         int pno = Integer.parseInt(pno_report_input.getText());
         for (int i = 0; i < size; i++) {
-            db.insertReport(pno, (String) lm.getElementAt(i));
+            db.insertTestReport(pno, (String) lm.getElementAt(i));
         }
 
     }
@@ -898,6 +936,9 @@ public class TestReport extends javax.swing.JPanel {
                 if (jr != null) {
                     JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
                     JasperPrintManager.printReport(jp, with_dialog);
+                    
+                     resetReportPage();
+                     setTestReportPatientDetailsObject(null);
 
                 } else {
 
@@ -920,9 +961,32 @@ public class TestReport extends javax.swing.JPanel {
         selected_report_list.setModel(new DefaultListModel());
         report_input.setText("");
         report_status.setText("");
+        
         report_show_panel.removeAll();
         report_show_panel.revalidate();
         report_show_panel.repaint();
+    }
+
+    public void updateTestReport() {
+        try {
+//            resetReportPage();
+//           
+            PatientDetails patientDetails = getTestReportPatientDetailsObject();
+//           
+//            setTestReportDetails();
+            
+            Database db = Database.getInstance();
+            db.removeALlTestReport(patientDetails.getPid());
+
+            setReportsIntoDatabase();
+            setReportPrint();
+
+            report_status.setText("Update Successful.");
+            report_status.setForeground(SUCCESS_COLOR);
+        } catch (Exception exp) {
+            report_status.setText("Unable ot update");
+            report_status.setForeground(WARNING_COLOR);
+        }
     }
 
 
@@ -952,9 +1016,9 @@ public class TestReport extends javax.swing.JPanel {
     private javax.swing.JPanel report_refresh;
     private javax.swing.JPanel report_show_panel;
     private javax.swing.JLabel report_status;
-    private javax.swing.JButton save;
     private javax.swing.JButton search_report;
     private javax.swing.JList<String> selected_report_list;
     private javax.swing.JPanel test_report_form;
+    private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
 }

@@ -28,7 +28,7 @@ public class Database {
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
-     private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
+    private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
     private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
     private static final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
 
@@ -37,6 +37,8 @@ public class Database {
     private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
     
     private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports`) VALUES (?,?);";
+    private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
+    private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
      static Database singletone_database = null;
      Connection connection = null;
     //creates the database connection
@@ -433,7 +435,8 @@ public class Database {
             System.out.println(e);
         }
     }
-    public void insertReport(int pno , String report_name) {
+    //inserting test reports 
+    public void insertTestReport(int pno , String report_name) {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT);
@@ -446,7 +449,19 @@ public class Database {
             System.out.println(e);
         }
     }
+    public void removeALlTestReport(int patient_number)
+    {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TEST_REPORT_BY_PNO);
+            preparedStatement.setInt(1, patient_number);
 
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     public ArrayList<String> getLikeMedicine(String str) {
 
         ArrayList<String> medi = new ArrayList<String>();
@@ -637,6 +652,34 @@ public class Database {
                 i++;
             }
             return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+            
+     public ArrayList<String> getAllTestReportts(int patient_number) {
+
+        ArrayList<String> tests = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            
+
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_ALL_TEST_REPORTS);
+             preparedStatement.setInt(1, patient_number);
+             
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                tests.add(rs.getString("reports"));
+                i++;
+            }
+            if(i==0) 
+                return null;
+            return tests;
 
         } catch (SQLException e) {
             System.out.println(e);
