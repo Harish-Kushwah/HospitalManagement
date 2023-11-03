@@ -96,8 +96,8 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         add(name, BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
 
-        Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
-        medicine_name.setFont(marathi_bold);
+        Font marathi_bold = new Font("Mangal", Font.BOLD, 12);
+       // medicine_name.setFont(marathi_bold);
 
     }
 

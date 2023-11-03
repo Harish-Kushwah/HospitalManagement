@@ -12,7 +12,7 @@ import net.sf.jasperreports.engine.JasperReport;
 public class MultithredingReports extends Thread {
    
     String reportPath = ".\\report\\report2.jrxml";
-    String testReportPath = ".\\report\\test_report.jrxml";
+    String testReportPath = ".\\report\\test_report1.jrxml";
     JasperReport jr ;
     JasperReport testReportJr;
     Database DB = Database.getInstance();
@@ -26,11 +26,11 @@ public class MultithredingReports extends Thread {
         } catch (JRException ex) {
         }
     }
-    public JasperReport getReportComipled()
+    public JasperReport getCompiledPrescriptionReport()
     {
         return this.jr;
     }
-    public JasperReport getCompiledTestReport()
+    public JasperReport getCompliedTestReport()
     {
         return this.testReportJr;
     }

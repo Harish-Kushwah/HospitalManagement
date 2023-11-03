@@ -35,6 +35,8 @@ public class Database {
     private static final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
 
     private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
+    
+    private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports`) VALUES (?,?);";
      static Database singletone_database = null;
      Connection connection = null;
     //creates the database connection
@@ -424,6 +426,19 @@ public class Database {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDICINE);
             preparedStatement.setString(1, medicine_name);
+            
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    public void insertReport(int pno , String report_name) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT);
+            preparedStatement.setInt(1,pno);
+            preparedStatement.setString(2, report_name);
             
             preparedStatement.executeUpdate();
             //conn.commit();

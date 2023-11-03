@@ -328,7 +328,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
             i++;
         }
 
-        String column[] = {"PID" ,"NAME" , "Date","Fees(Rs.)" };
+        String column[] = {"PID" ,"Date" , "Name  ","Fees(Rs.)" };
 
 
         LibraryTable new_books_table=new LibraryTable(data,column);
@@ -395,7 +395,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
             i++;
         }
 
-        String column[] = {"PID" ,"NAME" , "Date" ,"Fees(Rs.)"};
+        String column[] = {"PID" ,"Date" , "Name" ,"Fees(Rs.)"};
         LibraryTable new_memeber_table = new LibraryTable(data,column);
        // new_memeber_table.setTextColor(new Color(0x363659));
 
