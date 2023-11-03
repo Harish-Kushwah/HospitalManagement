@@ -7,11 +7,12 @@ public class RoundedBorderPanel extends JPanel {
 
     int cornerRadius;
     Color backgroundColor;
-    public RoundedBorderPanel( int cornerRadius , Color backgroundColor)
-    {
+
+    public RoundedBorderPanel(int cornerRadius, Color backgroundColor) {
         this.backgroundColor = backgroundColor;
         this.cornerRadius = cornerRadius;
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -27,8 +28,8 @@ public class RoundedBorderPanel extends JPanel {
         } else {
             graphics.setColor(getBackground());
         }
-        graphics.fillRoundRect(0, 0, width+1, height+1, arcs.width, arcs.height); //paint background
+        graphics.fillRoundRect(0, 0, width + 1, height + 1, arcs.width, arcs.height); //paint background
         graphics.setColor(getForeground());
-        graphics.drawRoundRect(0, 0, width+1, height+1, arcs.width, arcs.height); //paint border
+        graphics.drawRoundRect(0, 0, width + 1, height + 1, arcs.width, arcs.height); //paint border
     }
 }

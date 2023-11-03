@@ -4,9 +4,7 @@ import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
+import java.awt.event.KeyListener;
 import java.sql.Connection;
 
 import java.util.ArrayList;
@@ -65,12 +63,14 @@ public class Home extends javax.swing.JFrame {
     Dictionary<String, Integer> valid_reports_inputes = new Hashtable();
 
     public BookmarkPanel BOOK_MARK_PANEL = null;
-   
-    String refresh_page_icon = "./images/refresh3.png";
+    
+     String refresh_page_icon = "./images/refresh3.png";
     String refresh_page_icon_on_click = "./images/refresh3.png";
     String refresh_page_icon_on_exit = "./images/refresh3.png";
     String back_page_icon = "./images/left_arrow.png";
     String next_page_icon = "./images/right_arrow.png";
+
+    
 //=============================================[CONSTRUCTOR WORK START]====================================================
 
     public Home() {
@@ -92,7 +92,7 @@ public class Home extends javax.swing.JFrame {
         Dashboard.setLayout(new BorderLayout());
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
 
-        showPageOnWindow("Dashboard");
+        showPageOnWindow("prescription");
 
         addMedicineRowInPanelForm();
         setMedicineOnMedicineInputField();
@@ -112,10 +112,9 @@ public class Home extends javax.swing.JFrame {
 
         //make the male radio button auto selected on prescriotion page
         prescription_male_btn.setSelected(true);
-        
-       
-        //test_report_panel.removeAll();
-        test_report_panel.add(new TestReport(getPatientPagePatientDetailsObject()) ,BorderLayout.CENTER);
+
+        test_report_panel.removeAll();
+        test_report_panel.add(new TestReport(this , getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
 
         prescription_save_btn.setVisible(false);
 
@@ -124,22 +123,63 @@ public class Home extends javax.swing.JFrame {
         //prescription_form_panel.add(new JPanel());
         prescription_form_panel.revalidate();
         prescription_form_panel.repaint();
-        
-       setMarathiFontForInputes();
-    }
-    public void setMarathiFontForInputes()
-    {
-        Font marathi_plain = new Font("Mangal", Font.PLAIN , 13);
-        Font marathi_bold = new Font("Mangal", Font.BOLD , 13);
-        medicine_input.setFont(marathi_bold );
-        prescription_name_input.setFont(marathi_bold);
-        name_report_input.setFont(marathi_bold);
-        medicine_list.setFont(new Font("Mangal", Font.BOLD , 14));
-        name_input.setFont(marathi_plain);
+
+        //setMarathiFontForInputes();
+      //  addEnterBtnActionTotalTablet();
     }
 
+    public void setMarathiFontForInputes() {
+        Font marathi_plain = new Font("Mangal", Font.PLAIN, 13);
+        Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
+        medicine_input.setFont(marathi_bold);
+        prescription_name_input.setFont(marathi_bold);
+        name_report_input.setFont(marathi_bold);
+        medicine_list.setFont(new Font("Mangal", Font.BOLD, 14));
+        name_input.setFont(marathi_plain);
+    }
+/*
+    public void addEnterBtnActionTotalTablet()
+    {
+         for (int i = 0; i < medicine_arraylist.size(); i++) {
+            MedicineRowPanel p = medicine_arraylist.get(i);
+
+            p.total_tablet.addKeyListener(new KeyListener(){
+                @Override
+                public void keyTyped(KeyEvent e) {
+                     if(e.getKeyCode() == KeyEvent.VK_ENTER)
+                    {
+                       MedicineRowPanel temp = medicine_arraylist.get(1);
+                       temp.total_tablet.requestFocus();
+                       temp.setBackground(WARNING_COLOR);
+                       
+                       System.out.println("clicked");
+                       
+                       validate();
+                       repaint();
+                       
+                       
+                    }
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                   
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                }
+            });
+
+            validate();
+            repaint();
+
+        }
+    }*/
 //=============================================[CONSTRUCTOR WORK ENDS]====================================================
     public void addAllNavigationButtons() {
+       
+    
         report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
         refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
         back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
@@ -148,6 +188,7 @@ public class Home extends javax.swing.JFrame {
         patient_back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
 
         report_back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
+        report_next.add(new SetImageIcon(new ImageIcon(next_page_icon), 25, 25), BorderLayout.CENTER);
     }
 
     public void addBookmarkMedicine(JList<String> bookmark_list) {
@@ -306,7 +347,7 @@ public class Home extends javax.swing.JFrame {
 
                     }
 
-                    /* String p_mobile = prescription_mobile_number_input.getText();
+                    String p_mobile = prescription_mobile_number_input.getText();
                     p_mobile = p_mobile.trim();
                     if (p_mobile.length() != 0 && !validate.isValidMobileNumber(p_mobile)) {
                         prescription_mobile_number_input.setBorder(WARNING_BORDER);
@@ -316,7 +357,7 @@ public class Home extends javax.swing.JFrame {
                         prescription_mobile_number_input.setBorder(INPUT_BORDER);
                         valid_prescription_inputes.put("p_mobile", 1);
 
-                    }*/
+                    }
                     int p_pr = 1;
                     Enumeration<String> keys1 = valid_prescription_inputes.keys();
                     while (keys1.hasMoreElements()) {
@@ -389,7 +430,7 @@ public class Home extends javax.swing.JFrame {
         sugar_input.getDocument().addDocumentListener(dl);
 
         prescription_name_input.getDocument().addDocumentListener(dl);
-        //  prescription_mobile_number_input.getDocument().addDocumentListener(dl);
+        prescription_mobile_number_input.getDocument().addDocumentListener(dl);
 
         name_report_input.getDocument().addDocumentListener(dl);
         pno_report_input.getDocument().addDocumentListener(dl);
@@ -533,7 +574,7 @@ public class Home extends javax.swing.JFrame {
         Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
         Reports.getActionMap().put(k, refresh);
     }*/
-    private Date getCurrentDate() {
+    public Date getCurrentDate() {
         SimpleDateFormat fr = new SimpleDateFormat("dd-MM-yyyy");
         Date date = new Date();
         fr.format(date);
@@ -632,6 +673,13 @@ public class Home extends javax.swing.JFrame {
         String medicine_name = medicine_list.getSelectedValue();
         if (medicine_name == null) {
             medicine_name = medicine_input.getText();
+
+        }
+
+        int total_medicines = medicine_list.getModel().getSize();
+        if (total_medicines == 0 || medicine_name == null) {
+            Database db = Database.getInstance();
+            db.insertMedicine(medicine_name);
         }
         medicine_input.setText("");
 
@@ -755,6 +803,8 @@ public class Home extends javax.swing.JFrame {
         fees_pno_input = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         fees_status_label = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        prescription_mobile_number_input = new javax.swing.JTextField();
         prescription_foot_panel = new javax.swing.JPanel();
         prescription_head_panel = new javax.swing.JPanel();
         prescription_panel_head1 = new javax.swing.JPanel();
@@ -790,6 +840,7 @@ public class Home extends javax.swing.JFrame {
         save = new javax.swing.JButton();
         report_back = new javax.swing.JPanel();
         report_refresh = new javax.swing.JPanel();
+        report_next = new javax.swing.JPanel();
         report_show_panel = new javax.swing.JPanel();
         medical_report_panel = new javax.swing.JPanel();
         test_report_panel = new javax.swing.JPanel();
@@ -862,7 +913,7 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(heade_label, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1940, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1939, Short.MAX_VALUE)
                 .addComponent(doctor_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
@@ -886,12 +937,15 @@ public class Home extends javax.swing.JFrame {
         getContentPane().add(header, java.awt.BorderLayout.PAGE_START);
 
         footer.setBackground(new java.awt.Color(204, 255, 204));
+        footer.setPreferredSize(new java.awt.Dimension(2369, 16));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 153));
         jLabel4.setText(" By PatilInfo Tech");
+        jLabel4.setPreferredSize(new java.awt.Dimension(97, 14));
 
         jLabel5.setText("2023 Copyright");
+        jLabel5.setPreferredSize(new java.awt.Dimension(80, 15));
 
         javax.swing.GroupLayout footerLayout = new javax.swing.GroupLayout(footer);
         footer.setLayout(footerLayout);
@@ -911,10 +965,10 @@ public class Home extends javax.swing.JFrame {
         footerLayout.setVerticalGroup(
             footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(footerLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(6, 6, 6)
                 .addGroup(footerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(1, 1, 1)
                 .addComponent(jLabel11))
         );
@@ -1049,7 +1103,7 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(876, Short.MAX_VALUE))
+                .addContainerGap(882, Short.MAX_VALUE))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -1147,6 +1201,11 @@ public class Home extends javax.swing.JFrame {
                 medicine_inputMouseExited(evt);
             }
         });
+        medicine_input.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                medicine_inputKeyPressed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setText("Selected Medicine ");
@@ -1207,6 +1266,11 @@ public class Home extends javax.swing.JFrame {
         medicine_list.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 medicine_listMouseClicked(evt);
+            }
+        });
+        medicine_list.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                medicine_listKeyPressed(evt);
             }
         });
         medicine_list_panel.add(medicine_list, "card2");
@@ -1292,6 +1356,16 @@ public class Home extends javax.swing.JFrame {
                 fees_inputMouseExited(evt);
             }
         });
+        fees_input.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fees_inputActionPerformed(evt);
+            }
+        });
+        fees_input.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                fees_inputKeyPressed(evt);
+            }
+        });
 
         fees_save_btn.setBackground(new java.awt.Color(51, 102, 255));
         fees_save_btn.setForeground(new java.awt.Color(255, 255, 255));
@@ -1326,26 +1400,44 @@ public class Home extends javax.swing.JFrame {
 
         jLabel17.setText("Add Patient Fees");
 
+        jLabel18.setText("Mob:-");
+
+        prescription_mobile_number_input.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        prescription_mobile_number_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
+        prescription_mobile_number_input.setPreferredSize(new java.awt.Dimension(64, 20));
+        prescription_mobile_number_input.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                prescription_mobile_number_inputMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                prescription_mobile_number_inputMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout prescription_formLayout = new javax.swing.GroupLayout(prescription_form);
         prescription_form.setLayout(prescription_formLayout);
         prescription_formLayout.setHorizontalGroup(
             prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(prescription_formLayout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
-                .addComponent(name_label16, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(name_label16, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(prescription_name_input, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(name_label17, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(prescription_mobile_number_input, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(name_label17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(prescription_male_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(prescription_female_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
-                .addComponent(name_label23, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(prescription_female_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(name_label23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(prescription_date_input, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 38, Short.MAX_VALUE))
+                .addGap(0, 57, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, prescription_formLayout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1401,7 +1493,7 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(fees_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fees_pno_input, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1427,7 +1519,9 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(prescription_name_input, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(name_label16, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(prescription_male_btn)
-                        .addComponent(prescription_female_btn))
+                        .addComponent(prescription_female_btn)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(prescription_mobile_number_input, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(prescription_date_input, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1539,7 +1633,7 @@ public class Home extends javax.swing.JFrame {
         );
         prescrption_left_panelLayout.setVerticalGroup(
             prescrption_left_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 1046, Short.MAX_VALUE)
         );
 
         Prescription.add(prescrption_left_panel, java.awt.BorderLayout.LINE_START);
@@ -1555,7 +1649,7 @@ public class Home extends javax.swing.JFrame {
         );
         prescrption_right_panelLayout.setVerticalGroup(
             prescrption_right_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 1046, Short.MAX_VALUE)
         );
 
         Prescription.add(prescrption_right_panel, java.awt.BorderLayout.LINE_END);
@@ -1824,89 +1918,102 @@ public class Home extends javax.swing.JFrame {
         });
         report_refresh.setLayout(new java.awt.BorderLayout());
 
+        report_next.setBackground(new java.awt.Color(251, 252, 224));
+        report_next.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        report_next.setPreferredSize(new java.awt.Dimension(25, 25));
+        report_next.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                report_nextMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                report_nextMouseExited(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                report_nextMouseReleased(evt);
+            }
+        });
+        report_next.setLayout(new java.awt.BorderLayout());
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(edit_report, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(search_report, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                            .addComponent(print, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(redirect_to_prescription_page_label, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                            .addComponent(cancle_previous_editing_report_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cancle_click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(17, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(78, 78, 78)
+                        .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(report_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(redirect_to_prescription_page_label, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
-                                            .addComponent(cancle_previous_editing_report_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cancle_click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(20, 20, 20)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(edit_report, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(27, 27, 27)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(search_report, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                                            .addComponent(print, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(name_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(pno_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(name_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(pno_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(date_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 11, Short.MAX_VALUE)))
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(date_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pno_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(name_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(date_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(edit_report, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(search_report, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pno_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(name_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(date_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(edit_report, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(search_report, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
-                        .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(redirect_to_prescription_page_label, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1914,8 +2021,13 @@ public class Home extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cancle_previous_editing_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cancle_click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
-                        .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(report_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -1927,7 +2039,7 @@ public class Home extends javax.swing.JFrame {
         report_show_panel.setLayout(report_show_panelLayout);
         report_show_panelLayout.setHorizontalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 850, Short.MAX_VALUE)
+            .addGap(0, 1969, Short.MAX_VALUE)
         );
         report_show_panelLayout.setVerticalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1951,7 +2063,7 @@ public class Home extends javax.swing.JFrame {
         );
         medical_report_panelLayout.setVerticalGroup(
             medical_report_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+            .addGap(0, 1006, Short.MAX_VALUE)
         );
 
         reports_card_panel.add(medical_report_panel, "Medical");
@@ -1979,7 +2091,7 @@ public class Home extends javax.swing.JFrame {
         );
         DashboardLayout.setVerticalGroup(
             DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1075, Short.MAX_VALUE)
+            .addGap(0, 1081, Short.MAX_VALUE)
         );
 
         main_panel.add(Dashboard, "Dashboard");
@@ -2323,7 +2435,7 @@ public class Home extends javax.swing.JFrame {
                                             .addComponent(weight_input, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)))
                                     .addComponent(vomiting_chk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(diarrhea_chk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(weakness_chk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(weakness_chk, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(patient_form_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(headache_chk, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2461,7 +2573,7 @@ public class Home extends javax.swing.JFrame {
     private void dashboard_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboard_labelMouseClicked
         Dashboard.remove(newDashboardPanel);
         newDashboardPanel = new NewDashboardPanel();
-       
+
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
         showPageOnWindow("Dashboard");
 
@@ -2648,7 +2760,7 @@ public class Home extends javax.swing.JFrame {
         newDashboardPanel = new NewDashboardPanel();
 
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
-        
+
         showPageOnWindow("dashboard");
     }//GEN-LAST:event_dashboard_iconMouseClicked
 
@@ -2794,7 +2906,7 @@ public class Home extends javax.swing.JFrame {
         PatientDetails patient_page_obj = getPatientPagePatientDetailsObject();
         if (patient_page_obj != null) {
 
-            if (status_label.getText().startsWith("Patient Details Saved Successfully")) {
+            if (status_label.getText().startsWith("Patient Details Saved")) {
                 showPageOnWindow("prescription");
                 resetPrescriptionPage();
 
@@ -2835,6 +2947,7 @@ public class Home extends javax.swing.JFrame {
         prescription_status_label.setText("");
         prescription_save_btn.setText("Save");
         prescription_save_btn.setVisible(false);
+        prescription_mobile_number_input.setText("");
         new_patient = true;
 
         validate();
@@ -2853,6 +2966,8 @@ public class Home extends javax.swing.JFrame {
         if (patientDetails != null) {
             prescription_name_input.setText(patientDetails.getName());
             prescription_date_input.setDate(patientDetails.getDate());
+            prescription_mobile_number_input.setText(patientDetails.getMobileNo());
+            System.out.println(patientDetails.getMobileNo());
             String gender = patientDetails.getGender();
             if (gender.equalsIgnoreCase("Male")) {
                 prescription_male_btn.setSelected(true);
@@ -2954,7 +3069,7 @@ public class Home extends javax.swing.JFrame {
                         if (prescription_patient_object == null) {
 
                             String p_name_input = prescription_name_input.getText();
-                            //    String p_mobile_input = prescription_mobile_number_input.getText();
+                            String p_mobile_input = prescription_mobile_number_input.getText();
                             Date p_date = prescription_date_input.getDate();
 
                             String gender = "Female";
@@ -2966,7 +3081,7 @@ public class Home extends javax.swing.JFrame {
                             if (p_name_input.length() > 0) {
                                 prescription_patient_object = new PatientDetails();
                                 prescription_patient_object.setName(p_name_input);
-                                //   PATIENT_DETAILS.setMobileNo(p_mobile_input);
+                                prescription_patient_object.setMobileNo(p_mobile_input);
                                 prescription_patient_object.setDate(p_date);
                                 prescription_patient_object.setGender(gender);
 
@@ -3058,9 +3173,11 @@ public class Home extends javax.swing.JFrame {
         database.removeAllMedicinesOf(patientDetails.getPid());
 
         patientDetails.setDate(prescription_date_input.getDate());
-
+        patientDetails.setMobileNo(prescription_mobile_number_input.getText());
+       
         //here updatong the the date of patient for editing the recipt
         database.updatePatientDate(patientDetails);
+        database.updatePatientMobileNo(patientDetails);
 
         if (!medicine_arraylist.isEmpty()) {
             int size = medicine_arraylist.size();
@@ -3170,6 +3287,7 @@ public class Home extends javax.swing.JFrame {
             addMedicine();
             resetMedicineInputList();
             medicine_input.grabFocus();
+            evt.consume();
         }
         //medicine_input.setText(medicine_list.getSelectedValue());
     }//GEN-LAST:event_medicine_listMouseClicked
@@ -3256,7 +3374,7 @@ public class Home extends javax.swing.JFrame {
 
             Connection con = REPORTS_THREAD.getConnection();
             if (con != null) {
-                JasperReport jr = REPORTS_THREAD.getReportComipled();
+                JasperReport jr = REPORTS_THREAD.getCompiledPrescriptionReport();
                 if (jr != null) {
                     JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
 
@@ -3305,7 +3423,7 @@ public class Home extends javax.swing.JFrame {
                 prescription_save_btn.setText("Update");
 
                 PatientDetails patientDetails = database.getPatientDetails(patient_report_number);
-
+                    
                 if (patientDetails != null) {
                     ArrayList<MedicineDetails> medi = database.getMedicineList(patient_report_number);
                     if (medi != null) {
@@ -3472,7 +3590,7 @@ public class Home extends javax.swing.JFrame {
 
             Connection con = REPORTS_THREAD.getConnection();
             if (con != null) {
-                JasperReport jr = REPORTS_THREAD.getReportComipled();
+                JasperReport jr = REPORTS_THREAD.getCompiledPrescriptionReport();
                 if (jr != null) {
                     JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
                     JasperPrintManager.printReport(jp, false);
@@ -3503,7 +3621,7 @@ public class Home extends javax.swing.JFrame {
 
                 Connection con = REPORTS_THREAD.getConnection();
                 if (con != null) {
-                    JasperReport jr = REPORTS_THREAD.getReportComipled();
+                    JasperReport jr = REPORTS_THREAD.getCompiledPrescriptionReport();
                     if (jr != null) {
                         JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
                         JasperPrintManager.printReport(jp, true);
@@ -3687,8 +3805,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_fees_save_btnMouseExited
 
     private void fees_save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fees_save_btnActionPerformed
+        saveFees();
+    }//GEN-LAST:event_fees_save_btnActionPerformed
 
-        try {
+    public void saveFees()
+    {
+         try {
             int fees_pno = Integer.parseInt(fees_pno_input.getText());
             float fees = Float.parseFloat(fees_input.getText());
             Database database = Database.getInstance();
@@ -3696,6 +3818,7 @@ public class Home extends javax.swing.JFrame {
                 fees_status_label.setText("Fees Added Susscessfully");
                 fees_status_label.setForeground(SUCCESS_COLOR);
                 resetFeesSection();
+                fees_pno_input.grabFocus();
             } else {
                 throw new Exception("error in finding patient details");
             }
@@ -3705,8 +3828,7 @@ public class Home extends javax.swing.JFrame {
             fees_status_label.setForeground(WARNING_COLOR);
             resetFeesSection();
         }
-    }//GEN-LAST:event_fees_save_btnActionPerformed
-
+    }
     private void fees_pno_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fees_pno_inputMouseEntered
         fees_pno_input.setBorder(HOVER_BORDER);
     }//GEN-LAST:event_fees_pno_inputMouseEntered
@@ -3722,6 +3844,81 @@ public class Home extends javax.swing.JFrame {
     private void fees_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fees_inputMouseExited
         fees_input.setBorder(INPUT_BORDER);
     }//GEN-LAST:event_fees_inputMouseExited
+
+    private void prescription_mobile_number_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_mobile_number_inputMouseEntered
+        prescription_mobile_number_input.setBorder(HOVER_BORDER);
+    }//GEN-LAST:event_prescription_mobile_number_inputMouseEntered
+
+    private void prescription_mobile_number_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_mobile_number_inputMouseExited
+        prescription_mobile_number_input.setBorder(INPUT_BORDER);
+    }//GEN-LAST:event_prescription_mobile_number_inputMouseExited
+
+  
+    private void medicine_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_inputKeyPressed
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            addMedicine();
+        }
+
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            medicine_list.grabFocus();
+           medicine_list.setSelectedIndex(0);
+           
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+           
+            if(medicine_list.getSelectedIndex()==0){
+                medicine_input.grabFocus();
+            }
+            else{
+            medicine_list.grabFocus();
+            }
+                  
+        }
+
+    }//GEN-LAST:event_medicine_inputKeyPressed
+
+    private void medicine_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_listKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            addMedicine();
+            medicine_input.grabFocus();
+        }
+        
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+           
+            if(medicine_list.getSelectedIndex()==0){
+                medicine_input.grabFocus();
+            }
+            else{
+            medicine_list.grabFocus();
+            }
+                  
+        }
+    }//GEN-LAST:event_medicine_listKeyPressed
+
+    private void fees_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fees_inputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fees_inputActionPerformed
+
+    private void fees_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fees_inputKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+             saveFees();
+        }
+
+    }//GEN-LAST:event_fees_inputKeyPressed
+
+    private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
+        showReportOnWindow("Test");
+    }//GEN-LAST:event_report_nextMouseClicked
+
+    private void report_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_report_nextMouseExited
+
+    private void report_nextMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_report_nextMouseReleased
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -3806,6 +4003,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -3866,6 +4064,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel prescription_icon;
     private javax.swing.JLabel prescription_label;
     private javax.swing.JRadioButton prescription_male_btn;
+    private javax.swing.JTextField prescription_mobile_number_input;
     private javax.swing.JTextField prescription_name_input;
     private javax.swing.JButton prescription_next_btn;
     private javax.swing.JPanel prescription_panel_head1;
@@ -3881,6 +4080,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel redirect_to_prescription_page_label;
     private javax.swing.JPanel refresh;
     private javax.swing.JPanel report_back;
+    private javax.swing.JPanel report_next;
     private javax.swing.JPanel report_refresh;
     private javax.swing.JPanel report_show_panel;
     private javax.swing.JLabel report_status;

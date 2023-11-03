@@ -1,11 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package myutil;
-
-import myutil.*;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
@@ -334,7 +328,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
             i++;
         }
 
-        String column[] = {"PID" ,"NAME" , "Date","Fees(Rs.)" };
+        String column[] = {"PID" ,"Date" , "Name  ","Fees(Rs.)" };
 
 
         LibraryTable new_books_table=new LibraryTable(data,column);
@@ -401,7 +395,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
             i++;
         }
 
-        String column[] = {"PID" ,"NAME" , "Date" ,"Fees(Rs.)"};
+        String column[] = {"PID" ,"Date" , "Name" ,"Fees(Rs.)"};
         LibraryTable new_memeber_table = new LibraryTable(data,column);
        // new_memeber_table.setTextColor(new Color(0x363659));
 

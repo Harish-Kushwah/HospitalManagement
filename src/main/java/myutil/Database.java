@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import myutil.PatientDetails;
 
 /*
-In Database Singletone Design pattern used for reducing the instance of databases and their connection
+  In Database Singleton Design pattern used for reducing the instance of databases and their connection
 
  */
 public class Database {
@@ -21,24 +21,26 @@ public class Database {
     private static final String GET_TOTAL_NO_OF_ROWS = "SELECT COUNT(NAME) FROM pdetail";
     private static final String GET_TOTAL_MONTH_PATIENT = "select * from pdetail where MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now());";
     private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
-
     private static final String GET_MEDI_PEDI = "SELECT* FROM pdetail,medi;";
-    Connection connection = null;
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
-    static Database singletone_database = null;
-
     private static final String INSERT_MEDECINE_INFO = "INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
-
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
+    private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
+    private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
+    private static final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
 
-    private final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
-    private final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
+    private static final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
 
-    private final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
-
+    private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
+    
+    private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports`) VALUES (?,?);";
+    private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
+    private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
+     static Database singletone_database = null;
+     Connection connection = null;
     //creates the database connection
     public Connection connect() {
         try {
@@ -208,6 +210,7 @@ public class Database {
                 patientdetails.setPulse(rs.getString("pls"));
                 patientdetails.setSymptoms(rs.getString("pdis"));
                 patientdetails.setWeight(rs.getString("wht"));
+                patientdetails.setMobileNo(rs.getString("mno"));
 
                 String fees = rs.getString("fees_paid");
                 if (fees != null) {
@@ -298,6 +301,22 @@ public class Database {
 
         }
     }
+    public void updatePatientMobileNo(PatientDetails patientdetails) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_MOBILE_NO);
+
+            preparedStatement.setString(1, patientdetails.getMobileNo());
+            preparedStatement.setInt(2, patientdetails.getPid());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+    }
 
     public boolean updatePatientFees(int pno, float fees) {
 
@@ -332,16 +351,6 @@ public class Database {
             while (rs.next()) {
 
                 PatientDetails patientdetails = new PatientDetails();
-                //patientdetails.setPid(Integer.parseInt(rs.getString("pno")));
-                //patientdetails.setName(rs.getString("name"));
-                //patientdetails.setMobileNo(rs.getString("mno"));
-                //patientdetails.setGender(rs.getString("gen"));
-                //patientdetails.setAge(Integer.parseInt(rs.getString("age")));
-                //patientdetails.setPulse(Integer.parseInt(rs.getString("pls")));
-                //patientdetails.setSymptoms(rs.getString("pdis"));
-                //patientdetails.setWeight(Float.parseFloat(rs.getString("wht")));
-                // patientdetails.setSugar(Integer.parseInt(rs.getString("sugar")));
-                //  System.out.println(rs.getString("pdis"));
                 return patientdetails;
 
             }
@@ -414,7 +423,45 @@ public class Database {
             System.out.println(e);
         }
     }
+    public void insertMedicine(String medicine_name) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDICINE);
+            preparedStatement.setString(1, medicine_name);
+            
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    //inserting test reports 
+    public void insertTestReport(int pno , String report_name) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT);
+            preparedStatement.setInt(1,pno);
+            preparedStatement.setString(2, report_name);
+            
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    public void removeALlTestReport(int patient_number)
+    {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TEST_REPORT_BY_PNO);
+            preparedStatement.setInt(1, patient_number);
 
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     public ArrayList<String> getLikeMedicine(String str) {
 
         ArrayList<String> medi = new ArrayList<String>();
@@ -449,11 +496,6 @@ public class Database {
         try {
             Connection conn = connect();
             StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `medilist`");
-//            GET_LIKE_MEDICINE.append("\'");
-//            GET_LIKE_MEDICINE.append("%");
-//            GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
-//            GET_LIKE_MEDICINE.append("%';");
-
             PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
@@ -468,7 +510,8 @@ public class Database {
         }
         return null;
     }
-public ArrayList<String> getLikeReport(String str) {
+
+    public ArrayList<String> getLikeReport(String str) {
 
         ArrayList<String> report = new ArrayList<String>();
 
@@ -494,6 +537,7 @@ public ArrayList<String> getLikeReport(String str) {
         }
         return null;
     }
+
     public void getMediPedi() {
         try {
             Connection conn = connect();
@@ -576,7 +620,6 @@ public ArrayList<String> getLikeReport(String str) {
         }
         return null;
     }
-    
 
     public void removeAllMedicinesOf(int patient_number) {
 
@@ -609,6 +652,34 @@ public ArrayList<String> getLikeReport(String str) {
                 i++;
             }
             return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+            
+     public ArrayList<String> getAllTestReportts(int patient_number) {
+
+        ArrayList<String> tests = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            
+
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_ALL_TEST_REPORTS);
+             preparedStatement.setInt(1, patient_number);
+             
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                tests.add(rs.getString("reports"));
+                i++;
+            }
+            if(i==0) 
+                return null;
+            return tests;
 
         } catch (SQLException e) {
             System.out.println(e);
