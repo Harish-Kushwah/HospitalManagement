@@ -1,5 +1,7 @@
 package myutil;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import javax.swing.*;
 import  java.awt.event.*;
 
@@ -10,8 +12,18 @@ public class SetProgessBar extends JFrame {
 
     SetProgessBar()
     {
-        JProgressBar progressBar = new JProgressBar(0,100);
+       
+     this.setSize(500, 500);
+     this.setVisible(true);
+     this.setLocationRelativeTo(null);
+     this.setLayout(new BorderLayout());
+     
+      JProgressBar progressBar = new JProgressBar(0,100);
      progressBar.setBounds(100,300,100,10);
+     
+     Container con = this.getContentPane();
+     con.add(progressBar , BorderLayout.PAGE_END);
+     
      progess_timer = new Timer(100, new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -29,6 +41,9 @@ public class SetProgessBar extends JFrame {
         });
         progess_timer.start();
     }
-
+     public static void main(String[] args)
+    {
+        new SetProgessBar();
+    }
 
 }

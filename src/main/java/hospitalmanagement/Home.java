@@ -4,7 +4,6 @@ import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.Connection;
 
 import java.util.ArrayList;
@@ -589,11 +588,11 @@ public class Home extends javax.swing.JFrame {
 
         JLabel menu_panel_label_list[] = {dashboard_label, patient_label, prescription_label, reports_label};
 
-        for (int i = 0; i < menu_panel_label_list.length; i++) {
-            if (menu_panel_label_list[i].getText().equalsIgnoreCase(page_showing)) {
-                menu_panel_label_list[i].setForeground(Color.CYAN);
+        for (JLabel menu_panel_label_list1 : menu_panel_label_list) {
+            if (menu_panel_label_list1.getText().equalsIgnoreCase(page_showing)) {
+                menu_panel_label_list1.setForeground(Color.CYAN);
             } else {
-                menu_panel_label_list[i].setForeground(Color.white);
+                menu_panel_label_list1.setForeground(Color.white);
             }
         }
     }

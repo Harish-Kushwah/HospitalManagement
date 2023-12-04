@@ -47,10 +47,6 @@ public class TestReport extends javax.swing.JPanel {
     final Color SUCCESS_COLOR = new Color(0, 153, 0);
     final Color CLICKED_LABEL_COLOR = new Color(0, 0, 204);
     final Color REPORT_LABEL_COLOR = new Color(0, 0, 102);
-    /**
-     * Creates new form TestReport
-     */
-//    String all_reports_list[]  = new String[200];
 
     PatientDetails TEST_REPORT_PATIENT_DETAILS = null;
     @SuppressWarnings("empty-statement")
@@ -67,8 +63,6 @@ public class TestReport extends javax.swing.JPanel {
         setReportOnReportInputField();
         addAllNavigationButtons();
 
-        // setTestReportDetails();
-        // String all_reports_list = "3D-4D Obstetric");
         REPORTS_THREAD.start();
 
     }
@@ -97,8 +91,7 @@ public class TestReport extends javax.swing.JPanel {
         try {
             pno_report_input.setText(Integer.toString(TEST_REPORT_PATIENT_DETAILS.getPid()));
 
-            Database db = Database.getInstance();
-            ArrayList<String> tests = db.getAllTestReportts(TEST_REPORT_PATIENT_DETAILS.getPid());
+            ArrayList<String> tests = (Database.getInstance()).getAllTestReportts(TEST_REPORT_PATIENT_DETAILS.getPid());
 
             if (tests != null) {
                 lm.removeAllElements();
@@ -141,9 +134,8 @@ public class TestReport extends javax.swing.JPanel {
             }
 
             void updateFieldState() {
-                Database database = Database.getInstance();
                 String text = report_input.getText();
-                ArrayList<String> report = database.getLikeReport(text);
+                ArrayList<String> report = (Database.getInstance()).getLikeReport(text);
                 DefaultListModel lm = new DefaultListModel();
                 for (String m : report) {
                     lm.addElement(m);
@@ -609,7 +601,7 @@ public class TestReport extends javax.swing.JPanel {
 
     private void pno_report_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pno_report_inputKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            // searchReport();
+             searchReport();
         }
     }//GEN-LAST:event_pno_report_inputKeyPressed
 
@@ -639,8 +631,11 @@ public class TestReport extends javax.swing.JPanel {
     }//GEN-LAST:event_search_reportMouseExited
 
     private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
-
-       try{        
+       searchReport();
+    }//GEN-LAST:event_search_reportActionPerformed
+    public void searchReport()
+    {
+        try{        
         Database database = Database.getInstance();
         int pno = Integer.parseInt(pno_report_input.getText());
         setTestReportPatientDetailsObject(database.getPatientDetails(pno));
@@ -657,10 +652,7 @@ public class TestReport extends javax.swing.JPanel {
            report_status.setText("Enter valid patient number");
            report_status.setForeground(WARNING_COLOR);
        }
-        
-
-
-    }//GEN-LAST:event_search_reportActionPerformed
+    }
     public void resetTestReportLists()
     {
         report_input.setText("");
@@ -671,10 +663,7 @@ public class TestReport extends javax.swing.JPanel {
         report_show_panel.revalidate();
         report_show_panel.repaint();
         
-        report_status.setText("");
-        
-        
-        
+        report_status.setText("");   
     }
     private void printMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseEntered
         print.setBorder(HOVER_BORDER);
@@ -692,7 +681,6 @@ public class TestReport extends javax.swing.JPanel {
         } catch (JRException ex) {
             report_status.setText("Report not printed");
             report_status.setForeground(WARNING_COLOR);
-
         }
     }//GEN-LAST:event_printActionPerformed
 
@@ -721,6 +709,8 @@ public class TestReport extends javax.swing.JPanel {
         if (evt.getClickCount() == 1) {
             addReport();
         }
+        report_input.setText("");
+        report_input.grabFocus();
         //medicine_input.setText(medicine_list.getSelectedValue());
     }//GEN-LAST:event_report_listMouseClicked
 
@@ -855,13 +845,19 @@ public class TestReport extends javax.swing.JPanel {
     }
 
     DefaultListModel lm = new DefaultListModel();
-
+    
     public void addReport() {
         String str = report_list.getSelectedValue();
 
-        lm.addElement(str);
-
-        selected_report_list.setModel(lm);
+        if(str==null)
+        {
+            String report_name = report_input.getText();
+            Database db = Database.getInstance();
+            db.insertNewTestReportName(report_name);
+            str = report_name;
+        }
+          lm.addElement(str);
+          selected_report_list.setModel(lm);  
         revalidate();
         repaint();
     }
@@ -871,15 +867,11 @@ public class TestReport extends javax.swing.JPanel {
         Action remove = new AbstractAction("remove") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 System.out.println("hhh");
-
             }
-
         };
         String k = "remove";
         remove.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_X);
-
         test_report_form.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_x, k);
     }
 
@@ -975,8 +967,7 @@ public class TestReport extends javax.swing.JPanel {
 //           
 //            setTestReportDetails();
             
-            Database db = Database.getInstance();
-            db.removeALlTestReport(patientDetails.getPid());
+            (Database.getInstance()).removeALlTestReport(patientDetails.getPid());
 
             setReportsIntoDatabase();
             setReportPrint();

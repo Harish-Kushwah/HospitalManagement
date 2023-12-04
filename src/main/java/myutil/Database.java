@@ -39,6 +39,8 @@ public class Database {
     private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports`) VALUES (?,?);";
     private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
     private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
+    
+    private static final String INSERT_REPORT_NAME = "INSERT INTO `reports` (`report_name`)VALUES (?);";
      static Database singletone_database = null;
      Connection connection = null;
     //creates the database connection
@@ -449,6 +451,20 @@ public class Database {
             System.out.println(e);
         }
     }
+     public void insertNewTestReportName( String report_name) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement( INSERT_REPORT_NAME);
+            preparedStatement.setString(1, report_name);
+            
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+   
     public void removeALlTestReport(int patient_number)
     {
         try {
