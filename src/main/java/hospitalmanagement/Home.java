@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import myutil.Database;
@@ -62,16 +64,16 @@ public class Home extends javax.swing.JFrame {
     Dictionary<String, Integer> valid_reports_inputes = new Hashtable();
 
     public BookmarkPanel BOOK_MARK_PANEL = null;
-    
-     String refresh_page_icon = "./images/refresh3.png";
+
+    String refresh_page_icon = "./images/refresh3.png";
     String refresh_page_icon_on_click = "./images/refresh3.png";
     String refresh_page_icon_on_exit = "./images/refresh3.png";
     String back_page_icon = "./images/left_arrow.png";
     String next_page_icon = "./images/right_arrow.png";
+    String report_dropdown_right_arrow = "./images/right_arrow3.png";
+    String report_dropdown_down_arrow = "./images/down_arrow1.png";
 
-    
 //=============================================[CONSTRUCTOR WORK START]====================================================
-
     public Home() {
 
         initComponents();
@@ -85,6 +87,7 @@ public class Home extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
         this.setIconImage(icon.getImage());
         menu_panel.setBackground(new Color(0x021036));
+        reports_dropdown_panel.setBackground(new Color(0x021036));
 
         addAllNavigationButtons();
 
@@ -113,8 +116,9 @@ public class Home extends javax.swing.JFrame {
         prescription_male_btn.setSelected(true);
 
         test_report_panel.removeAll();
-        test_report_panel.add(new TestReport(this , getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
+        test_report_panel.add(new TestReport(this, getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
 
+        // prescription_report_panel.add(new PrescriptionReport() , BorderLayout.CENTER);
         prescription_save_btn.setVisible(false);
 
         BOOK_MARK_PANEL = new BookmarkPanel(this);
@@ -124,7 +128,9 @@ public class Home extends javax.swing.JFrame {
         prescription_form_panel.repaint();
 
         //setMarathiFontForInputes();
-      //  addEnterBtnActionTotalTablet();
+        //  addEnterBtnActionTotalTablet();
+        reports_dropdown_panel.setVisible(false);
+        reports_dropdown_seperator.setVisible(false);
     }
 
     public void setMarathiFontForInputes() {
@@ -136,7 +142,8 @@ public class Home extends javax.swing.JFrame {
         medicine_list.setFont(new Font("Mangal", Font.BOLD, 14));
         name_input.setFont(marathi_plain);
     }
-/*
+
+    /*
     public void addEnterBtnActionTotalTablet()
     {
          for (int i = 0; i < medicine_arraylist.size(); i++) {
@@ -177,8 +184,7 @@ public class Home extends javax.swing.JFrame {
     }*/
 //=============================================[CONSTRUCTOR WORK ENDS]====================================================
     public void addAllNavigationButtons() {
-       
-    
+
         report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
         refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
         back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
@@ -188,6 +194,22 @@ public class Home extends javax.swing.JFrame {
 
         report_back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
         report_next.add(new SetImageIcon(new ImageIcon(next_page_icon), 25, 25), BorderLayout.CENTER);
+        setRightArrowIconForReportDropdown();
+
+    }
+
+    public void setRightArrowIconForReportDropdown() {
+        reports_dropdown_icon_panel.removeAll();
+        reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_right_arrow), 15, 13), BorderLayout.CENTER);
+        validate();
+        repaint();
+    }
+
+    public void setDownArrowIconForReportDropdown() {
+        reports_dropdown_icon_panel.removeAll();
+        reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_down_arrow), 15, 13), BorderLayout.CENTER);
+        validate();
+        repaint();
     }
 
     public void addBookmarkMedicine(JList<String> bookmark_list) {
@@ -764,6 +786,12 @@ public class Home extends javax.swing.JFrame {
         prescription_icon.add(new SetImageIcon(new ImageIcon("./images/prescription_icon.png"),30,30)) ;
         reports_icon = new JPanel();
         reports_icon.add(new SetImageIcon(new ImageIcon("./images/reports_icon.png"),30,30)) ;
+        reports_dropdown_icon_panel = new javax.swing.JPanel();
+        reports_dropdown_panel = new javax.swing.JPanel();
+        prescription_reports_dropdown_label = new javax.swing.JLabel();
+        medical_reports_dropdown_label = new javax.swing.JLabel();
+        test_reports_dropdown_label = new javax.swing.JLabel();
+        reports_dropdown_seperator = new javax.swing.JSeparator();
         main_panel = new javax.swing.JPanel();
         Prescription = new javax.swing.JPanel();
         prescription_form_panel = prescription_form_panel = new GradientPanel(new Color(0xe8feff),new Color(0xe8f3ff) , 300,600);
@@ -1060,27 +1088,114 @@ public class Home extends javax.swing.JFrame {
         });
         reports_icon.setLayout(new java.awt.CardLayout());
 
+        reports_dropdown_icon_panel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reports_dropdown_icon_panel.setFocusable(false);
+        reports_dropdown_icon_panel.setPreferredSize(new java.awt.Dimension(15, 13));
+        reports_dropdown_icon_panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reports_dropdown_icon_panelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                reports_dropdown_icon_panelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                reports_dropdown_icon_panelMouseExited(evt);
+            }
+        });
+        reports_dropdown_icon_panel.setLayout(new java.awt.BorderLayout());
+
+        reports_dropdown_panel.setBackground(new java.awt.Color(0, 51, 204));
+        reports_dropdown_panel.setForeground(new java.awt.Color(255, 255, 255));
+
+        prescription_reports_dropdown_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        prescription_reports_dropdown_label.setForeground(new java.awt.Color(255, 255, 255));
+        prescription_reports_dropdown_label.setText("  Prescription");
+        prescription_reports_dropdown_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        prescription_reports_dropdown_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                prescription_reports_dropdown_labelMouseClicked(evt);
+            }
+        });
+
+        medical_reports_dropdown_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        medical_reports_dropdown_label.setForeground(new java.awt.Color(255, 255, 255));
+        medical_reports_dropdown_label.setText("        Medical");
+        medical_reports_dropdown_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        medical_reports_dropdown_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                medical_reports_dropdown_labelMouseClicked(evt);
+            }
+        });
+
+        test_reports_dropdown_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        test_reports_dropdown_label.setForeground(new java.awt.Color(255, 255, 255));
+        test_reports_dropdown_label.setText("              Test");
+        test_reports_dropdown_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        test_reports_dropdown_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                test_reports_dropdown_labelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout reports_dropdown_panelLayout = new javax.swing.GroupLayout(reports_dropdown_panel);
+        reports_dropdown_panel.setLayout(reports_dropdown_panelLayout);
+        reports_dropdown_panelLayout.setHorizontalGroup(
+            reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reports_dropdown_panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        reports_dropdown_panelLayout.setVerticalGroup(
+            reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reports_dropdown_panelLayout.createSequentialGroup()
+                .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout menu_panelLayout = new javax.swing.GroupLayout(menu_panel);
         menu_panel.setLayout(menu_panelLayout);
         menu_panelLayout.setHorizontalGroup(
             menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(menu_panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(menu_panelLayout.createSequentialGroup()
+                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
+                                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(prescription_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(8, 8, 8))
+                            .addGroup(menu_panelLayout.createSequentialGroup()
+                                .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(patient_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
+                                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(dashboard_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
+                                        .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(menu_panelLayout.createSequentialGroup()
+                        .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
-                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(prescription_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8))
-                    .addGroup(menu_panelLayout.createSequentialGroup()
-                        .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(reports_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(patient_label, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addComponent(dashboard_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         menu_panelLayout.setVerticalGroup(
@@ -1101,8 +1216,13 @@ public class Home extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(882, Short.MAX_VALUE))
+                    .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(751, Short.MAX_VALUE))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -3173,7 +3293,7 @@ public class Home extends javax.swing.JFrame {
 
         patientDetails.setDate(prescription_date_input.getDate());
         patientDetails.setMobileNo(prescription_mobile_number_input.getText());
-       
+
         //here updatong the the date of patient for editing the recipt
         database.updatePatientDate(patientDetails);
         database.updatePatientMobileNo(patientDetails);
@@ -3305,12 +3425,18 @@ public class Home extends javax.swing.JFrame {
         reports_card.show(reports_card_panel, report_name);
 
         JLabel report_panel_label_list[] = {prescription_report_label, test_report_label, medical_report_label};
+        JLabel dropdown_report_panel_label_list[] = {prescription_reports_dropdown_label, test_reports_dropdown_label, medical_reports_dropdown_label};
+        
 
         for (int i = 0; i < report_panel_label_list.length; i++) {
-            if (report_panel_label_list[i].getText().startsWith(report_name)) {
+            
+            if (report_panel_label_list[i].getText().startsWith(report_name) || prescription_reports_dropdown_label.getText().startsWith(report_name) ) {
                 report_panel_label_list[i].setForeground(CLICKED_LABEL_COLOR);
+                dropdown_report_panel_label_list[i].setForeground(Color.cyan);
+                
             } else {
                 report_panel_label_list[i].setForeground(REPORT_LABEL_COLOR);
+                dropdown_report_panel_label_list[i].setForeground(Color.white);
             }
         }
     }
@@ -3330,14 +3456,6 @@ public class Home extends javax.swing.JFrame {
     private void test_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test_report_labelMouseClicked
         showReportOnWindow("Test");
     }//GEN-LAST:event_test_report_labelMouseClicked
-
-    private void name_report_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name_report_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_name_report_inputActionPerformed
-
-    private void pno_report_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pno_report_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pno_report_inputActionPerformed
 
     public void setReportPageInfo(PatientDetails patientDetails) {
         if (patientDetails != null) {
@@ -3407,9 +3525,7 @@ public class Home extends javax.swing.JFrame {
 
     }
 
-    //Working
-    private void edit_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_reportActionPerformed
-
+    public void editReport() {
         try {
 
             prescription_save_btn.setVisible(true);
@@ -3422,7 +3538,7 @@ public class Home extends javax.swing.JFrame {
                 prescription_save_btn.setText("Update");
 
                 PatientDetails patientDetails = database.getPatientDetails(patient_report_number);
-                    
+
                 if (patientDetails != null) {
                     ArrayList<MedicineDetails> medi = database.getMedicineList(patient_report_number);
                     if (medi != null) {
@@ -3470,7 +3586,7 @@ public class Home extends javax.swing.JFrame {
 
         }
 
-    }//GEN-LAST:event_edit_reportActionPerformed
+    }
 
     public void resetReportLables() {
         redirect_to_prescription_page_label.setText("");
@@ -3478,37 +3594,6 @@ public class Home extends javax.swing.JFrame {
         click_here.setText("");
         cancle_previous_editing_report_label.setText("");
     }
-
-
-    private void pno_report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_report_inputMouseEntered
-        if (pno_report_input.getBorder() != WARNING_BORDER) {
-            pno_report_input.setBorder(HOVER_BORDER);
-        }
-
-
-    }//GEN-LAST:event_pno_report_inputMouseEntered
-
-    private void name_report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputMouseEntered
-        if (name_report_input.getBorder() != WARNING_BORDER) {
-            name_report_input.setBorder(HOVER_BORDER);
-        }
-    }//GEN-LAST:event_name_report_inputMouseEntered
-
-    private void pno_report_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_report_inputMouseExited
-        if (pno_report_input.getBorder() != WARNING_BORDER) {
-            pno_report_input.setBorder(INPUT_BORDER);
-        }
-    }//GEN-LAST:event_pno_report_inputMouseExited
-
-    private void name_report_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputMouseExited
-        if (name_report_input.getBorder() != WARNING_BORDER) {
-            name_report_input.setBorder(INPUT_BORDER);
-        }
-    }//GEN-LAST:event_name_report_inputMouseExited
-
-    private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
-        searchReport();
-    }//GEN-LAST:event_search_reportActionPerformed
 
     public void searchReport() {
         PatientDetails report_patient_details = getReportPagePatientDetailsObject();
@@ -3535,50 +3620,6 @@ public class Home extends javax.swing.JFrame {
             report_status.setForeground(Color.red);
         }
     }
-    private void cancle_click_hereMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancle_click_hereMouseClicked
-        resetPrescriptionPage();
-        resetReportLables();
-    }//GEN-LAST:event_cancle_click_hereMouseClicked
-
-    private void click_hereMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_click_hereMouseClicked
-        showPageOnWindow("prescription");
-        reports_label.setForeground(Color.white);
-
-        if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
-            resetReportLables();
-        }
-    }//GEN-LAST:event_click_hereMouseClicked
-
-    private void search_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseEntered
-
-        search_report.setBorder(HOVER_BORDER);
-    }//GEN-LAST:event_search_reportMouseEntered
-
-    private void search_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseExited
-        search_report.setBorder(DEFAULT_BTN_BORDER);
-    }//GEN-LAST:event_search_reportMouseExited
-
-    private void edit_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseEntered
-        edit_report.setBorder(HOVER_BORDER);
-    }//GEN-LAST:event_edit_reportMouseEntered
-
-    private void edit_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseExited
-        edit_report.setBorder(DEFAULT_BTN_BORDER);
-    }//GEN-LAST:event_edit_reportMouseExited
-
-    private void pno_report_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pno_report_inputKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            searchReport();
-        }
-    }//GEN-LAST:event_pno_report_inputKeyPressed
-
-    private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-        try {
-            printReport(getReportPagePatientDetailsObject());
-        } catch (JRException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_printActionPerformed
 
     public void printReport(PatientDetails patientDetails) throws JRException {
 
@@ -3604,11 +3645,8 @@ public class Home extends javax.swing.JFrame {
             report_status.setText("No report is availalble");
             report_status.setForeground(Color.red);
         }
-
     }
-    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        saveReport(getReportPagePatientDetailsObject());
-    }//GEN-LAST:event_saveActionPerformed
+
     public void saveReport(PatientDetails patientDetails) {
 
         try {
@@ -3641,22 +3679,6 @@ public class Home extends javax.swing.JFrame {
         }
 
     }
-    private void saveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseEntered
-        save.setBorder(HOVER_BORDER);
-    }//GEN-LAST:event_saveMouseEntered
-
-    private void printMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseEntered
-        print.setBorder(HOVER_BORDER);
-    }//GEN-LAST:event_printMouseEntered
-
-    private void printMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseExited
-        print.setBorder(DEFAULT_BTN_BORDER);
-    }//GEN-LAST:event_printMouseExited
-
-    private void saveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseExited
-        save.setBorder(DEFAULT_BTN_BORDER);
-    }//GEN-LAST:event_saveMouseExited
-
     private void save_and_print_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_and_print_btnActionPerformed
 
         saveAndPrintAction();
@@ -3770,31 +3792,6 @@ public class Home extends javax.swing.JFrame {
 
     }//GEN-LAST:event_patient_nextMouseReleased
 
-    private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
-        showPageOnWindow("prescription");
-    }//GEN-LAST:event_report_backMouseClicked
-
-    private void report_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_report_backMouseExited
-
-    private void report_backMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_report_backMouseReleased
-
-    private void report_refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseClicked
-        resetReportPage();
-        REPORT_PAGE_PATIENT_DETAILS_OBJECT = null;
-    }//GEN-LAST:event_report_refreshMouseClicked
-
-    private void report_refreshMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_report_refreshMouseExited
-
-    private void report_refreshMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_report_refreshMouseReleased
-
     private void fees_save_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fees_save_btnMouseEntered
         fees_save_btn.setBorder(HOVER_BTN_BORDER);
     }//GEN-LAST:event_fees_save_btnMouseEntered
@@ -3807,9 +3804,8 @@ public class Home extends javax.swing.JFrame {
         saveFees();
     }//GEN-LAST:event_fees_save_btnActionPerformed
 
-    public void saveFees()
-    {
-         try {
+    public void saveFees() {
+        try {
             int fees_pno = Integer.parseInt(fees_pno_input.getText());
             float fees = Float.parseFloat(fees_input.getText());
             Database database = Database.getInstance();
@@ -3852,7 +3848,7 @@ public class Home extends javax.swing.JFrame {
         prescription_mobile_number_input.setBorder(INPUT_BORDER);
     }//GEN-LAST:event_prescription_mobile_number_inputMouseExited
 
-  
+
     private void medicine_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_inputKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -3861,18 +3857,17 @@ public class Home extends javax.swing.JFrame {
 
         if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
             medicine_list.grabFocus();
-           medicine_list.setSelectedIndex(0);
-           
+            medicine_list.setSelectedIndex(0);
+
         }
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
-           
-            if(medicine_list.getSelectedIndex()==0){
+
+            if (medicine_list.getSelectedIndex() == 0) {
                 medicine_input.grabFocus();
+            } else {
+                medicine_list.grabFocus();
             }
-            else{
-            medicine_list.grabFocus();
-            }
-                  
+
         }
 
     }//GEN-LAST:event_medicine_inputKeyPressed
@@ -3882,16 +3877,15 @@ public class Home extends javax.swing.JFrame {
             addMedicine();
             medicine_input.grabFocus();
         }
-        
+
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
-           
-            if(medicine_list.getSelectedIndex()==0){
+
+            if (medicine_list.getSelectedIndex() == 0) {
                 medicine_input.grabFocus();
+            } else {
+                medicine_list.grabFocus();
             }
-            else{
-            medicine_list.grabFocus();
-            }
-                  
+
         }
     }//GEN-LAST:event_medicine_listKeyPressed
 
@@ -3900,24 +3894,210 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_fees_inputActionPerformed
 
     private void fees_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fees_inputKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-        {
-             saveFees();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            saveFees();
         }
 
     }//GEN-LAST:event_fees_inputKeyPressed
 
-    private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
-        showReportOnWindow("Test");
-    }//GEN-LAST:event_report_nextMouseClicked
+    private void report_nextMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_report_nextMouseReleased
 
     private void report_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_report_nextMouseExited
 
-    private void report_nextMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseReleased
+    private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
+        showReportOnWindow("Test");
+    }//GEN-LAST:event_report_nextMouseClicked
+
+    private void report_refreshMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_report_nextMouseReleased
+    }//GEN-LAST:event_report_refreshMouseReleased
+
+    private void report_refreshMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_report_refreshMouseExited
+
+    private void report_refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseClicked
+        resetReportPage();
+        REPORT_PAGE_PATIENT_DETAILS_OBJECT = null;
+    }//GEN-LAST:event_report_refreshMouseClicked
+
+    private void report_backMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_report_backMouseReleased
+
+    private void report_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_report_backMouseExited
+
+    private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
+        showPageOnWindow("prescription");
+    }//GEN-LAST:event_report_backMouseClicked
+
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        saveReport(getReportPagePatientDetailsObject());
+    }//GEN-LAST:event_saveActionPerformed
+
+    private void saveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseExited
+        save.setBorder(DEFAULT_BTN_BORDER);
+    }//GEN-LAST:event_saveMouseExited
+
+    private void saveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseEntered
+        save.setBorder(HOVER_BORDER);
+    }//GEN-LAST:event_saveMouseEntered
+
+    private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
+        try {
+            printReport(getReportPagePatientDetailsObject());
+        } catch (JRException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_printActionPerformed
+
+    private void printMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseExited
+        print.setBorder(DEFAULT_BTN_BORDER);
+    }//GEN-LAST:event_printMouseExited
+
+    private void printMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseEntered
+        print.setBorder(HOVER_BORDER);
+    }//GEN-LAST:event_printMouseEntered
+
+    private void click_hereMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_click_hereMouseClicked
+        showPageOnWindow("prescription");
+        reports_label.setForeground(Color.white);
+
+        if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
+            resetReportLables();
+        }
+    }//GEN-LAST:event_click_hereMouseClicked
+
+    private void cancle_click_hereMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancle_click_hereMouseClicked
+        resetPrescriptionPage();
+        resetReportLables();
+    }//GEN-LAST:event_cancle_click_hereMouseClicked
+
+    private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
+        searchReport();
+    }//GEN-LAST:event_search_reportActionPerformed
+
+    private void search_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseExited
+        search_report.setBorder(DEFAULT_BTN_BORDER);
+    }//GEN-LAST:event_search_reportMouseExited
+
+    private void search_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseEntered
+
+        search_report.setBorder(HOVER_BORDER);
+    }//GEN-LAST:event_search_reportMouseEntered
+
+    //Working
+    private void edit_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_reportActionPerformed
+        editReport();
+    }//GEN-LAST:event_edit_reportActionPerformed
+
+    private void edit_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseExited
+        edit_report.setBorder(DEFAULT_BTN_BORDER);
+    }//GEN-LAST:event_edit_reportMouseExited
+
+    private void edit_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseEntered
+        edit_report.setBorder(HOVER_BORDER);
+    }//GEN-LAST:event_edit_reportMouseEntered
+
+    private void name_report_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name_report_inputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_name_report_inputActionPerformed
+
+    private void name_report_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputMouseExited
+        if (name_report_input.getBorder() != WARNING_BORDER) {
+            name_report_input.setBorder(INPUT_BORDER);
+        }
+    }//GEN-LAST:event_name_report_inputMouseExited
+
+    private void name_report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputMouseEntered
+        if (name_report_input.getBorder() != WARNING_BORDER) {
+            name_report_input.setBorder(HOVER_BORDER);
+        }
+    }//GEN-LAST:event_name_report_inputMouseEntered
+
+    private void pno_report_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pno_report_inputKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            searchReport();
+        }
+    }//GEN-LAST:event_pno_report_inputKeyPressed
+
+    private void pno_report_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pno_report_inputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pno_report_inputActionPerformed
+
+    private void pno_report_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_report_inputMouseExited
+        if (pno_report_input.getBorder() != WARNING_BORDER) {
+            pno_report_input.setBorder(INPUT_BORDER);
+        }
+    }//GEN-LAST:event_pno_report_inputMouseExited
+
+    private void pno_report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_report_inputMouseEntered
+        if (pno_report_input.getBorder() != WARNING_BORDER) {
+            pno_report_input.setBorder(HOVER_BORDER);
+        }
+
+    }//GEN-LAST:event_pno_report_inputMouseEntered
+
+    private void reports_dropdown_icon_panelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reports_dropdown_icon_panelMouseEntered
+        // setDownArrowIconForReportDropdown();
+    }//GEN-LAST:event_reports_dropdown_icon_panelMouseEntered
+
+    private void reports_dropdown_icon_panelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reports_dropdown_icon_panelMouseExited
+
+    }//GEN-LAST:event_reports_dropdown_icon_panelMouseExited
+
+    boolean is_right_icon = false;
+    private void reports_dropdown_icon_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reports_dropdown_icon_panelMouseClicked
+
+        if (is_right_icon) {
+
+            setRightArrowIconForReportDropdown();
+            reports_dropdown_panel.setVisible(false);
+            reports_dropdown_seperator.setVisible(false);
+            is_right_icon = false;
+        } else {
+            setDownArrowIconForReportDropdown();
+            reports_dropdown_panel.setVisible(true);
+            reports_dropdown_seperator.setVisible(true);
+
+            is_right_icon = true;
+        }
+
+
+    }//GEN-LAST:event_reports_dropdown_icon_panelMouseClicked
+
+    private void prescription_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_reports_dropdown_labelMouseClicked
+        showPageOnWindow("reports");
+        showReportOnWindow("Prescription");
+
+//        prescription_reports_dropdown_label.setForeground(Color.CYAN);
+//        medical_reports_dropdown_label.setForeground(Color.white);
+//        test_reports_dropdown_label.setForeground(Color.white);
+    }//GEN-LAST:event_prescription_reports_dropdown_labelMouseClicked
+
+    private void medical_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_reports_dropdown_labelMouseClicked
+        showPageOnWindow("reports");
+        showReportOnWindow("Medical");
+
+//        prescription_reports_dropdown_label.setForeground(Color.white);
+//        medical_reports_dropdown_label.setForeground(Color.cyan);
+//        test_reports_dropdown_label.setForeground(Color.white);
+    }//GEN-LAST:event_medical_reports_dropdown_labelMouseClicked
+
+    private void test_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test_reports_dropdown_labelMouseClicked
+        showPageOnWindow("reports");
+        showReportOnWindow("Test");
+
+//        prescription_reports_dropdown_label.setForeground(Color.white);
+//        medical_reports_dropdown_label.setForeground(Color.white);
+//        test_reports_dropdown_label.setForeground(Color.cyan);
+    }//GEN-LAST:event_test_reports_dropdown_labelMouseClicked
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -4022,6 +4202,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel medical_report_label;
     private javax.swing.JPanel medical_report_panel;
     private javax.swing.JPanel medical_report_panel_head;
+    private javax.swing.JLabel medical_reports_dropdown_label;
     private javax.swing.JTextField medicine_input;
     private javax.swing.JList<String> medicine_list;
     private javax.swing.JPanel medicine_list_panel;
@@ -4070,6 +4251,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.ButtonGroup prescription_radio_btn_grp;
     private javax.swing.JLabel prescription_report_label;
     private javax.swing.JPanel prescription_report_panel;
+    private javax.swing.JLabel prescription_reports_dropdown_label;
     private javax.swing.JButton prescription_save_btn;
     private javax.swing.JLabel prescription_status_label;
     private javax.swing.JPanel prescrption_left_panel;
@@ -4084,6 +4266,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel report_show_panel;
     private javax.swing.JLabel report_status;
     private javax.swing.JPanel reports_card_panel;
+    private javax.swing.JPanel reports_dropdown_icon_panel;
+    private javax.swing.JPanel reports_dropdown_panel;
+    private javax.swing.JSeparator reports_dropdown_seperator;
     private javax.swing.JPanel reports_head_panel;
     private javax.swing.JPanel reports_icon;
     private javax.swing.JLabel reports_label;
@@ -4098,6 +4283,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField sugar_input;
     private javax.swing.JLabel test_report_label;
     private javax.swing.JPanel test_report_panel;
+    private javax.swing.JLabel test_reports_dropdown_label;
     private javax.swing.JCheckBox vomiting_chk;
     private javax.swing.JCheckBox weakness_chk;
     private javax.swing.JTextField weight_input;

@@ -443,7 +443,7 @@ public class Database {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT);
             preparedStatement.setInt(1,pno);
-            preparedStatement.setString(2, report_name);
+            preparedStatement.setString(2, report_name.toUpperCase());
             
             preparedStatement.executeUpdate();
             //conn.commit();
