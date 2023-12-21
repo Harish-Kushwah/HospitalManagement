@@ -2,6 +2,7 @@ package hospitalmanagement;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -15,6 +16,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -62,9 +64,13 @@ public class TestReport extends javax.swing.JPanel {
         setTestReportPatientDetailsObject(patientDetails);
         setReportOnReportInputField();
         addAllNavigationButtons();
-
+   
         REPORTS_THREAD.start();
+       
+    }
 
+    public JTextField getName_report_inputs() {
+        return name_report_inputs;
     }
 
     public void addAllNavigationButtons() {
@@ -110,7 +116,7 @@ public class TestReport extends javax.swing.JPanel {
             System.out.println("Enter integer value only");
         }
 
-        name_report_input.setText(TEST_REPORT_PATIENT_DETAILS.getName());
+        name_report_inputs.setText(TEST_REPORT_PATIENT_DETAILS.getName());
         date_report_input.setDate(TEST_REPORT_PATIENT_DETAILS.getDate());
 
     }
@@ -162,7 +168,7 @@ public class TestReport extends javax.swing.JPanel {
         jLabel12 = new javax.swing.JLabel();
         pno_report_input = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        name_report_input = new javax.swing.JTextField();
+        name_report_inputs = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         date_report_input = new com.toedter.calendar.JDateChooser();
         report_status = new javax.swing.JLabel();
@@ -225,18 +231,18 @@ public class TestReport extends javax.swing.JPanel {
 
         jLabel14.setText("Name:-");
 
-        name_report_input.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        name_report_input.addMouseListener(new java.awt.event.MouseAdapter() {
+        name_report_inputs.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        name_report_inputs.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                name_report_inputMouseEntered(evt);
+                name_report_inputsMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                name_report_inputMouseExited(evt);
+                name_report_inputsMouseExited(evt);
             }
         });
-        name_report_input.addActionListener(new java.awt.event.ActionListener() {
+        name_report_inputs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                name_report_inputActionPerformed(evt);
+                name_report_inputsActionPerformed(evt);
             }
         });
 
@@ -463,7 +469,7 @@ public class TestReport extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(search_report, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(name_report_input)))
+                                    .addComponent(name_report_inputs)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, test_report_formLayout.createSequentialGroup()
                                 .addComponent(report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -510,7 +516,7 @@ public class TestReport extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(name_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(name_report_inputs, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -604,21 +610,21 @@ public class TestReport extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_pno_report_inputKeyPressed
 
-    private void name_report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputMouseEntered
-        if (name_report_input.getBorder() != WARNING_BORDER) {
-            name_report_input.setBorder(HOVER_BORDER);
+    private void name_report_inputsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputsMouseEntered
+        if (name_report_inputs.getBorder() != WARNING_BORDER) {
+            name_report_inputs.setBorder(HOVER_BORDER);
         }
-    }//GEN-LAST:event_name_report_inputMouseEntered
+    }//GEN-LAST:event_name_report_inputsMouseEntered
 
-    private void name_report_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputMouseExited
-        if (name_report_input.getBorder() != WARNING_BORDER) {
-            name_report_input.setBorder(INPUT_BORDER);
+    private void name_report_inputsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_report_inputsMouseExited
+        if (name_report_inputs.getBorder() != WARNING_BORDER) {
+            name_report_inputs.setBorder(INPUT_BORDER);
         }
-    }//GEN-LAST:event_name_report_inputMouseExited
+    }//GEN-LAST:event_name_report_inputsMouseExited
 
-    private void name_report_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name_report_inputActionPerformed
+    private void name_report_inputsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name_report_inputsActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_name_report_inputActionPerformed
+    }//GEN-LAST:event_name_report_inputsActionPerformed
 
     private void search_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseEntered
 
@@ -701,6 +707,7 @@ public class TestReport extends javax.swing.JPanel {
         report_input.setBorder(INPUT_BORDER);
     }//GEN-LAST:event_report_inputMouseExited
 
+    
     private void report_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_listMouseClicked
 
         if (evt.getClickCount() == 1) {
@@ -954,7 +961,7 @@ public class TestReport extends javax.swing.JPanel {
 
     public void resetReportPage() {
         pno_report_input.setText("");
-        name_report_input.setText("");
+        name_report_inputs.setText("");
         date_report_input.setDate(home.getCurrentDate());
         report_list.clearSelection();
         selected_report_list.clearSelection();
@@ -1006,7 +1013,7 @@ public class TestReport extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField name_report_input;
+    private javax.swing.JTextField name_report_inputs;
     private javax.swing.JTextField pno_report_input;
     private javax.swing.JPanel prescription_report_panel;
     private javax.swing.JButton print;
