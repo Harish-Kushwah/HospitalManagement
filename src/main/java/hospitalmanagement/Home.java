@@ -65,6 +65,8 @@ public class Home extends javax.swing.JFrame {
 
     public BookmarkPanel BOOK_MARK_PANEL = null;
 
+    public boolean font_value=true;
+    
     String refresh_page_icon = "./images/refresh3.png";
     String refresh_page_icon_on_click = "./images/refresh3.png";
     String refresh_page_icon_on_exit = "./images/refresh3.png";
@@ -72,7 +74,10 @@ public class Home extends javax.swing.JFrame {
     String next_page_icon = "./images/right_arrow.png";
     String report_dropdown_right_arrow = "./images/right_arrow3.png";
     String report_dropdown_down_arrow = "./images/down_arrow1.png";
+    String english_translation_icon="./images/eng.png";
+    String marathi_translation_icon="./images/down_arrow1.png";
 
+    TestReport test;
 //=============================================[CONSTRUCTOR WORK START]====================================================
     public Home() {
 
@@ -116,7 +121,8 @@ public class Home extends javax.swing.JFrame {
         prescription_male_btn.setSelected(true);
 
         test_report_panel.removeAll();
-        test_report_panel.add(new TestReport(this, getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
+        test=new TestReport(this, getPatientPagePatientDetailsObject());
+        test_report_panel.add(test, BorderLayout.CENTER);
 
         medical_report_panel.removeAll();
         medical_report_panel.add(new MedicalReport(this, getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
@@ -130,10 +136,11 @@ public class Home extends javax.swing.JFrame {
         prescription_form_panel.revalidate();
         prescription_form_panel.repaint();
 
-        //setMarathiFontForInputes();
+       // setMarathiFontForInputes();
         //  addEnterBtnActionTotalTablet();
         reports_dropdown_panel.setVisible(false);
         reports_dropdown_seperator.setVisible(false);
+        setEnglishTranslateIcon();
     }
 
     public void setMarathiFontForInputes() {
@@ -144,6 +151,20 @@ public class Home extends javax.swing.JFrame {
         name_report_input.setFont(marathi_bold);
         medicine_list.setFont(new Font("Mangal", Font.BOLD, 14));
         name_input.setFont(marathi_plain);
+        JTextField test_report_input=test.getName_report_inputs();
+        test_report_input.setFont(marathi_bold);
+    }
+    public void setEnglishFontForInputes() {
+        Font english_plain = new Font("Segoe UI", Font.PLAIN, 13);
+        Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
+        medicine_input.setFont(english_bold);
+        prescription_name_input.setFont(english_bold);
+        name_report_input.setFont(english_bold);
+        medicine_list.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        name_input.setFont(english_bold);
+        JTextField test_report_input=test.getName_report_inputs();
+        test_report_input.setFont(english_bold);
+        
     }
 
     /*
@@ -211,6 +232,19 @@ public class Home extends javax.swing.JFrame {
     public void setDownArrowIconForReportDropdown() {
         reports_dropdown_icon_panel.removeAll();
         reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_down_arrow), 15, 13), BorderLayout.CENTER);
+        validate();
+        repaint();
+    }
+     public void setEnglishTranslateIcon() {
+        font_translate_icon_pannel.removeAll();
+        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(english_translation_icon), 15, 13), BorderLayout.CENTER);
+        validate();
+        repaint();
+    }
+
+    public void setMarathiTranslateIcon() {
+        font_translate_icon_pannel.removeAll();
+        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(marathi_translation_icon), 15, 13), BorderLayout.CENTER);
         validate();
         repaint();
     }
@@ -772,6 +806,7 @@ public class Home extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         doctor_icon_panel = new JPanel();
         doctor_icon_panel.add(new SetImageIcon(new ImageIcon("./images/doctor_icon1.png"),35,35)) ;
+        font_translate_icon_pannel = new javax.swing.JPanel();
         footer = footer = new GradientPanel(new Color(0x5AEEB2),new Color(0x9FC3EE),1100,30);
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -936,6 +971,22 @@ public class Home extends javax.swing.JFrame {
         doctor_icon_panel.setPreferredSize(new java.awt.Dimension(35, 35));
         doctor_icon_panel.setLayout(new java.awt.CardLayout());
 
+        font_translate_icon_pannel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        font_translate_icon_pannel.setFocusable(false);
+        font_translate_icon_pannel.setPreferredSize(new java.awt.Dimension(15, 13));
+        font_translate_icon_pannel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                font_translate_icon_pannelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                font_translate_icon_pannelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                font_translate_icon_pannelMouseExited(evt);
+            }
+        });
+        font_translate_icon_pannel.setLayout(new java.awt.BorderLayout());
+
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
@@ -943,7 +994,9 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(heade_label, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1939, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1896, Short.MAX_VALUE)
+                .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(doctor_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
@@ -951,16 +1004,18 @@ public class Home extends javax.swing.JFrame {
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(headerLayout.createSequentialGroup()
-                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(headerLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, headerLayout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addComponent(heade_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(doctor_icon_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(headerLayout.createSequentialGroup()
+                        .addContainerGap(8, Short.MAX_VALUE)
+                        .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(doctor_icon_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
 
@@ -1258,6 +1313,11 @@ public class Home extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 prescription_name_inputMouseExited(evt);
+            }
+        });
+        prescription_name_input.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prescription_name_inputActionPerformed(evt);
             }
         });
 
@@ -4089,6 +4149,34 @@ public class Home extends javax.swing.JFrame {
 //        medical_reports_dropdown_label.setForeground(Color.white);
 //        test_reports_dropdown_label.setForeground(Color.cyan);
     }//GEN-LAST:event_test_reports_dropdown_labelMouseClicked
+
+    private void font_translate_icon_pannelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseClicked
+        if(font_value)
+        {
+            setEnglishTranslateIcon();
+            setEnglishFontForInputes();
+            font_value=false;
+        }
+        else
+        {
+            font_value=true;
+            setMarathiTranslateIcon();
+            setMarathiFontForInputes();
+        }
+    }//GEN-LAST:event_font_translate_icon_pannelMouseClicked
+
+    private void font_translate_icon_pannelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_font_translate_icon_pannelMouseEntered
+
+    private void font_translate_icon_pannelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_font_translate_icon_pannelMouseExited
+
+    private void prescription_name_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_name_inputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_prescription_name_inputActionPerformed
+
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -4159,6 +4247,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel fees_status_label;
     private javax.swing.JRadioButton female_radio_btn;
     private javax.swing.JCheckBox fever_chk;
+    private javax.swing.JPanel font_translate_icon_pannel;
     private javax.swing.JPanel footer;
     private javax.swing.ButtonGroup gender_radio_group;
     private javax.swing.JCheckBox headache_chk;
