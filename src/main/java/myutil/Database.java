@@ -43,6 +43,7 @@ public class Database {
     private static final String INSERT_REPORT_NAME = "INSERT INTO `reports` (`report_name`)VALUES (?);";
     private static final String INSERT_DOCTOR_NAME = "INSERT INTO `doctor_names` (`doc_name`) VALUES (?);";
     private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM `doctor_names`";
+    private static final String GET_DOCTOR_ID = "SELECT * FROM doctor_names where doc_name = ?";
      static Database singletone_database = null;
      Connection connection = null;
     //creates the database connection
@@ -833,4 +834,24 @@ public class Database {
         }
         return null;
     }
+    
+    
+            
+    public int getDoctorID(String doctor_name) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_DOCTOR_ID);
+            preparedStatement.setString(1, doctor_name);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+            rs.next();
+            
+            return rs.getInt("doc_id");
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return -1;
+    }
+       
 }

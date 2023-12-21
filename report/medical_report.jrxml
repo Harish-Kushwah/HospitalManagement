@@ -1,1 +1,147 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="67"/>
+	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
+	<parameter name="dname" class="java.lang.String"/>
+	<parameter name="date" class="java.util.Date"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="dno" class="java.lang.String"/>
+	<parameter name="age" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM doctor_names WHERE doc_id = $P{dno};]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="90" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement x="278" y="8" width="37" height="20" uuid="efac5722-9a6a-442f-939d-c217c92283e8"/>
+				<textElement>
+					<font isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="70" width="32" height="26" uuid="2ca24b32-802f-4467-9d8f-0450c18cca1b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="7" width="119" height="20" uuid="f3184939-5af8-4e5a-8295-93fe8decda49"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ref by Dr. Ajit Pawar]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="315" y="7" width="55" height="20" uuid="30785230-e649-41b8-ae57-995eab3570ee"/>
+				<textElement>
+					<font isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="19" height="20" uuid="073cdef3-97f2-4227-b2f3-6b7d1fc3c669"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dr.]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="0" width="100" height="20" uuid="efa7f55c-cfbd-47e1-b9e8-6e0e1657cf46"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dname}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="20" width="173" height="20" uuid="d5ddeb5b-9bf0-44f3-a70b-03206728c4fe"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Respected Sir , ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="194" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="0" width="173" height="20" uuid="2104d3b0-95d9-46da-9f00-93213547d964"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Referring miss / mast / mr. / mrs. ]]></text>
+			</staticText>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="19" y="20" width="350" height="20" uuid="e136de44-627a-4180-810c-927048bc9944"/>
+				<textElement verticalAlignment="Middle">
+					<font isUnderline="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="40" width="23" height="20" uuid="43a1e72b-949d-42f0-8a9f-759f5deda57c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[age.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="42" y="40" width="30" height="20" uuid="44d8c8cd-ce95-4598-9748-93a951baea93"/>
+				<textElement verticalAlignment="Middle">
+					<font isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{age}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="60" width="173" height="20" uuid="7111d251-525a-48e1-bf65-5ec7b0c806e0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[for your expert opinion & advice .]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="87" width="84" height="20" uuid="c35b3dee-f207-48f9-b90b-fb6b59868a99"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Thanking you.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="286" y="120" width="84" height="20" uuid="00d4895f-bd92-4d89-a580-c3218408ad0a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Sincerely yours]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="297" y="177" width="73" height="17" uuid="ed9b2a39-0f88-4c4d-9b30-746b17c5b7f1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="false" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Dr.Ajit Pawar]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="11" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch"/>
+	</summary>
+</jasperReport>

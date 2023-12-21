@@ -74,8 +74,8 @@ public class Home extends javax.swing.JFrame {
     String next_page_icon = "./images/right_arrow.png";
     String report_dropdown_right_arrow = "./images/right_arrow3.png";
     String report_dropdown_down_arrow = "./images/down_arrow1.png";
-    String english_translation_icon="./images/eng.png";
-    String marathi_translation_icon="./images/down_arrow1.png";
+    String english_translation_icon="./images/translation_icon2.png";
+    String marathi_translation_icon="./images/translation_icon_marathi.png";
 
     TestReport test;
 //=============================================[CONSTRUCTOR WORK START]====================================================
@@ -237,14 +237,18 @@ public class Home extends javax.swing.JFrame {
     }
      public void setEnglishTranslateIcon() {
         font_translate_icon_pannel.removeAll();
-        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(english_translation_icon), 15, 13), BorderLayout.CENTER);
+        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(english_translation_icon), 35, 34), BorderLayout.CENTER);
+        String s1 = "<html> <div  style=\"color:rgb(5,7,35);text-align:center; font-size:bold; padding:0px; margin:0px border:1px solid black; border-radius:100px 10px; background-color:rgb(141,221,247); \";> English Language <br> Applied </div></html>";
+        font_translate_icon_pannel.setToolTipText(s1);
         validate();
         repaint();
     }
 
     public void setMarathiTranslateIcon() {
         font_translate_icon_pannel.removeAll();
-        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(marathi_translation_icon), 15, 13), BorderLayout.CENTER);
+        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(marathi_translation_icon), 35, 34), BorderLayout.CENTER);
+        String s1 = "<html> <div  style=\"color:rgb(5,7,35);text-align:center; font-size:bold; padding:0px; margin:0px border:1px solid black; border-radius:100px 10px; background-color:rgb(141,221,247); \";> Marathi Language <br> Applied </div></html>";
+        font_translate_icon_pannel.setToolTipText(s1);
         validate();
         repaint();
     }
@@ -973,7 +977,7 @@ public class Home extends javax.swing.JFrame {
 
         font_translate_icon_pannel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         font_translate_icon_pannel.setFocusable(false);
-        font_translate_icon_pannel.setPreferredSize(new java.awt.Dimension(15, 13));
+        font_translate_icon_pannel.setPreferredSize(new java.awt.Dimension(34, 35));
         font_translate_icon_pannel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 font_translate_icon_pannelMouseClicked(evt);
@@ -994,8 +998,8 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(heade_label, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1896, Short.MAX_VALUE)
-                .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1886, Short.MAX_VALUE)
+                .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(doctor_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1011,11 +1015,10 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(heade_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(headerLayout.createSequentialGroup()
                         .addContainerGap(8, Short.MAX_VALUE)
-                        .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(doctor_icon_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(doctor_icon_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -4151,7 +4154,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_test_reports_dropdown_labelMouseClicked
 
     private void font_translate_icon_pannelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseClicked
-        if(font_value)
+       if(font_value)
         {
             setEnglishTranslateIcon();
             setEnglishFontForInputes();
@@ -4163,6 +4166,8 @@ public class Home extends javax.swing.JFrame {
             setMarathiTranslateIcon();
             setMarathiFontForInputes();
         }
+       
+       
     }//GEN-LAST:event_font_translate_icon_pannelMouseClicked
 
     private void font_translate_icon_pannelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseEntered

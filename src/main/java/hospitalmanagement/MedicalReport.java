@@ -35,6 +35,23 @@ import net.sf.jasperreports.swing.JRViewer;
  *
  * @author haris
  */
+class ValidInputException extends Exception
+{
+    ValidInputException()
+    {
+        
+    }
+    ValidInputException(String msg)
+    {
+        super(msg);
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Inputs are not in in correct format";
+    }
+}
 public class MedicalReport extends javax.swing.JPanel {
 
     final LineBorder HOVER_BTN_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
@@ -50,14 +67,18 @@ public class MedicalReport extends javax.swing.JPanel {
     final Color REPORT_LABEL_COLOR = new Color(0, 0, 102);
 
     PatientDetails MEDICAL_REPORT_PATIENT_DETAILS = null;
-    
+     MultithredingReports REPORTS_THREAD = new MultithredingReports();
     Home home;
     public MedicalReport(Home home ,PatientDetails patientDetails) {
         initComponents();
+        REPORTS_THREAD.start();
         this.home = home;
         
         addAllNavigationButtons();
         setDoctorNamesOnDoctorInputField();
+        date_report_input.setDate(home.getCurrentDate());
+        
+        
     }
     public void addAllNavigationButtons() {
 
@@ -98,6 +119,8 @@ public class MedicalReport extends javax.swing.JPanel {
         report_refresh = new javax.swing.JPanel();
         report_back = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
+        selected_doctor = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         report_show_panel = new javax.swing.JPanel();
         age = new javax.swing.JLabel();
         gender = new javax.swing.JLabel();
@@ -302,57 +325,66 @@ public class MedicalReport extends javax.swing.JPanel {
         });
         report_back.setLayout(new java.awt.BorderLayout());
 
+        selected_doctor.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        selected_doctor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selected_doctorActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("To Dr.");
+
         javax.swing.GroupLayout medical_report_formLayout = new javax.swing.GroupLayout(medical_report_form);
         medical_report_form.setLayout(medical_report_formLayout);
         medical_report_formLayout.setHorizontalGroup(
             medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(medical_report_formLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(report_list_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, medical_report_formLayout.createSequentialGroup()
-                        .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, medical_report_formLayout.createSequentialGroup()
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(name_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, medical_report_formLayout.createSequentialGroup()
-                                .addComponent(report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(add_report_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 3, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, medical_report_formLayout.createSequentialGroup()
-                        .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(age_label, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(date_report_input, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(medical_report_formLayout.createSequentialGroup()
-                                .addComponent(age_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(20, 20, 20))
-            .addGroup(medical_report_formLayout.createSequentialGroup()
                 .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(medical_report_formLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(medical_report_formLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
+                        .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(selected_doctor, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(medical_report_formLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(medical_report_formLayout.createSequentialGroup()
+                                        .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(23, 23, 23))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, medical_report_formLayout.createSequentialGroup()
                         .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(47, 47, 47))
                     .addGroup(medical_report_formLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(medical_report_formLayout.createSequentialGroup()
+                                .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(age_label, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(age_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(date_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(report_list_panel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, medical_report_formLayout.createSequentialGroup()
+                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(name_report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, medical_report_formLayout.createSequentialGroup()
+                                        .addComponent(report_input, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(add_report_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         medical_report_formLayout.setVerticalGroup(
             medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -379,19 +411,23 @@ public class MedicalReport extends javax.swing.JPanel {
                     .addComponent(add_report_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(report_list_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(selected_doctor, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
                 .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(report_refresh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(report_back, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, medical_report_formLayout.createSequentialGroup()
                         .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(medical_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(301, Short.MAX_VALUE))
+                            .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
 
         jPanel1.add(medical_report_form, java.awt.BorderLayout.WEST);
@@ -602,6 +638,7 @@ public class MedicalReport extends javax.swing.JPanel {
 
         }
     }//GEN-LAST:event_doctor_listKeyPressed
+    
     public void addReport()
     {
         String str = doctor_list.getSelectedValue();
@@ -612,17 +649,64 @@ public class MedicalReport extends javax.swing.JPanel {
             db.insertDoctorName(report_name);
             str = report_name;
         }
-        DefaultListModel lm = (DefaultListModel) doctor_list.getModel();
-        lm.addElement(str);
-       // doctor_list.setModel(lm);
-         System.out.println("Doctor selected : " + str);
+        
+        selected_doctor.setText(str);
+     
         revalidate();
         repaint();
         
     }
     public void setReportPrint()
     {
-        
+        report_show_panel.removeAll();
+        report_show_panel.revalidate();
+        report_show_panel.repaint();
+        try {
+
+            HashMap a = new HashMap();
+            String doctor_name = selected_doctor.getText();
+            int id = (Database.getInstance()).getDoctorID(doctor_name);
+            
+            String patient_name = name_report_input.getText();
+            String age = age_report_input.getText();
+            
+            if(doctor_name == null || id == -1 || patient_name == null|| doctor_name.length()==0 )
+              throw  new ValidInputException();
+            
+            a.put("dname",doctor_name);
+            a.put("date",date_report_input.getDate());
+            a.put("dno",id);
+            a.put("name", patient_name);
+            a.put("age" , age);
+            
+            System.out.println(patient_name);
+             
+            Connection con = REPORTS_THREAD.getConnection();
+            if (con != null) {
+                JasperReport jr = REPORTS_THREAD.getCompliedMedicalReport();
+                if (jr != null) {
+                    JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
+                    JRViewer v = new JRViewer(jp);
+                    report_show_panel.setLayout(new BorderLayout());
+                    report_show_panel.add(v);
+                } else {
+                    report_status.setText("No report is availalble");
+                    report_status.setForeground(Color.red);
+                }
+                
+            }
+        } catch (NumberFormatException | JRException ex) {
+            System.out.println(ex.getMessage());
+            report_status.setText("No report is availalble ");
+            report_status.setForeground(Color.red);
+        }
+        catch(ValidInputException exp)
+        {
+            report_status.setText("Enter valid inputs");
+            report_status.setForeground(Color.red);
+        }
+        report_show_panel.revalidate();
+        report_show_panel.repaint();
     }
     public void setReportsIntoDatabase()
     {
@@ -634,6 +718,7 @@ public class MedicalReport extends javax.swing.JPanel {
         age_report_input.setText("");
         date_report_input.setDate(home.getCurrentDate());
         doctor_list.clearSelection();
+        selected_doctor.setText("");
 
         report_input.setText("");
         report_status.setText("");
@@ -681,6 +766,10 @@ public class MedicalReport extends javax.swing.JPanel {
     private void report_backMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_report_backMouseReleased
+
+    private void selected_doctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selected_doctorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_selected_doctorActionPerformed
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_report_btn;
@@ -691,6 +780,7 @@ public class MedicalReport extends javax.swing.JPanel {
     private javax.swing.JList<String> doctor_list;
     private javax.swing.JLabel gender;
     private javax.swing.JButton generate_report;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel5;
@@ -706,6 +796,7 @@ public class MedicalReport extends javax.swing.JPanel {
     private javax.swing.JPanel report_refresh;
     private javax.swing.JPanel report_show_panel;
     private javax.swing.JLabel report_status;
+    private javax.swing.JTextField selected_doctor;
     private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
 }
