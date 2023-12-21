@@ -118,6 +118,9 @@ public class Home extends javax.swing.JFrame {
         test_report_panel.removeAll();
         test_report_panel.add(new TestReport(this, getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
 
+        medical_report_panel.removeAll();
+        medical_report_panel.add(new MedicalReport(this, getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
+        
         // prescription_report_panel.add(new PrescriptionReport() , BorderLayout.CENTER);
         prescription_save_btn.setVisible(false);
 
@@ -1191,11 +1194,10 @@ public class Home extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(menu_panelLayout.createSequentialGroup()
                         .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         menu_panelLayout.setVerticalGroup(
@@ -2173,18 +2175,7 @@ public class Home extends javax.swing.JFrame {
         prescription_report_panel.getAccessibleContext().setAccessibleName("");
 
         medical_report_panel.setBackground(new java.awt.Color(204, 255, 255));
-
-        javax.swing.GroupLayout medical_report_panelLayout = new javax.swing.GroupLayout(medical_report_panel);
-        medical_report_panel.setLayout(medical_report_panelLayout);
-        medical_report_panelLayout.setHorizontalGroup(
-            medical_report_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1100, Short.MAX_VALUE)
-        );
-        medical_report_panelLayout.setVerticalGroup(
-            medical_report_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1006, Short.MAX_VALUE)
-        );
-
+        medical_report_panel.setLayout(new java.awt.BorderLayout());
         reports_card_panel.add(medical_report_panel, "Medical");
         medical_report_panel.getAccessibleContext().setAccessibleName("");
 
