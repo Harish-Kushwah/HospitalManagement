@@ -41,6 +41,8 @@ public class Database {
     private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
     
     private static final String INSERT_REPORT_NAME = "INSERT INTO `reports` (`report_name`)VALUES (?);";
+    private static final String INSERT_DOCTOR_NAME = "INSERT INTO `doctor_names` (`doc_name`) VALUES (?);";
+    private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM `doctor_names`";
      static Database singletone_database = null;
      Connection connection = null;
     //creates the database connection
@@ -437,6 +439,7 @@ public class Database {
             System.out.println(e);
         }
     }
+    
     //inserting test reports 
     public void insertTestReport(int pno , String report_name) {
         try {
@@ -789,4 +792,45 @@ public class Database {
         }
     }
 
+//    doctor related 
+    public void insertDoctorName(String doctor_name)
+    {
+         try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_DOCTOR_NAME);
+            preparedStatement.setString(1, doctor_name);
+            
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+    public ArrayList<String> getAllDoctorNames(String str) {
+
+        ArrayList<String> medi = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_DOCTOR = new StringBuffer("SELECT  DISTINCT  doc_name FROM `doctor_names` WHERE doc_name LIKE ");
+
+            GET_LIKE_DOCTOR.append("\'");
+            GET_LIKE_DOCTOR.append("%");
+            GET_LIKE_DOCTOR.append(new StringBuffer(str.toUpperCase()));
+            GET_LIKE_DOCTOR.append("%';");
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_DOCTOR));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                medi.add(rs.getString("doc_name").toUpperCase());
+                i++;
+            }
+            return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 }
