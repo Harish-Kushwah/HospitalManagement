@@ -152,7 +152,7 @@
 		<band height="50" splitType="Stretch">
 			<image>
 				<reportElement x="308" y="0" width="50" height="30" uuid="41ae6095-03af-4822-9b73-10d44993624e"/>
-				<imageExpression><![CDATA["/sign.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="296" y="30" width="74" height="20" uuid="c317552d-2b67-4202-ac2a-99c3971f8e56"/>

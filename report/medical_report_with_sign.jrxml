@@ -136,7 +136,7 @@
 			</staticText>
 			<image>
 				<reportElement x="301" y="140" width="64" height="37" uuid="10062db4-c20a-4410-9875-b62cdbf43257"/>
-				<imageExpression><![CDATA["/sign.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
 			</image>
 		</band>
 	</detail>
