@@ -66,6 +66,7 @@ public class TestReport extends javax.swing.JPanel {
         addAllNavigationButtons();
    
         REPORTS_THREAD.start();
+        shortKeyForRefreshingPage();
        
     }
 
@@ -658,6 +659,7 @@ public class TestReport extends javax.swing.JPanel {
     private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
         searchReport();
     }//GEN-LAST:event_search_reportActionPerformed
+    
     public void searchReport() {
         try {
             Database database = Database.getInstance();
@@ -676,7 +678,24 @@ public class TestReport extends javax.swing.JPanel {
             report_status.setForeground(WARNING_COLOR);
         }
     }
+     public void searchReport(int patient_number) {
+        try {
+            Database database = Database.getInstance();
+            setTestReportPatientDetailsObject(database.getPatientDetails(patient_number));
 
+            resetTestReportLists();
+            setTestReportDetails();
+
+            ArrayList<String> tests = database.getAllTestReportts(patient_number);
+            if (tests != null) {
+                setReportPrint();
+            }
+        } catch (NumberFormatException exp) {
+            report_status.setText("Enter valid patient number");
+            report_status.setForeground(WARNING_COLOR);
+        }
+    }
+   
     public void resetTestReportLists() {
         report_input.setText("");
         report_list.clearSelection();
@@ -696,11 +715,21 @@ public class TestReport extends javax.swing.JPanel {
         print.setBorder(DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_printMouseExited
 
+     JasperPrint test_jasper_print = null; 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
         try {
-            printReport(getTestReportPatientDetailsObject(), false);
-            report_status.setText("Report printed Succesfully");
-            report_status.setForeground(SUCCESS_COLOR);
+            if(test_jasper_print != null){
+             JasperPrintManager.printReport(test_jasper_print, false);
+             resetReportPage();
+             report_status.setText("Report printed Succesfully");
+             report_status.setForeground(SUCCESS_COLOR);
+             test_jasper_print = null;             
+            }
+            else{  
+                setReportPrint();
+                printActionPerformed(evt);
+              
+            }
         } catch (JRException ex) {
             report_status.setText("Report not printed");
             report_status.setForeground(WARNING_COLOR);
@@ -908,6 +937,20 @@ public class TestReport extends javax.swing.JPanel {
         String k = "remove";
         remove.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_X);
         test_report_form.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_x, k);
+        test_report_form.getActionMap().put(k, remove);
+    }
+    public void shortKeyForRefreshingPage() {
+        KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+        Action refresh = new AbstractAction("refresh") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              resetReportPage();
+            }
+        };
+        String k = "refresh";
+        refresh.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
+        test_report_form.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
+         test_report_form.getActionMap().put(k, refresh);
     }
 
     public void setReportsIntoDatabase() {
@@ -943,8 +986,8 @@ public class TestReport extends javax.swing.JPanel {
             if (con != null) {
                 JasperReport jr = REPORTS_THREAD.getCompliedTestReport();
                 if (jr != null) {
-                    JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
-                    JRViewer v = new JRViewer(jp);
+                     test_jasper_print = JasperFillManager.fillReport(jr, a, con);
+                    JRViewer v = new JRViewer(test_jasper_print);
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
                 } else {
@@ -961,6 +1004,7 @@ public class TestReport extends javax.swing.JPanel {
         report_show_panel.repaint();
     }
 
+    /*
     public void printReport(PatientDetails patientDetails, boolean with_dialog) throws JRException {
 
         if (patientDetails != null) {
@@ -989,7 +1033,7 @@ public class TestReport extends javax.swing.JPanel {
             report_status.setForeground(Color.red);
         }
 
-    }
+    }*/
 
     public void resetReportPage() {
         pno_report_input.setText("");

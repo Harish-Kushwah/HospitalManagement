@@ -13,6 +13,8 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Queue;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -145,6 +147,9 @@ public class Home extends javax.swing.JFrame {
         setMarathiTranslateIcon();
         addShortKeyForLanguageTranslation();
         setMarathiFontForInputes();
+        addShortArrowKeyForReportsNavigation();
+        /*Up down Arrow keys were binded on list as well that's why some proper functions not working */ 
+//        addShortArrowKeyForPagesNavigation();
     }
 
     public void setMarathiFontForInputes() {
@@ -532,6 +537,86 @@ public class Home extends javax.swing.JFrame {
 
          
     }
+    int report_showing_index = 0;
+    public void addShortArrowKeyForReportsNavigation()
+    {
+        //Vector<String> vec = new Vector<String>();
+        
+        String [] right_reports_name = {"Test","Medical","Prescription"}; 
+        String [] left_reports_name = {"Medical" ,"Test","Prescription"}; 
+        
+        KeyStroke right_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
+        KeyStroke left_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
+        
+        Action next_page = new AbstractAction("next") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Right:" + report_showing_index);
+                showReportOnWindow(right_reports_name[report_showing_index]);
+                report_showing_index = (report_showing_index+1)%3;   
+            }
+
+        };
+        String k = "next";
+        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(right_arrow, k);
+        Reports.getActionMap().put(k, next_page);
+        
+         Action prev_page = new AbstractAction("previous") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                  System.out.println("Left:" + report_showing_index);
+                showReportOnWindow(left_reports_name[report_showing_index]);
+                report_showing_index = (report_showing_index+1)%3;
+               
+            }
+
+        };
+
+        String k1 = "previous";
+        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(left_arrow, k1);
+        Reports.getActionMap().put(k1, prev_page);
+    }
+    
+    int page_showing_index = 0;
+    public void addShortArrowKeyForPagesNavigation()
+    {
+        //Vector<String> vec = new Vector<String>();
+        //here
+        String [] upper_pages_name = {"patient","Dashboard","reports","prescription"}; 
+        String [] down_pages_name = {"reports","Dashboard","patient","prescription"}; 
+        
+        KeyStroke up_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
+        KeyStroke down_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
+        
+        Action up_page = new AbstractAction("up") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPageOnWindow(upper_pages_name[page_showing_index]);
+                page_showing_index = (page_showing_index+1)%4;   
+            }
+
+        };
+        String k = "up";
+        menu_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(up_arrow, k);
+        menu_panel.getActionMap().put(k, up_page);
+        
+         Action down_page = new AbstractAction("down") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              
+                showPageOnWindow(down_pages_name[page_showing_index]);
+                page_showing_index = (page_showing_index+1)%4;
+               
+            }
+
+        };
+
+        String k1 = "down";
+        menu_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(down_arrow, k1);
+        menu_panel.getActionMap().put(k1, down_page);
+    }
+    
+    
     public void addShortKeyForPages() {
         KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke clt_p = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
@@ -4179,6 +4264,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medical_reports_dropdown_labelMouseClicked
 
     private void test_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test_reports_dropdown_labelMouseClicked
+        
+        
+        PatientDetails patient = this.getPatientPagePatientDetailsObject();
+        if(patient!=null){
+         test.searchReport(patient.getPid()); 
+        }
         showPageOnWindow("reports");
         showReportOnWindow("Test");
 

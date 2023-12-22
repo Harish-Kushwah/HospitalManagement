@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="67"/>
+	<property name="ireport.y" value="83"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
 	<parameter name="dname" class="java.lang.String"/>
 	<parameter name="date" class="java.util.Date"/>
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="dno" class="java.lang.String"/>
 	<parameter name="age" class="java.lang.String"/>
+	<parameter name="designation" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT * FROM doctor_names WHERE doc_id = $P{dno};]]>
 	</queryString>
@@ -79,42 +79,42 @@
 	<detail>
 		<band height="206" splitType="Stretch">
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="19" y="0" width="173" height="20" uuid="2104d3b0-95d9-46da-9f00-93213547d964"/>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="0" width="53" height="20" uuid="2104d3b0-95d9-46da-9f00-93213547d964"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[Referring miss / mast / mr. / mrs. ]]></text>
+				<text><![CDATA[Referring ]]></text>
 			</staticText>
 			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="19" y="20" width="350" height="20" uuid="e136de44-627a-4180-810c-927048bc9944"/>
+				<reportElement stretchType="RelativeToBandHeight" x="106" y="0" width="259" height="20" uuid="e136de44-627a-4180-810c-927048bc9944"/>
 				<textElement verticalAlignment="Middle">
 					<font isUnderline="false" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="19" y="40" width="23" height="20" uuid="43a1e72b-949d-42f0-8a9f-759f5deda57c"/>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="20" width="23" height="20" uuid="43a1e72b-949d-42f0-8a9f-759f5deda57c"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[age.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="42" y="40" width="30" height="20" uuid="44d8c8cd-ce95-4598-9748-93a951baea93"/>
+				<reportElement x="42" y="20" width="30" height="20" uuid="44d8c8cd-ce95-4598-9748-93a951baea93"/>
 				<textElement verticalAlignment="Middle">
 					<font isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{age}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="19" y="60" width="173" height="20" uuid="7111d251-525a-48e1-bf65-5ec7b0c806e0"/>
+				<reportElement positionType="FixRelativeToBottom" x="72" y="20" width="173" height="20" uuid="7111d251-525a-48e1-bf65-5ec7b0c806e0"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[for your expert opinion & advice .]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="19" y="87" width="84" height="20" uuid="c35b3dee-f207-48f9-b90b-fb6b59868a99"/>
+				<reportElement positionType="FixRelativeToBottom" x="19" y="40" width="84" height="20" uuid="c35b3dee-f207-48f9-b90b-fb6b59868a99"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
 				</textElement>
@@ -138,6 +138,13 @@
 				<reportElement x="301" y="140" width="64" height="37" uuid="10062db4-c20a-4410-9875-b62cdbf43257"/>
 				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="73" y="0" width="30" height="20" uuid="6fd5627a-9619-4a5a-b9ff-b8d06e9fbf19"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{designation}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
