@@ -545,15 +545,27 @@ public class MedicalReport extends javax.swing.JPanel {
         print.setBorder(DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_printMouseExited
 
+    JasperPrint medical_jasper_print = null; 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-//        try {
-//            printReport(getTestReportPatientDetailsObject(), false);
-//            report_status.setText("Report printed Succesfully");
-//            report_status.setForeground(SUCCESS_COLOR);
-//        } catch (JRException ex) {
-//            report_status.setText("Report not printed");
-//            report_status.setForeground(WARNING_COLOR);
-//        }
+        try {
+            if(medical_jasper_print != null){
+             JasperPrintManager.printReport(medical_jasper_print, false);
+             resetReportPage();
+             report_status.setText("Report printed Succesfully");
+             report_status.setForeground(SUCCESS_COLOR);
+             medical_jasper_print = null;             
+            }
+            else{
+                setReportPrint();
+                printActionPerformed(evt);
+               // throw new JRException("No report avilable");
+            }
+            
+              
+        } catch (JRException ex) {
+            report_status.setText("Report not printed");
+            report_status.setForeground(WARNING_COLOR);
+        }
     }//GEN-LAST:event_printActionPerformed
 
     private void updateMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateMouseEntered
@@ -685,8 +697,8 @@ public class MedicalReport extends javax.swing.JPanel {
             if (con != null) {
                 JasperReport jr = REPORTS_THREAD.getCompliedMedicalReport();
                 if (jr != null) {
-                    JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
-                    JRViewer v = new JRViewer(jp);
+                    medical_jasper_print = JasperFillManager.fillReport(jr, a, con);
+                    JRViewer v = new JRViewer(medical_jasper_print);
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
                 } else {
@@ -737,7 +749,7 @@ public class MedicalReport extends javax.swing.JPanel {
 
     private void generate_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generate_reportActionPerformed
 
-        setReportsIntoDatabase();
+       // setReportsIntoDatabase();
         setReportPrint();
 
     }//GEN-LAST:event_generate_reportActionPerformed
