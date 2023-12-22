@@ -11,9 +11,9 @@ import net.sf.jasperreports.engine.JasperReport;
 */
 public class MultithredingReports extends Thread {
    
-    String reportPath = ".\\report\\report2.jrxml";
-    String testReportPath = ".\\report\\test_report1.jrxml";
-    String medicalReportPath =".\\report\\medical_report.jrxml";
+    String reportPath = ".\\report\\prescription_report_with_sign.jrxml";
+    String testReportPath = ".\\report\\test_report_with_sign.jrxml";
+    String medicalReportPath =".\\report\\medical_report_with_sign.jrxml";
     JasperReport jr ;
     JasperReport testReportJr;
     JasperReport medicalReportJr;
