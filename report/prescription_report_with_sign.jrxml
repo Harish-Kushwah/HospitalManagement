@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
@@ -209,6 +210,15 @@
 		<band height="13" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="15" splitType="Stretch"/>
+		<band height="56" splitType="Stretch">
+			<image>
+				<reportElement x="315" y="10" width="40" height="30" uuid="8ca9536e-7606-47c0-9db0-d4228bd0d470"/>
+				<imageExpression><![CDATA["/sign.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="300" y="40" width="70" height="16" uuid="b48bd1a1-7242-4a94-91ae-a6195a22ef78"/>
+				<text><![CDATA[Dr. Ajit Pawar]]></text>
+			</staticText>
+		</band>
 	</summary>
 </jasperReport>
