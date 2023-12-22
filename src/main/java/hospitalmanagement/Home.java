@@ -78,6 +78,7 @@ public class Home extends javax.swing.JFrame {
     String marathi_translation_icon="./images/translation_icon_marathi.png";
 
     TestReport test;
+    MedicalReport medical;
 //=============================================[CONSTRUCTOR WORK START]====================================================
     public Home() {
 
@@ -125,7 +126,8 @@ public class Home extends javax.swing.JFrame {
         test_report_panel.add(test, BorderLayout.CENTER);
 
         medical_report_panel.removeAll();
-        medical_report_panel.add(new MedicalReport(this, getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
+        medical = new MedicalReport(this, getPatientPagePatientDetailsObject());
+        medical_report_panel.add(medical, BorderLayout.CENTER);
         
         // prescription_report_panel.add(new PrescriptionReport() , BorderLayout.CENTER);
         prescription_save_btn.setVisible(false);
@@ -140,7 +142,9 @@ public class Home extends javax.swing.JFrame {
         //  addEnterBtnActionTotalTablet();
         reports_dropdown_panel.setVisible(false);
         reports_dropdown_seperator.setVisible(false);
-        setEnglishTranslateIcon();
+        setMarathiTranslateIcon();
+        addShortKeyForLanguageTranslation();
+        setMarathiFontForInputes();
     }
 
     public void setMarathiFontForInputes() {
@@ -153,6 +157,9 @@ public class Home extends javax.swing.JFrame {
         name_input.setFont(marathi_plain);
         JTextField test_report_input=test.getName_report_inputs();
         test_report_input.setFont(marathi_bold);
+        
+        JTextField medical_report_input = medical.getMedicalReportNameInput();
+        medical_report_input.setFont(marathi_bold);
     }
     public void setEnglishFontForInputes() {
         Font english_plain = new Font("Segoe UI", Font.PLAIN, 13);
@@ -162,9 +169,12 @@ public class Home extends javax.swing.JFrame {
         name_report_input.setFont(english_bold);
         medicine_list.setFont(new Font("Segoe UI", Font.BOLD, 14));
         name_input.setFont(english_bold);
+        
         JTextField test_report_input=test.getName_report_inputs();
         test_report_input.setFont(english_bold);
         
+        JTextField medical_report_input = medical.getMedicalReportNameInput();
+        medical_report_input.setFont(english_bold);
     }
 
     /*
@@ -498,6 +508,30 @@ public class Home extends javax.swing.JFrame {
         pno_report_input.getDocument().addDocumentListener(dl);
     }
 
+    public void addShortKeyForLanguageTranslation()
+    {
+         
+         KeyStroke clt_m = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK);
+         Action translate = new AbstractAction("translate"){
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                translateLanguage();
+                System.out.println("changed");
+                revalidate();
+                repaint();
+                
+                //find
+             }
+             
+         };
+        String k = "translate";
+//        translate.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_M);
+        font_translate_icon_pannel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_m, k);
+        font_translate_icon_pannel.getActionMap().put(k, translate);
+//        font_translate_icon_pannel.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
+
+         
+    }
     public void addShortKeyForPages() {
         KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke clt_p = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
@@ -4154,7 +4188,11 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_test_reports_dropdown_labelMouseClicked
 
     private void font_translate_icon_pannelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseClicked
-       if(font_value)
+       translateLanguage();
+    }//GEN-LAST:event_font_translate_icon_pannelMouseClicked
+    public void translateLanguage()
+    {
+        if(font_value)
         {
             setEnglishTranslateIcon();
             setEnglishFontForInputes();
@@ -4166,10 +4204,7 @@ public class Home extends javax.swing.JFrame {
             setMarathiTranslateIcon();
             setMarathiFontForInputes();
         }
-       
-       
-    }//GEN-LAST:event_font_translate_icon_pannelMouseClicked
-
+    }
     private void font_translate_icon_pannelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_font_translate_icon_pannelMouseEntered
