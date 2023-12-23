@@ -3,7 +3,9 @@ package hospitalmanagement;
 import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.Connection;
 
 import java.util.ArrayList;
@@ -85,7 +87,7 @@ public class Home extends javax.swing.JFrame {
     public Home() {
 
         initComponents();
-
+        REPORTS_THREAD.start();
         //make the frame of full page
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //        setSize(1366,768);
@@ -117,8 +119,6 @@ public class Home extends javax.swing.JFrame {
         prescription_date_input.setDate(getCurrentDate());
 
         addShortKeyForPages();
-
-        REPORTS_THREAD.start();
 
         //make the male radio button auto selected on prescriotion page
         prescription_male_btn.setSelected(true);
@@ -829,7 +829,7 @@ public class Home extends javax.swing.JFrame {
         JScrollPane sc = new JScrollPane(jp);
         selected_medicine_panel.add(sc);
     }
-
+ 
     public void removeAllSelectedMedicine() {
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
@@ -4316,7 +4316,7 @@ public class Home extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+//    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -4340,14 +4340,17 @@ public class Home extends javax.swing.JFrame {
         }*/
         //</editor-fold>
 
+       
+        
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-                new Home().setVisible(true);
-            }
-        });
-    }
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                
+////                new Home().setVisible(true);
+//                
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Dashboard;
