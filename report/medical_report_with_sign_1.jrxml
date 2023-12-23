@@ -173,21 +173,21 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{designation}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="66" y="40" width="118" height="20" uuid="88af83a3-b24f-4bb6-bb8f-59833d4f1b6f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isUnderline="false" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="184" y="0" width="131" height="20" uuid="6f88f214-fa9a-4e46-b214-c73408b7ed14"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isUnderline="false" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{name}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField>
 				<reportElement stretchType="RelativeToBandHeight" x="31" y="110" width="129" height="20" uuid="b4071887-3b74-40f3-9355-6b1f4aa29ead"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isUnderline="false" isPdfEmbedded="true"/>

@@ -42,7 +42,6 @@ public class MultithredingReports extends Thread {
         return this.medicalReportJr;
     }
     
-    
     public Connection getConnection()
     {
         return DB.connect();
