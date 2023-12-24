@@ -1,5 +1,6 @@
 package hospitalmanagement;
 
+import java.sql.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -7,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +26,7 @@ import javax.swing.event.DocumentListener;
 import myutil.Database;
 import myutil.MultithredingReports;
 import myutil.PatientDetails;
+import myutil.ReportInfomartion;
 import myutil.SetImageIcon;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -64,10 +67,10 @@ public class TestReport extends javax.swing.JPanel {
         setTestReportPatientDetailsObject(patientDetails);
         setReportOnReportInputField();
         addAllNavigationButtons();
-   
+
         REPORTS_THREAD.start();
         shortKeyForRefreshingPage();
-       
+
     }
 
     public JTextField getName_report_inputs() {
@@ -99,10 +102,11 @@ public class TestReport extends javax.swing.JPanel {
     public void setTestReportDetails() {
         try {
             pno_report_input.setText(Integer.toString(TEST_REPORT_PATIENT_DETAILS.getPid()));
+            ReportInfomartion test_report = (Database.getInstance()).getAllTestReports(TEST_REPORT_PATIENT_DETAILS.getPid());
+           
 
-            ArrayList<String> tests = (Database.getInstance()).getAllTestReportts(TEST_REPORT_PATIENT_DETAILS.getPid());
-
-            if (tests != null) {
+            if (test_report != null) {
+                 ArrayList<String> tests = test_report.getReportNames();
                 lm.removeAllElements();
                 for (String t : tests) {
                     lm.addElement(t);
@@ -120,7 +124,9 @@ public class TestReport extends javax.swing.JPanel {
         }
 
         name_report_inputs.setText(TEST_REPORT_PATIENT_DETAILS.getName());
-        date_report_input.setDate(TEST_REPORT_PATIENT_DETAILS.getDate());
+        // date_report_input.setDate(TEST_REPORT_PATIENT_DETAILS.getDate());
+        //Test report date should be that date on which test report given       
+        date_report_input.setDate(home.getCurrentDate());
 
     }
 
@@ -659,7 +665,7 @@ public class TestReport extends javax.swing.JPanel {
     private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
         searchReport();
     }//GEN-LAST:event_search_reportActionPerformed
-    
+
     public void searchReport() {
         try {
             Database database = Database.getInstance();
@@ -669,8 +675,10 @@ public class TestReport extends javax.swing.JPanel {
             resetTestReportLists();
             setTestReportDetails();
 
-            ArrayList<String> tests = database.getAllTestReportts(pno);
-            if (tests != null) {
+            ReportInfomartion test_report = database.getAllTestReports(pno);
+           
+            if (test_report != null) {
+                 ArrayList<String> tests = test_report.getReportNames();
                 setReportPrint();
             }
         } catch (NumberFormatException exp) {
@@ -678,15 +686,16 @@ public class TestReport extends javax.swing.JPanel {
             report_status.setForeground(WARNING_COLOR);
         }
     }
-     public void searchReport(int patient_number) {
+
+    public void searchReport(int patient_number) {
         try {
             Database database = Database.getInstance();
             setTestReportPatientDetailsObject(database.getPatientDetails(patient_number));
 
             resetTestReportLists();
             setTestReportDetails();
-
-            ArrayList<String> tests = database.getAllTestReportts(patient_number);
+            ReportInfomartion test_report = database.getAllTestReports(patient_number);
+            ArrayList<String> tests = test_report.getReportNames();
             if (tests != null) {
                 setReportPrint();
             }
@@ -695,7 +704,27 @@ public class TestReport extends javax.swing.JPanel {
             report_status.setForeground(WARNING_COLOR);
         }
     }
-   
+    public void searchReport(PatientDetails patientDetails) {
+
+        try {
+            Database database = Database.getInstance();
+            setTestReportPatientDetailsObject(patientDetails);
+
+            resetTestReportLists();
+            setTestReportDetails();
+            ReportInfomartion test_report = database.getAllTestReports(patientDetails.getPid());
+          if(test_report!=null){
+            ArrayList<String> tests = test_report.getReportNames();
+            if (tests != null) {
+                setReportPrint();
+            }
+          }
+        } catch (NumberFormatException exp) {
+            report_status.setText("Enter valid patient number");
+            report_status.setForeground(WARNING_COLOR);
+        }
+    }
+
     public void resetTestReportLists() {
         report_input.setText("");
         report_list.clearSelection();
@@ -715,20 +744,19 @@ public class TestReport extends javax.swing.JPanel {
         print.setBorder(DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_printMouseExited
 
-     JasperPrint test_jasper_print = null; 
+    JasperPrint test_jasper_print = null;
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
         try {
-            if(test_jasper_print != null){
-             JasperPrintManager.printReport(test_jasper_print, false);
-             resetReportPage();
-             report_status.setText("Report printed Succesfully");
-             report_status.setForeground(SUCCESS_COLOR);
-             test_jasper_print = null;             
-            }
-            else{  
+            if (test_jasper_print != null) {
+                JasperPrintManager.printReport(test_jasper_print, false);
+                resetReportPage();
+                report_status.setText("Report printed Succesfully");
+                report_status.setForeground(SUCCESS_COLOR);
+                test_jasper_print = null;
+            } else {
                 setReportPrint();
                 printActionPerformed(evt);
-              
+
             }
         } catch (JRException ex) {
             report_status.setText("Report not printed");
@@ -756,7 +784,7 @@ public class TestReport extends javax.swing.JPanel {
         report_input.setBorder(INPUT_BORDER);
     }//GEN-LAST:event_report_inputMouseExited
 
-    
+
     private void report_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_listMouseClicked
 
         if (evt.getClickCount() == 1) {
@@ -939,18 +967,19 @@ public class TestReport extends javax.swing.JPanel {
         test_report_form.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_x, k);
         test_report_form.getActionMap().put(k, remove);
     }
+
     public void shortKeyForRefreshingPage() {
         KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
         Action refresh = new AbstractAction("refresh") {
             @Override
             public void actionPerformed(ActionEvent e) {
-              resetReportPage();
+                resetReportPage();
             }
         };
         String k = "refresh";
         refresh.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         test_report_form.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_r, k);
-         test_report_form.getActionMap().put(k, refresh);
+        test_report_form.getActionMap().put(k, refresh);
     }
 
     public void setReportsIntoDatabase() {
@@ -958,12 +987,11 @@ public class TestReport extends javax.swing.JPanel {
             Database db = Database.getInstance();
             int size = selected_report_list.getModel().getSize();
             int pno = Integer.parseInt(pno_report_input.getText());
+            long date_in_time = date_report_input.getDate().getTime();
             for (int i = 0; i < size; i++) {
-                db.insertTestReport(pno, (String) lm.getElementAt(i));
+                db.insertTestReport(pno, (String) lm.getElementAt(i), date_in_time);
             }
-        }
-        catch(NumberFormatException exp)
-        {
+        } catch (NumberFormatException exp) {
             report_status.setText("Enter valid patient number");
             report_status.setForeground(Color.red);
         }
@@ -986,7 +1014,7 @@ public class TestReport extends javax.swing.JPanel {
             if (con != null) {
                 JasperReport jr = REPORTS_THREAD.getCompliedTestReport();
                 if (jr != null) {
-                     test_jasper_print = JasperFillManager.fillReport(jr, a, con);
+                    test_jasper_print = JasperFillManager.fillReport(jr, a, con);
                     JRViewer v = new JRViewer(test_jasper_print);
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
@@ -994,7 +1022,7 @@ public class TestReport extends javax.swing.JPanel {
                     report_status.setText("No report is availalble");
                     report_status.setForeground(Color.red);
                 }
-                
+
             }
         } catch (NumberFormatException | JRException ex) {
             report_status.setText("No report is availalble");
@@ -1034,7 +1062,6 @@ public class TestReport extends javax.swing.JPanel {
         }
 
     }*/
-
     public void resetReportPage() {
         pno_report_input.setText("");
         name_report_inputs.setText("");

@@ -14,9 +14,11 @@ public class MultithredingReports extends Thread {
     String reportPath = ".\\report\\prescription_report_with_sign.jrxml";
     String testReportPath = ".\\report\\test_report_with_sign.jrxml";
     String medicalReportPath =".\\report\\medical_report_with_sign_1.jrxml";
+    String medicalReportPathForFormat2 =".\\report\\medical_report_with_sign.jrxml";
     JasperReport jr ;
     JasperReport testReportJr;
     JasperReport medicalReportJr;
+    JasperReport medicalReportJrFormat2;
     Database DB = Database.getInstance();
     @Override
     public void run()
@@ -25,7 +27,8 @@ public class MultithredingReports extends Thread {
            this.jr = JasperCompileManager.compileReport(reportPath);
            this.testReportJr = JasperCompileManager.compileReport(testReportPath);
            this.medicalReportJr = JasperCompileManager.compileReport(medicalReportPath);
-           System.out.println("hello");
+           this.medicalReportJrFormat2 = JasperCompileManager.compileReport(medicalReportPathForFormat2);
+         
         } catch (JRException ex) {
         }
     }
@@ -37,9 +40,13 @@ public class MultithredingReports extends Thread {
     {
         return this.testReportJr;
     }
-     public JasperReport getCompliedMedicalReport()
+     public JasperReport getCompliedMedicalReportFormat1()
     {
         return this.medicalReportJr;
+    }
+      public JasperReport getCompliedMedicalReportFormat2()
+    {
+        return this.medicalReportJrFormat2;
     }
     
     public Connection getConnection()
