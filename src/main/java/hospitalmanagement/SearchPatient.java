@@ -1221,7 +1221,8 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_add_medicine_btnMouseEntered
 
     private void new_test_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_test_btnActionPerformed
-
+             home.showPageOnWindow("reports");
+             home.showReportOnWindow("Test");
         //        savePrescriptionPatientDetails();
     }//GEN-LAST:event_new_test_btnActionPerformed
 
@@ -1259,7 +1260,7 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_new_prescription_btnMouseExited
 
     private void new_prescription_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_prescription_btnActionPerformed
-        // TODO add your handling code here:
+         home.showPageOnWindow("prescription");
     }//GEN-LAST:event_new_prescription_btnActionPerformed
 
     private void old_test_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_old_test_btnMouseEntered
@@ -1300,7 +1301,8 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_reffer_btnMouseExited
 
     private void reffer_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reffer_btnActionPerformed
-        // TODO add your handling code here:
+        home.showPageOnWindow("reports");
+        home.showReportOnWindow("Medical");
     }//GEN-LAST:event_reffer_btnActionPerformed
 
 

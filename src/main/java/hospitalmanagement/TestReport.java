@@ -695,8 +695,9 @@ public class TestReport extends javax.swing.JPanel {
             resetTestReportLists();
             setTestReportDetails();
             ReportInfomartion test_report = database.getAllTestReports(patient_number);
-            ArrayList<String> tests = test_report.getReportNames();
-            if (tests != null) {
+           
+            if (test_report != null) {
+                 ArrayList<String> tests = test_report.getReportNames();
                 setReportPrint();
             }
         } catch (NumberFormatException exp) {

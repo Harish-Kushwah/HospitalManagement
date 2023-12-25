@@ -127,7 +127,7 @@ public class Main extends javax.swing.JFrame {
         
         String [] msg ={"Establishing Database Connection...","Loading Patient Records...","Preparing User Interface...","Syncing Data...","Preparing Dashboard..."};
         int k = 0;
-            /*
+            
         try {
             for (int i = 0; i < 100; i++) {
                
@@ -160,7 +160,7 @@ public class Main extends javax.swing.JFrame {
             }
         } catch (InterruptedException exp) {
 
-        }*/
+        }
         new Main().setVisible(false);
         new Home().setVisible(true);
 

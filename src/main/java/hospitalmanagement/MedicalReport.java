@@ -715,7 +715,7 @@ public class MedicalReport extends javax.swing.JPanel {
         repaint();
 
     }
-
+    
     public void setReportPrint() {
         report_show_panel.removeAll();
         report_show_panel.revalidate();
