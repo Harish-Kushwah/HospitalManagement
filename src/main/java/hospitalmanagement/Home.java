@@ -171,40 +171,40 @@ public class Home extends javax.swing.JFrame {
 
     public void setMarathiFontForInputes() {
         Font marathi_plain = new Font("Mangal", Font.PLAIN, 13);
-        Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
-        medicine_input.setFont(marathi_bold);
-        prescription_name_input.setFont(marathi_bold);
-        name_report_input.setFont(marathi_bold);
-        medicine_list.setFont(new Font("Mangal", Font.BOLD, 14));
+       // Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
+        medicine_input.setFont(marathi_plain);
+        prescription_name_input.setFont(marathi_plain);
+        name_report_input.setFont(marathi_plain);
+        medicine_list.setFont(marathi_plain);
         name_input.setFont(marathi_plain);
         JTextField test_report_input = test.getName_report_inputs();
-        test_report_input.setFont(marathi_bold);
+        test_report_input.setFont(marathi_plain);
 
         JTextField medical_report_input = medical.getMedicalReportNameInput();
-        medical_report_input.setFont(marathi_bold);
+        medical_report_input.setFont(marathi_plain);
 
         JTextField search_patient_name_input = search_patient.getSearchPatientNameField();
-        search_patient_name_input.setFont(marathi_bold);
+        search_patient_name_input.setFont(marathi_plain);
 
     }
 
     public void setEnglishFontForInputes() {
         Font english_plain = new Font("Segoe UI", Font.PLAIN, 13);
-        Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
-        medicine_input.setFont(english_bold);
-        prescription_name_input.setFont(english_bold);
-        name_report_input.setFont(english_bold);
+       // Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
+        medicine_input.setFont(english_plain);
+        prescription_name_input.setFont(english_plain);
+        name_report_input.setFont(english_plain);
         medicine_list.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        name_input.setFont(english_bold);
+        name_input.setFont(english_plain);
 
         JTextField test_report_input = test.getName_report_inputs();
-        test_report_input.setFont(english_bold);
+        test_report_input.setFont(english_plain);
 
         JTextField medical_report_input = medical.getMedicalReportNameInput();
-        medical_report_input.setFont(english_bold);
+        medical_report_input.setFont(english_plain);
 
         JTextField search_patient_name_input = search_patient.getSearchPatientNameField();
-        search_patient_name_input.setFont(english_bold);
+        search_patient_name_input.setFont(english_plain);
     }
 
     /*
@@ -1477,7 +1477,7 @@ public class Home extends javax.swing.JFrame {
         name_label16.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
         name_label16.setText("Name :-");
 
-        prescription_name_input.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        prescription_name_input.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         prescription_name_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
         prescription_name_input.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {

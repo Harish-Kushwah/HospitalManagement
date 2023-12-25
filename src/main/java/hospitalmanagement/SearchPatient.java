@@ -37,6 +37,7 @@ import javax.swing.table.TableColumn;
 import myutil.MyCustomRenderer;
 import myutil.Database;
 import myutil.GradientPanel;
+import myutil.InputValidation;
 import myutil.LibraryTable;
 import myutil.MedicineDetails;
 import myutil.MedicineRowPanel;
@@ -100,11 +101,14 @@ public class SearchPatient extends javax.swing.JPanel {
             }
 
             void updateFieldState() {
+                
+                 InputValidation validate = new InputValidation();
                 resetMedicinePanel();
                 String name = name_input.getText();
                 String pno = pno_input.getText();
+               
                 String mobile_number = mobile_number_input.getText();
-                if (name.length() != 0) {
+                 if(validate.isVlalidName(name)) {
                     searchByName(name);
                 } else if (pno.length() != 0) {
                     try {
@@ -115,6 +119,9 @@ public class SearchPatient extends javax.swing.JPanel {
 
                 } else if (mobile_number.length() != 0) {
                     searchByMobileNumber(mobile_number);
+                }
+                else{
+                    System.out.println("Enter valid name");
                 }
 
             }
