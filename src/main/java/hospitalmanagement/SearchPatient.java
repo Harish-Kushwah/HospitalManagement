@@ -37,12 +37,14 @@ import javax.swing.table.TableColumn;
 import myutil.MyCustomRenderer;
 import myutil.Database;
 import myutil.GradientPanel;
+import myutil.InputValidation;
 import myutil.LibraryTable;
 import myutil.MedicineDetails;
 import myutil.MedicineRowPanel;
 import myutil.PatientDetails;
 import myutil.ReportInfomartion;
 import myutil.SetImageIcon;
+import java.util.regex.*;
 
 /**
  *
@@ -69,7 +71,6 @@ public class SearchPatient extends javax.swing.JPanel {
 
     public SearchPatient(Home home) {
         initComponents();
-        setPatientOnPatientInputField();
         addMouseListerOnTabel();
         AddlisterOnGenderRadioBtn();
         this.home = home;
@@ -80,49 +81,6 @@ public class SearchPatient extends javax.swing.JPanel {
 
     public JTextField getSearchPatientNameField() {
         return name_input;
-    }
-
-    public void setPatientOnPatientInputField() {
-        DocumentListener dl = new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
-
-            void updateFieldState() {
-                resetMedicinePanel();
-                String name = name_input.getText();
-                String pno = pno_input.getText();
-                String mobile_number = mobile_number_input.getText();
-                if (name.length() != 0) {
-                    searchByName(name);
-                } else if (pno.length() != 0) {
-                    try {
-                        searchByPno(Integer.parseInt(pno));
-                    } catch (NumberFormatException exp) {
-                        System.err.println("Enter valid patien number");
-                    }
-
-                } else if (mobile_number.length() != 0) {
-                    searchByMobileNumber(mobile_number);
-                }
-
-            }
-        };
-        name_input.getDocument().addDocumentListener(dl);
-        pno_input.getDocument().addDocumentListener(dl);
-        mobile_number_input.getDocument().addDocumentListener(dl);
-
     }
 
     public void AddlisterOnGenderRadioBtn() {
@@ -340,9 +298,7 @@ public class SearchPatient extends javax.swing.JPanel {
         diseases_input_label.setText(patient.getSymptoms());
         bp_input_label.setText(patient.getBloodPressure());
 
-        System.out.println(patient.getBloodPressure());
-        System.out.println(patient.getBloodPressure().length());
-
+    
         //updating the patient object for report page click
         patient_for_report_page = patient;
 
@@ -495,19 +451,19 @@ public class SearchPatient extends javax.swing.JPanel {
         prescription_form.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         prescription_form.setPreferredSize(new java.awt.Dimension(600, 550));
 
-        name_input.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        name_input.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         name_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
+        name_input.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                name_inputCaretUpdate(evt);
+            }
+        });
         name_input.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 name_inputMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 name_inputMouseExited(evt);
-            }
-        });
-        name_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                name_inputActionPerformed(evt);
             }
         });
 
@@ -621,6 +577,11 @@ public class SearchPatient extends javax.swing.JPanel {
 
         pno_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
         pno_input.setPreferredSize(new java.awt.Dimension(64, 20));
+        pno_input.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                pno_inputCaretUpdate(evt);
+            }
+        });
         pno_input.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pno_inputMouseEntered(evt);
@@ -635,6 +596,11 @@ public class SearchPatient extends javax.swing.JPanel {
         mobile_number_input.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         mobile_number_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
         mobile_number_input.setPreferredSize(new java.awt.Dimension(64, 20));
+        mobile_number_input.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                mobile_number_inputCaretUpdate(evt);
+            }
+        });
         mobile_number_input.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 mobile_number_inputMouseEntered(evt);
@@ -1209,7 +1175,7 @@ public class SearchPatient extends javax.swing.JPanel {
     private void add_medicine_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btnActionPerformed
         long date_in_time_format = date_input.getDate().getTime();
         searchByDate(date_in_time_format);
-        System.out.println(date_in_time_format);
+        
     }//GEN-LAST:event_add_medicine_btnActionPerformed
 
     private void add_medicine_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_medicine_btnMouseExited
@@ -1221,8 +1187,8 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_add_medicine_btnMouseEntered
 
     private void new_test_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_test_btnActionPerformed
-             home.showPageOnWindow("reports");
-             home.showReportOnWindow("Test");
+        home.showPageOnWindow("reports");
+        home.showReportOnWindow("Test");
         //        savePrescriptionPatientDetails();
     }//GEN-LAST:event_new_test_btnActionPerformed
 
@@ -1234,10 +1200,6 @@ public class SearchPatient extends javax.swing.JPanel {
         //  prescription_save_btn.setBorder(INPUT_BORDER);
         new_test_btn.setBorder(new LineBorder(Color.BLACK, 2, true));
     }//GEN-LAST:event_new_test_btnMouseEntered
-
-    private void name_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_name_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_name_inputActionPerformed
 
     private void name_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_inputMouseExited
         if (name_input.getBorder() != WARNING_BORDER) {
@@ -1260,7 +1222,7 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_new_prescription_btnMouseExited
 
     private void new_prescription_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_prescription_btnActionPerformed
-         home.showPageOnWindow("prescription");
+        home.showPageOnWindow("prescription");
     }//GEN-LAST:event_new_prescription_btnActionPerformed
 
     private void old_test_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_old_test_btnMouseEntered
@@ -1304,6 +1266,41 @@ public class SearchPatient extends javax.swing.JPanel {
         home.showPageOnWindow("reports");
         home.showReportOnWindow("Medical");
     }//GEN-LAST:event_reffer_btnActionPerformed
+
+    private void name_inputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_name_inputCaretUpdate
+        if (evt.getMark() != 0) {
+            String name = name_input.getText().trim();
+            searchByName(name);
+        }
+    }//GEN-LAST:event_name_inputCaretUpdate
+
+    private void pno_inputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_pno_inputCaretUpdate
+
+        if (evt.getMark() != 0) {
+            String pno = pno_input.getText().trim();
+            try {
+                searchByPno(Integer.parseInt(pno));
+            } catch (NumberFormatException exp) {
+                System.err.println("Enter valid patien number");
+            }
+
+        }
+    }//GEN-LAST:event_pno_inputCaretUpdate
+
+    private void mobile_number_inputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_mobile_number_inputCaretUpdate
+
+        if (evt.getMark() != 0) {
+            String mobile_number = mobile_number_input.getText().trim();
+            try {
+
+                searchByMobileNumber(mobile_number);
+
+            } catch (NumberFormatException exp) {
+                System.err.println("Enter valid patien number");
+            }
+
+        }
+    }//GEN-LAST:event_mobile_number_inputCaretUpdate
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -748,10 +748,10 @@ public class MedicalReport extends javax.swing.JPanel {
                 
                 JasperReport jr;
                 if(report_showing_format_1 == true){
-                     jr = REPORTS_THREAD.getCompliedMedicalReportFormat1();
+                     jr = REPORTS_THREAD.getCompliedMedicalReportFormat2();
                 }
                 else{
-                    jr = REPORTS_THREAD.getCompliedMedicalReportFormat2();
+                    jr = REPORTS_THREAD.getCompliedMedicalReportFormat1();
                 }
                 
                 if (jr != null) {
