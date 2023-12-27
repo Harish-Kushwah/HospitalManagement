@@ -36,7 +36,7 @@ public class Database {
 
     private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
     
-    private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports`) VALUES (?,?);";
+    private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports` ,`report_date`) VALUES (?,?,?);";
     private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
     private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
     
@@ -442,12 +442,14 @@ public class Database {
     }
     
     //inserting test reports 
-    public void insertTestReport(int pno , String report_name) {
+    public void insertTestReport(int pno , String report_name , long date_in_time) {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT);
             preparedStatement.setInt(1,pno);
             preparedStatement.setString(2, report_name.toUpperCase());
+             preparedStatement.setDate(3, new Date(date_in_time));
+            
             
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -508,6 +510,155 @@ public class Database {
         }
         return null;
     }
+    
+    public ArrayList<String> getLikePatient(String str) {
+
+        ArrayList<String> patient_details  = new ArrayList<>();
+        
+        
+       
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE name LIKE ");
+            GET_LIKE_PATIENT.append("\'");
+            GET_LIKE_PATIENT.append("%");
+            GET_LIKE_PATIENT.append(new StringBuffer(str.toUpperCase()));
+            GET_LIKE_PATIENT.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_PATIENT));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
+               
+                patient_details.add(info);
+                i++;
+            }
+            return patient_details;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public ArrayList<String> getLikePatient(int  patient_number) {
+
+        ArrayList<String> patient_details  = new ArrayList<>();
+         
+       
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE pno LIKE ");
+            GET_LIKE_PATIENT.append("\'");
+            GET_LIKE_PATIENT.append("%");
+            GET_LIKE_PATIENT.append(Integer.toString(patient_number));
+            GET_LIKE_PATIENT.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_PATIENT));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
+               
+                patient_details.add(info);
+                i++;
+            }
+            return patient_details;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public ArrayList<String> getLikePatientByMobileNo(String mobile_number) {
+
+        ArrayList<String> patient_details  = new ArrayList<>();
+         
+       
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE mno LIKE ");
+            GET_LIKE_PATIENT.append("\'");
+            GET_LIKE_PATIENT.append("%");
+            GET_LIKE_PATIENT.append(mobile_number);
+            GET_LIKE_PATIENT.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_PATIENT));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
+               
+                patient_details.add(info);
+                i++;
+            }
+            return patient_details;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public ArrayList<String> getLikePatientByGender(String gender) {
+
+        ArrayList<String> patient_details  = new ArrayList<>();
+         
+       
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE gen LIKE ");
+            GET_LIKE_PATIENT.append("\'");
+            GET_LIKE_PATIENT.append("%");
+            GET_LIKE_PATIENT.append(gender);
+            GET_LIKE_PATIENT.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_PATIENT));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
+               
+                patient_details.add(info);
+                i++;
+            }
+            return patient_details;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public ArrayList<String> getLikePatientByDate(long date_in_time_format) {
+
+        ArrayList<String> patient_details  = new ArrayList<>();
+         
+       
+        try {
+            Connection conn = connect();
+            Date date = new Date(date_in_time_format);
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE date LIKE ");
+            GET_LIKE_PATIENT.append("\'");
+            GET_LIKE_PATIENT.append("%");
+            GET_LIKE_PATIENT.append(date.toString());
+            GET_LIKE_PATIENT.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_PATIENT));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
+               
+                patient_details.add(info);
+                i++;
+            }
+            return patient_details;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
 
     public ArrayList<String> getAllMedicine() {
 
@@ -680,9 +831,9 @@ public class Database {
     }
     
             
-     public ArrayList<String> getAllTestReportts(int patient_number) {
+     public ReportInfomartion getAllTestReports(int patient_number) {
 
-        ArrayList<String> tests = new ArrayList<String>();
+        ReportInfomartion test_report = new ReportInfomartion();
 
         try {
             Connection conn = connect();
@@ -692,19 +843,23 @@ public class Database {
              preparedStatement.setInt(1, patient_number);
              
             ResultSet rs = preparedStatement.executeQuery();
+            //rs.getDate()
+            test_report.setPatientNumber(patient_number);
             int i = 0;
             while (rs.next()) {
-                tests.add(rs.getString("reports"));
+               
+                test_report.setReportName(rs.getString("reports"));
+                test_report.setDate(rs.getDate("report_date"));
                 i++;
             }
             if(i==0) 
                 return null;
-            return tests;
+          
 
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
+        return test_report;
     }
 
     public ArrayList<String> getLikeBookmarkMedicine(String str) {
