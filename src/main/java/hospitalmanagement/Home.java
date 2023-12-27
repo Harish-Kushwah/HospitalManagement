@@ -87,6 +87,7 @@ public class Home extends javax.swing.JFrame {
     TestReport test;
     MedicalReport medical;
     SearchPatient search_patient;
+    Email email_panel;
 //=============================================[CONSTRUCTOR WORK START]====================================================
 
     public Home() {
@@ -141,6 +142,9 @@ public class Home extends javax.swing.JFrame {
 
         // prescription_report_panel.add(new PrescriptionReport() , BorderLayout.CENTER);
         prescription_save_btn.setVisible(false);
+        
+        email_panel = new Email();
+        EmailPage.add(email_panel , BorderLayout.CENTER);
 
         BOOK_MARK_PANEL = new BookmarkPanel(this);
         prescription_form_panel.add(BOOK_MARK_PANEL, BorderLayout.CENTER);
@@ -261,6 +265,8 @@ public class Home extends javax.swing.JFrame {
         setRightArrowIconForReportDropdown();
 
         search_patient_panel.add(new SetImageIcon(new ImageIcon(search_icon), 15, 10), BorderLayout.CENTER);
+        
+        email_icon.add(new SetImageIcon(new ImageIcon("./images/gmail_icon.png"),30,30)) ;
 
     }
 
@@ -319,9 +325,9 @@ public class Home extends javax.swing.JFrame {
 //=============================================[GENERAL FUNCTIONS WORK START]====================================================
 
     public void setPageShowingLabelColor() {
-        JLabel pages[] = {reports_label, dashboard_label, prescription_label, patient_label};
+        JLabel pages[] = {reports_label, dashboard_label, prescription_label, patient_label,email_label};
         for (JLabel page : pages) {
-            if (page_showing.equalsIgnoreCase(page.getText())) {
+            if (page_showing.equalsIgnoreCase(page.getText().trim())) {
                 page.setForeground(Color.CYAN);
             } else {
                 page.setForeground(Color.white);
@@ -793,10 +799,10 @@ public class Home extends javax.swing.JFrame {
         card.show(main_panel, page_name);
         page_showing = page_name;
 
-        JLabel menu_panel_label_list[] = {dashboard_label, patient_label, prescription_label, reports_label};
+        JLabel menu_panel_label_list[] = {dashboard_label, patient_label, prescription_label, reports_label , email_label};
 
         for (JLabel menu_panel_label_list1 : menu_panel_label_list) {
-            if (menu_panel_label_list1.getText().equalsIgnoreCase(page_showing)) {
+            if (menu_panel_label_list1.getText().trim().equalsIgnoreCase(page_showing)) {
                 menu_panel_label_list1.setForeground(Color.CYAN);
             } else {
                 menu_panel_label_list1.setForeground(Color.white);
@@ -979,6 +985,9 @@ public class Home extends javax.swing.JFrame {
         test_reports_dropdown_label = new javax.swing.JLabel();
         reports_dropdown_seperator = new javax.swing.JSeparator();
         search_patient_panel = new javax.swing.JPanel();
+        email_label = new javax.swing.JLabel();
+        email_icon = new JPanel();
+        reports_icon.add(new SetImageIcon(new ImageIcon("./images/reports_icon.png"),30,30)) ;
         main_panel = new javax.swing.JPanel();
         Prescription = new javax.swing.JPanel();
         prescription_form_panel = prescription_form_panel = new GradientPanel(new Color(0xe8feff),new Color(0xe8f3ff) , 300,600);
@@ -1104,6 +1113,7 @@ public class Home extends javax.swing.JFrame {
         patient_back = new javax.swing.JPanel();
         patient_next = new javax.swing.JPanel();
         search_patient_main_panel = new javax.swing.JPanel();
+        EmailPage = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1368, 740));
@@ -1236,7 +1246,7 @@ public class Home extends javax.swing.JFrame {
 
         prescription_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
         prescription_label.setForeground(new java.awt.Color(255, 255, 255));
-        prescription_label.setText("Prescription");
+        prescription_label.setText(" Prescription");
         prescription_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         prescription_label.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1383,44 +1393,64 @@ public class Home extends javax.swing.JFrame {
         });
         search_patient_panel.setLayout(new java.awt.BorderLayout());
 
+        email_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        email_label.setForeground(new java.awt.Color(255, 255, 255));
+        email_label.setText("Email");
+        email_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        email_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                email_labelMouseClicked(evt);
+            }
+        });
+
+        email_icon.setBackground(new java.awt.Color(0, 0, 102));
+        email_icon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        email_icon.setPreferredSize(new java.awt.Dimension(30, 30));
+        email_icon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                email_iconMouseClicked(evt);
+            }
+        });
+        email_icon.setLayout(new java.awt.CardLayout());
+
         javax.swing.GroupLayout menu_panelLayout = new javax.swing.GroupLayout(menu_panel);
         menu_panel.setLayout(menu_panelLayout);
         menu_panelLayout.setHorizontalGroup(
             menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(menu_panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(menu_panelLayout.createSequentialGroup()
+                    .addComponent(reports_dropdown_seperator)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
                         .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
-                                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(prescription_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(8, 8, 8))
-                            .addGroup(menu_panelLayout.createSequentialGroup()
-                                .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
-                                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(dashboard_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
-                                        .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
-                                        .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(search_patient_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(prescription_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
+                        .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(menu_panelLayout.createSequentialGroup()
-                        .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dashboard_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
+                                .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
+                                .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(search_patient_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(email_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(email_label, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)))
                 .addContainerGap())
         );
         menu_panelLayout.setVerticalGroup(
@@ -1451,7 +1481,11 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(789, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(email_icon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(email_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(741, Short.MAX_VALUE))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -2070,7 +2104,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(test_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(medical_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1857, Short.MAX_VALUE))
+                .addContainerGap(1860, Short.MAX_VALUE))
         );
         medical_report_panel_headLayout.setVerticalGroup(
             medical_report_panel_headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2392,7 +2426,7 @@ public class Home extends javax.swing.JFrame {
         report_show_panel.setLayout(report_show_panelLayout);
         report_show_panelLayout.setHorizontalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1969, Short.MAX_VALUE)
+            .addGap(0, 1972, Short.MAX_VALUE)
         );
         report_show_panelLayout.setVerticalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2429,7 +2463,7 @@ public class Home extends javax.swing.JFrame {
         Dashboard.setLayout(DashboardLayout);
         DashboardLayout.setHorizontalGroup(
             DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2219, Short.MAX_VALUE)
+            .addGap(0, 2222, Short.MAX_VALUE)
         );
         DashboardLayout.setVerticalGroup(
             DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2908,6 +2942,9 @@ public class Home extends javax.swing.JFrame {
         search_patient_main_panel.setLayout(new java.awt.BorderLayout());
         main_panel.add(search_patient_main_panel, "search_patient");
 
+        EmailPage.setLayout(new java.awt.BorderLayout());
+        main_panel.add(EmailPage, "email");
+
         getContentPane().add(main_panel, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -3105,8 +3142,7 @@ public class Home extends javax.swing.JFrame {
         newDashboardPanel = new NewDashboardPanel();
 
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
-
-        showPageOnWindow("dashboard");
+        showPageOnWindow("Dashboard");
     }//GEN-LAST:event_dashboard_iconMouseClicked
 
     private void patient_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_iconMouseClicked
@@ -4392,6 +4428,14 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_search_patient_panelMouseExited
 
+    private void email_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_email_labelMouseClicked
+         showPageOnWindow("email");
+    }//GEN-LAST:event_email_labelMouseClicked
+
+    private void email_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_email_iconMouseClicked
+        showPageOnWindow("email");
+    }//GEN-LAST:event_email_iconMouseClicked
+
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -4435,6 +4479,7 @@ public class Home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Dashboard;
+    private javax.swing.JPanel EmailPage;
     private javax.swing.JPanel Patient;
     private javax.swing.JPanel Prescription;
     private javax.swing.JPanel Reports;
@@ -4456,6 +4501,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JCheckBox diarrhea_chk;
     private javax.swing.JPanel doctor_icon_panel;
     private javax.swing.JButton edit_report;
+    private javax.swing.JPanel email_icon;
+    private javax.swing.JLabel email_label;
     private javax.swing.JTextField fees_input;
     private javax.swing.JTextField fees_pno_input;
     private javax.swing.JButton fees_save_btn;

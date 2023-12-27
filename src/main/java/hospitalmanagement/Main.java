@@ -129,31 +129,32 @@ public class Main extends javax.swing.JFrame {
         int k = 0;
             
         try {
+            
             for (int i = 0; i < 100; i++) {
                
-                if(i==60){
-                    Thread.sleep(1000);
-                }
-                if(i<30){
-                   Thread.sleep(40);
-                }
-                else if(i<60){
-                    Thread.sleep(60);
-                }
-                else if(i<80){
-                     Thread.sleep(30);
-                }
-                else{
-                     Thread.sleep(20);
-
-                }
-                info_msg.setText(msg[k]);
-                if(i==40||i==60||i==80||i==90)
-                {
-                    k++;
-                }
+//                if(i==60){
+//                    Thread.sleep(1000);
+//                }
+//                if(i<30){
+//                   Thread.sleep(40);
+//                }
+//                else if(i<60){
+//                    Thread.sleep(60);
+//                }
+//                else if(i<80){
+//                     Thread.sleep(30);
+//                }
+//                else{
+//                     Thread.sleep(20);
+//
+//                }
+//                info_msg.setText(msg[k]);
+//                if(i==40||i==60||i==80||i==90)
+//                {
+//                    k++;
+//                }
                 
-              
+              Thread.sleep(0);
               
                 sc.progress.setValue(i);
                 sc.completed.setText(Integer.toString(i) + "%");
