@@ -17,7 +17,7 @@ public class Database {
 
     private static final String SELECT_ALL_QUERY = "select * from pdetail";
     private static final String UPDATE_USERS_SQL = "update pdetail set username = ? where id = ?;";
-    private static final String INSERT_RECORD_SQL = "INSERT INTO `pdetail`( `pno`,`date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `pdis`) VALUES (?,?,?,?,?,?,?,?,?,?);";
+    private static final String INSERT_RECORD_SQL = "INSERT INTO `pdetail`( `pno`,`date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `pdis`,`email`) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
     private static final String GET_TOTAL_NO_OF_ROWS = "SELECT COUNT(NAME) FROM pdetail";
     private static final String GET_TOTAL_MONTH_PATIENT = "select * from pdetail where MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now());";
     private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
@@ -35,17 +35,20 @@ public class Database {
     private static final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
 
     private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
-    
+
     private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports` ,`report_date`) VALUES (?,?,?);";
-    private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
-    private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
-    
+    private static final String DELETE_TEST_REPORT_BY_PNO = "delete  from patient_reports where patient_no =?";
+    private static final String GET_ALL_TEST_REPORTS = "SELECT *FROM patient_reports where patient_no=?";
+
     private static final String INSERT_REPORT_NAME = "INSERT INTO `reports` (`report_name`)VALUES (?);";
     private static final String INSERT_DOCTOR_NAME = "INSERT INTO `doctor_names` (`doc_name`) VALUES (?);";
     private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM `doctor_names`";
     private static final String GET_DOCTOR_ID = "SELECT * FROM doctor_names where doc_name = ?";
-     static Database singletone_database = null;
-     Connection connection = null;
+
+    private static final String INSERT_INTO_EMAIL = "INSERT INTO `email` (`email_from`, `email_to`, `subject`, `body`, `template`) VALUES (?,?,?,?,?)";
+    static Database singletone_database = null;
+    Connection connection = null;
+
     //creates the database connection
     public Connection connect() {
         try {
@@ -216,6 +219,7 @@ public class Database {
                 patientdetails.setSymptoms(rs.getString("pdis"));
                 patientdetails.setWeight(rs.getString("wht"));
                 patientdetails.setMobileNo(rs.getString("mno"));
+                patientdetails.setEmail(rs.getString("email"));
 
                 String fees = rs.getString("fees_paid");
                 if (fees != null) {
@@ -306,6 +310,7 @@ public class Database {
 
         }
     }
+
     public void updatePatientMobileNo(PatientDetails patientdetails) {
 
         try {
@@ -397,8 +402,9 @@ public class Database {
             preparedStatement.setInt(7, patientdetails.getWeight());
             preparedStatement.setString(8, patientdetails.getBloodPressure());
             preparedStatement.setString(9, patientdetails.getPulse());
-//            preparedStatement.setString(9, patientdetails.getSugar());
+
             preparedStatement.setString(10, patientdetails.getSymptoms());
+            preparedStatement.setString(11, patientdetails.getEmail());
 
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -428,51 +434,50 @@ public class Database {
             System.out.println(e);
         }
     }
+
     public void insertMedicine(String medicine_name) {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDICINE);
             preparedStatement.setString(1, medicine_name);
-            
+
             preparedStatement.executeUpdate();
             //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-    
+
     //inserting test reports 
-    public void insertTestReport(int pno , String report_name , long date_in_time) {
+    public void insertTestReport(int pno, String report_name, long date_in_time) {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT);
-            preparedStatement.setInt(1,pno);
+            preparedStatement.setInt(1, pno);
             preparedStatement.setString(2, report_name.toUpperCase());
-             preparedStatement.setDate(3, new Date(date_in_time));
-            
-            
+            preparedStatement.setDate(3, new Date(date_in_time));
+
             preparedStatement.executeUpdate();
             //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-     public void insertNewTestReportName( String report_name) {
+
+    public void insertNewTestReportName(String report_name) {
         try {
             Connection conn = connect();
-            PreparedStatement preparedStatement = conn.prepareStatement( INSERT_REPORT_NAME);
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT_NAME);
             preparedStatement.setString(1, report_name);
-            
+
             preparedStatement.executeUpdate();
             //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-    
-   
-    public void removeALlTestReport(int patient_number)
-    {
+
+    public void removeALlTestReport(int patient_number) {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TEST_REPORT_BY_PNO);
@@ -484,6 +489,7 @@ public class Database {
             System.out.println(e);
         }
     }
+
     public ArrayList<String> getLikeMedicine(String str) {
 
         ArrayList<String> medi = new ArrayList<String>();
@@ -510,13 +516,11 @@ public class Database {
         }
         return null;
     }
-    
+
     public ArrayList<String> getLikePatient(String str) {
 
-        ArrayList<String> patient_details  = new ArrayList<>();
-        
-        
-       
+        ArrayList<String> patient_details = new ArrayList<>();
+
         try {
             Connection conn = connect();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE name LIKE ");
@@ -529,8 +533,8 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
-               
+                String info = rs.getString("pno") + "/" + rs.getString("name") + "/" + (rs.getString("date").split(" "))[0];
+
                 patient_details.add(info);
                 i++;
             }
@@ -541,11 +545,11 @@ public class Database {
         }
         return null;
     }
-    public ArrayList<String> getLikePatient(int  patient_number) {
 
-        ArrayList<String> patient_details  = new ArrayList<>();
-         
-       
+    public ArrayList<String> getLikePatient(int patient_number) {
+
+        ArrayList<String> patient_details = new ArrayList<>();
+
         try {
             Connection conn = connect();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE pno LIKE ");
@@ -558,8 +562,8 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
-               
+                String info = rs.getString("pno") + "/" + rs.getString("name") + "/" + (rs.getString("date").split(" "))[0];
+
                 patient_details.add(info);
                 i++;
             }
@@ -570,11 +574,11 @@ public class Database {
         }
         return null;
     }
+
     public ArrayList<String> getLikePatientByMobileNo(String mobile_number) {
 
-        ArrayList<String> patient_details  = new ArrayList<>();
-         
-       
+        ArrayList<String> patient_details = new ArrayList<>();
+
         try {
             Connection conn = connect();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE mno LIKE ");
@@ -587,8 +591,8 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
-               
+                String info = rs.getString("pno") + "/" + rs.getString("name") + "/" + (rs.getString("date").split(" "))[0];
+
                 patient_details.add(info);
                 i++;
             }
@@ -599,11 +603,11 @@ public class Database {
         }
         return null;
     }
+
     public ArrayList<String> getLikePatientByGender(String gender) {
 
-        ArrayList<String> patient_details  = new ArrayList<>();
-         
-       
+        ArrayList<String> patient_details = new ArrayList<>();
+
         try {
             Connection conn = connect();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE gen LIKE ");
@@ -616,8 +620,8 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
-               
+                String info = rs.getString("pno") + "/" + rs.getString("name") + "/" + (rs.getString("date").split(" "))[0];
+
                 patient_details.add(info);
                 i++;
             }
@@ -628,11 +632,11 @@ public class Database {
         }
         return null;
     }
+
     public ArrayList<String> getLikePatientByDate(long date_in_time_format) {
 
-        ArrayList<String> patient_details  = new ArrayList<>();
-         
-       
+        ArrayList<String> patient_details = new ArrayList<>();
+
         try {
             Connection conn = connect();
             Date date = new Date(date_in_time_format);
@@ -646,8 +650,8 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
-               
+                String info = rs.getString("pno") + "/" + rs.getString("name") + "/" + (rs.getString("date").split(" "))[0];
+
                 patient_details.add(info);
                 i++;
             }
@@ -658,7 +662,6 @@ public class Database {
         }
         return null;
     }
-    
 
     public ArrayList<String> getAllMedicine() {
 
@@ -829,32 +832,30 @@ public class Database {
         }
         return null;
     }
-    
-            
-     public ReportInfomartion getAllTestReports(int patient_number) {
+
+    public ReportInfomartion getAllTestReports(int patient_number) {
 
         ReportInfomartion test_report = new ReportInfomartion();
 
         try {
             Connection conn = connect();
-            
 
             PreparedStatement preparedStatement = conn.prepareStatement(GET_ALL_TEST_REPORTS);
-             preparedStatement.setInt(1, patient_number);
-             
+            preparedStatement.setInt(1, patient_number);
+
             ResultSet rs = preparedStatement.executeQuery();
             //rs.getDate()
             test_report.setPatientNumber(patient_number);
             int i = 0;
             while (rs.next()) {
-               
+
                 test_report.setReportName(rs.getString("reports"));
                 test_report.setDate(rs.getDate("report_date"));
                 i++;
             }
-            if(i==0) 
+            if (i == 0) {
                 return null;
-          
+            }
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -949,20 +950,19 @@ public class Database {
     }
 
 //    doctor related 
-    public void insertDoctorName(String doctor_name)
-    {
-         try {
+    public void insertDoctorName(String doctor_name) {
+        try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_DOCTOR_NAME);
             preparedStatement.setString(1, doctor_name);
-            
+
             preparedStatement.executeUpdate();
             //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-    
+
     public ArrayList<String> getAllDoctorNames(String str) {
 
         ArrayList<String> medi = new ArrayList<String>();
@@ -989,24 +989,47 @@ public class Database {
         }
         return null;
     }
-    
-    
-            
+
     public int getDoctorID(String doctor_name) {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_DOCTOR_ID);
             preparedStatement.setString(1, doctor_name);
             ResultSet rs = preparedStatement.executeQuery();
-            
+
             rs.next();
-            
+
             return rs.getInt("doc_id");
-            
+
         } catch (SQLException e) {
             System.out.println(e);
         }
         return -1;
     }
-       
+
+    //Email Related operations
+    public void insertEmail(EmailInformation emailInformation) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_INTO_EMAIL);
+
+            preparedStatement.setString(1, emailInformation.getSendFrom());
+
+            preparedStatement.setString(2, emailInformation.getSendTo());
+            preparedStatement.setString(3, emailInformation.getSubject());
+            preparedStatement.setString(4, emailInformation.getBody());
+            preparedStatement.setString(5, emailInformation.getTemplate());
+
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public String getEmail(int patient_number) {
+        return getPatientDetails(patient_number).getEmail();
+    }
+
 }
