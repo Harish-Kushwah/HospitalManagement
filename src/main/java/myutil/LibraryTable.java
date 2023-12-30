@@ -59,9 +59,42 @@ public class LibraryTable extends JTable{
     int row_height = 35;
 
     CustomRenderer customRenderer = new CustomRenderer();
+    String data[][];
+    String column[];
+    public  LibraryTable()
+    {
+        defaultTableModel = new DefaultTableModel(this.data,this.column){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+
+        this.setModel(defaultTableModel);
+
+        this.setRowHeight(row_height);
+        this.setBackground(TABLE_BACKGROUND_COLOR);
+        this.setIntercellSpacing(new Dimension(0,5));
+        this.setShowGrid(false);
+        this.setRowMargin(5);
+        this.getTableHeader().setPreferredSize(new Dimension(100,30));
+        this.getTableHeader().setBackground(TABLE_HEADER_BACKGROUND_COLOR);
+        this.getTableHeader().setForeground(TABLE_HEADER_FORGROUND_COLOR);
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        int total_col = defaultTableModel.getColumnCount();
+        for(int i=0;i<total_col;i++){
+            TableColumn col =  this.getColumnModel().getColumn(i);
+            col.setCellRenderer(customRenderer);
+        }
+        
+    }
     public  LibraryTable(String data[][], String column[])
     {
-        defaultTableModel = new DefaultTableModel(data,column){
+        this.data = data;
+        this.column = column;
+        defaultTableModel = new DefaultTableModel(this.data,this.column){
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -88,7 +121,14 @@ public class LibraryTable extends JTable{
         }
 
     }
-
+    public void setRow(String data[][])
+    {
+        this.data = data;
+    }
+    public void setColumn(String column[])
+    {
+        this.column = column;
+    }
     public  void setRowColor(Color first_row_color , Color second_row_color)
     {
         customRenderer.setRowColor(first_row_color,second_row_color);

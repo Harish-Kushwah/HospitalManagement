@@ -3,7 +3,11 @@ package hospitalmanagement;
 import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 
 import java.util.ArrayList;
@@ -13,6 +17,8 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Queue;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,8 +71,8 @@ public class Home extends javax.swing.JFrame {
 
     public BookmarkPanel BOOK_MARK_PANEL = null;
 
-    public boolean font_value=true;
-    
+    public boolean font_value = true;
+
     String refresh_page_icon = "./images/refresh3.png";
     String refresh_page_icon_on_click = "./images/refresh3.png";
     String refresh_page_icon_on_exit = "./images/refresh3.png";
@@ -74,16 +80,19 @@ public class Home extends javax.swing.JFrame {
     String next_page_icon = "./images/right_arrow.png";
     String report_dropdown_right_arrow = "./images/right_arrow3.png";
     String report_dropdown_down_arrow = "./images/down_arrow1.png";
-    String english_translation_icon="./images/translation_icon2.png";
-    String marathi_translation_icon="./images/translation_icon_marathi.png";
+    String english_translation_icon = "./images/translation_icon2.png";
+    String marathi_translation_icon = "./images/translation_icon_marathi.png";
+    String search_icon = "./images/search.png";
 
     TestReport test;
     MedicalReport medical;
+    SearchPatient search_patient;
 //=============================================[CONSTRUCTOR WORK START]====================================================
+
     public Home() {
 
         initComponents();
-
+        REPORTS_THREAD.start();
         //make the frame of full page
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //        setSize(1366,768);
@@ -116,19 +125,20 @@ public class Home extends javax.swing.JFrame {
 
         addShortKeyForPages();
 
-        REPORTS_THREAD.start();
-
         //make the male radio button auto selected on prescriotion page
         prescription_male_btn.setSelected(true);
 
         test_report_panel.removeAll();
-        test=new TestReport(this, getPatientPagePatientDetailsObject());
+        test = new TestReport(this, getPatientPagePatientDetailsObject());
         test_report_panel.add(test, BorderLayout.CENTER);
 
         medical_report_panel.removeAll();
         medical = new MedicalReport(this, getPatientPagePatientDetailsObject());
         medical_report_panel.add(medical, BorderLayout.CENTER);
-        
+
+        search_patient = new SearchPatient(this);
+        search_patient_main_panel.add(search_patient, BorderLayout.CENTER);
+
         // prescription_report_panel.add(new PrescriptionReport() , BorderLayout.CENTER);
         prescription_save_btn.setVisible(false);
 
@@ -138,13 +148,25 @@ public class Home extends javax.swing.JFrame {
         prescription_form_panel.revalidate();
         prescription_form_panel.repaint();
 
-       // setMarathiFontForInputes();
+        // setMarathiFontForInputes();
         //  addEnterBtnActionTotalTablet();
         reports_dropdown_panel.setVisible(false);
         reports_dropdown_seperator.setVisible(false);
         setMarathiTranslateIcon();
         addShortKeyForLanguageTranslation();
         setMarathiFontForInputes();
+        addShortArrowKeyForReportsNavigation();
+        /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
+//        addShortArrowKeyForPagesNavigation();
+
+    }
+
+    public JLabel getMedicalReportsDropdownLabel() {
+        return medical_reports_dropdown_label;
+    }
+
+    public JPanel getMenuPanel() {
+        return menu_panel;
     }
 
     public void setMarathiFontForInputes() {
@@ -155,12 +177,17 @@ public class Home extends javax.swing.JFrame {
         name_report_input.setFont(marathi_bold);
         medicine_list.setFont(new Font("Mangal", Font.BOLD, 14));
         name_input.setFont(marathi_plain);
-        JTextField test_report_input=test.getName_report_inputs();
+        JTextField test_report_input = test.getName_report_inputs();
         test_report_input.setFont(marathi_bold);
-        
+
         JTextField medical_report_input = medical.getMedicalReportNameInput();
         medical_report_input.setFont(marathi_bold);
+
+        JTextField search_patient_name_input = search_patient.getSearchPatientNameField();
+        search_patient_name_input.setFont(marathi_bold);
+
     }
+
     public void setEnglishFontForInputes() {
         Font english_plain = new Font("Segoe UI", Font.PLAIN, 13);
         Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
@@ -169,12 +196,15 @@ public class Home extends javax.swing.JFrame {
         name_report_input.setFont(english_bold);
         medicine_list.setFont(new Font("Segoe UI", Font.BOLD, 14));
         name_input.setFont(english_bold);
-        
-        JTextField test_report_input=test.getName_report_inputs();
+
+        JTextField test_report_input = test.getName_report_inputs();
         test_report_input.setFont(english_bold);
-        
+
         JTextField medical_report_input = medical.getMedicalReportNameInput();
         medical_report_input.setFont(english_bold);
+
+        JTextField search_patient_name_input = search_patient.getSearchPatientNameField();
+        search_patient_name_input.setFont(english_bold);
     }
 
     /*
@@ -230,6 +260,8 @@ public class Home extends javax.swing.JFrame {
         report_next.add(new SetImageIcon(new ImageIcon(next_page_icon), 25, 25), BorderLayout.CENTER);
         setRightArrowIconForReportDropdown();
 
+        search_patient_panel.add(new SetImageIcon(new ImageIcon(search_icon), 15, 10), BorderLayout.CENTER);
+
     }
 
     public void setRightArrowIconForReportDropdown() {
@@ -245,7 +277,8 @@ public class Home extends javax.swing.JFrame {
         validate();
         repaint();
     }
-     public void setEnglishTranslateIcon() {
+
+    public void setEnglishTranslateIcon() {
         font_translate_icon_pannel.removeAll();
         font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(english_translation_icon), 35, 34), BorderLayout.CENTER);
         String s1 = "<html> <div  style=\"color:rgb(5,7,35);text-align:center; font-size:bold; padding:0px; margin:0px border:1px solid black; border-radius:100px 10px; background-color:rgb(141,221,247); \";> English Language <br> Applied </div></html>";
@@ -508,30 +541,107 @@ public class Home extends javax.swing.JFrame {
         pno_report_input.getDocument().addDocumentListener(dl);
     }
 
-    public void addShortKeyForLanguageTranslation()
-    {
-         
-         KeyStroke clt_m = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK);
-         Action translate = new AbstractAction("translate"){
-             @Override
-             public void actionPerformed(ActionEvent e) {
+    public void addShortKeyForLanguageTranslation() {
+
+        KeyStroke clt_m = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK);
+        Action translate = new AbstractAction("translate") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 translateLanguage();
                 System.out.println("changed");
                 revalidate();
                 repaint();
-                
+
                 //find
-             }
-             
-         };
+            }
+
+        };
         String k = "translate";
 //        translate.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_M);
         font_translate_icon_pannel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(clt_m, k);
         font_translate_icon_pannel.getActionMap().put(k, translate);
 //        font_translate_icon_pannel.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
 
-         
     }
+    int report_showing_index = 0;
+
+    public void addShortArrowKeyForReportsNavigation() {
+        //Vector<String> vec = new Vector<String>();
+
+        String[] right_reports_name = {"Test", "Medical", "Prescription"};
+        String[] left_reports_name = {"Medical", "Test", "Prescription"};
+
+        KeyStroke right_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
+        KeyStroke left_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
+
+        Action next_page = new AbstractAction("next") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Right:" + report_showing_index);
+                showReportOnWindow(right_reports_name[report_showing_index]);
+                report_showing_index = (report_showing_index + 1) % 3;
+            }
+
+        };
+        String k = "next";
+        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(right_arrow, k);
+        Reports.getActionMap().put(k, next_page);
+
+        Action prev_page = new AbstractAction("previous") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Left:" + report_showing_index);
+                showReportOnWindow(left_reports_name[report_showing_index]);
+                report_showing_index = (report_showing_index + 1) % 3;
+
+            }
+
+        };
+
+        String k1 = "previous";
+        Reports.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(left_arrow, k1);
+        Reports.getActionMap().put(k1, prev_page);
+    }
+
+    int page_showing_index = 0;
+
+    public void addShortArrowKeyForPagesNavigation() {
+        //Vector<String> vec = new Vector<String>();
+        //here
+        String[] upper_pages_name = {"patient", "Dashboard", "reports", "prescription"};
+        String[] down_pages_name = {"reports", "Dashboard", "patient", "prescription"};
+
+        KeyStroke up_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
+        KeyStroke down_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
+
+        Action up_page = new AbstractAction("up") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showPageOnWindow(upper_pages_name[page_showing_index]);
+                page_showing_index = (page_showing_index + 1) % 4;
+            }
+
+        };
+        String k = "up";
+        menu_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(up_arrow, k);
+        menu_panel.getActionMap().put(k, up_page);
+
+        Action down_page = new AbstractAction("down") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                showPageOnWindow(down_pages_name[page_showing_index]);
+                page_showing_index = (page_showing_index + 1) % 4;
+
+            }
+
+        };
+
+        String k1 = "down";
+        menu_panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(down_arrow, k1);
+        menu_panel.getActionMap().put(k1, down_page);
+    }
+
     public void addShortKeyForPages() {
         KeyStroke clt_r = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
         KeyStroke clt_p = KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK);
@@ -868,6 +978,7 @@ public class Home extends javax.swing.JFrame {
         medical_reports_dropdown_label = new javax.swing.JLabel();
         test_reports_dropdown_label = new javax.swing.JLabel();
         reports_dropdown_seperator = new javax.swing.JSeparator();
+        search_patient_panel = new javax.swing.JPanel();
         main_panel = new javax.swing.JPanel();
         Prescription = new javax.swing.JPanel();
         prescription_form_panel = prescription_form_panel = new GradientPanel(new Color(0xe8feff),new Color(0xe8f3ff) , 300,600);
@@ -992,6 +1103,7 @@ public class Home extends javax.swing.JFrame {
         status_label = new javax.swing.JLabel();
         patient_back = new javax.swing.JPanel();
         patient_next = new javax.swing.JPanel();
+        search_patient_main_panel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1368, 740));
@@ -1255,6 +1367,22 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        search_patient_panel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        search_patient_panel.setFocusable(false);
+        search_patient_panel.setPreferredSize(new java.awt.Dimension(11, 10));
+        search_patient_panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                search_patient_panelMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                search_patient_panelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                search_patient_panelMouseExited(evt);
+            }
+        });
+        search_patient_panel.setLayout(new java.awt.BorderLayout());
+
         javax.swing.GroupLayout menu_panelLayout = new javax.swing.GroupLayout(menu_panel);
         menu_panel.setLayout(menu_panelLayout);
         menu_panelLayout.setHorizontalGroup(
@@ -1274,7 +1402,6 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(patient_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
                                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1282,7 +1409,11 @@ public class Home extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
                                         .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
+                                        .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(search_patient_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(menu_panelLayout.createSequentialGroup()
                         .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1299,10 +1430,14 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dashboard_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dashboard_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(patient_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(patient_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(menu_panelLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(patient_label, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                            .addComponent(search_patient_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(18, 18, 18)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(prescription_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1316,7 +1451,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(751, Short.MAX_VALUE))
+                .addContainerGap(789, Short.MAX_VALUE))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -2770,6 +2905,9 @@ public class Home extends javax.swing.JFrame {
 
         main_panel.add(Patient, "patient");
 
+        search_patient_main_panel.setLayout(new java.awt.BorderLayout());
+        main_panel.add(search_patient_main_panel, "search_patient");
+
         getContentPane().add(main_panel, java.awt.BorderLayout.CENTER);
 
         pack();
@@ -3514,14 +3652,13 @@ public class Home extends javax.swing.JFrame {
 
         JLabel report_panel_label_list[] = {prescription_report_label, test_report_label, medical_report_label};
         JLabel dropdown_report_panel_label_list[] = {prescription_reports_dropdown_label, test_reports_dropdown_label, medical_reports_dropdown_label};
-        
 
         for (int i = 0; i < report_panel_label_list.length; i++) {
-            
-            if (report_panel_label_list[i].getText().startsWith(report_name) || prescription_reports_dropdown_label.getText().startsWith(report_name) ) {
+
+            if (report_panel_label_list[i].getText().startsWith(report_name) || prescription_reports_dropdown_label.getText().startsWith(report_name)) {
                 report_panel_label_list[i].setForeground(CLICKED_LABEL_COLOR);
                 dropdown_report_panel_label_list[i].setForeground(Color.cyan);
-                
+
             } else {
                 report_panel_label_list[i].setForeground(REPORT_LABEL_COLOR);
                 dropdown_report_panel_label_list[i].setForeground(Color.white);
@@ -3707,6 +3844,31 @@ public class Home extends javax.swing.JFrame {
             report_status.setText("Patient Details not found");
             report_status.setForeground(Color.red);
         }
+    }
+
+    public void searchReport(PatientDetails patientDetails) {
+
+        try {
+
+            if (patientDetails == null) {
+                throw new NullPointerException();
+            }
+
+            setReportPageInfo(patientDetails);
+            setReportPagePatientDetailsObject(patientDetails);
+
+            setReportPrint();
+        } catch (NumberFormatException exp) {
+            report_status.setText("Enter valid report number");
+            report_status.setForeground(Color.red);
+        } catch (NullPointerException exp) {
+            report_status.setText("Patient Details not found");
+            report_status.setForeground(Color.red);
+        }
+    }
+    public void setTestReport(PatientDetails patientDetails)
+    {
+        test.searchReport(patientDetails);
     }
 
     public void printReport(PatientDetails patientDetails) throws JRException {
@@ -4179,6 +4341,11 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medical_reports_dropdown_labelMouseClicked
 
     private void test_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test_reports_dropdown_labelMouseClicked
+
+        PatientDetails patient = this.getPatientPagePatientDetailsObject();
+        if (patient != null) {
+            test.searchReport(patient.getPid());
+        }
         showPageOnWindow("reports");
         showReportOnWindow("Test");
 
@@ -4188,19 +4355,15 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_test_reports_dropdown_labelMouseClicked
 
     private void font_translate_icon_pannelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseClicked
-       translateLanguage();
+        translateLanguage();
     }//GEN-LAST:event_font_translate_icon_pannelMouseClicked
-    public void translateLanguage()
-    {
-        if(font_value)
-        {
+    public void translateLanguage() {
+        if (font_value) {
             setEnglishTranslateIcon();
             setEnglishFontForInputes();
-            font_value=false;
-        }
-        else
-        {
-            font_value=true;
+            font_value = false;
+        } else {
+            font_value = true;
             setMarathiTranslateIcon();
             setMarathiFontForInputes();
         }
@@ -4217,6 +4380,18 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_prescription_name_inputActionPerformed
 
+    private void search_patient_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseClicked
+        showPageOnWindow("search_patient");
+    }//GEN-LAST:event_search_patient_panelMouseClicked
+
+    private void search_patient_panelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_patient_panelMouseEntered
+
+    private void search_patient_panelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_patient_panelMouseExited
+
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -4225,12 +4400,12 @@ public class Home extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//    public static void main(String args[]) {
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+     */
  /* try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -4247,16 +4422,16 @@ public class Home extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }*/
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-                new Home().setVisible(true);
-            }
-        });
-    }
+    //</editor-fold>
+    /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                
+////                new Home().setVisible(true);
+//                
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Dashboard;
@@ -4397,6 +4572,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton save;
     private javax.swing.JButton save_and_print_btn;
     private javax.swing.JButton save_btn;
+    private javax.swing.JPanel search_patient_main_panel;
+    private javax.swing.JPanel search_patient_panel;
     private javax.swing.JButton search_report;
     private javax.swing.JPanel selected_medicine_panel;
     private javax.swing.JLabel status_label;

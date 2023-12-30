@@ -92,7 +92,7 @@ public class PatientDetails {
     }
 
     public String getBloodPressure() {
-        return this.bloodpressure_input;
+        return this.bloodpressure_input.trim();
     }
 
     public String getPulse() {

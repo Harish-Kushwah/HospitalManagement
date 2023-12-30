@@ -47,7 +47,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <exec.mainClass>hospitalmanagement.Home</exec.mainClass>
+        <exec.mainClass>hospitalmanagement.Main</exec.mainClass>
     </properties>
      
      
@@ -63,7 +63,7 @@
           <manifest>
             <addClasspath>true</addClasspath>
             <classpathPrefix>lib/</classpathPrefix>
-            <mainClass>hospitalmanagement.Home</mainClass>
+            <mainClass>hospitalmanagement.Main</mainClass>
           </manifest>
         </archive>
       </configuration>
@@ -74,7 +74,7 @@
       <configuration>
         <archive>
           <manifest>
-            <mainClass>hospitalmanagement.Home</mainClass>
+            <mainClass>hospitalmanagement.Main</mainClass>
           </manifest>
         </archive>
         <descriptorRefs>

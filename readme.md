@@ -69,6 +69,9 @@ Prescription Report
 Test Report
 ![Screenshot 4](screenshots/test_report.png)
 
+Medical Report
+![Screenshot 4](screenshots/medical_report.png)
+
 ## Contributing
 
 Contributions are welcome! If you'd like to contribute to this project, please follow the guidelines in the [CONTRIBUTING.md](./contribute.md) file.
