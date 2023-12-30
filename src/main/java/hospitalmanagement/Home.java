@@ -3532,7 +3532,7 @@ public class Home extends javax.swing.JFrame {
                                         medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
                                         database.insertRecordInMedicine(medicineDetails);
                                         prescription_status_label.setForeground(SUCCESS_COLOR);
-
+                                        System.out.print("hii");
                                         fees_pno_input.setText(Integer.toString(prescription_patient_object.getPid()));
                                         fees_status_label.setText("");
 

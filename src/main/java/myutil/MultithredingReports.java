@@ -30,6 +30,7 @@ public class MultithredingReports extends Thread {
            this.medicalReportJrFormat2 = JasperCompileManager.compileReport(medicalReportPathForFormat2);
          
         } catch (JRException ex) {
+            System.out.println("File Not compile");
         }
     }
     public JasperReport getCompiledPrescriptionReport()

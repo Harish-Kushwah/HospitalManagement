@@ -7,12 +7,21 @@
 	<parameter name="dname" class="java.lang.String"/>
 	<parameter name="date" class="java.util.Date"/>
 	<parameter name="name" class="java.lang.String"/>
-	<parameter name="dno" class="java.lang.String"/>
+	<parameter name="dno" class="java.lang.Integer"/>
 	<parameter name="age" class="java.lang.String"/>
-	<parameter name="designation" class="java.lang.String"/>
-	<queryString>
+	<queryString language="plsql">
 		<![CDATA[SELECT * FROM doctor_names WHERE doc_id = $P{dno};]]>
 	</queryString>
+	<field name="doc_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="doc_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="doc_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doctor_names"/>
+	</field>
+	<field name="doc_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="doc_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="doc_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doctor_names"/>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

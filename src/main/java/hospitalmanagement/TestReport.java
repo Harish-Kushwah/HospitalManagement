@@ -1020,14 +1020,18 @@ public class TestReport extends javax.swing.JPanel {
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
                 } else {
-                    report_status.setText("No report is availalble");
+                    report_status.setText("No report is availalble internal");
                     report_status.setForeground(Color.red);
                 }
 
             }
+            else{
+                System.out.println("cONNECTION IS NULL");
+            }
         } catch (NumberFormatException | JRException ex) {
-            report_status.setText("No report is availalble");
-            report_status.setForeground(Color.red);
+             ex.printStackTrace();
+            report_status.setText("No report is availalbleexternal");
+            report_status.setForeground(Color.blue);
         }
         report_show_panel.revalidate();
         report_show_panel.repaint();

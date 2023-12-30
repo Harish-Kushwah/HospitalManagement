@@ -147,8 +147,8 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         afternoon_chk.setSelected(medicineDetails.afternoon);
         evening_chk.setSelected(medicineDetails.evening);
 
-        String meal_time = medicineDetails.getMedicineMealTime();
-        if (meal_time.equalsIgnoreCase("1")) {
+        int meal_time = medicineDetails.getMedicineMealTime();
+        if (meal_time==1) {
             before.setSelected(true);
             after.setSelected(false);
         } else {
