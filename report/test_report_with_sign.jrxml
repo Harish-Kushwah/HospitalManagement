@@ -4,42 +4,93 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Postgress"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
-	<parameter name="pno" class="java.lang.String"/>
-	<queryString>
+	<parameter name="pno" class="java.lang.Integer"/>
+	<queryString language="plsql">
 		<![CDATA[SELECT * FROM patient_reports INNER join pdetail on patient_reports.patient_no =$P{pno} and pdetail.pno=$P{pno};]]>
 	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patient_reports"/>
+	</field>
+	<field name="patient_no" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="patient_no"/>
+		<property name="com.jaspersoft.studio.field.label" value="patient_no"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patient_reports"/>
+	</field>
+	<field name="reports" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="reports"/>
+		<property name="com.jaspersoft.studio.field.label" value="reports"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patient_reports"/>
+	</field>
 	<field name="pno" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="pno"/>
+		<property name="com.jaspersoft.studio.field.label" value="pno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="date" class="java.sql.Timestamp">
+	<field name="date" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="date"/>
+		<property name="com.jaspersoft.studio.field.label" value="date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="mno" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="mno"/>
+		<property name="com.jaspersoft.studio.field.label" value="mno"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="gen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="gen"/>
+		<property name="com.jaspersoft.studio.field.label" value="gen"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="age" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="wht" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="age"/>
+		<property name="com.jaspersoft.studio.field.label" value="age"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="bp" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="bp"/>
+		<property name="com.jaspersoft.studio.field.label" value="bp"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="pls" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pls"/>
+		<property name="com.jaspersoft.studio.field.label" value="pls"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="pdis" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pdis"/>
+		<property name="com.jaspersoft.studio.field.label" value="pdis"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="reports" class="java.lang.String"/>
+	<field name="fees_paid" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="fees_paid"/>
+		<property name="com.jaspersoft.studio.field.label" value="fees_paid"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
+	</field>
+	<field name="wht" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="wht"/>
+		<property name="com.jaspersoft.studio.field.label" value="wht"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pdetail"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

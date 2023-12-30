@@ -11,38 +11,38 @@ import myutil.PatientDetails;
  */
 public class Database {
 
-    private final String url = "jdbc:mysql://localhost/guru";
-    private final String user = "root";
-    private final String password = "";
+    private final String url = "jdbc:postgresql://localhost:5432/guru";
+    private final String user = "postgres";
+    private final String password = "root";
 
     private static final String SELECT_ALL_QUERY = "select * from pdetail";
     private static final String UPDATE_USERS_SQL = "update pdetail set username = ? where id = ?;";
-    private static final String INSERT_RECORD_SQL = "INSERT INTO `pdetail`( `pno`,`date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `pdis`) VALUES (?,?,?,?,?,?,?,?,?,?);";
+    private static final String INSERT_RECORD_SQL = "INSERT INTO pdetail (pno, date, name, mno, gen, age, wht, bp, pls, pdis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String GET_TOTAL_NO_OF_ROWS = "SELECT COUNT(NAME) FROM pdetail";
-    private static final String GET_TOTAL_MONTH_PATIENT = "select * from pdetail where MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now());";
-    private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
+    private static final String GET_TOTAL_MONTH_PATIENT = "SELECT * FROM pdetail WHERE EXTRACT(MONTH FROM date::date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date::date) = EXTRACT(YEAR FROM CURRENT_DATE);";
+    private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM pdetail WHERE date::timestamp >= DATE_TRUNC('day', CURRENT_DATE);";
     private static final String GET_MEDI_PEDI = "SELECT* FROM pdetail,medi;";
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
-    private static final String INSERT_MEDECINE_INFO = "INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
+    private static final String INSERT_MEDECINE_INFO = "INSERT INTO medi (pno, pname, medicin, mqty, mtime, ba, qty) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
     private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
-    private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
-    private static final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
+    private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM bookmark WHERE bname=?";
+    private static final String INSERT_BOOKMARK = "INSERT INTO bookmark (bname, medicin, mqty, mtime, ba, qty) VALUES (?,?,?,?,?,?);";
 
-    private static final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
+    private static final String UPDATE_PATIENT_FEES = "UPDATE pdetail SET  fees_paid =? WHERE pno = ?";
 
-    private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
+    private static final String INSERT_MEDICINE = "INSERT INTO medilist (medicine) VALUES (?);";
     
-    private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports`) VALUES (?,?);";
+    private static final String INSERT_REPORT = "INSERT INTO patient_reports (patient_no, reports) VALUES (?,?);";
     private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
     private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
     
-    private static final String INSERT_REPORT_NAME = "INSERT INTO `reports` (`report_name`)VALUES (?);";
-    private static final String INSERT_DOCTOR_NAME = "INSERT INTO `doctor_names` (`doc_name`) VALUES (?);";
-    private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM `doctor_names`";
+    private static final String INSERT_REPORT_NAME = "INSERT INTO reports (report_name)VALUES (?);";
+    private static final String INSERT_DOCTOR_NAME = "INSERT INTO doctor_names (doc_name) VALUES (?);";
+    private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM doctor_names";
     private static final String GET_DOCTOR_ID = "SELECT * FROM doctor_names where doc_name = ?";
      static Database singletone_database = null;
      Connection connection = null;
@@ -419,8 +419,8 @@ public class Database {
             preparedStatement.setString(3, medicineDetails.getMedicineName());
             preparedStatement.setString(4, medicineDetails.getMedicineQuantity());
             preparedStatement.setString(5, medicineDetails.getMedicineTime());
-            preparedStatement.setString(6, medicineDetails.getMedicineMealTime());
-            preparedStatement.setString(7, medicineDetails.getTotalQuantity());
+            preparedStatement.setInt(6, medicineDetails.getMedicineMealTime());
+            preparedStatement.setInt(7, Integer.parseInt(medicineDetails.getTotalQuantity()));
 
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -488,7 +488,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `medilist` WHERE medicine LIKE ");
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM medilist WHERE medicine LIKE ");
             GET_LIKE_MEDICINE.append("\'");
             GET_LIKE_MEDICINE.append("%");
             GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
@@ -515,7 +515,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `medilist`");
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM medilist");
             PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
@@ -537,7 +537,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_REPORT = new StringBuffer("SELECT * FROM `reports` WHERE report_name LIKE ");
+            StringBuffer GET_LIKE_REPORT = new StringBuffer("SELECT * FROM reports WHERE report_name LIKE ");
             GET_LIKE_REPORT.append("\'");
             GET_LIKE_REPORT.append("%");
             GET_LIKE_REPORT.append(new StringBuffer(str.toUpperCase()));
@@ -713,9 +713,9 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `bookmark` WHERE bname =");
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM bookmark WHERE bname =");
             GET_LIKE_MEDICINE.append("\'");
-            GET_LIKE_MEDICINE.append(new StringBuffer(str));
+            GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
             GET_LIKE_MEDICINE.append("\';");
 
             PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
@@ -739,7 +739,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  bname FROM `bookmark` WHERE bname LIKE ");
+            StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  bname FROM bookmark WHERE bname LIKE ");
 
             GET_LIKE_BOOKMARK.append("\'");
             GET_LIKE_BOOKMARK.append("%");
@@ -779,12 +779,13 @@ public class Database {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_BOOKMARK);
 
-            preparedStatement.setString(1, bookmark_name);
+            preparedStatement.setString(1, bookmark_name.toUpperCase());
             preparedStatement.setString(2, medicineDetails.getMedicineName());
             preparedStatement.setString(3, medicineDetails.getMedicineQuantity());
             preparedStatement.setString(4, medicineDetails.getMedicineTime());
-            preparedStatement.setString(5, medicineDetails.getMedicineMealTime());
-            preparedStatement.setString(6, medicineDetails.getTotalQuantity());
+            preparedStatement.setInt(5, medicineDetails.getMedicineMealTime());
+            
+            preparedStatement.setInt(6, Integer.parseInt(medicineDetails.getTotalQuantity()));
 
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -799,7 +800,7 @@ public class Database {
          try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_DOCTOR_NAME);
-            preparedStatement.setString(1, doctor_name);
+            preparedStatement.setString(1, doctor_name.toUpperCase());
             
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -814,7 +815,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_DOCTOR = new StringBuffer("SELECT  DISTINCT  doc_name FROM `doctor_names` WHERE doc_name LIKE ");
+            StringBuffer GET_LIKE_DOCTOR = new StringBuffer("SELECT  DISTINCT  doc_name FROM doctor_names WHERE doc_name LIKE ");
 
             GET_LIKE_DOCTOR.append("\'");
             GET_LIKE_DOCTOR.append("%");
@@ -841,12 +842,17 @@ public class Database {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_DOCTOR_ID);
-            preparedStatement.setString(1, doctor_name);
+            preparedStatement.setString(1, doctor_name.toUpperCase());
             ResultSet rs = preparedStatement.executeQuery();
-            
-            rs.next();
-            
-            return rs.getInt("doc_id");
+            if(rs==null)
+            {
+                            System.out.println("rs next");
+            }
+           // System.out.println(rs.getString("doc_name"));
+           rs.next();
+            System.out.println(rs.getString("doc_name"));
+            return Integer.parseInt(rs.getString("doc_id"));
+            //return 1;
             
         } catch (SQLException e) {
             System.out.println(e);

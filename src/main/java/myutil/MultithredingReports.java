@@ -25,8 +25,9 @@ public class MultithredingReports extends Thread {
            this.jr = JasperCompileManager.compileReport(reportPath);
            this.testReportJr = JasperCompileManager.compileReport(testReportPath);
            this.medicalReportJr = JasperCompileManager.compileReport(medicalReportPath);
-           System.out.println("hello");
+           System.out.println("hello by");
         } catch (JRException ex) {
+            System.out.println("File Not compile");
         }
     }
     public JasperReport getCompiledPrescriptionReport()
