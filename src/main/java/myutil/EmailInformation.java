@@ -7,7 +7,12 @@ package myutil;
  */
 public class EmailInformation {
     String from,to,subject,body,template;
+    String attatch_file_path;
     
+    public void setAttachFilePath(String file_path)
+    {
+        this.attatch_file_path = file_path;
+    }
     public void setSendFrom(String from)
     {
         this.from = from;
@@ -48,6 +53,11 @@ public class EmailInformation {
     public String getTemplate()
     {
         return this.template;
+    }
+    
+     public String getAttachFilePath()
+    {
+        return this.attatch_file_path;
     }
     
 }

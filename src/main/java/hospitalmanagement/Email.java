@@ -14,18 +14,23 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 import java.util.HashMap;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import myutil.Database;
 import myutil.EmailInformation;
+import myutil.InternetAvailabilityChecker;
 import myutil.MyCustomRenderer;
+import myutil.SendingEmail;
 import myutil.SetImageIcon;
 
 /**
@@ -48,6 +53,11 @@ public class Email extends javax.swing.JPanel {
     String delete_icon = "./images/delete_file.png";
     String refresh_page_icon_on_click = "./images/refresh3.png";
     CardLayout card;
+    JFileChooser em_file_chooser, ad_file_chooser, pd_file_chooser;
+    String em_file_path, ad_file_path, pd_file_path;
+    String page_showing;
+
+    SendingEmail sendingEmail;
 
     public Email() {
         initComponents();
@@ -60,7 +70,41 @@ public class Email extends javax.swing.JPanel {
         pd_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
         ad_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
         em_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
+        tm_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
 
+        try{
+        if(InternetAvailabilityChecker.isInternetAvailable()){
+        sendingEmail = new SendingEmail();
+        sendingEmail.setAuthenicationDetails("testify8953@gmail.com", "kaom ridr dvep qlfe");
+        }
+        else{
+         System.out.println("Internet is not connecetd");
+        }
+        }catch(Exception exp)
+        {
+            exp.printStackTrace();
+        }
+    }
+
+    public boolean isEmailModePage() {
+        if (page_showing.equalsIgnoreCase("email_mode")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isPatientModePage() {
+        if (page_showing.equalsIgnoreCase("patient_mode")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isAddEmailModePage() {
+        if (page_showing.equalsIgnoreCase("add_email")) {
+            return true;
+        }
+        return false;
     }
 
     //when the email page is in custome email mode 
@@ -73,8 +117,46 @@ public class Email extends javax.swing.JPanel {
     }
 
     public void removeEMPageSelectedFile() {
+        em_selected_file_name.setText("");
+        em_remove_attach_file_icon_panel.removeAll();
+        em_file_chooser = null;
+        em_file_path = null;
+        revalidate();
+        repaint();
+    }
+
+    public void setEMPageFile(File file) {
+        if (file != null) {
+            em_file_path = file.getAbsolutePath();
+            em_selected_file_name.setText(file.getName());
+            em_remove_attach_file_icon_panel.add(new SetImageIcon(new ImageIcon(delete_icon), 15, 13), BorderLayout.CENTER);
+            revalidate();
+            repaint();
+        }
 
     }
+
+    public void setPDPageFile(File file) {
+        if (file != null) {
+            pd_file_path = file.getAbsolutePath();
+            pd_selected_file_name.setText(file.getName());
+            pd_remove_attach_file_icon_panel.add(new SetImageIcon(new ImageIcon(delete_icon), 15, 13), BorderLayout.CENTER);
+            revalidate();
+            repaint();
+        }
+
+    }
+
+    public void setADPageFile(File file) {
+        if (file != null) {
+            ad_file_path = file.getAbsolutePath();
+            ad_selected_file_name.setText(file.getName());
+            ad_remove_attach_file_icon_panel.add(new SetImageIcon(new ImageIcon(delete_icon), 15, 13), BorderLayout.CENTER);
+            revalidate();
+            repaint();
+        }
+    }
+
     public void resetPDPage() {
         pd_email_to_input.setText("");
         pd_subject_input.setText("");
@@ -84,18 +166,29 @@ public class Email extends javax.swing.JPanel {
     }
 
     public void removePDPageSelectedFile() {
-
+        pd_selected_file_name.setText("");
+        pd_remove_attach_file_icon_panel.removeAll();
+        pd_file_chooser = null;
+        pd_file_path = null;
+        revalidate();
+        repaint();
     }
+
     public void resetADPage() {
         ad_template_input.setText("");
         ad_subject_input.setText("");
         ad_body_input.setText("");
         ad_status_label.setText("");
-        removeEMPageSelectedFile();
+        removeADPageSelectedFile();
     }
 
     public void removeADPageSelectedFile() {
-
+        ad_selected_file_name.setText("");
+        ad_remove_attach_file_icon_panel.removeAll();
+        ad_file_chooser = null;
+        ad_file_path = null;
+        revalidate();
+        repaint();
     }
 
     public void setIocns() {
@@ -125,6 +218,7 @@ public class Email extends javax.swing.JPanel {
             if (menu_panel_label_list1 == mp.get(page_name)) {
                 menu_panel_label_list1.setForeground(Color.BLUE);
                 menu_panel_label_list1.setBackground(new Color(205, 207, 185));
+                page_showing = page_name;
 
             } else {
                 menu_panel_label_list1.setForeground(Color.black);
@@ -195,7 +289,7 @@ public class Email extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         ad_body_input = new javax.swing.JTextArea();
         ad_attach_file_btn = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        ad_save_btn = new javax.swing.JButton();
         ad_selected_file_name = new javax.swing.JLabel();
         ad_remove_attach_file_icon_panel = new javax.swing.JPanel();
         ad_status_label = new javax.swing.JLabel();
@@ -207,17 +301,19 @@ public class Email extends javax.swing.JPanel {
         from_email_input = new javax.swing.JTextField();
         add_email_label = new javax.swing.JLabel();
         composing_email_panel = new javax.swing.JPanel();
-        medicine_input1 = new javax.swing.JTextField();
-        add_medicine_btn4 = new javax.swing.JButton();
-        medicine_list_panel1 = new javax.swing.JPanel();
-        medicine_list1 = new javax.swing.JList<>();
+        template_input = new javax.swing.JTextField();
+        add_template_btn = new javax.swing.JButton();
+        template_list_panel = new javax.swing.JPanel();
+        template_list = new javax.swing.JList<>();
         jLabel6 = new javax.swing.JLabel();
-        add_medicine_btn5 = new javax.swing.JButton();
+        delete_template_btn = new javax.swing.JButton();
         selected_template = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel16 = new javax.swing.JLabel();
-        jButton7 = new javax.swing.JButton();
+        update_template_btn = new javax.swing.JButton();
+        tm_status_label = new javax.swing.JLabel();
+        tm_report_refresh = new javax.swing.JPanel();
         upper_pannel_for_margin = new javax.swing.JPanel();
         left_pannel_for_margin = new javax.swing.JPanel();
         down_pannel_for_margin = new javax.swing.JPanel();
@@ -522,16 +618,17 @@ public class Email extends javax.swing.JPanel {
                         .addGap(12, 12, 12)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(patient_details_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(pd_save_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pd_send_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15)
-                            .addComponent(pd_attach_file_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pd_selected_file_name, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pd_remove_attach_file_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(patient_details_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pd_remove_attach_file_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(patient_details_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(pd_save_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pd_send_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel15)
+                                .addComponent(pd_attach_file_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(pd_selected_file_name, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(38, 38, 38)
                 .addComponent(pd_report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
             .addGroup(patient_details_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(patient_details_modeLayout.createSequentialGroup()
                     .addGap(132, 132, 132)
@@ -647,8 +744,6 @@ public class Email extends javax.swing.JPanel {
         });
         em_remove_attach_file_icon_panel.setLayout(new java.awt.BorderLayout());
 
-        em_status_label.setText("jLabel17");
-
         em_report_refresh.setBackground(new java.awt.Color(251, 252, 224));
         em_report_refresh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         em_report_refresh.setPreferredSize(new java.awt.Dimension(29, 29));
@@ -719,17 +814,17 @@ public class Email extends javax.swing.JPanel {
                 .addGroup(email_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(email_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(em_send_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(em_selected_file_name, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(email_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(em_attach_file_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(em_selected_file_name, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(em_attach_file_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(em_save_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(em_remove_attach_file_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
                 .addGroup(email_modeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(em_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(em_report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         modes.add(email_mode, "email_mode");
@@ -799,14 +894,14 @@ public class Email extends javax.swing.JPanel {
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(0, 51, 255));
-        jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setText("Save");
-        jButton6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
-        jButton6.setFocusPainted(false);
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        ad_save_btn.setBackground(new java.awt.Color(0, 51, 255));
+        ad_save_btn.setForeground(new java.awt.Color(255, 255, 255));
+        ad_save_btn.setText("Save");
+        ad_save_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
+        ad_save_btn.setFocusPainted(false);
+        ad_save_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                ad_save_btnActionPerformed(evt);
             }
         });
 
@@ -826,8 +921,6 @@ public class Email extends javax.swing.JPanel {
             }
         });
         ad_remove_attach_file_icon_panel.setLayout(new java.awt.BorderLayout());
-
-        ad_status_label.setText("jLabel17");
 
         ad_report_refresh.setBackground(new java.awt.Color(251, 252, 224));
         ad_report_refresh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -875,7 +968,7 @@ public class Email extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ad_selected_file_name, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(ad_save_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                             .addComponent(ad_subject_input))
                         .addContainerGap(69, Short.MAX_VALUE))))
@@ -897,7 +990,7 @@ public class Email extends javax.swing.JPanel {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(add_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ad_save_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(add_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(ad_attach_file_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -908,7 +1001,7 @@ public class Email extends javax.swing.JPanel {
                 .addGroup(add_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ad_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ad_report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         modes.add(add_email_panel, "add_email");
@@ -991,9 +1084,7 @@ public class Email extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(update_from_email_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(email_sending_panelLayout.createSequentialGroup()
-                .addComponent(modes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addComponent(modes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         email_sending_panelLayout.setVerticalGroup(
             email_sending_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1009,7 +1100,7 @@ public class Email extends javax.swing.JPanel {
                     .addComponent(patient_details_email_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(custome_email_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
-                .addComponent(modes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(modes, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE))
         );
 
         main_panel.add(email_sending_panel, java.awt.BorderLayout.CENTER);
@@ -1018,78 +1109,83 @@ public class Email extends javax.swing.JPanel {
         composing_email_panel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 153), 1, true));
         composing_email_panel.setPreferredSize(new java.awt.Dimension(400, 100));
 
-        medicine_input1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        medicine_input1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                medicine_input1MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                medicine_input1MouseExited(evt);
+        template_input.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        template_input.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                template_inputCaretUpdate(evt);
             }
         });
-        medicine_input1.addKeyListener(new java.awt.event.KeyAdapter() {
+        template_input.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                template_inputMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                template_inputMouseExited(evt);
+            }
+        });
+        template_input.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                medicine_input1KeyPressed(evt);
+                template_inputKeyPressed(evt);
             }
         });
 
-        add_medicine_btn4.setBackground(new java.awt.Color(0, 51, 255));
-        add_medicine_btn4.setForeground(new java.awt.Color(255, 255, 255));
-        add_medicine_btn4.setText("Add");
-        add_medicine_btn4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-        add_medicine_btn4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        add_medicine_btn4.setFocusPainted(false);
-        add_medicine_btn4.addMouseListener(new java.awt.event.MouseAdapter() {
+        add_template_btn.setBackground(new java.awt.Color(0, 51, 255));
+        add_template_btn.setForeground(new java.awt.Color(255, 255, 255));
+        add_template_btn.setText("Add");
+        add_template_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
+        add_template_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        add_template_btn.setFocusPainted(false);
+        add_template_btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                add_medicine_btn4MouseEntered(evt);
+                add_template_btnMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                add_medicine_btn4MouseExited(evt);
+                add_template_btnMouseExited(evt);
             }
         });
-        add_medicine_btn4.addActionListener(new java.awt.event.ActionListener() {
+        add_template_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add_medicine_btn4ActionPerformed(evt);
+                add_template_btnActionPerformed(evt);
             }
         });
 
-        medicine_list_panel1.setPreferredSize(new java.awt.Dimension(0, 240));
-        medicine_list_panel1.setLayout(new java.awt.CardLayout());
+        template_list_panel.setPreferredSize(new java.awt.Dimension(0, 240));
+        template_list_panel.setLayout(new java.awt.CardLayout());
 
-        medicine_list1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        medicine_list1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        medicine_list1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        medicine_list1.addMouseListener(new java.awt.event.MouseAdapter() {
+        template_list.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        template_list.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        template_list.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        template_list.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                medicine_list1MouseClicked(evt);
+                template_listMouseClicked(evt);
             }
         });
-        medicine_list1.addKeyListener(new java.awt.event.KeyAdapter() {
+        template_list.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                medicine_list1KeyPressed(evt);
+                template_listKeyPressed(evt);
             }
         });
-        medicine_list_panel1.add(medicine_list1, "card2");
+        template_list_panel.add(template_list, "card2");
 
         jLabel6.setText("Enter Template Name");
 
-        add_medicine_btn5.setBackground(new java.awt.Color(255, 51, 51));
-        add_medicine_btn5.setForeground(new java.awt.Color(255, 255, 255));
-        add_medicine_btn5.setText("Delete");
-        add_medicine_btn5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
-        add_medicine_btn5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        add_medicine_btn5.setFocusPainted(false);
-        add_medicine_btn5.addMouseListener(new java.awt.event.MouseAdapter() {
+        delete_template_btn.setBackground(new java.awt.Color(255, 51, 51));
+        delete_template_btn.setForeground(new java.awt.Color(255, 255, 255));
+        delete_template_btn.setText("Delete");
+        delete_template_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
+        delete_template_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        delete_template_btn.setFocusPainted(false);
+        delete_template_btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                add_medicine_btn5MouseEntered(evt);
+                delete_template_btnMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                add_medicine_btn5MouseExited(evt);
+                delete_template_btnMouseExited(evt);
             }
         });
-        add_medicine_btn5.addActionListener(new java.awt.event.ActionListener() {
+        delete_template_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add_medicine_btn5ActionPerformed(evt);
+                delete_template_btnActionPerformed(evt);
             }
         });
 
@@ -1115,16 +1211,26 @@ public class Email extends javax.swing.JPanel {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel16.setText("Choose Email Templates");
 
-        jButton7.setBackground(new java.awt.Color(0, 51, 255));
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("Update");
-        jButton7.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
-        jButton7.setFocusPainted(false);
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        update_template_btn.setBackground(new java.awt.Color(0, 51, 255));
+        update_template_btn.setForeground(new java.awt.Color(255, 255, 255));
+        update_template_btn.setText("Update");
+        update_template_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
+        update_template_btn.setFocusPainted(false);
+        update_template_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                update_template_btnActionPerformed(evt);
             }
         });
+
+        tm_report_refresh.setBackground(new java.awt.Color(251, 252, 224));
+        tm_report_refresh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tm_report_refresh.setPreferredSize(new java.awt.Dimension(29, 29));
+        tm_report_refresh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tm_report_refreshMouseClicked(evt);
+            }
+        });
+        tm_report_refresh.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout composing_email_panelLayout = new javax.swing.GroupLayout(composing_email_panel);
         composing_email_panel.setLayout(composing_email_panelLayout);
@@ -1143,22 +1249,27 @@ public class Email extends javax.swing.JPanel {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(composing_email_panelLayout.createSequentialGroup()
-                        .addComponent(selected_template, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(add_medicine_btn5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(composing_email_panelLayout.createSequentialGroup()
-                        .addComponent(medicine_input1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(template_input, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(add_medicine_btn4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(add_template_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(composing_email_panelLayout.createSequentialGroup()
+                            .addComponent(tm_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tm_report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(composing_email_panelLayout.createSequentialGroup()
+                            .addComponent(selected_template, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(update_template_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(delete_template_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(25, 25, 25))
             .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(composing_email_panelLayout.createSequentialGroup()
                     .addGap(23, 23, 23)
-                    .addComponent(medicine_list_panel1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(template_list_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(26, Short.MAX_VALUE)))
         );
         composing_email_panelLayout.setVerticalGroup(
@@ -1172,21 +1283,25 @@ public class Email extends javax.swing.JPanel {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(add_medicine_btn4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(medicine_input1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(add_template_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(template_input, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(276, 276, 276)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(selected_template, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(add_medicine_btn5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(87, 87, 87))
+                    .addComponent(update_template_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delete_template_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tm_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tm_report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(102, Short.MAX_VALUE))
             .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(composing_email_panelLayout.createSequentialGroup()
                     .addGap(161, 161, 161)
-                    .addComponent(medicine_list_panel1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(222, Short.MAX_VALUE)))
+                    .addComponent(template_list_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(217, Short.MAX_VALUE)))
         );
 
         main_panel.add(composing_email_panel, java.awt.BorderLayout.LINE_END);
@@ -1217,47 +1332,69 @@ public class Email extends javax.swing.JPanel {
     }//GEN-LAST:event_update_from_email_btnActionPerformed
 
     private void em_send_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_em_send_btnActionPerformed
-        // TODO add your handling code here:
+        String to = em_email_to_input.getText();
+        String subject = em_subject_input.getText();
+        String message = em_body_input.getText();
+        
+
+        try {
+            saveEMPageEmail();
+            if (em_file_path != null) {
+                File file = new File(em_file_path);
+                sendingEmail.sendEmailWithAttatch(to, subject, message, file);
+            } else {
+                sendingEmail.sendEmail(to, subject, message);
+            }
+            
+            em_status_label.setText("Email send successfully");
+            em_status_label.setForeground(SUCCESS_COLOR);
+        } catch (Exception exp) {
+            System.out.println("Something went wrong");
+             em_status_label.setText("Email Not send");
+            em_status_label.setForeground(WARNING_COLOR);
+        }
     }//GEN-LAST:event_em_send_btnActionPerformed
 
     private void em_save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_em_save_btnActionPerformed
         saveEMPageEmail();
     }//GEN-LAST:event_em_save_btnActionPerformed
     public void saveEMPageEmail() {
-        String from = from_email_input.getText();
-        String to = em_email_to_input.getText();
-        String subject = em_subject_input.getText();
-        String body = em_body_input.getText();
-        String template = selected_template.getText();
-        if (template.length() == 0) {
-            template = "None";
-        }
-        EmailInformation emailInformation = new EmailInformation();
-        emailInformation.setSendFrom(from);
-        emailInformation.setSendTo(to);
-        emailInformation.setSubject(subject);
-        emailInformation.setBody(body);
-        emailInformation.setTemplate(template);
+        try {
 
-        Database database = Database.getInstance();
-        database.insertEmail(emailInformation);
-        System.out.println("Email Saved successfully");
-        //em_status_label1.setText("Email Saved successfully");
-        //em_status_label1.setForeground(WARNING_COLOR);
-        resetEMPage();
+            String from = from_email_input.getText();
+            String to = em_email_to_input.getText();
+            String subject = em_subject_input.getText();
+            String body = em_body_input.getText();
+            String template = selected_template.getText();
+            if (template.length() == 0) {
+                template = "None";
+            }
+            EmailInformation emailInformation = new EmailInformation();
+            emailInformation.setSendFrom(from);
+            emailInformation.setSendTo(to);
+            emailInformation.setSubject(subject);
+            emailInformation.setBody(body);
+            emailInformation.setTemplate(template);
+
+            Database database = Database.getInstance();
+            database.insertEmail(emailInformation);
+            System.out.println("Email Saved successfully");
+            resetEMPage();
+            em_status_label.setText("Email Saved successfully");
+            em_status_label.setForeground(SUCCESS_COLOR);
+        } catch (Exception exp) {
+            System.out.println(exp.getMessage());
+            em_status_label.setText("Email Not Saved ");
+            em_status_label.setForeground(WARNING_COLOR);
+        }
     }
     private void em_attach_file_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_em_attach_file_btnActionPerformed
         try {
-            JFileChooser ch = new JFileChooser();
-            ch.showOpenDialog(null);
-            File file = ch.getSelectedFile();
-            if (file != null) {
-                em_selected_file_name.setText(file.getName());
-            }
-
-            em_remove_attach_file_icon_panel.add(new SetImageIcon(new ImageIcon(delete_icon), 15, 13), BorderLayout.CENTER);
-            revalidate();
-            repaint();
+            em_file_chooser = new JFileChooser();
+            em_file_chooser.showOpenDialog(null);
+            File file = em_file_chooser.getSelectedFile();
+            em_file_path = file.getAbsolutePath();
+            setEMPageFile(file);
 
         } catch (HeadlessException exp) {
         }
@@ -1435,26 +1572,36 @@ public class Email extends javax.swing.JPanel {
     }//GEN-LAST:event_pd_save_btnMouseExited
 
     private void pd_save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pd_save_btnActionPerformed
-        String from = from_email_input.getText();
-        String to = pd_email_to_input.getText();
-        String subject = pd_subject_input.getText();
-        String body = pd_body_input.getText();
-        String template = selected_template.getText();
-        if (template.length() == 0) {
-            template = "None";
-        }
-        EmailInformation emailInformation = new EmailInformation();
-        emailInformation.setSendFrom(from);
-        emailInformation.setSendTo(to);
-        emailInformation.setSubject(subject);
-        emailInformation.setBody(body);
-        emailInformation.setTemplate(template);
-
-        Database database = Database.getInstance();
-        database.insertEmail(emailInformation);
-        System.out.println("Emial inserted successfully");
+        savePDEmail();
     }//GEN-LAST:event_pd_save_btnActionPerformed
+    public void savePDEmail() {
+        try {
 
+            String from = from_email_input.getText();
+            String to = pd_email_to_input.getText();
+            String subject = pd_subject_input.getText();
+            String body = pd_body_input.getText();
+            String template = selected_template.getText();
+            if (template.length() == 0) {
+                template = "None";
+            }
+            EmailInformation emailInformation = new EmailInformation();
+            emailInformation.setSendFrom(from);
+            emailInformation.setSendTo(to);
+            emailInformation.setSubject(subject);
+            emailInformation.setBody(body);
+            emailInformation.setTemplate(template);
+
+            Database database = Database.getInstance();
+            database.insertEmail(emailInformation);
+            resetEMPage();
+            pd_status_label.setText("Email Saved Succesfully");
+            pd_status_label.setForeground(SUCCESS_COLOR);
+            System.out.println("Emial inserted successfully");
+        } catch (Exception exp) {
+            System.out.println("Unable to insert email");
+        }
+    }
     private void pd_send_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pd_send_btnMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_pd_send_btnMouseEntered
@@ -1464,7 +1611,23 @@ public class Email extends javax.swing.JPanel {
     }//GEN-LAST:event_pd_send_btnMouseExited
 
     private void pd_send_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pd_send_btnActionPerformed
-        // TODO add your handling code here:
+
+        String to = pd_email_to_input.getText();
+        String subject = pd_subject_input.getText();
+        String message = pd_body_input.getText();
+        savePDEmail();
+
+        try {
+
+            if (pd_file_path != null) {
+                File file = new File(pd_file_path);
+                sendingEmail.sendEmailWithAttatch(to, subject, message, file);
+            } else {
+                sendingEmail.sendEmail(to, subject, message);
+            }
+        } catch (Exception exp) {
+            System.out.println("Something went wrong");
+        }
     }//GEN-LAST:event_pd_send_btnActionPerformed
 
     private void pd_attach_file_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pd_attach_file_btnMouseEntered
@@ -1477,11 +1640,11 @@ public class Email extends javax.swing.JPanel {
 
     private void pd_attach_file_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pd_attach_file_btnActionPerformed
         try {
-            JFileChooser ch = new JFileChooser();
-            ch.showOpenDialog(null);
-            File file = ch.getSelectedFile();
-            pd_selected_file_name.setText(file.getName());
-            setIocns();
+            pd_file_chooser = new JFileChooser();
+            pd_file_chooser.showOpenDialog(null);
+            File file = pd_file_chooser.getSelectedFile();
+            setPDPageFile(file);
+
         } catch (HeadlessException exp) {
         }
 
@@ -1525,66 +1688,174 @@ public class Email extends javax.swing.JPanel {
 
     private void ad_attach_file_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ad_attach_file_btnActionPerformed
         try {
-            JFileChooser ch = new JFileChooser();
-            ch.showOpenDialog(null);
-            File file = ch.getSelectedFile();
-            ad_selected_file_name.setText(file.getName());
+            ad_file_chooser = new JFileChooser();
+            ad_file_chooser.showOpenDialog(null);
+            File file = ad_file_chooser.getSelectedFile();
 
-            ad_remove_attach_file_icon_panel.add(new SetImageIcon(new ImageIcon(delete_icon), 15, 13), BorderLayout.CENTER);
-            revalidate();
-            repaint();
+            setADPageFile(file);
         } catch (HeadlessException exp) {
         }
     }//GEN-LAST:event_ad_attach_file_btnActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void ad_save_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ad_save_btnActionPerformed
+        //save template email
 
-    }//GEN-LAST:event_jButton6ActionPerformed
+        String subject = ad_subject_input.getText();
+        String body = ad_body_input.getText();
+        String template = ad_template_input.getText();
+        String file_path = null;
+        if (ad_file_chooser != null) {
+            File file = ad_file_chooser.getSelectedFile();
 
-    private void medicine_input1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_input1MouseEntered
+            if (file != null) {
+                file_path = file.getAbsolutePath();
+            }
+
+        }
+
+        if (template.length() == 0) {
+            template = "None";
+        }
+        EmailInformation emailInformation = new EmailInformation();
+
+        emailInformation.setSubject(subject);
+        emailInformation.setBody(body);
+        emailInformation.setTemplate(template);
+        emailInformation.setAttachFilePath(file_path);
+
+        Database database = Database.getInstance();
+        database.insertEmailTemplate(emailInformation);
+
+        resetADPage();
+        ad_status_label.setText("Template saved successfully");
+        ad_status_label.setForeground(SUCCESS_COLOR);
+        System.out.println("Email Template saved successfully");
+
+    }//GEN-LAST:event_ad_save_btnActionPerformed
+
+    private void template_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_template_inputMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_medicine_input1MouseEntered
+    }//GEN-LAST:event_template_inputMouseEntered
 
-    private void medicine_input1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_input1MouseExited
+    private void template_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_template_inputMouseExited
         // TODO add your handling code here:
-    }//GEN-LAST:event_medicine_input1MouseExited
+    }//GEN-LAST:event_template_inputMouseExited
 
-    private void medicine_input1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_input1KeyPressed
+    private void template_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_template_inputKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_medicine_input1KeyPressed
+    }//GEN-LAST:event_template_inputKeyPressed
 
-    private void add_medicine_btn4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_medicine_btn4MouseEntered
+    private void add_template_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_template_btnMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_add_medicine_btn4MouseEntered
+    }//GEN-LAST:event_add_template_btnMouseEntered
 
-    private void add_medicine_btn4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_medicine_btn4MouseExited
+    private void add_template_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_template_btnMouseExited
         // TODO add your handling code here:
-    }//GEN-LAST:event_add_medicine_btn4MouseExited
+    }//GEN-LAST:event_add_template_btnMouseExited
 
-    private void add_medicine_btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btn4ActionPerformed
+    private void add_template_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_template_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_add_medicine_btn4ActionPerformed
+    }//GEN-LAST:event_add_template_btnActionPerformed
 
-    private void medicine_list1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_list1MouseClicked
+    private void template_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_template_listMouseClicked
+        //if (evt.getClickCount() == 1) {
+        copyTemplateToPage();
+       // evt.consume();
+        //}
+    }//GEN-LAST:event_template_listMouseClicked
+    public void copyTemplateToPage() {
+        String template_name = template_list.getSelectedValue().trim();
+        System.out.println(template_name);
+        selected_template.setText(template_name);
+        Database database = Database.getInstance();
+        if (isEmailModePage()) {
+            EmailInformation emailInformation = database.getEmail(template_name);
+            if (emailInformation != null) {
+                em_subject_input.setText(emailInformation.getSubject());
+                em_body_input.setText(emailInformation.getBody());
+                String file_path = emailInformation.getAttachFilePath();
+                if (file_path != null) {
+                    setEMPageFile(new File(file_path));
+
+                } else {
+                    removeEMPageSelectedFile();
+                }
+
+            } else {
+                System.out.println("Email information not found");
+            }
+
+        } else if (isPatientModePage()) {
+            EmailInformation emailInformation = database.getEmail(template_name);
+            if (emailInformation != null) {
+                pd_subject_input.setText(emailInformation.getSubject());
+                pd_body_input.setText(emailInformation.getBody());
+                String file_path = emailInformation.getAttachFilePath();
+                System.out.println(file_path);
+                if (file_path != null) {
+                    setPDPageFile(new File(file_path));
+                } else {
+                    removePDPageSelectedFile();
+                }
+            } else {
+                System.out.println("Email information not found");
+            }
+        }
+    }
+
+
+    private void template_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_template_listKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_medicine_list1MouseClicked
+    }//GEN-LAST:event_template_listKeyPressed
 
-    private void medicine_list1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_list1KeyPressed
+    private void delete_template_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delete_template_btnMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_medicine_list1KeyPressed
+    }//GEN-LAST:event_delete_template_btnMouseEntered
 
-    private void add_medicine_btn5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_medicine_btn5MouseEntered
+    private void delete_template_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_delete_template_btnMouseExited
         // TODO add your handling code here:
-    }//GEN-LAST:event_add_medicine_btn5MouseEntered
+    }//GEN-LAST:event_delete_template_btnMouseExited
 
-    private void add_medicine_btn5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_medicine_btn5MouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_add_medicine_btn5MouseExited
+    private void delete_template_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_template_btnActionPerformed
+        String template_name = selected_template.getText();
+        Database database = Database.getInstance();
+        try {
 
-    private void add_medicine_btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btn5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_add_medicine_btn5ActionPerformed
+            if (database.removeTemplate(template_name)) {
 
+                tm_status_label.setText("Template removed succesfully");
+                tm_status_label.setForeground(SUCCESS_COLOR);
+                template_input.grabFocus();
+                setTemplateOnList();
+                selected_template.setText("");
+                template_list.remove(template_list.getSelectedIndex());
+                template_list.revalidate();
+                template_list.repaint();
+
+                revalidate();
+                repaint();
+            } else {
+
+                tm_status_label.setText("Unable to remove template");
+                tm_status_label.setForeground(WARNING_COLOR);
+
+            }
+        } catch (ArrayIndexOutOfBoundsException exp) {
+
+        }
+    }//GEN-LAST:event_delete_template_btnActionPerformed
+    public void setTemplateOnList() {
+        Database database = Database.getInstance();
+        if (template_input.getText().length() != 0) {
+            String text = template_input.getText();
+            ArrayList<String> templates = database.getLikeTemplate(text);
+            DefaultListModel lm = new DefaultListModel();
+            for (String m : templates) {
+                lm.addElement(m);
+            }
+            template_list.setModel(lm);
+        }
+    }
     private void selected_templateMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selected_templateMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_selected_templateMouseEntered
@@ -1597,9 +1868,9 @@ public class Email extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_selected_templateKeyPressed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void update_template_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_template_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_update_template_btnActionPerformed
 
     private void pd_remove_attach_file_icon_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pd_remove_attach_file_icon_panelMouseClicked
         pd_selected_file_name.setText("");
@@ -1657,12 +1928,35 @@ public class Email extends javax.swing.JPanel {
     }//GEN-LAST:event_ad_report_refreshMouseClicked
 
     private void pd_report_refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pd_report_refreshMouseClicked
-       resetPDPage();
+        resetPDPage();
     }//GEN-LAST:event_pd_report_refreshMouseClicked
 
     private void em_report_refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_em_report_refreshMouseClicked
-      resetEMPage();
+        resetEMPage();
     }//GEN-LAST:event_em_report_refreshMouseClicked
+
+    private void template_inputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_template_inputCaretUpdate
+        setTemplateOnList();
+    }//GEN-LAST:event_template_inputCaretUpdate
+
+    private void tm_report_refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tm_report_refreshMouseClicked
+        resetTemplatePage();
+    }//GEN-LAST:event_tm_report_refreshMouseClicked
+    public void resetTemplatePage() {
+        selected_template.setText("");
+        template_input.setText("");
+//        template_list.getModel();
+//        template_list.removeAll();
+
+        DefaultListModel lm = new DefaultListModel();
+        template_list.setModel(lm);
+
+        tm_status_label.setText("");
+        revalidate();
+        repaint();
+
+    }
+
     public void addMouseListerOnTabel() {
 
         patient_table.addMouseListener(new MouseListener() {
@@ -1713,18 +2007,19 @@ public class Email extends javax.swing.JPanel {
     private javax.swing.JTextArea ad_body_input;
     private javax.swing.JPanel ad_remove_attach_file_icon_panel;
     private javax.swing.JPanel ad_report_refresh;
+    private javax.swing.JButton ad_save_btn;
     private javax.swing.JLabel ad_selected_file_name;
     private javax.swing.JLabel ad_status_label;
     private javax.swing.JTextField ad_subject_input;
     private javax.swing.JTextField ad_template_input;
     private javax.swing.JLabel add_email_label;
     private javax.swing.JPanel add_email_panel;
-    private javax.swing.JButton add_medicine_btn4;
-    private javax.swing.JButton add_medicine_btn5;
     private javax.swing.JButton add_patient_email_btn;
+    private javax.swing.JButton add_template_btn;
     private javax.swing.JPanel composing_email_panel;
     private javax.swing.JPanel content_panel;
     private javax.swing.JLabel custome_email_label;
+    private javax.swing.JButton delete_template_btn;
     private javax.swing.JPanel down_pannel_for_margin;
     private javax.swing.JButton em_attach_file_btn;
     private javax.swing.JTextArea em_body_input;
@@ -1741,8 +2036,6 @@ public class Email extends javax.swing.JPanel {
     private javax.swing.JPanel email_sending_panel;
     private javax.swing.JTextField from_email_input;
     private javax.swing.JLabel from_email_label;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1765,9 +2058,6 @@ public class Email extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel left_pannel_for_margin;
     private javax.swing.JPanel main_panel;
-    private javax.swing.JTextField medicine_input1;
-    private javax.swing.JList<String> medicine_list1;
-    private javax.swing.JPanel medicine_list_panel1;
     private javax.swing.JPanel modes;
     private javax.swing.JLabel patient_details_email_label;
     private javax.swing.JPanel patient_details_mode;
@@ -1788,7 +2078,13 @@ public class Email extends javax.swing.JPanel {
     private javax.swing.JTextField pd_subject_input;
     private javax.swing.JPanel right_pannel_for_margin;
     private javax.swing.JTextField selected_template;
+    private javax.swing.JTextField template_input;
+    private javax.swing.JList<String> template_list;
+    private javax.swing.JPanel template_list_panel;
+    private javax.swing.JPanel tm_report_refresh;
+    private javax.swing.JLabel tm_status_label;
     private javax.swing.JButton update_from_email_btn;
+    private javax.swing.JButton update_template_btn;
     private javax.swing.JPanel upper_pannel_for_margin;
     // End of variables declaration//GEN-END:variables
 

@@ -17,35 +17,39 @@ public class Database {
 
     private static final String SELECT_ALL_QUERY = "select * from pdetail";
     private static final String UPDATE_USERS_SQL = "update pdetail set username = ? where id = ?;";
-    private static final String INSERT_RECORD_SQL = "INSERT INTO `pdetail`( `pno`,`date`, `name`, `mno`, `gen`, `age`, `wht`, `bp`, `pls`, `pdis`,`email`) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+    private static final String INSERT_RECORD_SQL = "INSERT INTO pdetail( pno,date, name, mno, gen, age, wht, bp, pls, pdis,email) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
     private static final String GET_TOTAL_NO_OF_ROWS = "SELECT COUNT(NAME) FROM pdetail";
     private static final String GET_TOTAL_MONTH_PATIENT = "select * from pdetail where MONTH(date) = MONTH(now()) and YEAR(date) = YEAR(now());";
-    private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM `pdetail` WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
+    private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM pdetail WHERE date = CURRENT_DATE+\" 00:00:00\"; ";
     private static final String GET_MEDI_PEDI = "SELECT* FROM pdetail,medi;";
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
-    private static final String INSERT_MEDECINE_INFO = "INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
+    private static final String INSERT_MEDECINE_INFO = "INSERT INTO medi (pno, pname, medicin, mqty, mtime, ba, qty) VALUES (?,?,?,?,?,?,?);";
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
     private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
-    private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
-    private static final String INSERT_BOOKMARK = "INSERT INTO `bookmark` (`bname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?);";
+    private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM bookmark WHERE bname=?";
+    private static final String INSERT_BOOKMARK = "INSERT INTO bookmark (bname, medicin, mqty, mtime, ba, qty) VALUES (?,?,?,?,?,?);";
 
-    private static final String UPDATE_PATIENT_FEES = "UPDATE `pdetail` SET  fees_paid =? WHERE pno = ?";
+    private static final String UPDATE_PATIENT_FEES = "UPDATE pdetail SET  fees_paid =? WHERE pno = ?";
 
-    private static final String INSERT_MEDICINE = "INSERT INTO `medilist` (`medicine`) VALUES (?);";
+    private static final String INSERT_MEDICINE = "INSERT INTO medilist (medicine) VALUES (?);";
 
-    private static final String INSERT_REPORT = "INSERT INTO `patient_reports` (`patient_no`, `reports` ,`report_date`) VALUES (?,?,?);";
+    private static final String INSERT_REPORT = "INSERT INTO patient_reports (patient_no, reports ,report_date) VALUES (?,?,?);";
     private static final String DELETE_TEST_REPORT_BY_PNO = "delete  from patient_reports where patient_no =?";
     private static final String GET_ALL_TEST_REPORTS = "SELECT *FROM patient_reports where patient_no=?";
 
-    private static final String INSERT_REPORT_NAME = "INSERT INTO `reports` (`report_name`)VALUES (?);";
-    private static final String INSERT_DOCTOR_NAME = "INSERT INTO `doctor_names` (`doc_name`) VALUES (?);";
-    private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM `doctor_names`";
+    private static final String INSERT_REPORT_NAME = "INSERT INTO reports (report_name)VALUES (?);";
+    private static final String INSERT_DOCTOR_NAME = "INSERT INTO doctor_names (doc_name) VALUES (?);";
+    private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM doctor_names";
     private static final String GET_DOCTOR_ID = "SELECT * FROM doctor_names where doc_name = ?";
 
-    private static final String INSERT_INTO_EMAIL = "INSERT INTO `email` (`email_from`, `email_to`, `subject`, `body`, `template`) VALUES (?,?,?,?,?)";
+    private static final String INSERT_INTO_EMAIL = "INSERT INTO email (email_from, email_to, subject, body, template) VALUES (?,?,?,?,?)";
+
+    private static final String INSERT_INTO_EMAIL_TEMPLATE = "INSERT INTO email_template (template, subject, body, attach_file) VALUES (?, ?, ?, ?)";
+
+    private static final String DELETE_EMPLATE_TEMPLATE_BY_NAME = "delete  from email_template where template =?";
     static Database singletone_database = null;
     Connection connection = null;
 
@@ -496,7 +500,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `medilist` WHERE medicine LIKE ");
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM medilist WHERE medicine LIKE ");
             GET_LIKE_MEDICINE.append("\'");
             GET_LIKE_MEDICINE.append("%");
             GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
@@ -523,7 +527,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE name LIKE ");
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE name LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
             GET_LIKE_PATIENT.append(new StringBuffer(str.toUpperCase()));
@@ -552,7 +556,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE pno LIKE ");
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE pno LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
             GET_LIKE_PATIENT.append(Integer.toString(patient_number));
@@ -581,7 +585,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE mno LIKE ");
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE mno LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
             GET_LIKE_PATIENT.append(mobile_number);
@@ -610,7 +614,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE gen LIKE ");
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE gen LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
             GET_LIKE_PATIENT.append(gender);
@@ -640,7 +644,7 @@ public class Database {
         try {
             Connection conn = connect();
             Date date = new Date(date_in_time_format);
-            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE date LIKE ");
+            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE date LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
             GET_LIKE_PATIENT.append(date.toString());
@@ -669,7 +673,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `medilist`");
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM medilist");
             PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
@@ -691,7 +695,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_REPORT = new StringBuffer("SELECT * FROM `reports` WHERE report_name LIKE ");
+            StringBuffer GET_LIKE_REPORT = new StringBuffer("SELECT * FROM reports WHERE report_name LIKE ");
             GET_LIKE_REPORT.append("\'");
             GET_LIKE_REPORT.append("%");
             GET_LIKE_REPORT.append(new StringBuffer(str.toUpperCase()));
@@ -869,7 +873,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM `bookmark` WHERE bname =");
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM bookmark WHERE bname =");
             GET_LIKE_MEDICINE.append("\'");
             GET_LIKE_MEDICINE.append(new StringBuffer(str));
             GET_LIKE_MEDICINE.append("\';");
@@ -895,7 +899,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  bname FROM `bookmark` WHERE bname LIKE ");
+            StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  bname FROM bookmark WHERE bname LIKE ");
 
             GET_LIKE_BOOKMARK.append("\'");
             GET_LIKE_BOOKMARK.append("%");
@@ -969,7 +973,7 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_DOCTOR = new StringBuffer("SELECT  DISTINCT  doc_name FROM `doctor_names` WHERE doc_name LIKE ");
+            StringBuffer GET_LIKE_DOCTOR = new StringBuffer("SELECT  DISTINCT  doc_name FROM doctor_names WHERE doc_name LIKE ");
 
             GET_LIKE_DOCTOR.append("\'");
             GET_LIKE_DOCTOR.append("%");
@@ -1025,6 +1029,96 @@ public class Database {
             //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
+        }
+    }
+
+    public void insertEmailTemplate(EmailInformation emailInformation) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_INTO_EMAIL_TEMPLATE);
+
+            preparedStatement.setString(1, emailInformation.getTemplate());
+            preparedStatement.setString(2, emailInformation.getSubject());
+            preparedStatement.setString(3, emailInformation.getBody());
+            preparedStatement.setString(4, emailInformation.getAttachFilePath());
+
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public ArrayList<String> getLikeTemplate(String template_name) {
+
+        ArrayList<String> template = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_EMAIL = new StringBuffer("SELECT  DISTINCT  subject ,template FROM email_template WHERE template LIKE ");
+
+            GET_LIKE_EMAIL.append("\'");
+            GET_LIKE_EMAIL.append("%");
+            GET_LIKE_EMAIL.append(new StringBuffer(template_name.toUpperCase()));
+            GET_LIKE_EMAIL.append("%';");
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_EMAIL));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                //String str =rs.getString("template").toUpperCase()+" "+rs.getString("subject").toUpperCase();
+             ///  System.out.println(rs.getString("template").toUpperCase());
+                template.add(rs.getString("template").toUpperCase());
+              // template.add(str);
+                i++;
+            }
+            return template;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public EmailInformation getEmail(String template_name) {
+
+        try {
+            Connection conn = connect();
+            // Step 2:Create a statement using connection object
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM email_template where template = ?");
+            preparedStatement.setString(1, template_name);
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+            // Step 4: Process the ResultSet object.
+
+            while (rs.next()) {
+
+                EmailInformation emailInformation = new EmailInformation();
+                emailInformation.setTemplate(rs.getString("template"));
+                emailInformation.setSubject(rs.getString("subject"));
+                emailInformation.setBody(rs.getString("body"));
+                emailInformation.setAttachFilePath(rs.getString("attach_file"));
+                return emailInformation;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public boolean removeTemplate(String template_name) {
+        try {
+            
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_EMPLATE_TEMPLATE_BY_NAME);
+            preparedStatement.setString(1, template_name);
+
+            preparedStatement.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+             return false;
         }
     }
 
