@@ -10,7 +10,7 @@
 	<parameter name="dno" class="java.lang.String"/>
 	<parameter name="age" class="java.lang.String"/>
 	<parameter name="designation" class="java.lang.String"/>
-	<queryString>
+	<queryString language="plsql">
 		<![CDATA[SELECT * FROM doctor_names WHERE doc_id = $P{dno};]]>
 	</queryString>
 	<background>

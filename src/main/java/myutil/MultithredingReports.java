@@ -30,6 +30,7 @@ public class MultithredingReports extends Thread {
            this.medicalReportJrFormat2 = JasperCompileManager.compileReport(medicalReportPathForFormat2);
          
         } catch (JRException ex) {
+            ex.printStackTrace();
             System.out.println("File Not compile");
         }
     }
@@ -47,6 +48,8 @@ public class MultithredingReports extends Thread {
     }
       public JasperReport getCompliedMedicalReportFormat2()
     {
+        //for making both format same one format is compatible with the the MYSQL and other is PGSQL
+//         return this.medicalReportJr;
         return this.medicalReportJrFormat2;
     }
     

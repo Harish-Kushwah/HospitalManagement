@@ -149,60 +149,76 @@ public class SearchPatient extends javax.swing.JPanel {
     }
 
     public void searchByPno(int patient_number) {
-        Database database = Database.getInstance();
-        ArrayList<String> patient_details = database.getLikePatient(patient_number);
+        try {
+            Database database = Database.getInstance();
+            ArrayList<String> patient_details = database.getLikePatient(patient_number);
 
-        String data[][] = new String[patient_details.size()][3];
+            if (patient_details != null )  {
 
-        int i = 0;
-        for (String m : patient_details) {
+                String data[][] = new String[patient_details.size()][3];
+
+                int i = 0;
+                for (String m : patient_details) {
 //                    lm.addElement(m);
-            String str[] = m.split("/");
-            data[i][0] = str[0];
-            data[i][1] = str[1];
-            data[i][2] = str[2];
-            i++;
+                    String str[] = m.split("/");
+                    data[i][0] = str[0];
+                    data[i][1] = str[1];
+                    data[i][2] = str[2];
+                    i++;
+                }
+                String column[] = {"Pno", "Name", "Date"};
+                setTable(data, column);
+            }
+        } catch (NullPointerException exp) {
+            System.out.println("Error in search by name");
+            exp.printStackTrace();
         }
-        String column[] = {"Pno", "Name", "Date"};
-        setTable(data, column);
     }
 
     public void searchByMobileNumber(String mobile_number) {
         Database database = Database.getInstance();
         ArrayList<String> patient_details = database.getLikePatientByMobileNo(mobile_number);
 
-        String data[][] = new String[patient_details.size()][3];
+        if (patient_details != null) {
+            String data[][] = new String[patient_details.size()][3];
 
-        int i = 0;
-        for (String m : patient_details) {
+            int i = 0;
+            for (String m : patient_details) {
 //                    lm.addElement(m);
-            String str[] = m.split("/");
-            data[i][0] = str[0];
-            data[i][1] = str[1];
-            data[i][2] = str[2];
-            i++;
+                String str[] = m.split("/");
+                data[i][0] = str[0];
+                data[i][1] = str[1];
+                data[i][2] = str[2];
+                i++;
+            }
+            String column[] = {"Pno", "Name", "Date"};
+            setTable(data, column);
+        } else {
+            System.out.println("Patient Details are null");
         }
-        String column[] = {"Pno", "Name", "Date"};
-        setTable(data, column);
     }
 
     public void searchByDate(long date_time_format) {
         Database database = Database.getInstance();
         ArrayList<String> patient_details = database.getLikePatientByDate(date_time_format);
 
-        String data[][] = new String[patient_details.size()][3];
+        if (patient_details != null) {
+            String data[][] = new String[patient_details.size()][3];
 
-        int i = 0;
-        for (String m : patient_details) {
+            int i = 0;
+            for (String m : patient_details) {
 //                    lm.addElement(m);
-            String str[] = m.split("/");
-            data[i][0] = str[0];
-            data[i][1] = str[1];
-            data[i][2] = str[2];
-            i++;
+                String str[] = m.split("/");
+                data[i][0] = str[0];
+                data[i][1] = str[1];
+                data[i][2] = str[2];
+                i++;
+            }
+            String column[] = {"Pno", "Name", "Date"};
+            setTable(data, column);
+        } else {
+            System.out.println("Patient Details are null");
         }
-        String column[] = {"Pno", "Name", "Date"};
-        setTable(data, column);
     }
 
     public void setTable(String data[][], String[] column) {
@@ -298,7 +314,6 @@ public class SearchPatient extends javax.swing.JPanel {
         diseases_input_label.setText(patient.getSymptoms());
         bp_input_label.setText(patient.getBloodPressure());
 
-    
         //updating the patient object for report page click
         patient_for_report_page = patient;
 
@@ -1175,7 +1190,7 @@ public class SearchPatient extends javax.swing.JPanel {
     private void add_medicine_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btnActionPerformed
         long date_in_time_format = date_input.getDate().getTime();
         searchByDate(date_in_time_format);
-        
+
     }//GEN-LAST:event_add_medicine_btnActionPerformed
 
     private void add_medicine_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_medicine_btnMouseExited

@@ -2,13 +2,16 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="72"/>
+	<property name="ireport.y" value="18"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
 	<parameter name="dname" class="java.lang.String"/>
 	<parameter name="date" class="java.util.Date"/>
 	<parameter name="name" class="java.lang.String"/>
-	<parameter name="dno" class="java.lang.Integer"/>
 	<parameter name="age" class="java.lang.String"/>
+	<parameter name="designation" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dno" class="java.lang.Integer"/>
 	<queryString language="plsql">
 		<![CDATA[SELECT * FROM doctor_names WHERE doc_id = $P{dno};]]>
 	</queryString>
@@ -140,7 +143,7 @@
 				<reportElement x="306" y="152" width="64" height="37" uuid="10062db4-c20a-4410-9875-b62cdbf43257"/>
 				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
 			</image>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="129" y="20" width="30" height="20" uuid="6fd5627a-9619-4a5a-b9ff-b8d06e9fbf19"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>

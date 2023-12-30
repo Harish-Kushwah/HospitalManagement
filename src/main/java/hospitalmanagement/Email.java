@@ -72,16 +72,14 @@ public class Email extends javax.swing.JPanel {
         em_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
         tm_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
 
-        try{
-        if(InternetAvailabilityChecker.isInternetAvailable()){
-        sendingEmail = new SendingEmail();
-        sendingEmail.setAuthenicationDetails("testify8953@gmail.com", "kaom ridr dvep qlfe");
-        }
-        else{
-         System.out.println("Internet is not connecetd");
-        }
-        }catch(Exception exp)
-        {
+        try {
+            if (InternetAvailabilityChecker.isInternetAvailable()) {
+                sendingEmail = new SendingEmail();
+                sendingEmail.setAuthenicationDetails("testify8953@gmail.com", "kaom ridr dvep qlfe");
+            } else {
+                System.out.println("Internet is not connecetd");
+            }
+        } catch (Exception exp) {
             exp.printStackTrace();
         }
     }
@@ -1335,22 +1333,23 @@ public class Email extends javax.swing.JPanel {
         String to = em_email_to_input.getText();
         String subject = em_subject_input.getText();
         String message = em_body_input.getText();
-        
 
         try {
-            saveEMPageEmail();
+         
             if (em_file_path != null) {
                 File file = new File(em_file_path);
                 sendingEmail.sendEmailWithAttatch(to, subject, message, file);
             } else {
                 sendingEmail.sendEmail(to, subject, message);
+
             }
-            
+               saveEMPageEmail();
             em_status_label.setText("Email send successfully");
             em_status_label.setForeground(SUCCESS_COLOR);
         } catch (Exception exp) {
+            exp.printStackTrace();
             System.out.println("Something went wrong");
-             em_status_label.setText("Email Not send");
+            em_status_label.setText("Email Not send");
             em_status_label.setForeground(WARNING_COLOR);
         }
     }//GEN-LAST:event_em_send_btnActionPerformed
@@ -1615,7 +1614,7 @@ public class Email extends javax.swing.JPanel {
         String to = pd_email_to_input.getText();
         String subject = pd_subject_input.getText();
         String message = pd_body_input.getText();
-        savePDEmail();
+       
 
         try {
 
@@ -1625,7 +1624,9 @@ public class Email extends javax.swing.JPanel {
             } else {
                 sendingEmail.sendEmail(to, subject, message);
             }
+            savePDEmail();
         } catch (Exception exp) {
+            exp.printStackTrace();
             System.out.println("Something went wrong");
         }
     }//GEN-LAST:event_pd_send_btnActionPerformed
@@ -1760,7 +1761,7 @@ public class Email extends javax.swing.JPanel {
     private void template_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_template_listMouseClicked
         //if (evt.getClickCount() == 1) {
         copyTemplateToPage();
-       // evt.consume();
+        // evt.consume();
         //}
     }//GEN-LAST:event_template_listMouseClicked
     public void copyTemplateToPage() {

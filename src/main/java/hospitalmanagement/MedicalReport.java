@@ -734,6 +734,8 @@ public class MedicalReport extends javax.swing.JPanel {
                 throw new ValidInputException();
             }
 
+            System.out.println(id);
+             System.out.println(doctor_name);
             a.put("dname", doctor_name);
             a.put("date", date_report_input.getDate());
             a.put("dno", id);
@@ -760,6 +762,7 @@ public class MedicalReport extends javax.swing.JPanel {
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
                 } else {
+                    System.out.println("jr is null");
                     report_status.setText("No report is availalble");
                     report_status.setForeground(Color.red);
                 }

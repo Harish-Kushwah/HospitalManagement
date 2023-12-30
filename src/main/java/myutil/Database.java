@@ -13,11 +13,11 @@ public class Database {
 
     private final String url = "jdbc:postgresql://localhost:5432/guru";
     private final String user = "postgres";
-    private final String password = "root";
+    private final String password = "Harish";
 
     private static final String SELECT_ALL_QUERY = "select * from pdetail";
     private static final String UPDATE_USERS_SQL = "update pdetail set username = ? where id = ?;";
-    private static final String INSERT_RECORD_SQL = "INSERT INTO pdetail (pno, date, name, mno, gen, age, wht, bp, pls, pdis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String INSERT_RECORD_SQL = "INSERT INTO pdetail (pno, date, name, mno, gen, age, wht, bp, pls, pdis,email) VALUES (?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String GET_TOTAL_NO_OF_ROWS = "SELECT COUNT(NAME) FROM pdetail";
     private static final String GET_TOTAL_MONTH_PATIENT = "SELECT * FROM pdetail WHERE EXTRACT(MONTH FROM date::date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date::date) = EXTRACT(YEAR FROM CURRENT_DATE);";
     private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM pdetail WHERE date::timestamp >= DATE_TRUNC('day', CURRENT_DATE);";
@@ -36,7 +36,7 @@ public class Database {
 
     private static final String INSERT_MEDICINE = "INSERT INTO medilist (medicine) VALUES (?);";
     
-    private static final String INSERT_REPORT = "INSERT INTO patient_reports (patient_no, reports) VALUES (?,?);";
+    private static final String INSERT_REPORT = "INSERT INTO patient_reports (patient_no, reports , report_date) VALUES (?,?,?);";
     private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
     private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
     
@@ -399,7 +399,7 @@ public class Database {
             preparedStatement.setInt(1, id);
 
             preparedStatement.setDate(2, new Date(patientdetails.getDate().getTime()));
-            preparedStatement.setString(3, patientdetails.getName());
+            preparedStatement.setString(3, patientdetails.getName().toUpperCase());
             preparedStatement.setString(4, patientdetails.getMobileNo());
             preparedStatement.setString(5, patientdetails.getGender());
             preparedStatement.setInt(6, patientdetails.getAge());
@@ -426,7 +426,7 @@ public class Database {
             preparedStatement.setInt(1, patientDetails.getPid());
 
             preparedStatement.setString(2, patientDetails.getName());
-            preparedStatement.setString(3, medicineDetails.getMedicineName());
+            preparedStatement.setString(3, medicineDetails.getMedicineName().toUpperCase());
             preparedStatement.setString(4, medicineDetails.getMedicineQuantity());
             preparedStatement.setString(5, medicineDetails.getMedicineTime());
             preparedStatement.setInt(6, medicineDetails.getMedicineMealTime());
@@ -443,7 +443,7 @@ public class Database {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDICINE);
-            preparedStatement.setString(1, medicine_name);
+            preparedStatement.setString(1, medicine_name.toUpperCase());
 
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -472,7 +472,7 @@ public class Database {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT_NAME);
-            preparedStatement.setString(1, report_name);
+            preparedStatement.setString(1, report_name.toUpperCase());
 
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -556,13 +556,8 @@ public class Database {
 
         try {
             Connection conn = connect();
-            StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE pno LIKE ");
-            GET_LIKE_PATIENT.append("\'");
-            GET_LIKE_PATIENT.append("%");
-            GET_LIKE_PATIENT.append(Integer.toString(patient_number));
-            GET_LIKE_PATIENT.append("%';");
-
-            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_PATIENT));
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM pdetail WHERE pno=?");
+            preparedStatement.setInt(1, patient_number);
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
@@ -1044,7 +1039,7 @@ public class Database {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_INTO_EMAIL_TEMPLATE);
 
-            preparedStatement.setString(1, emailInformation.getTemplate());
+            preparedStatement.setString(1, emailInformation.getTemplate().toUpperCase());
             preparedStatement.setString(2, emailInformation.getSubject());
             preparedStatement.setString(3, emailInformation.getBody());
             preparedStatement.setString(4, emailInformation.getAttachFilePath());
