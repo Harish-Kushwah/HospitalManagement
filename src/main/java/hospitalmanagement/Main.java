@@ -1,5 +1,6 @@
 package hospitalmanagement;
 
+import email.InternetThread;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -122,6 +123,7 @@ public class Main extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 sc.setVisible(true);
+              
             }
         });
         

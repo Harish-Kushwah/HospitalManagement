@@ -1,5 +1,6 @@
 package myutil;
 
+import email.EmailInformation;
 import java.sql.*;
 import java.util.ArrayList;
 
