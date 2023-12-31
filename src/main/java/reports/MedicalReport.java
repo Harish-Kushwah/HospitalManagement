@@ -1,5 +1,6 @@
-package hospitalmanagement;
+package reports;
 
+import hospitalmanagement.Home;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;

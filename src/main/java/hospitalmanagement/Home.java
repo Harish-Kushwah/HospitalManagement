@@ -1,5 +1,9 @@
 package hospitalmanagement;
 
+import reports.TestReport;
+import reports.MedicalReport;
+import email.Email;
+import email.InternetThread;
 import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.Connection;
 
 import java.util.ArrayList;
@@ -17,16 +22,12 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Queue;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import myutil.Database;
@@ -88,12 +89,16 @@ public class Home extends javax.swing.JFrame {
     MedicalReport medical;
     SearchPatient search_patient;
     Email email_panel;
+    InternetThread INTERNET_THREAD = new InternetThread();
+    
 //=============================================[CONSTRUCTOR WORK START]====================================================
 
     public Home() {
-
-        initComponents();
         REPORTS_THREAD.start();
+        INTERNET_THREAD.start();
+       
+        initComponents();
+        
         //make the frame of full page
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //        setSize(1366,768);
@@ -110,7 +115,6 @@ public class Home extends javax.swing.JFrame {
         Dashboard.setLayout(new BorderLayout());
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
 
-        showPageOnWindow("prescription");
 
         addMedicineRowInPanelForm();
         setMedicineOnMedicineInputField();
@@ -163,8 +167,20 @@ public class Home extends javax.swing.JFrame {
         /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
 //        addShortArrowKeyForPagesNavigation();
 
-    }
+        
+        showPageOnWindow("prescription");
 
+    }
+    public void setEmailLabelColor()
+    {
+//        try {
+//            if (!InternetAvailabilityChecker.isInternetAvailable())
+//            {
+//                email_label.setForeground(WARNING_COLOR);
+//            }
+//        } catch (IOException ex) {
+//        }
+    }
     public JLabel getMedicalReportsDropdownLabel() {
         return medical_reports_dropdown_label;
     }
@@ -267,6 +283,7 @@ public class Home extends javax.swing.JFrame {
         search_patient_panel.add(new SetImageIcon(new ImageIcon(search_icon), 15, 10), BorderLayout.CENTER);
         
         email_icon.add(new SetImageIcon(new ImageIcon("./images/gmail_icon.png"),30,30)) ;
+       
 
     }
 
@@ -793,20 +810,28 @@ public class Home extends javax.swing.JFrame {
         return date;
 
     }
-
+    
     public void showPageOnWindow(String page_name) {
         card = (CardLayout) main_panel.getLayout();
         card.show(main_panel, page_name);
         page_showing = page_name;
-
+        
+        
+        
         JLabel menu_panel_label_list[] = {dashboard_label, patient_label, prescription_label, reports_label , email_label};
 
         for (JLabel menu_panel_label_list1 : menu_panel_label_list) {
             if (menu_panel_label_list1.getText().trim().equalsIgnoreCase(page_showing)) {
                 menu_panel_label_list1.setForeground(Color.CYAN);
+                
             } else {
                 menu_panel_label_list1.setForeground(Color.white);
             }
+            if(INTERNET_THREAD.isInternetAvailable()==false)
+            {
+                email_label.setForeground(WARNING_COLOR);
+            }
+           
         }
     }
 //=============================================[GENERAL FUNCTIONS WORK ENDS]====================================================
@@ -1119,6 +1144,11 @@ public class Home extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1368, 740));
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
 
         header.setBackground(new java.awt.Color(153, 255, 255));
         header.setPreferredSize(new java.awt.Dimension(1100, 49));
@@ -1156,9 +1186,9 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(heade_label, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1886, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1898, Short.MAX_VALUE)
                 .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(doctor_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
@@ -1224,6 +1254,11 @@ public class Home extends javax.swing.JFrame {
         menu_panel.setBackground(new java.awt.Color(0, 255, 204));
         menu_panel.setForeground(new java.awt.Color(255, 255, 255));
         menu_panel.setMaximumSize(new java.awt.Dimension(3000, 32767));
+        menu_panel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                menu_panelMouseMoved(evt);
+            }
+        });
 
         dashboard_label.setBackground(new java.awt.Color(255, 51, 51));
         dashboard_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
@@ -4471,6 +4506,21 @@ public class Home extends javax.swing.JFrame {
     private void email_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_email_inputMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_email_inputMouseExited
+
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+        
+    }//GEN-LAST:event_formMouseMoved
+
+    private void menu_panelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu_panelMouseMoved
+       INTERNET_THREAD = new InternetThread();
+        if(!INTERNET_THREAD.isAlive()){
+           INTERNET_THREAD.start();
+        }
+//        if(INTERNET_THREAD.isInternetAvailable()==false)
+//        {
+//            email_label.setForeground(WARNING_COLOR);
+//        }
+    }//GEN-LAST:event_menu_panelMouseMoved
 
     public void resetFeesSection() {
         fees_pno_input.setText("");

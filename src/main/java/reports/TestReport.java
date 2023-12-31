@@ -1,5 +1,6 @@
-package hospitalmanagement;
+package reports;
 
+import hospitalmanagement.Home;
 import java.sql.*;
 import java.awt.BorderLayout;
 import java.awt.Color;

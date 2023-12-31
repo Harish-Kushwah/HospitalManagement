@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package hospitalmanagement;
+package email;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -27,10 +27,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import myutil.Database;
-import myutil.EmailInformation;
+import email.EmailInformation;
 import myutil.InternetAvailabilityChecker;
 import myutil.MyCustomRenderer;
-import myutil.SendingEmail;
+import email.SendingEmail;
+import email.SendingEmailWithAttachment;
+import email.SendingEmailWithoutAttachment;
 import myutil.SetImageIcon;
 
 /**
@@ -57,8 +59,6 @@ public class Email extends javax.swing.JPanel {
     String em_file_path, ad_file_path, pd_file_path;
     String page_showing;
 
-    SendingEmail sendingEmail;
-
     public Email() {
         initComponents();
         showEmailTypePage("email_mode");
@@ -72,16 +72,16 @@ public class Email extends javax.swing.JPanel {
         em_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
         tm_report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
 
-        try {
-            if (InternetAvailabilityChecker.isInternetAvailable()) {
-                sendingEmail = new SendingEmail();
-                sendingEmail.setAuthenicationDetails("testify8953@gmail.com", "kaom ridr dvep qlfe");
-            } else {
-                System.out.println("Internet is not connecetd");
-            }
-        } catch (Exception exp) {
-            exp.printStackTrace();
-        }
+//        try {
+//            if (InternetAvailabilityChecker.isInternetAvailable()) {
+//                sendingEmail = new SendingEmail();
+//                sendingEmail.setAuthenicationDetails("testify8953@gmail.com", "kaom ridr dvep qlfe");
+//            } else {
+//                System.out.println("Internet is not connecetd");
+//            }
+//        } catch (Exception exp) {
+//            exp.printStackTrace();
+//        }
     }
 
     public boolean isEmailModePage() {
@@ -1335,15 +1335,16 @@ public class Email extends javax.swing.JPanel {
         String message = em_body_input.getText();
 
         try {
-         
+
             if (em_file_path != null) {
                 File file = new File(em_file_path);
-                sendingEmail.sendEmailWithAttatch(to, subject, message, file);
+                SendingEmailWithAttachment sendEmailWithAttatch = new SendingEmailWithAttachment(to, subject, message, file);
+                sendEmailWithAttatch.start();
             } else {
-                sendingEmail.sendEmail(to, subject, message);
-
+                SendingEmailWithoutAttachment sendEmailWithoutAttatch = new SendingEmailWithoutAttachment(to, subject, message);
+                sendEmailWithoutAttatch.start();
             }
-               saveEMPageEmail();
+            saveEMPageEmail();
             em_status_label.setText("Email send successfully");
             em_status_label.setForeground(SUCCESS_COLOR);
         } catch (Exception exp) {
@@ -1614,17 +1615,21 @@ public class Email extends javax.swing.JPanel {
         String to = pd_email_to_input.getText();
         String subject = pd_subject_input.getText();
         String message = pd_body_input.getText();
-       
 
         try {
 
             if (pd_file_path != null) {
                 File file = new File(pd_file_path);
-                sendingEmail.sendEmailWithAttatch(to, subject, message, file);
+                SendingEmailWithAttachment sendEmailWithAttatch = new SendingEmailWithAttachment(to, subject, message, file);
+                sendEmailWithAttatch.start();
             } else {
-                sendingEmail.sendEmail(to, subject, message);
+                SendingEmailWithoutAttachment sendEmailWithoutAttatch = new SendingEmailWithoutAttachment(to, subject, message);
+                sendEmailWithoutAttatch.start();
             }
             savePDEmail();
+            pd_status_label.setText("Email send successfully");
+            pd_status_label.setForeground(SUCCESS_COLOR);
+
         } catch (Exception exp) {
             exp.printStackTrace();
             System.out.println("Something went wrong");
