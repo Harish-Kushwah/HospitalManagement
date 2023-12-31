@@ -14,7 +14,7 @@ public class Database {
 
     private final String url = "jdbc:postgresql://localhost:5432/guru";
     private final String user = "postgres";
-    private final String password = "root";
+    private final String password = "Harish";
 
     private static final String SELECT_ALL_QUERY = "select * from pdetail";
     private static final String UPDATE_USERS_SQL = "update pdetail set username = ? where id = ?;";
@@ -51,6 +51,8 @@ public class Database {
     private static final String INSERT_INTO_EMAIL_TEMPLATE = "INSERT INTO email_template (template, subject, body, attach_file) VALUES (?, ?, ?, ?)";
 
     private static final String DELETE_EMPLATE_TEMPLATE_BY_NAME = "delete  from email_template where template =?";
+    
+    private static final String UPDATE_EMAIL_TEMPLATE = "UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
     static Database singletone_database = null;
     Connection connection = null;
 
@@ -1082,6 +1084,24 @@ public class Database {
         return null;
     }
 
+    public void updateTemplate(int template_id , EmailInformation emailInformation)
+    {
+       try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_EMAIL_TEMPLATE);
+//"UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
+            preparedStatement.setString(1, emailInformation.getTemplate().toUpperCase());
+            preparedStatement.setString(2, emailInformation.getSubject());
+            preparedStatement.setString(3, emailInformation.getBody());
+            preparedStatement.setString(4, emailInformation.getAttachFilePath());
+            preparedStatement.setInt(5,template_id);
+
+            preparedStatement.executeUpdate();
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     public EmailInformation getEmail(String template_name) {
 
         try {
@@ -1100,6 +1120,7 @@ public class Database {
                 emailInformation.setSubject(rs.getString("subject"));
                 emailInformation.setBody(rs.getString("body"));
                 emailInformation.setAttachFilePath(rs.getString("attach_file"));
+                emailInformation.setTemplateId(rs.getInt("email_id"));
                 return emailInformation;
             }
 

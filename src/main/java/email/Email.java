@@ -34,6 +34,7 @@ import email.SendingEmail;
 import email.SendingEmailWithAttachment;
 import email.SendingEmailWithoutAttachment;
 import myutil.SetImageIcon;
+import myutil.UserInformation;
 
 /**
  *
@@ -82,6 +83,8 @@ public class Email extends javax.swing.JPanel {
 //        } catch (Exception exp) {
 //            exp.printStackTrace();
 //        }
+        UserInformation user = new UserInformation();
+        from_email_input.setText(user.getEmail());
     }
 
     public boolean isEmailModePage() {
@@ -177,6 +180,8 @@ public class Email extends javax.swing.JPanel {
         ad_subject_input.setText("");
         ad_body_input.setText("");
         ad_status_label.setText("");
+        
+        ad_save_btn.setText("Save");
         removeADPageSelectedFile();
     }
 
@@ -896,6 +901,7 @@ public class Email extends javax.swing.JPanel {
         ad_save_btn.setForeground(new java.awt.Color(255, 255, 255));
         ad_save_btn.setText("Save");
         ad_save_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
+        ad_save_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         ad_save_btn.setFocusPainted(false);
         ad_save_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1213,6 +1219,7 @@ public class Email extends javax.swing.JPanel {
         update_template_btn.setForeground(new java.awt.Color(255, 255, 255));
         update_template_btn.setText("Update");
         update_template_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
+        update_template_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         update_template_btn.setFocusPainted(false);
         update_template_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1332,7 +1339,8 @@ public class Email extends javax.swing.JPanel {
     private void em_send_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_em_send_btnActionPerformed
         String to = em_email_to_input.getText();
         String subject = em_subject_input.getText();
-        String message = em_body_input.getText();
+        String message =  em_body_input.getText();
+        
 
         try {
 
@@ -1722,21 +1730,32 @@ public class Email extends javax.swing.JPanel {
         if (template.length() == 0) {
             template = "None";
         }
-        EmailInformation emailInformation = new EmailInformation();
 
+        EmailInformation emailInformation = new EmailInformation();
         emailInformation.setSubject(subject);
         emailInformation.setBody(body);
         emailInformation.setTemplate(template);
         emailInformation.setAttachFilePath(file_path);
 
         Database database = Database.getInstance();
-        database.insertEmailTemplate(emailInformation);
+        if (ad_save_btn.getText().startsWith("Save")) {
+            database.insertEmailTemplate(emailInformation);
+             resetADPage();
+            ad_status_label.setText("Template saved successfully");
+            ad_status_label.setForeground(SUCCESS_COLOR);
+            
+        } else {
+            if (TEMPLATE_ID_FOR_UPDATING != -1) {
+                database.updateTemplate(TEMPLATE_ID_FOR_UPDATING, emailInformation);
+                
+                resetADPage();
+                ad_status_label.setText("Template Upadted successfully");
+                ad_status_label.setForeground(SUCCESS_COLOR);
+                TEMPLATE_ID_FOR_UPDATING = -1;
+            }
+        }
 
-        resetADPage();
-        ad_status_label.setText("Template saved successfully");
-        ad_status_label.setForeground(SUCCESS_COLOR);
-        System.out.println("Email Template saved successfully");
-
+       
     }//GEN-LAST:event_ad_save_btnActionPerformed
 
     private void template_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_template_inputMouseEntered
@@ -1874,8 +1893,33 @@ public class Email extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_selected_templateKeyPressed
 
+    int TEMPLATE_ID_FOR_UPDATING = -1;
     private void update_template_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_template_btnActionPerformed
-        // TODO add your handling code here:
+        //copy the template into add email page
+        //update the all the details based on the template id
+        try {
+            if (isAddEmailModePage()) {
+                String template_name = selected_template.getText();
+
+                ad_save_btn.setText("Update");
+
+                Database db = Database.getInstance();
+                EmailInformation emailInformation = db.getEmail(template_name);
+                ad_template_input.setText(emailInformation.getTemplate());
+                ad_subject_input.setText(emailInformation.getSubject());
+                ad_body_input.setText(emailInformation.getBody());
+                ad_file_path = emailInformation.getAttachFilePath();
+                if (ad_file_path != null) {
+                    setADPageFile(new File(ad_file_path));
+                }
+
+                TEMPLATE_ID_FOR_UPDATING = emailInformation.getTemplateId();
+                System.out.println(TEMPLATE_ID_FOR_UPDATING);
+            }
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+//       updateTemplate(int template_id , EmailInformation emailInformation);
     }//GEN-LAST:event_update_template_btnActionPerformed
 
     private void pd_remove_attach_file_icon_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pd_remove_attach_file_icon_panelMouseClicked

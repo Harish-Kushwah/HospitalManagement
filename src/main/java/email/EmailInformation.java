@@ -8,7 +8,12 @@ package email;
 public class EmailInformation {
     String from,to,subject,body,template;
     String attatch_file_path;
+    int template_id;
     
+    public void setTemplateId(int template_id)
+    {
+        this.template_id = template_id;
+    }
     public void setAttachFilePath(String file_path)
     {
         this.attatch_file_path = file_path;
@@ -58,6 +63,10 @@ public class EmailInformation {
      public String getAttachFilePath()
     {
         return this.attatch_file_path;
+    }
+    public int getTemplateId()
+    {
+        return this.template_id;
     }
     
 }

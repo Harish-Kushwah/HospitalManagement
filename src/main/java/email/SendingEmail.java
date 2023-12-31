@@ -1,10 +1,16 @@
 package email;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 import javax.mail.Authenticator;
 import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.*;
-
+import myutil.UserInformation;
 
 public class SendingEmail extends Thread {
 
@@ -12,31 +18,15 @@ public class SendingEmail extends Thread {
     public static Session session = null;
 
     public SendingEmail() {
-        getCredentials();
+        UserInformation user = new UserInformation();
+        SendingEmail.from = user.getEmail();
+        SendingEmail.password = user.getPassword();
+        
         setSessionDetails();
     }
 
-    
-    private static void getCredentials() {
-//        File file = new File("./logs/email_auth.txt");
-//        try {
-//            FileReader fr = new FileReader(file);
-//            BufferedReader br = new BufferedReader(fr);
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                System.out.println(line);
-//            }
-//        } catch (FileNotFoundException ex) {
-//        } catch (IOException ex) {
-//        }
-        SendingEmail.from = "testify8953@gmail.com";
-
-        SendingEmail.password = "kaom ridr dvep qlfe";
-
-    }
-
     public static void setSessionDetails() {
-       
+
         //Variabl from gmail host
         String host = "smtp.gmail.com";
 
