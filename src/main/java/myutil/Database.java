@@ -13,7 +13,7 @@ public class Database {
 
     private final String url = "jdbc:postgresql://localhost:5432/guru";
     private final String user = "postgres";
-    private final String password = "Harish";
+    private final String password = "root";
 
     private static final String SELECT_ALL_QUERY = "select * from pdetail";
     private static final String UPDATE_USERS_SQL = "update pdetail set username = ? where id = ?;";
