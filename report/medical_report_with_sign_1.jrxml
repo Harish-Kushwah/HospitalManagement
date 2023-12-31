@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="107"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Postgress"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
 	<parameter name="dname" class="java.lang.String"/>
 	<parameter name="date" class="java.util.Date"/>
 	<parameter name="name" class="java.lang.String"/>
-	<parameter name="dno" class="java.lang.String"/>
+	<parameter name="dno" class="java.lang.Integer"/>
 	<parameter name="age" class="java.lang.String"/>
 	<parameter name="designation" class="java.lang.String"/>
 	<queryString language="plsql">
 		<![CDATA[SELECT * FROM doctor_names WHERE doc_id = $P{dno};]]>
 	</queryString>
+	<field name="doc_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="doc_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="doc_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doctor_names"/>
+	</field>
+	<field name="doc_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="doc_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="doc_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="doctor_names"/>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
