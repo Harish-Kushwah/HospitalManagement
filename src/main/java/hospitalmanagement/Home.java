@@ -7,12 +7,7 @@ import email.InternetThread;
 import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.sql.Connection;
 
 import java.util.ArrayList;
@@ -90,89 +85,112 @@ public class Home extends javax.swing.JFrame {
     SearchPatient search_patient;
     Email email_panel;
     InternetThread INTERNET_THREAD = new InternetThread();
-    
-//=============================================[CONSTRUCTOR WORK START]====================================================
 
+//=============================================[CONSTRUCTOR WORK START]====================================================
     public Home() {
         REPORTS_THREAD.start();
         INTERNET_THREAD.start();
-       
+
         initComponents();
+
+        Runnable first = ()-> {
+            this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            setLocationRelativeTo(null);
+            this.pack();
+
+            ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
+            this.setIconImage(icon.getImage());
+            menu_panel.setBackground(new Color(0x021036));
+            reports_dropdown_panel.setBackground(new Color(0x021036));
+            addAllNavigationButtons();
+        };
+
+        Runnable dashboard_thread = () -> {
+            Dashboard.setLayout(new BorderLayout());
+            Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
+        };
+
+        Runnable other = () -> {
+            addMedicineRowInPanelForm();
+            setMedicineOnMedicineInputField();
+            setValidationListenerOnInputs();
+            date_input.setDate(getCurrentDate());
+            male_radio_btn.setSelected(true);
+        };
+
+        //for patient
+        Runnable imp_thread = () -> {
+
+            //set cuurent date on the patient page when loads
+            prescription_save_btn.setVisible(false);
+            prescription_form_panel.revalidate();
+            prescription_form_panel.repaint();
+            prescription_date_input.setDate(getCurrentDate());
+            prescription_male_btn.setSelected(true);
+
+            setMarathiTranslateIcon();
+            addShortKeyForLanguageTranslation();
+            addShortArrowKeyForReportsNavigation();
+            addShortKeyForPages();
+
+        };
+
+        Runnable reports_thread = ()-> {
+            test_report_panel.removeAll();
+            test = new TestReport(this, getPatientPagePatientDetailsObject());
+            test_report_panel.add(test, BorderLayout.CENTER);
+
+            medical_report_panel.removeAll();
+            medical = new MedicalReport(this, getPatientPagePatientDetailsObject());
+            medical_report_panel.add(medical, BorderLayout.CENTER);
+
+            search_patient = new SearchPatient(this);
+            search_patient_main_panel.add(search_patient, BorderLayout.CENTER);
+
+            setMarathiFontForInputes();
+
+        };
         
-        //make the frame of full page
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        setSize(1366,768);
-        setLocationRelativeTo(null);
-        this.pack();
+        Runnable email_thread = ()-> {
+            email_panel = new Email();
+            EmailPage.add(email_panel, BorderLayout.CENTER);
 
-        ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
-        this.setIconImage(icon.getImage());
-        menu_panel.setBackground(new Color(0x021036));
-        reports_dropdown_panel.setBackground(new Color(0x021036));
+        };
 
-        addAllNavigationButtons();
+        Runnable bookmark_thread = ()-> {
+            BOOK_MARK_PANEL = new BookmarkPanel(this);
+            prescription_form_panel.add(BOOK_MARK_PANEL, BorderLayout.CENTER);
 
-        Dashboard.setLayout(new BorderLayout());
-        Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
+        };
+
+        Runnable last = ()-> {
+            // setMarathiFontForInputes();
+            //  addEnterBtnActionTotalTablet();
+            reports_dropdown_panel.setVisible(false);
+            reports_dropdown_seperator.setVisible(false);
 
 
-        addMedicineRowInPanelForm();
-        setMedicineOnMedicineInputField();
-
-        setValidationListenerOnInputs();  //for patient
-
-        //set cuurent date on the patient page when loads
-        date_input.setDate(getCurrentDate());
-        male_radio_btn.setSelected(true);
-
-        //set cuurent date on the prescription page when loads
-        prescription_date_input.setDate(getCurrentDate());
-
-        addShortKeyForPages();
-
-        //make the male radio button auto selected on prescriotion page
-        prescription_male_btn.setSelected(true);
-
-        test_report_panel.removeAll();
-        test = new TestReport(this, getPatientPagePatientDetailsObject());
-        test_report_panel.add(test, BorderLayout.CENTER);
-
-        medical_report_panel.removeAll();
-        medical = new MedicalReport(this, getPatientPagePatientDetailsObject());
-        medical_report_panel.add(medical, BorderLayout.CENTER);
-
-        search_patient = new SearchPatient(this);
-        search_patient_main_panel.add(search_patient, BorderLayout.CENTER);
-
-        // prescription_report_panel.add(new PrescriptionReport() , BorderLayout.CENTER);
-        prescription_save_btn.setVisible(false);
-        
-        email_panel = new Email();
-        EmailPage.add(email_panel , BorderLayout.CENTER);
-
-        BOOK_MARK_PANEL = new BookmarkPanel(this);
-        prescription_form_panel.add(BOOK_MARK_PANEL, BorderLayout.CENTER);
-        //prescription_form_panel.add(new JPanel());
-        prescription_form_panel.revalidate();
-        prescription_form_panel.repaint();
-
-        // setMarathiFontForInputes();
-        //  addEnterBtnActionTotalTablet();
-        reports_dropdown_panel.setVisible(false);
-        reports_dropdown_seperator.setVisible(false);
-        setMarathiTranslateIcon();
-        addShortKeyForLanguageTranslation();
-        setMarathiFontForInputes();
-        addShortArrowKeyForReportsNavigation();
-        /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
+            /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
 //        addShortArrowKeyForPagesNavigation();
+            showPageOnWindow("prescription");
+        };
 
-        
-        showPageOnWindow("prescription");
+        new Thread(first).start();
+
+        new Thread(other).start();
+
+        new Thread(bookmark_thread).start();
+        new Thread(imp_thread).start();
+
+        new Thread(email_thread).start();
+        new Thread(reports_thread).start();
+        new Thread(dashboard_thread).start();
+
+        new Thread(last).start();
 
     }
-    public void setEmailLabelColor()
-    {
+
+    public void setEmailLabelColor() {
 //        try {
 //            if (!InternetAvailabilityChecker.isInternetAvailable())
 //            {
@@ -181,6 +199,7 @@ public class Home extends javax.swing.JFrame {
 //        } catch (IOException ex) {
 //        }
     }
+
     public JLabel getMedicalReportsDropdownLabel() {
         return medical_reports_dropdown_label;
     }
@@ -197,6 +216,7 @@ public class Home extends javax.swing.JFrame {
         name_report_input.setFont(marathi_bold);
         medicine_list.setFont(new Font("Mangal", Font.BOLD, 14));
         name_input.setFont(marathi_plain);
+
         JTextField test_report_input = test.getName_report_inputs();
         test_report_input.setFont(marathi_bold);
 
@@ -281,9 +301,8 @@ public class Home extends javax.swing.JFrame {
         setRightArrowIconForReportDropdown();
 
         search_patient_panel.add(new SetImageIcon(new ImageIcon(search_icon), 15, 10), BorderLayout.CENTER);
-        
-        email_icon.add(new SetImageIcon(new ImageIcon("./images/gmail_icon.png"),30,30)) ;
-       
+
+        email_icon.add(new SetImageIcon(new ImageIcon("./images/gmail_icon.png"), 30, 30));
 
     }
 
@@ -342,7 +361,7 @@ public class Home extends javax.swing.JFrame {
 //=============================================[GENERAL FUNCTIONS WORK START]====================================================
 
     public void setPageShowingLabelColor() {
-        JLabel pages[] = {reports_label, dashboard_label, prescription_label, patient_label,email_label};
+        JLabel pages[] = {reports_label, dashboard_label, prescription_label, patient_label, email_label};
         for (JLabel page : pages) {
             if (page_showing.equalsIgnoreCase(page.getText().trim())) {
                 page.setForeground(Color.CYAN);
@@ -810,32 +829,28 @@ public class Home extends javax.swing.JFrame {
         return date;
 
     }
-    
+
     public void showPageOnWindow(String page_name) {
         card = (CardLayout) main_panel.getLayout();
         card.show(main_panel, page_name);
         page_showing = page_name;
-        
-        
-        
-        JLabel menu_panel_label_list[] = {dashboard_label, patient_label, prescription_label, reports_label , email_label};
+
+        JLabel menu_panel_label_list[] = {dashboard_label, patient_label, prescription_label, reports_label, email_label};
 
         for (JLabel menu_panel_label_list1 : menu_panel_label_list) {
             if (menu_panel_label_list1.getText().trim().equalsIgnoreCase(page_showing)) {
                 menu_panel_label_list1.setForeground(Color.CYAN);
-                
+
             } else {
                 menu_panel_label_list1.setForeground(Color.white);
             }
-            if(INTERNET_THREAD.isInternetAvailable()==false)
-            {
+            if (INTERNET_THREAD.isInternetAvailable() == false) {
                 email_label.setForeground(WARNING_COLOR);
                 email_label.setToolTipText("No Internet Connection Avilable");
-            }
-            else{
+            } else {
                 email_label.setToolTipText("Internet Connection Avilable");
             }
-           
+
         }
     }
 //=============================================[GENERAL FUNCTIONS WORK ENDS]====================================================
@@ -3969,8 +3984,8 @@ public class Home extends javax.swing.JFrame {
             report_status.setForeground(Color.red);
         }
     }
-    public void setTestReport(PatientDetails patientDetails)
-    {
+
+    public void setTestReport(PatientDetails patientDetails) {
         test.searchReport(patientDetails);
     }
 
@@ -4496,7 +4511,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_search_patient_panelMouseExited
 
     private void email_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_email_labelMouseClicked
-         showPageOnWindow("email");
+        showPageOnWindow("email");
     }//GEN-LAST:event_email_labelMouseClicked
 
     private void email_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_email_iconMouseClicked
@@ -4512,13 +4527,13 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_email_inputMouseExited
 
     private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
-        
+
     }//GEN-LAST:event_formMouseMoved
 
     private void menu_panelMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menu_panelMouseMoved
-       INTERNET_THREAD = new InternetThread();
-        if(!INTERNET_THREAD.isAlive()){
-           INTERNET_THREAD.start();
+        INTERNET_THREAD = new InternetThread();
+        if (!INTERNET_THREAD.isAlive()) {
+            INTERNET_THREAD.start();
         }
 //        if(INTERNET_THREAD.isInternetAvailable()==false)
 //        {

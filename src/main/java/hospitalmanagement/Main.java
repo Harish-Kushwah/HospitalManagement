@@ -1,6 +1,5 @@
 package hospitalmanagement;
 
-import email.InternetThread;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -8,14 +7,16 @@ import myutil.GradientPanel;
 import myutil.SetImageIcon;
 
 public class Main extends javax.swing.JFrame {
+
     public Main() {
         initComponents();
         ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
         this.setIconImage(icon.getImage());
-        
+
         hospital_icon_panel.add(new SetImageIcon(new ImageIcon("./images/name_logo3.png"), 258, 197), BorderLayout.CENTER);
-        
+
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -120,44 +121,41 @@ public class Main extends javax.swing.JFrame {
 
     public static void main(String args[]) {
         Main sc = new Main();
+        Home home = new Home();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 sc.setVisible(true);
-              
+
             }
         });
-        
-        String [] msg ={"Establishing Database Connection...","Loading Patient Records...","Preparing User Interface...","Syncing Data...","Preparing Dashboard..."};
+
+        String[] msg = {"Establishing Database Connection...", "Loading Patient Records...", "Preparing User Interface...", "Syncing Data...", "Preparing Dashboard..."};
         int k = 0;
-            
+
         try {
-            
+
             for (int i = 0; i < 100; i++) {
-               
-//                if(i==60){
-//                    Thread.sleep(1000);
-//                }
-//                if(i<30){
-//                   Thread.sleep(40);
-//                }
-//                else if(i<60){
-//                    Thread.sleep(60);
-//                }
-//                else if(i<80){
-//                     Thread.sleep(30);
-//                }
-//                else{
-//                     Thread.sleep(20);
-//
-//                }
-//                info_msg.setText(msg[k]);
-//                if(i==40||i==60||i==80||i==90)
-//                {
-//                    k++;
-//                }
-                
-              Thread.sleep(0);
-              
+
+                if (i == 60) {
+                    Thread.sleep(1000);
+                }
+                if (i < 30) {
+                    Thread.sleep(40);
+                } else if (i < 60) {
+                    Thread.sleep(60);
+                } else if (i < 80) {
+                    Thread.sleep(30);
+                } else {
+                    Thread.sleep(20);
+
+                }
+                info_msg.setText(msg[k]);
+                if (i == 40 || i == 60 || i == 80 || i == 90) {
+                    k++;
+                }
+
+                Thread.sleep(0);
+
                 sc.progress.setValue(i);
                 sc.completed.setText(Integer.toString(i) + "%");
             }
@@ -165,7 +163,7 @@ public class Main extends javax.swing.JFrame {
 
         }
         new Main().setVisible(false);
-        new Home().setVisible(true);
+        home.setVisible(true);
 
         sc.dispose();
     }
