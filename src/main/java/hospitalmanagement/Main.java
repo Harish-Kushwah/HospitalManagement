@@ -1,5 +1,6 @@
 package hospitalmanagement;
 
+import auth.Authentication;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -122,6 +123,7 @@ public class Main extends javax.swing.JFrame {
     public static void main(String args[]) {
         Main sc = new Main();
         Home home = new Home();
+      
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 sc.setVisible(true);
@@ -163,7 +165,9 @@ public class Main extends javax.swing.JFrame {
 
         }
         new Main().setVisible(false);
-        home.setVisible(true);
+//        home.setVisible(true);
+         Authentication authentication  = new Authentication(home);
+         authentication.setVisible(true);
 
         sc.dispose();
     }

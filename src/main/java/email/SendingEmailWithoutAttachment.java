@@ -17,6 +17,7 @@ import static email.SendingEmail.session;
 public class SendingEmailWithoutAttachment extends SendingEmail {
 
     String to,subject,message;
+    private boolean status=false;
     public SendingEmailWithoutAttachment(String to, String subject, String message) {
         this.to = to;
         this.subject = subject;
@@ -39,11 +40,17 @@ public class SendingEmailWithoutAttachment extends SendingEmail {
             //send the message using transport class 
             Transport.send(msg);
             System.out.println("Email send successfully");
+            status=true;
 
         } catch (MessagingException ex) {
             ex.printStackTrace();
+            status=false;
         }
 
+    }
+    public boolean getEmailSendStatus()
+    {
+        return this.status;
     }
 
 }

@@ -6,6 +6,8 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 //This class is for the making the card with the label and icon
@@ -89,7 +91,10 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
     String TOTAL_TODAY_PATIENT=database.getTotalTodayPatient();
 
     public NewDashboardPanel(){
-        
+      
+            // this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+            //this.getRootPane().setWindowDecorationStyle();
+         
         this.setLayout(new BorderLayout());
 
         //create a dashboard for all the component
@@ -338,6 +343,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         new_books_table.setRowColor(Color.white,Color.white);
         JScrollPane tableScrollPane = new JScrollPane(new_books_table,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         tableScrollPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
         new_books_table.setFillsViewportHeight(true);
 
         TableModel tableModel = new_books_table.getModel();

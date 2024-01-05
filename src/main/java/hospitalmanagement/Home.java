@@ -1,5 +1,6 @@
 package hospitalmanagement;
 
+import auth.User;
 import reports.TestReport;
 import reports.MedicalReport;
 import email.Email;
@@ -88,6 +89,7 @@ public class Home extends javax.swing.JFrame {
 
 //=============================================[CONSTRUCTOR WORK START]====================================================
     public Home() {
+        this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
         REPORTS_THREAD.start();
         INTERNET_THREAD.start();
 
@@ -190,6 +192,10 @@ public class Home extends javax.swing.JFrame {
 
     }
 
+    public void setUserForHome(User user)
+    {
+        System.out.println(user);
+    }
     public void setEmailLabelColor() {
 //        try {
 //            if (!InternetAvailabilityChecker.isInternetAvailable())

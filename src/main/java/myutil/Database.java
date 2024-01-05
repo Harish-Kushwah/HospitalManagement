@@ -1,5 +1,6 @@
 package myutil;
 
+import auth.User;
 import email.EmailInformation;
 import java.sql.*;
 import java.util.ArrayList;
@@ -53,6 +54,10 @@ public class Database {
     private static final String DELETE_EMPLATE_TEMPLATE_BY_NAME = "delete  from email_template where template =?";
     
     private static final String UPDATE_EMAIL_TEMPLATE = "UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
+   
+    private static final String INSERT_NEW_USER = "INSERT INTO  public.\"user\"(username, email, type, hospital_name, password) VALUES (?, ?, ?, ?, ?);";
+    private static final String GET_LOGIN_USER = "SELECT  * FROM public.\"user\" where email=? and password=? and type=?";
+    private static final String GET_LOGIN_USER_BY_NAME = "SELECT  * FROM public.\"user\" where email=? and username=? and type=?";
     static Database singletone_database = null;
     Connection connection = null;
 
@@ -1001,7 +1006,7 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             if(rs==null)
             {
-                            System.out.println("rs next");
+               System.out.println("rs next");
             }
            // System.out.println(rs.getString("doc_name"));
            rs.next();
@@ -1053,6 +1058,101 @@ public class Database {
             System.out.println(e);
         }
     }
+    public boolean insertNewUser(User user) {
+
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_NEW_USER);
+
+            preparedStatement.setString(1, user.getUserName());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getUserType());
+            preparedStatement.setString(4, user.getHospitalName());
+            preparedStatement.setString(5, user.getPassword());
+
+            preparedStatement.executeUpdate();
+            
+            return true;
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+    public User isValidUser(User user)
+    {
+         System.out.println(user);
+        //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER);
+            preparedStatement.setString(1,user.getEmail());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3, user.getUserType());
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+
+                User user_info = new User();
+                user_info.setUserName(rs.getString("username"));
+                user_info.setHospitalName(rs.getString("hospital_name"));
+                user_info.setEmail(rs.getString("email"));
+                user_info.setUserType(rs.getString("type"));
+               
+                System.out.println(user_info);
+                return user_info;
+                // user_info.setUserName(rs.getString("username"));
+                
+               // return patientdetails;
+
+            }
+        } catch (SQLException e) {
+            
+            System.out.println(e);
+           
+        }
+        return null;
+        
+    }
+    
+    //using this for getting details of user who forgot the password
+    public User isValidUserByName(User user)
+    {
+         System.out.println(user);
+        //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER_BY_NAME);
+            preparedStatement.setString(1,user.getEmail());
+            preparedStatement.setString(2, user.getUserName());
+            preparedStatement.setString(3, user.getUserType());
+            
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+
+                User user_info = new User();
+                user_info.setUserName(rs.getString("username"));
+                user_info.setHospitalName(rs.getString("hospital_name"));
+                user_info.setEmail(rs.getString("email"));
+                user_info.setUserType(rs.getString("type"));
+                user_info.setPassword(rs.getString("password"));
+               
+                System.out.println(user_info);
+                return user_info;
+                // user_info.setUserName(rs.getString("username"));
+                
+               // return patientdetails;
+
+            }
+        } catch (SQLException e) {
+            
+            System.out.println(e);
+           
+        }
+        return null;
+        
+    }
+    
 
     public ArrayList<String> getLikeTemplate(String template_name) {
 
