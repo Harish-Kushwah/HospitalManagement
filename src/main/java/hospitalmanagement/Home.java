@@ -1,5 +1,6 @@
 package hospitalmanagement;
 
+import auth.Authentication;
 import auth.User;
 import reports.TestReport;
 import reports.MedicalReport;
@@ -191,10 +192,29 @@ public class Home extends javax.swing.JFrame {
         new Thread(last).start();
 
     }
-
+    private User LOGIN_USER =null;
     public void setUserForHome(User user)
     {
+        
+        if(user.getUserType().equals("Doctor"))
+        {
+            heade_label.setText(user.getHospitalName());
+            String doc_name = user.getUserName();
+            if(!doc_name.startsWith("dr.") || !doc_name.startsWith("Dr.")|| !doc_name.startsWith("DR."))
+            {
+                doc_name = "Dr." + doc_name;
+            }
+            doctor_name.setText(doc_name);
+        }
+        
+        
+        LOGIN_USER = user;
+        email_panel.setUserOnEmailPage(user);
         System.out.println(user);
+    }
+    public User getHomeUser()
+    {
+        return this.LOGIN_USER;
     }
     public void setEmailLabelColor() {
 //        try {
@@ -309,6 +329,9 @@ public class Home extends javax.swing.JFrame {
         search_patient_panel.add(new SetImageIcon(new ImageIcon(search_icon), 15, 10), BorderLayout.CENTER);
 
         email_icon.add(new SetImageIcon(new ImageIcon("./images/gmail_icon.png"), 30, 30));
+        
+        logout_icon_panel.add(new SetImageIcon(new ImageIcon("./images/logout4.png"), 30, 30));
+        logout_icon_panel.setToolTipText("Logout");
 
     }
 
@@ -1007,10 +1030,12 @@ public class Home extends javax.swing.JFrame {
         prescription_radio_btn_grp = new javax.swing.ButtonGroup();
         header = header = new GradientPanel(new Color(0x589BE8),new Color(0x5AEEB2),1100,50);
         heade_label = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        doctor_name = new javax.swing.JLabel();
         doctor_icon_panel = new JPanel();
         doctor_icon_panel.add(new SetImageIcon(new ImageIcon("./images/doctor_icon1.png"),35,35)) ;
         font_translate_icon_pannel = new javax.swing.JPanel();
+        logout_icon_panel = new JPanel();
+        doctor_icon_panel.add(new SetImageIcon(new ImageIcon("./images/doctor_icon1.png"),35,35)) ;
         footer = footer = new GradientPanel(new Color(0x5AEEB2),new Color(0x9FC3EE),1100,30);
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -1181,9 +1206,9 @@ public class Home extends javax.swing.JFrame {
         heade_label.setFont(new java.awt.Font("Bell MT", 1, 24)); // NOI18N
         heade_label.setText("SHRIGURU CLINIC");
 
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 102));
-        jLabel3.setText("Dr.Ajit Pawar");
+        doctor_name.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        doctor_name.setForeground(new java.awt.Color(0, 0, 102));
+        doctor_name.setText("Dr.Ajit Pawar");
 
         doctor_icon_panel.setPreferredSize(new java.awt.Dimension(35, 35));
         doctor_icon_panel.setLayout(new java.awt.CardLayout());
@@ -1204,6 +1229,15 @@ public class Home extends javax.swing.JFrame {
         });
         font_translate_icon_pannel.setLayout(new java.awt.BorderLayout());
 
+        logout_icon_panel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logout_icon_panel.setPreferredSize(new java.awt.Dimension(30, 30));
+        logout_icon_panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                logout_icon_panelMouseClicked(evt);
+            }
+        });
+        logout_icon_panel.setLayout(new java.awt.CardLayout());
+
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
@@ -1211,27 +1245,30 @@ public class Home extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(heade_label, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1898, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1891, Short.MAX_VALUE)
                 .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(doctor_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addGap(52, 52, 52))
+                .addComponent(doctor_name)
+                .addGap(18, 18, 18)
+                .addComponent(logout_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         headerLayout.setVerticalGroup(
             headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
-                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, headerLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(heade_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(headerLayout.createSequentialGroup()
+                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(headerLayout.createSequentialGroup()
-                        .addContainerGap(8, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)
+                        .addComponent(heade_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(doctor_icon_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(doctor_name, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(font_translate_icon_pannel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(logout_icon_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -4547,6 +4584,12 @@ public class Home extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_menu_panelMouseMoved
 
+    private void logout_icon_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logout_icon_panelMouseClicked
+        this.dispose();
+        new Authentication(new Home()).setVisible(true);
+        LOGIN_USER = null;
+    }//GEN-LAST:event_logout_icon_panelMouseClicked
+
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -4611,6 +4654,7 @@ public class Home extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser date_report_input;
     private javax.swing.JCheckBox diarrhea_chk;
     private javax.swing.JPanel doctor_icon_panel;
+    private javax.swing.JLabel doctor_name;
     private javax.swing.JButton edit_report;
     private javax.swing.JPanel email_icon;
     private javax.swing.JTextField email_input;
@@ -4638,7 +4682,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -4651,6 +4694,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JPanel logout_icon_panel;
     private javax.swing.JPanel main_panel;
     private javax.swing.JRadioButton male_radio_btn;
     private javax.swing.JLabel medical_report_label;

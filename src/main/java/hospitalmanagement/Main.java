@@ -124,11 +124,8 @@ public class Main extends javax.swing.JFrame {
         Main sc = new Main();
         Home home = new Home();
       
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                sc.setVisible(true);
-
-            }
+         java.awt.EventQueue.invokeLater(() -> {
+            sc.setVisible(true);
         });
 
         String[] msg = {"Establishing Database Connection...", "Loading Patient Records...", "Preparing User Interface...", "Syncing Data...", "Preparing Dashboard..."};
@@ -165,7 +162,7 @@ public class Main extends javax.swing.JFrame {
 
         }
         new Main().setVisible(false);
-//        home.setVisible(true);
+      //  home.setVisible(true);
          Authentication authentication  = new Authentication(home);
          authentication.setVisible(true);
 

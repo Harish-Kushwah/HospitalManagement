@@ -16,10 +16,10 @@ import java.util.HashMap;
  *
  * @author haris
  */
-public class UserInformation {
+public class AdminInformation {
     private String username,password,email;
     
-    public UserInformation()
+    public AdminInformation()
     {
         getCredentials();
     }

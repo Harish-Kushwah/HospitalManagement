@@ -23,8 +23,6 @@ public class Authentication extends javax.swing.JFrame {
     private final DecimalFormat df = new DecimalFormat("##0.###", DecimalFormatSymbols.getInstance(Locale.US));
     private MigLayout layout;
     private PanelCover cover;
-    private PanelLoading2 loading;
-    private Varify varify;
     private PanelLoginAndRegister loginAndRegister;
     private boolean isLogin = true;
     private final double addSize = 30;
@@ -48,8 +46,6 @@ public class Authentication extends javax.swing.JFrame {
     private void init() {
         layout = new MigLayout("fill, insets 0");
         cover = new PanelCover();
-        loading = new PanelLoading2();
-        varify = new Varify();
 
         ActionListener eventRegister = (ActionEvent ae) -> {
             register();
@@ -116,10 +112,7 @@ public class Authentication extends javax.swing.JFrame {
         animator.setDeceleration(0.5f);
         animator.setResolution(0);  //  for smooth animation
         bg.setLayout(layout);
-        bg.setLayer(loading, JLayeredPane.POPUP_LAYER);
-        bg.setLayer(varify, JLayeredPane.POPUP_LAYER);
-        bg.add(loading, "pos 0 0 100% 100%");
-        bg.add(varify, "pos 0 0 100% 100%");
+  
 
         bg.add(cover, "width " + coverSize + "%, pos " + (isLogin ? "1al" : "0al") + " 0 n 100%");
         bg.add(loginAndRegister, "width " + loginSize + "%, pos " + (isLogin ? "0al" : "1al") + " 0 n 100%"); //  1al as 100%
@@ -229,8 +222,9 @@ public class Authentication extends javax.swing.JFrame {
             if (login_user != null) {
 
                 showMessage(Message.MessageType.SUCCESS, "Login successful");
-                this.home.setUserForHome(user);
+                this.home.setUserForHome(login_user);
                 this.home.setVisible(true);
+                this.dispose();
 
             } else {
                 showMessage(Message.MessageType.ERROR, "Enter Valid Details");
@@ -252,6 +246,7 @@ public class Authentication extends javax.swing.JFrame {
                 String subject = "Healix Password";
                 String message = login_user.getPassword();
                 SendingEmailWithoutAttachment sendPasswordToEmail = new SendingEmailWithoutAttachment(to, subject, message);
+                sendPasswordToEmail.usingAdminEmail();
                 sendPasswordToEmail.start();
                 showMessage(Message.MessageType.SUCCESS, "Password Send at you email");
 

@@ -1,30 +1,32 @@
 package email;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
+import auth.User;
 import javax.mail.Authenticator;
 import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.*;
-import myutil.UserInformation;
+import myutil.AdminInformation;
 
 public class SendingEmail extends Thread {
 
     public static String from, password;
     public static Session session = null;
 
-    public SendingEmail() {
-        UserInformation user = new UserInformation();
-        SendingEmail.from = user.getEmail();
-        SendingEmail.password = user.getPassword();
-        
+    public SendingEmail() {     
         setSessionDetails();
     }
 
+    public void usingAdminEmail()
+    {
+        AdminInformation user = new AdminInformation();
+        SendingEmail.from = user.getEmail();
+        SendingEmail.password = user.getPassword();
+    }
+    public void usingCutomeUserDetails(User user)
+    {
+        SendingEmail.from = user.getEmail();
+        SendingEmail.password = user.getEmailPassword();
+    }
     public static void setSessionDetails() {
 
         //Variabl from gmail host
@@ -54,7 +56,7 @@ public class SendingEmail extends Thread {
 
     }
 
-    public static Session getSession() {
+    public  Session getSession() {
         // if(SendingEmail.session == null)
         return SendingEmail.session;
 

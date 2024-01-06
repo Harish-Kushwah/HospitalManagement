@@ -16,6 +16,7 @@ public class VerificationCode {
         this.code = getRandomCode();
       
         SendingEmailWithoutAttachment sendingEmailWithoutAttachment = new SendingEmailWithoutAttachment(to, subject, this.code);
+        sendingEmailWithoutAttachment.usingAdminEmail();
         sendingEmailWithoutAttachment.start();
         try {
             sendingEmailWithoutAttachment.join();
@@ -25,6 +26,7 @@ public class VerificationCode {
         return sendingEmailWithoutAttachment.getEmailSendStatus();
     }
 
+    
     public String getRandomCode() {
         Random rand = new Random();
         String num = Integer.toString(rand.nextInt(100000));

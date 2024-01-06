@@ -37,11 +37,11 @@ public class Database {
     private static final String UPDATE_PATIENT_FEES = "UPDATE pdetail SET  fees_paid =? WHERE pno = ?";
 
     private static final String INSERT_MEDICINE = "INSERT INTO medilist (medicine) VALUES (?);";
-    
+
     private static final String INSERT_REPORT = "INSERT INTO patient_reports (patient_no, reports , report_date) VALUES (?,?,?);";
-    private static final String DELETE_TEST_REPORT_BY_PNO  = "delete  from patient_reports where patient_no =?";
-    private static final String GET_ALL_TEST_REPORTS ="SELECT *FROM patient_reports where patient_no=?";
-    
+    private static final String DELETE_TEST_REPORT_BY_PNO = "delete  from patient_reports where patient_no =?";
+    private static final String GET_ALL_TEST_REPORTS = "SELECT *FROM patient_reports where patient_no=?";
+
     private static final String INSERT_REPORT_NAME = "INSERT INTO reports (report_name)VALUES (?);";
     private static final String INSERT_DOCTOR_NAME = "INSERT INTO doctor_names (doc_name) VALUES (?);";
     private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM doctor_names";
@@ -52,14 +52,20 @@ public class Database {
     private static final String INSERT_INTO_EMAIL_TEMPLATE = "INSERT INTO email_template (template, subject, body, attach_file) VALUES (?, ?, ?, ?)";
 
     private static final String DELETE_EMPLATE_TEMPLATE_BY_NAME = "delete  from email_template where template =?";
-    
+
     private static final String UPDATE_EMAIL_TEMPLATE = "UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
-   
+
     private static final String INSERT_NEW_USER = "INSERT INTO  public.\"user\"(username, email, type, hospital_name, password) VALUES (?, ?, ?, ?, ?);";
     private static final String GET_LOGIN_USER = "SELECT  * FROM public.\"user\" where email=? and password=? and type=?";
     private static final String GET_LOGIN_USER_BY_NAME = "SELECT  * FROM public.\"user\" where email=? and username=? and type=?";
+
+    private static final String INSERT_USER_EMAIL_DETAILS = "INSERT INTO public.email_users(user_id, email, password,status) VALUES (?, ?,?,?);";
+
     static Database singletone_database = null;
     Connection connection = null;
+
+    private Database() {
+    }
 
     //creates the database connection
     public Connection connect() {
@@ -947,7 +953,7 @@ public class Database {
             preparedStatement.setString(3, medicineDetails.getMedicineQuantity());
             preparedStatement.setString(4, medicineDetails.getMedicineTime());
             preparedStatement.setInt(5, medicineDetails.getMedicineMealTime());
-            
+
             preparedStatement.setInt(6, Integer.parseInt(medicineDetails.getTotalQuantity()));
 
             preparedStatement.executeUpdate();
@@ -963,7 +969,7 @@ public class Database {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_DOCTOR_NAME);
             preparedStatement.setString(1, doctor_name.toUpperCase());
-            
+
             preparedStatement.executeUpdate();
             //conn.commit();
         } catch (SQLException e) {
@@ -1004,16 +1010,15 @@ public class Database {
             PreparedStatement preparedStatement = conn.prepareStatement(GET_DOCTOR_ID);
             preparedStatement.setString(1, doctor_name.toUpperCase());
             ResultSet rs = preparedStatement.executeQuery();
-            if(rs==null)
-            {
-               System.out.println("rs next");
+            if (rs == null) {
+                System.out.println("rs next");
             }
-           // System.out.println(rs.getString("doc_name"));
-           rs.next();
+            // System.out.println(rs.getString("doc_name"));
+            rs.next();
             System.out.println(rs.getString("doc_name"));
             return Integer.parseInt(rs.getString("doc_id"));
             //return 1;
-            
+
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -1058,6 +1063,7 @@ public class Database {
             System.out.println(e);
         }
     }
+
     public boolean insertNewUser(User user) {
 
         try {
@@ -1069,9 +1075,7 @@ public class Database {
             preparedStatement.setString(3, user.getUserType());
             preparedStatement.setString(4, user.getHospitalName());
             preparedStatement.setString(5, user.getPassword());
-
             preparedStatement.executeUpdate();
-            
             return true;
             //conn.commit();
         } catch (SQLException e) {
@@ -1079,17 +1083,83 @@ public class Database {
             return false;
         }
     }
-    public User isValidUser(User user)
+
+    public boolean insertUserEmailInforamtion(User user) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_USER_EMAIL_DETAILS);
+
+            preparedStatement.setInt(1, user.getUserId());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getEmailPassword());
+            preparedStatement.setBoolean(4, user.getEmailVerificationStatus());
+
+            preparedStatement.executeUpdate();
+            return true;
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+   
+    
+    public boolean updateUserEmailInforamtion(User user) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(" UPDATE public.email_users SET email=?, password=?, status=? WHERE user_id = ?;");
+
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(2, user.getEmailPassword());
+            preparedStatement.setBoolean(3, user.getEmailVerificationStatus());
+            preparedStatement.setInt(4, user.getUserId());
+
+            preparedStatement.executeUpdate();
+            return true;
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+    public User getEmailSecurityCodes(User user)
     {
-         System.out.println(user);
+         try {
+            Connection conn = connect();
+            // Step 2:Create a statement using connection object
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT password, status FROM public.email_users where user_id = ?;");
+            preparedStatement.setInt(1,user.getUserId());
+            // Step 3: Execute the query or update query
+            ResultSet rs = preparedStatement.executeQuery();
+            // Step 4: Process the ResultSet object.
+
+            while (rs.next()) {
+
+                User rs_user = new User();
+                rs_user.setEmailPassword(rs.getString("password"));
+                rs_user.setEmailVerificationStatus(rs.getBoolean("status"));
+                System.out.println(rs_user.getEmailPassword());
+                System.out.println(rs_user.getEmailVerificationStatus());
+
+                return rs_user;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public User isValidUser(User user) {
+        System.out.println(user);
         //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER);
-            preparedStatement.setString(1,user.getEmail());
+            preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getUserType());
-            
+
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
 
@@ -1098,35 +1168,34 @@ public class Database {
                 user_info.setHospitalName(rs.getString("hospital_name"));
                 user_info.setEmail(rs.getString("email"));
                 user_info.setUserType(rs.getString("type"));
-               
+                user_info.setUserId(rs.getInt("user_id"));
+
                 System.out.println(user_info);
                 return user_info;
                 // user_info.setUserName(rs.getString("username"));
-                
-               // return patientdetails;
 
+                // return patientdetails;
             }
         } catch (SQLException e) {
-            
+
             System.out.println(e);
-           
+
         }
         return null;
-        
+
     }
-    
+
     //using this for getting details of user who forgot the password
-    public User isValidUserByName(User user)
-    {
-         System.out.println(user);
+    public User isValidUserByName(User user) {
+        System.out.println(user);
         //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER_BY_NAME);
-            preparedStatement.setString(1,user.getEmail());
+            preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getUserName());
             preparedStatement.setString(3, user.getUserType());
-            
+
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
 
@@ -1136,23 +1205,21 @@ public class Database {
                 user_info.setEmail(rs.getString("email"));
                 user_info.setUserType(rs.getString("type"));
                 user_info.setPassword(rs.getString("password"));
-               
+
                 System.out.println(user_info);
                 return user_info;
                 // user_info.setUserName(rs.getString("username"));
-                
-               // return patientdetails;
 
+                // return patientdetails;
             }
         } catch (SQLException e) {
-            
+
             System.out.println(e);
-           
+
         }
         return null;
-        
+
     }
-    
 
     public ArrayList<String> getLikeTemplate(String template_name) {
 
@@ -1171,9 +1238,9 @@ public class Database {
             int i = 0;
             while (rs.next()) {
                 //String str =rs.getString("template").toUpperCase()+" "+rs.getString("subject").toUpperCase();
-             ///  System.out.println(rs.getString("template").toUpperCase());
+                ///  System.out.println(rs.getString("template").toUpperCase());
                 template.add(rs.getString("template").toUpperCase());
-              // template.add(str);
+                // template.add(str);
                 i++;
             }
             return template;
@@ -1184,9 +1251,8 @@ public class Database {
         return null;
     }
 
-    public void updateTemplate(int template_id , EmailInformation emailInformation)
-    {
-       try {
+    public void updateTemplate(int template_id, EmailInformation emailInformation) {
+        try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_EMAIL_TEMPLATE);
 //"UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
@@ -1194,7 +1260,7 @@ public class Database {
             preparedStatement.setString(2, emailInformation.getSubject());
             preparedStatement.setString(3, emailInformation.getBody());
             preparedStatement.setString(4, emailInformation.getAttachFilePath());
-            preparedStatement.setInt(5,template_id);
+            preparedStatement.setInt(5, template_id);
 
             preparedStatement.executeUpdate();
             //conn.commit();
@@ -1202,6 +1268,7 @@ public class Database {
             System.out.println(e);
         }
     }
+
     public EmailInformation getEmail(String template_name) {
 
         try {
@@ -1229,9 +1296,10 @@ public class Database {
         }
         return null;
     }
+
     public boolean removeTemplate(String template_name) {
         try {
-            
+
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_EMPLATE_TEMPLATE_BY_NAME);
             preparedStatement.setString(1, template_name);
@@ -1241,7 +1309,7 @@ public class Database {
 
         } catch (SQLException e) {
             System.out.println(e);
-             return false;
+            return false;
         }
     }
 

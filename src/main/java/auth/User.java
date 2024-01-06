@@ -3,10 +3,18 @@ package auth;
 
 public class User {
 
-    String email=null , username , hospital_name=null , password;
-    String type;
-    int user_id;
+    private String email=null , username , hospital_name=null , password, type,email_password;
+    private int user_id;
+    private boolean status = false;
     
+    public void setEmailVerificationStatus(boolean status)
+    {
+        this.status = status;
+    }
+    public void setEmailPassword(String email_password)
+    {
+        this.email_password = email_password;
+    }
     public void setUserId(int user_id)
     {
         this.user_id = user_id;
@@ -54,9 +62,17 @@ public class User {
     {
         return this.email ;
     }
+    public String getEmailPassword()
+    {
+        return this.email_password;
+    }
     public int getUserId()
     {
         return this.user_id;
+    }
+    public boolean getEmailVerificationStatus()
+    {
+        return this.status;
     }
   
     @Override
