@@ -1,6 +1,6 @@
 # Hospital Management System
 [![Java](https://img.shields.io/badge/Java-8+-blue.svg)](https://www.oracle.com/java/technologies/javase-downloads.html)
- [![MySQL](https://img.shields.io/badge/MySQL-5.7+-orange.svg)](https://dev.mysql.com/downloads/mysql/5.7.html)
+ [![PostgreeSql](https://img.shields.io/badge/(Postgresql,PgAdmin4)-V7+-green.svg)](https://dev.mysql.com/downloads/mysql/5.7.html)
 
 The Hospital Management System is a Java Swing-based application that allows doctors to manage patient details, prescribe medications, generate reports, and provides a dashboard for an overview of all hospital activities.
 
@@ -18,7 +18,8 @@ The Hospital Management System is a Java Swing-based application that allows doc
 
 - Java Swing for the user interface.
 - Java for the application logic.
-- MySQL or another database for data storage.
+- Postgresql or another database for data storage.
+- JasperStudio for report generation
 
 ## Getting Started
 
@@ -49,8 +50,15 @@ Here's a brief overview of how to use the Hospital Management System:
 - **Report Generation**: Generate reports for patient records and other hospital activities.
 
 - **Dashboard**: View the dashboard to see an overview of hospital activities.
+- **Email**: Send the email to the patients, share report through email.
+
 
 ## Screenshots
+Login
+![Screenshot 1](screenshots/login.png)
+
+SignUp 
+![Screenshot 1](screenshots/signup.png)
 
 Dashboard
 ![Screenshot 1](screenshots/dashboard.png)
@@ -58,6 +66,8 @@ Dashboard
 Patient
 ![Screenshot 2](screenshots/patient.png)
 
+Searching Patient
+![Screenshot 4](screenshots/search.png)
 Prescription
 ![Screenshot 3](screenshots/prescription.png)
 
@@ -71,6 +81,20 @@ Test Report
 
 Medical Report
 ![Screenshot 4](screenshots/medical_report.png)
+
+Email
+
+Using Custom Email
+![Screenshot 4](screenshots/email_custom.png)
+
+Using Patient Details
+![Screenshot 4](screenshots/email_patient.png)
+
+Add Email Template
+![Screenshot 4](screenshots/add_email.png)
+
+Update Email Credentials
+![Screenshot 4](screenshots/update_email_codes.png)
 
 ## Contributing
 
