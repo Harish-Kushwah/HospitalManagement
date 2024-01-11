@@ -108,8 +108,10 @@ public class Home extends javax.swing.JFrame {
             addAllNavigationButtons();
         };
 
-        Runnable dashboard_thread = () -> {
-            Dashboard.setLayout(new BorderLayout());
+        Runnable dashboard_thread = () -> {  
+            JScrollPane sc = new JScrollPane(newDashboardPanel);
+
+            sc.setPreferredSize(new Dimension(100, 100));
             Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
         };
 
@@ -175,7 +177,7 @@ public class Home extends javax.swing.JFrame {
 
             /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
 //        addShortArrowKeyForPagesNavigation();
-            showPageOnWindow("prescription");
+            
         };
 
         new Thread(first).start();
@@ -205,12 +207,29 @@ public class Home extends javax.swing.JFrame {
                 doc_name = "Dr." + doc_name;
             }
             doctor_name.setText(doc_name);
+            
+            showPageOnWindow("prescription");
+        }
+        else{
+               heade_label.setText("Healix");
+               doctor_name.setText(user.getUserName());
+               removePrescriptionAndDashboadPage();  
+               showPageOnWindow("patient");
         }
         
         
         LOGIN_USER = user;
         email_panel.setUserOnEmailPage(user);
         System.out.println(user);
+    }
+    public void removePrescriptionAndDashboadPage()
+    {   
+        menu_panel.remove(prescription_label);
+        menu_panel.remove(prescription_icon);
+        menu_panel.remove(dashboard_label);
+        menu_panel.remove(dashboard_icon);
+        next_btn.setEnabled(false);
+           
     }
     public User getHomeUser()
     {
@@ -1345,7 +1364,7 @@ public class Home extends javax.swing.JFrame {
 
         prescription_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
         prescription_label.setForeground(new java.awt.Color(255, 255, 255));
-        prescription_label.setText(" Prescription");
+        prescription_label.setText("Prescription");
         prescription_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         prescription_label.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1522,35 +1541,36 @@ public class Home extends javax.swing.JFrame {
             .addGroup(menu_panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(reports_dropdown_seperator)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
+                    .addGroup(menu_panelLayout.createSequentialGroup()
                         .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(prescription_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8)
-                        .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(reports_dropdown_seperator)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
+                                .addComponent(email_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                                .addComponent(email_label, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(menu_panelLayout.createSequentialGroup()
+                                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(prescription_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(11, 11, 11)
+                                .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap())
                     .addGroup(menu_panelLayout.createSequentialGroup()
                         .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(dashboard_label, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
                                 .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
-                                .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(search_patient_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(email_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(email_label, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)))
-                .addContainerGap())
+                                .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(search_patient_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(dashboard_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         menu_panelLayout.setVerticalGroup(
             menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1567,11 +1587,11 @@ public class Home extends javax.swing.JFrame {
                         .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(patient_label, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                             .addComponent(search_patient_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(prescription_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(prescription_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1584,7 +1604,7 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(email_icon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(email_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(747, Short.MAX_VALUE))
+                .addContainerGap(749, Short.MAX_VALUE))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -2203,7 +2223,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(test_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(medical_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1860, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         medical_report_panel_headLayout.setVerticalGroup(
             medical_report_panel_headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2525,7 +2545,7 @@ public class Home extends javax.swing.JFrame {
         report_show_panel.setLayout(report_show_panelLayout);
         report_show_panelLayout.setHorizontalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1972, Short.MAX_VALUE)
+            .addGap(0, 1973, Short.MAX_VALUE)
         );
         report_show_panelLayout.setVerticalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2557,18 +2577,7 @@ public class Home extends javax.swing.JFrame {
 
         Dashboard.setBackground(new java.awt.Color(255, 255, 0));
         Dashboard.setForeground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout DashboardLayout = new javax.swing.GroupLayout(Dashboard);
-        Dashboard.setLayout(DashboardLayout);
-        DashboardLayout.setHorizontalGroup(
-            DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 2222, Short.MAX_VALUE)
-        );
-        DashboardLayout.setVerticalGroup(
-            DashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1081, Short.MAX_VALUE)
-        );
-
+        Dashboard.setLayout(new java.awt.BorderLayout());
         main_panel.add(Dashboard, "Dashboard");
 
         Patient.setBackground(new java.awt.Color(204, 255, 255));
@@ -4180,7 +4189,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseReleased
 
     private void patient_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_backMouseClicked
+        if(LOGIN_USER.getUserType().equals("Compounder")){
+            //do do anything
+        }
+        else{
         showPageOnWindow("Dashboard");
+        }
     }//GEN-LAST:event_patient_backMouseClicked
 
     private void patient_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_backMouseExited
@@ -4192,7 +4206,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_patient_backMouseReleased
 
     private void patient_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_nextMouseClicked
-        showPageOnWindow("prescription");
+        if(LOGIN_USER.getUserType().equals("Compounder")){
+            showPageOnWindow("reports");
+        }
+        else{
+          showPageOnWindow("prescription");
+        }
     }//GEN-LAST:event_patient_nextMouseClicked
 
     private void patient_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_nextMouseExited
@@ -4345,7 +4364,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_report_backMouseExited
 
     private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
+        if(LOGIN_USER.getUserType().equals("Compounder")){
+            showPageOnWindow("patient");
+        }
+        else{
         showPageOnWindow("prescription");
+        }
     }//GEN-LAST:event_report_backMouseClicked
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
