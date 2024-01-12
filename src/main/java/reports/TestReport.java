@@ -1,5 +1,6 @@
 package reports;
 
+import database.Database;
 import hospitalmanagement.Home;
 import java.sql.*;
 import java.awt.BorderLayout;
@@ -24,7 +25,7 @@ import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import myutil.Database;
+import database.Database;
 import myutil.MultithredingReports;
 import myutil.PatientDetails;
 import myutil.ReportInfomartion;

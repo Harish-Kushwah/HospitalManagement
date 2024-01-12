@@ -1,4 +1,4 @@
-package util;
+package swing;
 
 import java.awt.Color;
 import java.awt.Cursor;

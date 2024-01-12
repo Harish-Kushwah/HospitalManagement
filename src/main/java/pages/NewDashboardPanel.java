@@ -1,6 +1,7 @@
 
-package myutil;
-import util.LibraryTable;
+package pages;
+import database.Database;
+import swing.LibraryTable;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
@@ -9,6 +10,10 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import myutil.BooksPanelInfo;
+import myutil.GradientPanel;
+import myutil.PatientDetails;
+import myutil.SetImageIcon;
 
 
 //This class is for the making the card with the label and icon

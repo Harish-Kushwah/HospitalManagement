@@ -2,9 +2,9 @@ package auth;
 
 import hospitalmanagement.Home;
 import java.awt.BorderLayout;
-import util.Button;
-import util.MyPasswordField;
-import util.MyTextField;
+import swing.Button;
+import swing.MyPasswordField;
+import swing.MyTextField;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;

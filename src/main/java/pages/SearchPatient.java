@@ -1,50 +1,37 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-package hospitalmanagement;
+package pages;
 
-import static hospitalmanagement.Home.total_medicine_selected;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import myutil.MyCustomRenderer;
-import myutil.Database;
+import database.Database;
+import hospitalmanagement.Home;
+import java.awt.event.MouseAdapter;
 import myutil.GradientPanel;
-import myutil.InputValidation;
-import util.LibraryTable;
 import myutil.MedicineDetails;
 import myutil.MedicineRowPanel;
 import myutil.PatientDetails;
 import myutil.ReportInfomartion;
 import myutil.SetImageIcon;
-import java.util.regex.*;
 
 /**
  *
@@ -153,7 +140,7 @@ public class SearchPatient extends javax.swing.JPanel {
             Database database = Database.getInstance();
             ArrayList<String> patient_details = database.getLikePatient(patient_number);
 
-            if (patient_details != null )  {
+            if (patient_details != null) {
 
                 String data[][] = new String[patient_details.size()][3];
 
@@ -207,7 +194,6 @@ public class SearchPatient extends javax.swing.JPanel {
 
             int i = 0;
             for (String m : patient_details) {
-//                    lm.addElement(m);
                 String str[] = m.split("/");
                 data[i][0] = str[0];
                 data[i][1] = str[1];
@@ -259,17 +245,19 @@ public class SearchPatient extends javax.swing.JPanel {
         patient_table.getColumnModel().getColumn(1).setPreferredWidth(80);
 
     }
-
+    
+    /**
+     * This method is used when the user click on the table row of patient details
+     * then all the related information will be rendered on respective fields
+     */
     public void addMouseListerOnTabel() {
 
-        patient_table.addMouseListener(new MouseListener() {
+        patient_table.addMouseListener(new MouseAdapter(){
             @Override
             public void mouseClicked(MouseEvent e) {
                 int index = patient_table.getSelectedRow();
 
                 String pno = (String) patient_table.getModel().getValueAt(index, 0);
-                String name = (String) patient_table.getModel().getValueAt(index, 1);
-                String date = (String) patient_table.getModel().getValueAt(index, 2);
 
                 try {
                     int patient_number = Integer.parseInt(pno);
@@ -281,27 +269,9 @@ public class SearchPatient extends javax.swing.JPanel {
                 }
 
             }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                int index = patient_table.getSelectedRow();
-                //  patient_table.getColumnModel().se;
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
     }
-
+        
     public void addPatientDetails(int patient_number) {
         Database db = Database.getInstance();
         PatientDetails patient = db.getPatientDetails(patient_number);
@@ -1124,21 +1094,11 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_refreshMouseReleased
 
     private void refreshMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_refreshMouseExited
-        //        refresh.removeAll();
-        //        refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_exit), 30, 30), BorderLayout.CENTER);
-        //        validate();
-        //        repaint();
+      
     }//GEN-LAST:event_refreshMouseExited
 
     private void refreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_refreshMouseClicked
         resetSearchPage();
-//               
-//                refresh.removeAll();
-//                refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
-//        
-//                fees_status_label.setText("");
-//                validate();
-//                repaint();
     }//GEN-LAST:event_refreshMouseClicked
 
     public void resetSearchPage() {

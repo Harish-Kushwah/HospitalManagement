@@ -1,4 +1,4 @@
-package myutil;
+package swing;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -40,10 +40,6 @@ public class SetProgessBar extends JFrame {
         }
         });
         progess_timer.start();
-    }
-     public static void main(String[] args)
-    {
-        new SetProgessBar();
     }
 
 }

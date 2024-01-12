@@ -1,5 +1,6 @@
 package email;
 
+import database.Database;
 import auth.User;
 import hospitalmanagement.Home;
 import java.awt.BorderLayout;
@@ -22,7 +23,7 @@ import javax.swing.JFileChooser;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import myutil.Database;
+import database.Database;
 import myutil.MyCustomRenderer;
 import myutil.SetImageIcon;
 import myutil.AdminInformation;

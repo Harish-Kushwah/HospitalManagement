@@ -1,11 +1,14 @@
-package myutil;
+package database;
+
+
 
 import auth.User;
 import email.EmailInformation;
 import java.sql.*;
 import java.util.ArrayList;
-
+import myutil.MedicineDetails;
 import myutil.PatientDetails;
+import myutil.ReportInfomartion;
 import sha.SHA;
 
 /*
@@ -18,49 +21,67 @@ public class Database {
     private final String user = "postgres";
     private final String password = "Harish";
 
+    /**
+     * Patient Related All queries
+     */
     private static final String SELECT_ALL_QUERY = "select * from pdetail";
-    private static final String UPDATE_USERS_SQL = "update pdetail set username = ? where id = ?;";
     private static final String INSERT_RECORD_SQL = "INSERT INTO pdetail (pno, date, name, mno, gen, age, wht, bp, pls, pdis,email) VALUES (?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String GET_TOTAL_NO_OF_ROWS = "SELECT COUNT(NAME) FROM pdetail";
     private static final String GET_TOTAL_MONTH_PATIENT = "SELECT * FROM pdetail WHERE EXTRACT(MONTH FROM date::date) = EXTRACT(MONTH FROM CURRENT_DATE) AND EXTRACT(YEAR FROM date::date) = EXTRACT(YEAR FROM CURRENT_DATE);";
     private static final String GET_TOTAL_TODAY_PATIENT = "SELECT * FROM pdetail WHERE date::timestamp >= DATE_TRUNC('day', CURRENT_DATE);";
+    private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
+    private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
+    private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
+    private static final String UPDATE_PATIENT_FEES = "UPDATE pdetail SET  fees_paid =? WHERE pno = ?";
+
+    /**
+     * Medicine Related All queries
+     */    
     private static final String GET_MEDI_PEDI = "SELECT* FROM pdetail,medi;";
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
     private static final String INSERT_MEDECINE_INFO = "INSERT INTO medi (pno, pname, medicin, mqty, mtime, ba, qty) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
-    private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
-    private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
+    private static final String INSERT_MEDICINE = "INSERT INTO medilist (medicine) VALUES (?);";
+
+   /**
+    * Bookmark Relates All queries
+    */
     private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM bookmark WHERE bname=?";
     private static final String INSERT_BOOKMARK = "INSERT INTO bookmark (bname, medicin, mqty, mtime, ba, qty) VALUES (?,?,?,?,?,?);";
 
-    private static final String UPDATE_PATIENT_FEES = "UPDATE pdetail SET  fees_paid =? WHERE pno = ?";
+    /**
+     * Doctor Related All queries
+     */
+    private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM doctor_names";
 
-    private static final String INSERT_MEDICINE = "INSERT INTO medilist (medicine) VALUES (?);";
-
+    /**
+     * Report Relates all queries
+     */
     private static final String INSERT_REPORT = "INSERT INTO patient_reports (patient_no, reports , report_date) VALUES (?,?,?);";
     private static final String DELETE_TEST_REPORT_BY_PNO = "delete  from patient_reports where patient_no =?";
     private static final String GET_ALL_TEST_REPORTS = "SELECT *FROM patient_reports where patient_no=?";
 
     private static final String INSERT_REPORT_NAME = "INSERT INTO reports (report_name)VALUES (?);";
     private static final String INSERT_DOCTOR_NAME = "INSERT INTO doctor_names (doc_name) VALUES (?);";
-    private static final String GET_ALL_DOCTOR_NAMES = "SELECT * FROM doctor_names";
     private static final String GET_DOCTOR_ID = "SELECT * FROM doctor_names where doc_name = ?";
 
+    /**
+     * Email Related All queries
+     */
     private static final String INSERT_INTO_EMAIL = "INSERT INTO email (email_from, email_to, subject, body, template) VALUES (?,?,?,?,?)";
-
     private static final String INSERT_INTO_EMAIL_TEMPLATE = "INSERT INTO email_template (template, subject, body, attach_file) VALUES (?, ?, ?, ?)";
-
     private static final String DELETE_EMPLATE_TEMPLATE_BY_NAME = "delete  from email_template where template =?";
-
     private static final String UPDATE_EMAIL_TEMPLATE = "UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
+    private static final String INSERT_USER_EMAIL_DETAILS = "INSERT INTO public.email_users(user_id, email, password,status) VALUES (?, ?,?,?);";
 
+   /**
+    * User Relates All queries
+    */
     private static final String INSERT_NEW_USER = "INSERT INTO  public.\"user\"(username, email, type, hospital_name, password) VALUES (?, ?, ?, ?, ?);";
     private static final String GET_LOGIN_USER = "SELECT  * FROM public.\"user\" where email=? and password=? and type=?";
     private static final String GET_LOGIN_USER_BY_NAME = "SELECT  * FROM public.\"user\" where email=? and username=? and type=?";
 
-    private static final String INSERT_USER_EMAIL_DETAILS = "INSERT INTO public.email_users(user_id, email, password,status) VALUES (?, ?,?,?);";
 
     static Database singletone_database = null;
     Connection connection = null;
@@ -82,7 +103,10 @@ public class Database {
         return null;
     }
 
-    //give the instance of database 
+    /**
+     * give the instance of database 
+     * @return 
+     */
     public static Database getInstance() {
         if (singletone_database == null) {
             singletone_database = new Database();
@@ -91,7 +115,10 @@ public class Database {
         return singletone_database;
     }
 
-    //return the total number of patients data presnt in database
+    /**
+     * return the total number of patients data present in database
+     * @return 
+     */
     public String getTotalNumberOfUser() {
         try {
             Connection conn = connect();
@@ -298,21 +325,7 @@ public class Database {
         }
         return null;
     }
-
-    public void updateRecord() {
-
-        try {
-            Connection conn = DriverManager.getConnection(url, user, password);
-            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_USERS_SQL);
-            preparedStatement.setString(1, "Ram");
-            preparedStatement.setInt(2, 3);
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
-
+    
     public void updatePatientDate(PatientDetails patientdetails) {
 
         try {
@@ -701,7 +714,7 @@ public class Database {
 
     public ArrayList<String> getLikeReport(String str) {
 
-        ArrayList<String> report = new ArrayList<String>();
+        ArrayList<String> report = new ArrayList<>();
 
         try {
             Connection conn = connect();

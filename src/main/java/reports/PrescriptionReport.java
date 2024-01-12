@@ -10,7 +10,7 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import myutil.Database;
+import database.Database;
 import net.sf.jasperreports.engine.JRException;
 
 /**

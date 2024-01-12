@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-package hospitalmanagement;
+package pages;
 
-import static hospitalmanagement.Home.total_medicine_selected;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -17,7 +11,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import myutil.Database;
+import database.Database;
+import hospitalmanagement.Home;
 import myutil.M_BandType;
 import myutil.MedicineDetails;
 import myutil.MedicineRowPanel;

@@ -1,4 +1,4 @@
-package util;
+package swing;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -9,9 +9,9 @@ import java.awt.Insets;
 import java.awt.RenderingHints;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 
-public class MyTextField extends JTextField {
+public class MyPasswordField extends JPasswordField {
 
     public String getHint() {
         return hint;
@@ -43,13 +43,12 @@ public class MyTextField extends JTextField {
     private Icon suffixIcon;
     private String hint = "";
 
-    public MyTextField() {
+    public MyPasswordField() {
         setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setBackground(new Color(0, 0, 0, 0));
         setForeground(Color.decode("#7A8C8D"));
         setFont(new java.awt.Font("sansserif", 0, 13));
         setSelectionColor(new Color(75, 175, 152));
-      
     }
 
     @Override
@@ -65,7 +64,7 @@ public class MyTextField extends JTextField {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (getText().length() == 0) {
+        if (getPassword().length == 0) {
             int h = getHeight();
             ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             Insets ins = getInsets();
@@ -95,11 +94,11 @@ public class MyTextField extends JTextField {
         //  5 is default
         if (prefixIcon != null) {
             //  prefix is left
-            left = prefixIcon.getIconWidth() + 14;
+            left = prefixIcon.getIconWidth() + 15;
         }
         if (suffixIcon != null) {
             //  suffix is right
-            right = suffixIcon.getIconWidth() + 14;
+            right = suffixIcon.getIconWidth() + 15;
         }
         setBorder(javax.swing.BorderFactory.createEmptyBorder(10, left, 10, right));
     }

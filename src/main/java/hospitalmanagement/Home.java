@@ -1,5 +1,8 @@
 package hospitalmanagement;
 
+import pages.NewDashboardPanel;
+import pages.SearchPatient;
+import pages.BookmarkPanel;
 import auth.Authentication;
 import auth.Log;
 import auth.User;
@@ -28,7 +31,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import myutil.Database;
+import database.Database;
 import myutil.GradientPanel;
 import myutil.*;
 import myutil.M_BandType;
