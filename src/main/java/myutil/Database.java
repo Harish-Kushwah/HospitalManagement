@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import myutil.PatientDetails;
+import sha.SHA;
 
 /*
   In Database Singleton Design pattern used for reducing the instance of databases and their connection
@@ -1074,7 +1075,15 @@ public class Database {
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getUserType());
             preparedStatement.setString(4, user.getHospitalName());
-            preparedStatement.setString(5, user.getPassword());
+            
+            /**
+             * This hash is generated using SHA-512 
+             * public key i.e salt is email id of user
+             * private key i.e password of user
+             */
+            String hash = SHA.getHash(user.getPassword() , user.getEmail());
+            
+            preparedStatement.setString(5, hash);
             preparedStatement.executeUpdate();
             return true;
             //conn.commit();
@@ -1151,13 +1160,18 @@ public class Database {
     }
 
     public User isValidUser(User user) {
-        System.out.println(user);
-        //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER);
             preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getPassword());
+            
+            /**
+             * This hash is generated using SHA-512 
+             * public key i.e salt is email id of user
+             * private key i.e password of user
+             */
+            String hash = SHA.getHash(user.getPassword() , user.getEmail());
+            preparedStatement.setString(2, hash);
             preparedStatement.setString(3, user.getUserType());
 
             ResultSet rs = preparedStatement.executeQuery();
