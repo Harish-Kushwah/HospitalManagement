@@ -1,6 +1,7 @@
 package hospitalmanagement;
 
 import auth.Authentication;
+import auth.Log;
 import auth.User;
 import reports.TestReport;
 import reports.MedicalReport;
@@ -90,12 +91,21 @@ public class Home extends javax.swing.JFrame {
 
 //=============================================[CONSTRUCTOR WORK START]====================================================
     public Home() {
-        this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        /**
+         * All the reports pree compiled which increases the speed of report generation
+         * this report thread will do that task
+         */
         REPORTS_THREAD.start();
+        
+        /**
+         * To check the internet connectivity concurrently and making the email lable color red
+         * this thread will do that thing 
+         */
         INTERNET_THREAD.start();
 
         initComponents();
 
+        
         Runnable first = ()-> {
             this.setExtendedState(JFrame.MAXIMIZED_BOTH);
             setLocationRelativeTo(null);
@@ -109,9 +119,6 @@ public class Home extends javax.swing.JFrame {
         };
 
         Runnable dashboard_thread = () -> {  
-            JScrollPane sc = new JScrollPane(newDashboardPanel);
-
-            sc.setPreferredSize(new Dimension(100, 100));
             Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
         };
 
@@ -195,6 +202,10 @@ public class Home extends javax.swing.JFrame {
 
     }
     private User LOGIN_USER =null;
+    /**
+     * This function will set the user details for the software
+     * @param user 
+     */
     public void setUserForHome(User user)
     {
         
@@ -218,10 +229,29 @@ public class Home extends javax.swing.JFrame {
         }
         
         
+       /**
+        * This line will make the login user as global user 
+        */
         LOGIN_USER = user;
+       
+        /**
+         * This function will the the current user details on the email page
+         * form this user can perform all the email related services
+         */
         email_panel.setUserOnEmailPage(user);
-        System.out.println(user);
+        
+       /**
+        * This function will set the user details into the user_log.txt  
+        * when same user try to login then don't need to login again
+        * until the user don't logout the system
+        */
+        Log.setUserLog(user);
     }
+    /**
+     * When the user mode is a compounder then at that time prescription page and
+     * dashboard is not shown ,this methods will remove the prescription and 
+     * dashboard page 
+     */
     public void removePrescriptionAndDashboadPage()
     {   
         menu_panel.remove(prescription_label);
@@ -235,16 +265,6 @@ public class Home extends javax.swing.JFrame {
     {
         return this.LOGIN_USER;
     }
-    public void setEmailLabelColor() {
-//        try {
-//            if (!InternetAvailabilityChecker.isInternetAvailable())
-//            {
-//                email_label.setForeground(WARNING_COLOR);
-//            }
-//        } catch (IOException ex) {
-//        }
-    }
-
     public JLabel getMedicalReportsDropdownLabel() {
         return medical_reports_dropdown_label;
     }
@@ -253,6 +273,10 @@ public class Home extends javax.swing.JFrame {
         return menu_panel;
     }
 
+    /**
+     * For changing the font for the inputs ,this method will set the font input 
+     * type to the Mangal font i.e Marathi font 
+     */
     public void setMarathiFontForInputes() {
         Font marathi_plain = new Font("Mangal", Font.PLAIN, 13);
         Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
@@ -273,6 +297,10 @@ public class Home extends javax.swing.JFrame {
 
     }
 
+    /**
+     * For changing the font for the inputs ,this method will set the font input 
+     * type to the Segoe UI font i.e English font 
+     */
     public void setEnglishFontForInputes() {
         Font english_plain = new Font("Segoe UI", Font.PLAIN, 13);
         Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
@@ -4612,6 +4640,7 @@ public class Home extends javax.swing.JFrame {
         this.dispose();
         new Authentication(new Home()).setVisible(true);
         LOGIN_USER = null;
+        Log.removeUserLog();
     }//GEN-LAST:event_logout_icon_panelMouseClicked
 
     public void resetFeesSection() {

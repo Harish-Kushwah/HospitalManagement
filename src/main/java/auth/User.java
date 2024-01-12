@@ -1,8 +1,12 @@
 
 package auth;
 
-public class User {
+import java.io.Serializable;
 
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 2111220202093239L;
+    
     private String email=null , username , hospital_name=null , password, type,email_password;
     private int user_id;
     private boolean status = false;

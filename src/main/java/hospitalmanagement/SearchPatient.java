@@ -38,7 +38,7 @@ import myutil.MyCustomRenderer;
 import myutil.Database;
 import myutil.GradientPanel;
 import myutil.InputValidation;
-import myutil.LibraryTable;
+import util.LibraryTable;
 import myutil.MedicineDetails;
 import myutil.MedicineRowPanel;
 import myutil.PatientDetails;

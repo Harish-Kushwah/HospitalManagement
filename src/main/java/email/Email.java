@@ -1551,22 +1551,27 @@ public class Email extends javax.swing.JPanel {
             String subject = em_subject_input.getText();
             String body = em_body_input.getText();
             String template = selected_template.getText();
-            if (template.length() == 0) {
-                template = "None";
-            }
-            EmailInformation emailInformation = new EmailInformation();
-            emailInformation.setSendFrom(from);
-            emailInformation.setSendTo(to);
-            emailInformation.setSubject(subject);
-            emailInformation.setBody(body);
-            emailInformation.setTemplate(template);
+            if (from.length() == 0 || to.length() == 0 || subject.length() == 0 || body.length() == 0) {
+                em_status_label.setText("Enter valid inputs ");
+                em_status_label.setForeground(WARNING_COLOR);
+            } else {
+                if (template.length() == 0) {
+                    template = "None";
+                }
+                EmailInformation emailInformation = new EmailInformation();
+                emailInformation.setSendFrom(from);
+                emailInformation.setSendTo(to);
+                emailInformation.setSubject(subject);
+                emailInformation.setBody(body);
+                emailInformation.setTemplate(template);
 
-            Database database = Database.getInstance();
-            database.insertEmail(emailInformation);
-            System.out.println("Email Saved successfully");
-            resetEMPage();
-            em_status_label.setText("Email Saved successfully");
-            em_status_label.setForeground(SUCCESS_COLOR);
+                Database database = Database.getInstance();
+                database.insertEmail(emailInformation);
+                System.out.println("Email Saved successfully");
+                resetEMPage();
+                em_status_label.setText("Email Saved successfully");
+                em_status_label.setForeground(SUCCESS_COLOR);
+            }
         } catch (Exception exp) {
             System.out.println(exp.getMessage());
             em_status_label.setText("Email Not Saved ");

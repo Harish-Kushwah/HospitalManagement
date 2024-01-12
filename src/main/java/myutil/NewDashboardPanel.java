@@ -1,5 +1,6 @@
 
 package myutil;
+import util.LibraryTable;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;

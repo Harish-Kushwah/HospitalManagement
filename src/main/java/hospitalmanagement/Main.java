@@ -1,6 +1,8 @@
 package hospitalmanagement;
 
 import auth.Authentication;
+import auth.Log;
+import auth.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -14,8 +16,9 @@ public class Main extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
         this.setIconImage(icon.getImage());
 
-        hospital_icon_panel.add(new SetImageIcon(new ImageIcon("./images/name_logo3.png"), 258, 197), BorderLayout.CENTER);
-
+        String name = "./images/healix_logo4.png";   
+        hospital_icon_panel.add(new SetImageIcon(new ImageIcon(name), 258, 197) , BorderLayout.CENTER);
+ 
     }
 
     @SuppressWarnings("unchecked")
@@ -23,7 +26,7 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         screen = new GradientPanel(new Color(0x589BE8),new Color(0x5AEEB2),1100,50);
-        hospital_icon_panel = new GradientPanel(new Color(0x589BE8),new Color(0x5AEEB2),200,348);
+        hospital_icon_panel = new GradientPanel(new Color(0xceddef),new Color(0xa8c2e2),200,348);
         info_panel = new javax.swing.JPanel();
         completed = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -44,7 +47,7 @@ public class Main extends javax.swing.JFrame {
         hospital_icon_panel.setPreferredSize(new java.awt.Dimension(200, 396));
         hospital_icon_panel.setLayout(new java.awt.BorderLayout());
 
-        info_panel.setBackground(new java.awt.Color(4, 22, 53));
+        info_panel.setBackground(new java.awt.Color(7, 13, 89));
         info_panel.setForeground(new java.awt.Color(255, 255, 255));
         info_panel.setMinimumSize(new java.awt.Dimension(100, 20));
 
@@ -136,7 +139,7 @@ public class Main extends javax.swing.JFrame {
             for (int i = 0; i < 100; i++) {
 
                 if (i == 60) {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 }
                 if (i < 30) {
                     Thread.sleep(40);
@@ -162,9 +165,19 @@ public class Main extends javax.swing.JFrame {
 
         }
         new Main().setVisible(false);
-      //  home.setVisible(true);
+      
+      
+         User user = Log.getUserLog();
+         if(user!=null){
+             home.setUserForHome(user);
+             home.setVisible(true);
+             
+         }
+         else{
          Authentication authentication  = new Authentication(home);
          authentication.setVisible(true);
+         }
+        
 
         sc.dispose();
     }
