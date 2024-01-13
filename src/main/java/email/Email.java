@@ -1,8 +1,6 @@
 package email;
 
-import database.Database;
 import auth.User;
-import hospitalmanagement.Home;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -26,7 +24,6 @@ import javax.swing.table.TableColumn;
 import database.Database;
 import myutil.MyCustomRenderer;
 import myutil.SetImageIcon;
-import myutil.AdminInformation;
 
 /**
  *
@@ -469,8 +466,8 @@ public class Email extends javax.swing.JPanel {
         pd_body_input.setRows(5);
         jScrollPane2.setViewportView(pd_body_input);
 
-        pd_save_btn.setBackground(new java.awt.Color(0, 51, 255));
-        pd_save_btn.setForeground(new java.awt.Color(255, 255, 255));
+        pd_save_btn.setBackground(new java.awt.Color(153, 255, 153));
+        pd_save_btn.setForeground(new java.awt.Color(0, 0, 51));
         pd_save_btn.setText("Save");
         pd_save_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
         pd_save_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -688,8 +685,8 @@ public class Email extends javax.swing.JPanel {
             }
         });
 
-        em_save_btn.setBackground(new java.awt.Color(0, 51, 255));
-        em_save_btn.setForeground(new java.awt.Color(255, 255, 255));
+        em_save_btn.setBackground(new java.awt.Color(153, 255, 153));
+        em_save_btn.setForeground(new java.awt.Color(0, 0, 51));
         em_save_btn.setText("Save");
         em_save_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
         em_save_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -913,8 +910,8 @@ public class Email extends javax.swing.JPanel {
             }
         });
 
-        ad_save_btn.setBackground(new java.awt.Color(0, 51, 255));
-        ad_save_btn.setForeground(new java.awt.Color(255, 255, 255));
+        ad_save_btn.setBackground(new java.awt.Color(153, 255, 153));
+        ad_save_btn.setForeground(new java.awt.Color(0, 0, 51));
         ad_save_btn.setText("Save");
         ad_save_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
         ad_save_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1076,7 +1073,7 @@ public class Email extends javax.swing.JPanel {
         });
         up_report_refresh.setLayout(new java.awt.BorderLayout());
 
-        up_cancle_btn.setBackground(new java.awt.Color(0, 51, 255));
+        up_cancle_btn.setBackground(new java.awt.Color(255, 51, 51));
         up_cancle_btn.setForeground(new java.awt.Color(255, 255, 255));
         up_cancle_btn.setText("Cancle");
         up_cancle_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
@@ -1121,10 +1118,6 @@ public class Email extends javax.swing.JPanel {
         update_email.setLayout(update_emailLayout);
         update_emailLayout.setHorizontalGroup(
             update_emailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, update_emailLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(up_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(update_emailLayout.createSequentialGroup()
                 .addContainerGap(205, Short.MAX_VALUE)
                 .addGroup(update_emailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1146,7 +1139,9 @@ public class Email extends javax.swing.JPanel {
                 .addGap(0, 199, Short.MAX_VALUE))
             .addGroup(update_emailLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(update_emailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(up_status_label, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         update_emailLayout.setVerticalGroup(
@@ -1197,10 +1192,11 @@ public class Email extends javax.swing.JPanel {
             }
         });
 
-        update_from_email_btn.setBackground(new java.awt.Color(0, 51, 255));
-        update_from_email_btn.setForeground(new java.awt.Color(255, 255, 255));
+        update_from_email_btn.setBackground(new java.awt.Color(153, 255, 153));
+        update_from_email_btn.setForeground(new java.awt.Color(0, 51, 51));
         update_from_email_btn.setText("Update");
         update_from_email_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
+        update_from_email_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         update_from_email_btn.setFocusPainted(false);
         update_from_email_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1387,8 +1383,8 @@ public class Email extends javax.swing.JPanel {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel16.setText("Choose Email Templates");
 
-        update_template_btn.setBackground(new java.awt.Color(0, 51, 255));
-        update_template_btn.setForeground(new java.awt.Color(255, 255, 255));
+        update_template_btn.setBackground(new java.awt.Color(153, 255, 153));
+        update_template_btn.setForeground(new java.awt.Color(0, 0, 51));
         update_template_btn.setText("Update");
         update_template_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 255), 1, true));
         update_template_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1473,7 +1469,7 @@ public class Email extends javax.swing.JPanel {
                 .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tm_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tm_report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(composing_email_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(composing_email_panelLayout.createSequentialGroup()
                     .addGap(161, 161, 161)

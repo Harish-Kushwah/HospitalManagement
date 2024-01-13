@@ -49,7 +49,5 @@ public class ReportInfomartion {
     }
      public Date getDate() {
         return this.date;
-    }
-    
-    
+    }  
 }
