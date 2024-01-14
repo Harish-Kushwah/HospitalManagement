@@ -90,7 +90,7 @@ public class Database {
     }
 
     //creates the database connection
-    public Connection connect() {
+    public Connection getConnection() {
         try {
             if (connection == null) {
                 connection = DriverManager.getConnection(url, user, password);
@@ -121,7 +121,7 @@ public class Database {
      */
     public String getTotalNumberOfUser() {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_TOTAL_NO_OF_ROWS);
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
@@ -136,7 +136,7 @@ public class Database {
     //return total monthly patinets
     public String getTotalMonthlyPatient() {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_TOTAL_MONTH_PATIENT);
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
@@ -153,7 +153,7 @@ public class Database {
     //return total today patient
     public String getTotalTodayPatient() {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_TOTAL_TODAY_PATIENT);
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
@@ -172,7 +172,7 @@ public class Database {
         ArrayList<PatientDetails> patientDetailsList = new ArrayList<PatientDetails>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_TOTAL_MONTH_PATIENT);
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
@@ -210,7 +210,7 @@ public class Database {
         ArrayList<PatientDetails> patientDetailsList = new ArrayList<PatientDetails>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_TOTAL_TODAY_PATIENT);
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
@@ -246,7 +246,7 @@ public class Database {
     public PatientDetails getPatientDetails(int patient_report_number) {
         try {
             // Step 1: Establishing a Connection
-            Connection conn = connect();
+            Connection conn = getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(FIND_PATIENT_BY_PNO);
             preparedStatement.setInt(1, patient_report_number);
@@ -293,7 +293,7 @@ public class Database {
 
         try {
             // Step 1: Establishing a Connection
-            Connection conn = connect();
+            Connection conn = getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(SELECT_ALL_QUERY);
             // Step 3: Execute the query or update query
@@ -329,7 +329,7 @@ public class Database {
     public void updatePatientDate(PatientDetails patientdetails) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_DATE);
 
             preparedStatement.setDate(1, new Date(patientdetails.getDate().getTime()));
@@ -346,7 +346,7 @@ public class Database {
     public void updatePatientMobileNo(PatientDetails patientdetails) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_MOBILE_NO);
 
             preparedStatement.setString(1, patientdetails.getMobileNo());
@@ -363,7 +363,7 @@ public class Database {
     public boolean updatePatientFees(int pno, float fees) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_PATIENT_FEES);
 
             preparedStatement.setFloat(1, fees);
@@ -386,7 +386,7 @@ public class Database {
     public PatientDetails getRecord(String username) {
         final String GET_PAITENT_HAVING_USERNAME = "select * from pdetail where name = \'" + username + "\'";
         try {
-            Connection connection = connect();
+            Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(GET_PAITENT_HAVING_USERNAME);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -405,7 +405,7 @@ public class Database {
     //This is requird for maintaing the patient number as id 
     public int getMaxIndex() {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_MAX_INDEX);
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
@@ -421,7 +421,7 @@ public class Database {
     public int insertRecord(PatientDetails patientdetails) {
         int id = -1;
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_RECORD_SQL);
             id = getMaxIndex() + 1;
             preparedStatement.setInt(1, id);
@@ -448,7 +448,7 @@ public class Database {
 
     public void insertRecordInMedicine(MedicineDetails medicineDetails) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDECINE_INFO);
             PatientDetails patientDetails = medicineDetails.getPatientDetails();
             preparedStatement.setInt(1, patientDetails.getPid());
@@ -469,7 +469,7 @@ public class Database {
 
     public void insertMedicine(String medicine_name) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_MEDICINE);
             preparedStatement.setString(1, medicine_name.toUpperCase());
 
@@ -483,7 +483,7 @@ public class Database {
     //inserting test reports 
     public void insertTestReport(int pno, String report_name, long date_in_time) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT);
             preparedStatement.setInt(1, pno);
             preparedStatement.setString(2, report_name.toUpperCase());
@@ -498,7 +498,7 @@ public class Database {
 
     public void insertNewTestReportName(String report_name) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_REPORT_NAME);
             preparedStatement.setString(1, report_name.toUpperCase());
 
@@ -511,7 +511,7 @@ public class Database {
 
     public void removeALlTestReport(int patient_number) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_TEST_REPORT_BY_PNO);
             preparedStatement.setInt(1, patient_number);
 
@@ -527,7 +527,7 @@ public class Database {
         ArrayList<String> medi = new ArrayList<String>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM medilist WHERE medicine LIKE ");
             GET_LIKE_MEDICINE.append("\'");
             GET_LIKE_MEDICINE.append("%");
@@ -554,7 +554,7 @@ public class Database {
         ArrayList<String> patient_details = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE name LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
@@ -583,7 +583,7 @@ public class Database {
         ArrayList<String> patient_details = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM pdetail WHERE pno=?");
             preparedStatement.setInt(1, patient_number);
             ResultSet rs = preparedStatement.executeQuery();
@@ -607,7 +607,7 @@ public class Database {
         ArrayList<String> patient_details = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE mno LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
@@ -636,7 +636,7 @@ public class Database {
         ArrayList<String> patient_details = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE gen LIKE ");
             GET_LIKE_PATIENT.append("\'");
             GET_LIKE_PATIENT.append("%");
@@ -665,7 +665,7 @@ public class Database {
         ArrayList<String> patient_details = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             Date date = new Date(date_in_time_format);
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM pdetail WHERE date LIKE ");
             GET_LIKE_PATIENT.append("\'");
@@ -695,7 +695,7 @@ public class Database {
         ArrayList<String> medi = new ArrayList<String>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM medilist");
             PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
             ResultSet rs = preparedStatement.executeQuery();
@@ -717,7 +717,7 @@ public class Database {
         ArrayList<String> report = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_REPORT = new StringBuffer("SELECT * FROM reports WHERE report_name LIKE ");
             GET_LIKE_REPORT.append("\'");
             GET_LIKE_REPORT.append("%");
@@ -741,7 +741,7 @@ public class Database {
 
     public void getMediPedi() {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement(GET_MEDI_PEDI);
 
@@ -777,7 +777,7 @@ public class Database {
         ArrayList<MedicineDetails> medicineDetailsList = new ArrayList<MedicineDetails>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(FIND_MEDICINE_BY_PNO);
             preparedStatement.setInt(1, patient_number);
 
@@ -825,7 +825,7 @@ public class Database {
     public void removeAllMedicinesOf(int patient_number) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_MEDICINE_BY_PNO);
             preparedStatement.setInt(1, patient_number);
 
@@ -842,7 +842,7 @@ public class Database {
         ArrayList<String> medi = new ArrayList<String>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT DISTINCT bname FROM bookmark;");
 
             PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
@@ -865,7 +865,7 @@ public class Database {
         ReportInfomartion test_report = new ReportInfomartion();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
 
             PreparedStatement preparedStatement = conn.prepareStatement(GET_ALL_TEST_REPORTS);
             preparedStatement.setInt(1, patient_number);
@@ -895,7 +895,7 @@ public class Database {
         ArrayList<String> medi = new ArrayList<String>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM bookmark WHERE bname =");
             GET_LIKE_MEDICINE.append("\'");
             GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
@@ -921,7 +921,7 @@ public class Database {
         ArrayList<String> medi = new ArrayList<String>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  bname FROM bookmark WHERE bname LIKE ");
 
             GET_LIKE_BOOKMARK.append("\'");
@@ -946,7 +946,7 @@ public class Database {
     public void removeBookmark(String name) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_BOOKMARK_BY_NAME);
             preparedStatement.setString(1, name);
             preparedStatement.executeUpdate();
@@ -959,7 +959,7 @@ public class Database {
 
     public void addBookmark(String bookmark_name, MedicineDetails medicineDetails) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_BOOKMARK);
 
             preparedStatement.setString(1, bookmark_name.toUpperCase());
@@ -980,7 +980,7 @@ public class Database {
 //    doctor related 
     public void insertDoctorName(String doctor_name) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_DOCTOR_NAME);
             preparedStatement.setString(1, doctor_name.toUpperCase());
 
@@ -996,7 +996,7 @@ public class Database {
         ArrayList<String> medi = new ArrayList<String>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_DOCTOR = new StringBuffer("SELECT  DISTINCT  doc_name FROM doctor_names WHERE doc_name LIKE ");
 
             GET_LIKE_DOCTOR.append("\'");
@@ -1020,7 +1020,7 @@ public class Database {
 
     public int getDoctorID(String doctor_name) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_DOCTOR_ID);
             preparedStatement.setString(1, doctor_name.toUpperCase());
             ResultSet rs = preparedStatement.executeQuery();
@@ -1043,7 +1043,7 @@ public class Database {
     public void insertEmail(EmailInformation emailInformation) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_INTO_EMAIL);
 
             preparedStatement.setString(1, emailInformation.getSendFrom());
@@ -1063,7 +1063,7 @@ public class Database {
     public void insertEmailTemplate(EmailInformation emailInformation) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_INTO_EMAIL_TEMPLATE);
 
             preparedStatement.setString(1, emailInformation.getTemplate().toUpperCase());
@@ -1081,7 +1081,7 @@ public class Database {
     public boolean insertNewUser(User user) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_NEW_USER);
 
             preparedStatement.setString(1, user.getUserName());
@@ -1108,7 +1108,7 @@ public class Database {
 
     public boolean insertUserEmailInforamtion(User user) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_USER_EMAIL_DETAILS);
 
             preparedStatement.setInt(1, user.getUserId());
@@ -1128,7 +1128,7 @@ public class Database {
     
     public boolean updateUserEmailInforamtion(User user) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(" UPDATE public.email_users SET email=?, password=?, status=? WHERE user_id = ?;");
 
             preparedStatement.setString(1, user.getEmail());
@@ -1147,7 +1147,7 @@ public class Database {
     public User getEmailSecurityCodes(User user)
     {
          try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement("SELECT password, status FROM public.email_users where user_id = ?;");
             preparedStatement.setInt(1,user.getUserId());
@@ -1174,7 +1174,7 @@ public class Database {
 
     public User isValidUser(User user) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER);
             preparedStatement.setString(1, user.getEmail());
             
@@ -1217,7 +1217,7 @@ public class Database {
         System.out.println(user);
         //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER_BY_NAME);
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getUserName());
@@ -1253,7 +1253,7 @@ public class Database {
         ArrayList<String> template = new ArrayList<String>();
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             StringBuffer GET_LIKE_EMAIL = new StringBuffer("SELECT  DISTINCT  subject ,template FROM email_template WHERE template LIKE ");
 
             GET_LIKE_EMAIL.append("\'");
@@ -1280,7 +1280,7 @@ public class Database {
 
     public void updateTemplate(int template_id, EmailInformation emailInformation) {
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_EMAIL_TEMPLATE);
 //"UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
             preparedStatement.setString(1, emailInformation.getTemplate().toUpperCase());
@@ -1299,7 +1299,7 @@ public class Database {
     public EmailInformation getEmail(String template_name) {
 
         try {
-            Connection conn = connect();
+            Connection conn = getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM email_template where template = ?");
             preparedStatement.setString(1, template_name);
@@ -1327,7 +1327,7 @@ public class Database {
     public boolean removeTemplate(String template_name) {
         try {
 
-            Connection conn = connect();
+            Connection conn = getConnection();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_EMPLATE_TEMPLATE_BY_NAME);
             preparedStatement.setString(1, template_name);
 

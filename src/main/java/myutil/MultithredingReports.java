@@ -56,7 +56,7 @@ public class MultithredingReports extends Thread {
     
     public Connection getConnection()
     {
-        return DB.connect();
+        return DB.getConnection();
     }
     
 }
