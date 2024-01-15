@@ -13,12 +13,12 @@ import java.sql.SQLException;
  */
 public class PDFDatabase {
 
-    private final String INSERT_FILE = "INSERT INTO documents (filename, content, compression_type) VALUES (?, ?, ?)";
+    private final String INSERT_FILE = "INSERT INTO documents (filename, content, compression_type,patient_fk ,file_ref_name) VALUES (?,?, ?, ?,?)";
     private final String GET_DOCUMENT = "SELECT id, filename, content, compression_type FROM documents WHERE id = ?";
 
     private final Connection connection = Database.getInstance().getConnection();
 
-    public boolean storePdf(File file) {
+    public boolean storePdf(String file_ref_name,File file,int patient_id) {
 
         try {
             // Use a PreparedStatement to insert data into the database
@@ -33,6 +33,12 @@ public class PDFDatabase {
                 preparedStatement.setBytes(2, compressedData);
 
                 preparedStatement.setString(3, "deflate");
+                
+                preparedStatement.setInt(4, patient_id);
+                
+                preparedStatement.setString(5, file_ref_name);
+                
+                
 
                 preparedStatement.executeUpdate();
                 return true;
@@ -79,14 +85,22 @@ public class PDFDatabase {
         return null;
     }
     
-    public static void main(String []args)
-    {
-        PDFDatabase pdf = new PDFDatabase();
-        File file = new File("./images/arrow.png");
-        if(pdf.storePdf(file)){
-            System.out.println("PDF saved successfully");
-        }
-        
-    }
+//    public static void main(String []args)
+//    {
+//        PDFDatabase pdf = new PDFDatabase();
+//        File file = new File("./images/back.png");
+////        if(pdf.storePdf(file,1)){
+////            System.out.println("PDF saved successfully");
+////        }
+//        
+//        file = pdf.getPDF(3);
+//        if(file!=null){
+//            System.out.println("file name :" + file.getName());
+//        }
+//        else{
+//            System.out.println("Not found");
+//        }
+//        
+//    }
 
 }

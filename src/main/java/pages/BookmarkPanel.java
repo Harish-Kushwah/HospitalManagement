@@ -112,6 +112,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         bookmark_panel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         bookmark_input = new javax.swing.JTextField();
@@ -134,9 +135,12 @@ public class BookmarkPanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(200, 528));
         setLayout(new java.awt.BorderLayout());
 
+        jPanel1.setBackground(new java.awt.Color(251, 252, 224));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
         bookmark_panel.setBackground(new java.awt.Color(251, 252, 224));
         bookmark_panel.setAutoscrolls(true);
-        bookmark_panel.setPreferredSize(new java.awt.Dimension(200, 528));
+        bookmark_panel.setPreferredSize(new java.awt.Dimension(300, 528));
 
         jLabel7.setText("Bookmark");
 
@@ -335,7 +339,9 @@ public class BookmarkPanel extends javax.swing.JPanel {
                 .addGap(16, 16, 16))
         );
 
-        add(bookmark_panel, java.awt.BorderLayout.CENTER);
+        jPanel1.add(bookmark_panel);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
 
     private void add_bookmark_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_bookmark_btnActionPerformed
@@ -496,6 +502,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTextField new_bookmark_input;
