@@ -2428,20 +2428,21 @@
                                           <EmptySpace min="-2" pref="680" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="patient_back" min="-2" pref="25" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="254" max="-2" attributes="0"/>
-                                      <Component id="save_btn" min="-2" pref="80" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
-                                      <Component id="next_btn" min="-2" pref="90" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="patient_refresh" min="-2" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="status_label" min="-2" pref="227" max="-2" attributes="0"/>
-                                              <Component id="jSeparator1" min="-2" pref="782" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="patient_back" min="-2" pref="25" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="254" max="-2" attributes="0"/>
+                                              <Component id="save_btn" min="-2" pref="80" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="79" max="-2" attributes="0"/>
+                                              <Component id="next_btn" min="-2" pref="90" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                              <Component id="patient_refresh" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="status_label" min="-2" pref="227" max="-2" attributes="0"/>
+                                                  <Component id="jSeparator1" min="-2" pref="782" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
