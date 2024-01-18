@@ -6,6 +6,7 @@ package pdfviewer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import myutil.GradientPanel;
 import myutil.SetImageIcon;
@@ -19,16 +20,34 @@ public class head extends javax.swing.JPanel {
     /**
      * Creates new form head
      */
-    public head() {
+    NewPDFViewer viewer;
+    public head(NewPDFViewer viewer) {
         initComponents();
-        
+        this.viewer = viewer;
+
+//        prev_page.add(new SetImageIcon(new ImageIcon("./images/left_arrow1.png"), 30, 30), BorderLayout.CENTER);
          prev_page.add(new SetImageIcon(new ImageIcon("./images/arrow_left.gif"), 30, 30), BorderLayout.CENTER);
+
+//        next_page.add(new SetImageIcon(new ImageIcon("./images/right_arrow4.png"), 30, 30), BorderLayout.CENTER);
          next_page.add(new SetImageIcon(new ImageIcon("./images/arrow_right1.gif"), 30, 30), BorderLayout.CENTER);
-         zoom_in.add(new SetImageIcon(new ImageIcon("./images/zoom_in2.png"), 30, 30), BorderLayout.CENTER);
-         zoom_out.add(new SetImageIcon(new ImageIcon("./images/zoom_out1.png"), 30, 30), BorderLayout.CENTER);
+
+        zoom_in.add(new SetImageIcon(new ImageIcon("./images/zoom_in3.png"), 30, 30), BorderLayout.CENTER);
+        zoom_out.add(new SetImageIcon(new ImageIcon("./images/zoom_out2.png"), 30, 30), BorderLayout.CENTER);
 
     }
 
+    public void setFileName(String name)
+    {
+        prescription_report_label.setText(name);
+    }
+    public void setTotalPage(int total_pages)
+    {
+        total_pages_label.setText("/"+String.valueOf(total_pages));
+    }
+    public void setCurrentPage(int current_page)
+    {
+        current_pages_input.setText(String.valueOf(current_page));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -45,6 +64,9 @@ public class head extends javax.swing.JPanel {
         next_page = new javax.swing.JPanel();
         zoom_in = new javax.swing.JPanel();
         zoom_out = new javax.swing.JPanel();
+        current_pages_input = new javax.swing.JTextField();
+        prescription_report_label1 = new javax.swing.JLabel();
+        total_pages_label = new javax.swing.JLabel();
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -53,7 +75,7 @@ public class head extends javax.swing.JPanel {
         setBackground(new java.awt.Color(0, 0, 153));
         setLayout(new java.awt.BorderLayout());
 
-        medical_report_panel_head.setBackground(new java.awt.Color(0, 204, 0));
+        medical_report_panel_head.setBackground(new java.awt.Color(255, 255, 255));
         medical_report_panel_head.setPreferredSize(new java.awt.Dimension(169, 40));
 
         prescription_report_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -130,14 +152,48 @@ public class head extends javax.swing.JPanel {
         });
         zoom_out.setLayout(new java.awt.BorderLayout());
 
+        current_pages_input.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        current_pages_input.setForeground(new java.awt.Color(0, 0, 102));
+        current_pages_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 153), 1, true));
+        current_pages_input.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                current_pages_inputKeyPressed(evt);
+            }
+        });
+
+        prescription_report_label1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        prescription_report_label1.setForeground(new java.awt.Color(0, 0, 102));
+        prescription_report_label1.setText("Page");
+        prescription_report_label1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        prescription_report_label1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                prescription_report_label1MouseClicked(evt);
+            }
+        });
+
+        total_pages_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        total_pages_label.setForeground(new java.awt.Color(0, 0, 102));
+        total_pages_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        total_pages_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                total_pages_labelMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout medical_report_panel_headLayout = new javax.swing.GroupLayout(medical_report_panel_head);
         medical_report_panel_head.setLayout(medical_report_panel_headLayout);
         medical_report_panel_headLayout.setHorizontalGroup(
             medical_report_panel_headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(medical_report_panel_headLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(prescription_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
+                .addComponent(prescription_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(prescription_report_label1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(current_pages_input, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total_pages_label, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(prev_page, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(next_page, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -154,10 +210,14 @@ public class head extends javax.swing.JPanel {
                 .addGroup(medical_report_panel_headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(next_page, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(prev_page, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(prescription_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(medical_report_panel_headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(prescription_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(prescription_report_label1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(current_pages_input, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(total_pages_label, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(zoom_out, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(zoom_in, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(7, Short.MAX_VALUE))
         );
 
         add(medical_report_panel_head, java.awt.BorderLayout.CENTER);
@@ -165,11 +225,11 @@ public class head extends javax.swing.JPanel {
 
     private void prescription_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_report_labelMouseClicked
 
-        
+
     }//GEN-LAST:event_prescription_report_labelMouseClicked
 
     private void prev_pageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prev_pageMouseClicked
-       
+        viewer.showPreviousPage();
     }//GEN-LAST:event_prev_pageMouseClicked
 
     private void prev_pageMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prev_pageMouseEntered
@@ -181,7 +241,7 @@ public class head extends javax.swing.JPanel {
     }//GEN-LAST:event_prev_pageMouseExited
 
     private void next_pageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_next_pageMouseClicked
-        // TODO add your handling code here:
+        viewer.showNextPage();
     }//GEN-LAST:event_next_pageMouseClicked
 
     private void next_pageMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_next_pageMouseEntered
@@ -193,7 +253,7 @@ public class head extends javax.swing.JPanel {
     }//GEN-LAST:event_next_pageMouseExited
 
     private void zoom_inMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoom_inMouseClicked
-        // TODO add your handling code here:
+         viewer.zoomIn();
     }//GEN-LAST:event_zoom_inMouseClicked
 
     private void zoom_inMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoom_inMouseEntered
@@ -205,7 +265,7 @@ public class head extends javax.swing.JPanel {
     }//GEN-LAST:event_zoom_inMouseExited
 
     private void zoom_outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoom_outMouseClicked
-        // TODO add your handling code here:
+          viewer.zoomOut();
     }//GEN-LAST:event_zoom_outMouseClicked
 
     private void zoom_outMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_zoom_outMouseEntered
@@ -216,13 +276,32 @@ public class head extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_zoom_outMouseExited
 
+    private void prescription_report_label1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_report_label1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_prescription_report_label1MouseClicked
+
+    private void total_pages_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_total_pages_labelMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_total_pages_labelMouseClicked
+
+    private void current_pages_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_current_pages_inputKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            int get_page_number = Integer.parseInt(current_pages_input.getText());
+            viewer.showPage(get_page_number);
+        }
+    }//GEN-LAST:event_current_pages_inputKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField current_pages_input;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel medical_report_panel_head;
     private javax.swing.JPanel next_page;
     private javax.swing.JLabel prescription_report_label;
+    private javax.swing.JLabel prescription_report_label1;
     private javax.swing.JPanel prev_page;
+    private javax.swing.JLabel total_pages_label;
     private javax.swing.JPanel zoom_in;
     private javax.swing.JPanel zoom_out;
     // End of variables declaration//GEN-END:variables

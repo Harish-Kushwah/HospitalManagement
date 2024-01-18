@@ -32,6 +32,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import database.Database;
+import reports.Document;
 import myutil.GradientPanel;
 import myutil.*;
 import myutil.M_BandType;
@@ -42,6 +43,7 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
 import pages.DocumentsPanel;
+import pdfviewer.NewPDFViewer;
 
 public class Home extends javax.swing.JFrame {
 
@@ -119,7 +121,8 @@ public class Home extends javax.swing.JFrame {
             ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
             this.setIconImage(icon.getImage());
             menu_panel.setBackground(new Color(0x021036));
-            reports_dropdown_panel.setBackground(new Color(0x021036));
+//            reports_dropdown_panel.setBackground(new Color(0x021036));
+//            patient_dropdown_panel.setBackground(new Color(0x021036));
             addAllNavigationButtons();
         };
 
@@ -163,6 +166,8 @@ public class Home extends javax.swing.JFrame {
 
             search_patient = new SearchPatient(this);
             search_patient_main_panel.add(search_patient, BorderLayout.CENTER);
+            
+            document_panel.add(new Document(this,getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
 
             setMarathiFontForInputes();
 
@@ -187,7 +192,9 @@ public class Home extends javax.swing.JFrame {
             // setMarathiFontForInputes();
             //  addEnterBtnActionTotalTablet();
             reports_dropdown_panel.setVisible(false);
+            patient_dropdown_panel.setVisible(false);
             reports_dropdown_seperator.setVisible(false);
+            patient_dropdown_seperator.setVisible(false);
 
 
             /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
@@ -381,8 +388,9 @@ public class Home extends javax.swing.JFrame {
         report_back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
         report_next.add(new SetImageIcon(new ImageIcon(next_page_icon), 25, 25), BorderLayout.CENTER);
         setRightArrowIconForReportDropdown();
+        
+        setRightArrowIconForPatientDropdown();
 
-        search_patient_panel.add(new SetImageIcon(new ImageIcon(search_icon), 15, 10), BorderLayout.CENTER);
 
         email_icon.add(new SetImageIcon(new ImageIcon("./images/gmail_icon.png"), 30, 30));
         
@@ -401,6 +409,19 @@ public class Home extends javax.swing.JFrame {
     public void setDownArrowIconForReportDropdown() {
         reports_dropdown_icon_panel.removeAll();
         reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_down_arrow), 15, 13), BorderLayout.CENTER);
+        validate();
+        repaint();
+    }
+    public void setRightArrowIconForPatientDropdown() {
+        patient_dropdown_icon_panel.removeAll();
+        patient_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_right_arrow), 15, 13), BorderLayout.CENTER);
+        validate();
+        repaint();
+    }
+
+    public void setDownArrowIconForPatientDropdown() {
+        patient_dropdown_icon_panel.removeAll();
+        patient_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_down_arrow), 15, 13), BorderLayout.CENTER);
         validate();
         repaint();
     }
@@ -937,6 +958,11 @@ public class Home extends javax.swing.JFrame {
             }
 
         }
+        
+        if(page_name.equals("patient"))
+        {
+            showPatientOptionOnWindow("patient");
+        }
     }
 //=============================================[GENERAL FUNCTIONS WORK ENDS]====================================================
 
@@ -1099,6 +1125,10 @@ public class Home extends javax.swing.JFrame {
         menu_panel = new javax.swing.JPanel();
         dashboard_label = new javax.swing.JLabel();
         patient_label = new javax.swing.JLabel();
+        patient_dropdown_panel = new javax.swing.JPanel();
+        new_patient_dropdown = new javax.swing.JLabel();
+        document_dropdown = new javax.swing.JLabel();
+        search_dropdown = new javax.swing.JLabel();
         prescription_label = new javax.swing.JLabel();
         reports_label = new javax.swing.JLabel();
         dashboard_icon = new JPanel();
@@ -1115,10 +1145,11 @@ public class Home extends javax.swing.JFrame {
         medical_reports_dropdown_label = new javax.swing.JLabel();
         test_reports_dropdown_label = new javax.swing.JLabel();
         reports_dropdown_seperator = new javax.swing.JSeparator();
-        search_patient_panel = new javax.swing.JPanel();
+        patient_dropdown_icon_panel = new javax.swing.JPanel();
         email_label = new javax.swing.JLabel();
         email_icon = new JPanel();
         reports_icon.add(new SetImageIcon(new ImageIcon("./images/reports_icon.png"),30,30)) ;
+        patient_dropdown_seperator = new javax.swing.JSeparator();
         main_panel = new javax.swing.JPanel();
         Prescription = new javax.swing.JPanel();
         prescription_form_panel = prescription_form_panel = new GradientPanel(new Color(0xe8feff),new Color(0xe8f3ff) , 300,600);
@@ -1249,6 +1280,7 @@ public class Home extends javax.swing.JFrame {
         patient_panel_header_title = new javax.swing.JLabel();
         patient_left_panel = new javax.swing.JPanel();
         patient_right_panel = new javax.swing.JPanel();
+        document_panel = new javax.swing.JPanel();
         search_patient_main_panel = new javax.swing.JPanel();
         EmailPage = new javax.swing.JPanel();
 
@@ -1403,6 +1435,66 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        patient_dropdown_panel.setBackground(new java.awt.Color(2, 16, 54));
+        patient_dropdown_panel.setForeground(new java.awt.Color(255, 255, 255));
+
+        new_patient_dropdown.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        new_patient_dropdown.setForeground(new java.awt.Color(255, 255, 255));
+        new_patient_dropdown.setText("  New Patient");
+        new_patient_dropdown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        new_patient_dropdown.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                new_patient_dropdownMouseClicked(evt);
+            }
+        });
+
+        document_dropdown.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        document_dropdown.setForeground(new java.awt.Color(255, 255, 255));
+        document_dropdown.setText("   Document");
+        document_dropdown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        document_dropdown.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                document_dropdownMouseClicked(evt);
+            }
+        });
+
+        search_dropdown.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        search_dropdown.setForeground(new java.awt.Color(255, 255, 255));
+        search_dropdown.setText("        Search");
+        search_dropdown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        search_dropdown.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                search_dropdownMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout patient_dropdown_panelLayout = new javax.swing.GroupLayout(patient_dropdown_panel);
+        patient_dropdown_panel.setLayout(patient_dropdown_panelLayout);
+        patient_dropdown_panelLayout.setHorizontalGroup(
+            patient_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(patient_dropdown_panelLayout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(patient_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, patient_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(new_patient_dropdown)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, patient_dropdown_panelLayout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addComponent(document_dropdown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(search_dropdown, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        patient_dropdown_panelLayout.setVerticalGroup(
+            patient_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(patient_dropdown_panelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(new_patient_dropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(document_dropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(search_dropdown)
+                .addContainerGap(8, Short.MAX_VALUE))
+        );
+
         prescription_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
         prescription_label.setForeground(new java.awt.Color(255, 255, 255));
         prescription_label.setText("Prescription");
@@ -1480,12 +1572,12 @@ public class Home extends javax.swing.JFrame {
         });
         reports_dropdown_icon_panel.setLayout(new java.awt.BorderLayout());
 
-        reports_dropdown_panel.setBackground(new java.awt.Color(0, 51, 204));
+        reports_dropdown_panel.setBackground(new java.awt.Color(2, 16, 54));
         reports_dropdown_panel.setForeground(new java.awt.Color(255, 255, 255));
 
         prescription_reports_dropdown_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
         prescription_reports_dropdown_label.setForeground(new java.awt.Color(255, 255, 255));
-        prescription_reports_dropdown_label.setText("  Prescription");
+        prescription_reports_dropdown_label.setText("    Prescription");
         prescription_reports_dropdown_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         prescription_reports_dropdown_label.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1495,7 +1587,7 @@ public class Home extends javax.swing.JFrame {
 
         medical_reports_dropdown_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
         medical_reports_dropdown_label.setForeground(new java.awt.Color(255, 255, 255));
-        medical_reports_dropdown_label.setText("        Medical");
+        medical_reports_dropdown_label.setText("          Medical");
         medical_reports_dropdown_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         medical_reports_dropdown_label.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1520,37 +1612,41 @@ public class Home extends javax.swing.JFrame {
             .addGroup(reports_dropdown_panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(reports_dropdown_panelLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(test_reports_dropdown_label)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         reports_dropdown_panelLayout.setVerticalGroup(
             reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reports_dropdown_panelLayout.createSequentialGroup()
-                .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(prescription_reports_dropdown_label)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
-        search_patient_panel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        search_patient_panel.setFocusable(false);
-        search_patient_panel.setPreferredSize(new java.awt.Dimension(11, 10));
-        search_patient_panel.addMouseListener(new java.awt.event.MouseAdapter() {
+        patient_dropdown_icon_panel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        patient_dropdown_icon_panel.setFocusable(false);
+        patient_dropdown_icon_panel.setPreferredSize(new java.awt.Dimension(11, 10));
+        patient_dropdown_icon_panel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                search_patient_panelMouseClicked(evt);
+                patient_dropdown_icon_panelMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                search_patient_panelMouseEntered(evt);
+                patient_dropdown_icon_panelMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                search_patient_panelMouseExited(evt);
+                patient_dropdown_icon_panelMouseExited(evt);
             }
         });
-        search_patient_panel.setLayout(new java.awt.BorderLayout());
+        patient_dropdown_icon_panel.setLayout(new java.awt.BorderLayout());
 
         email_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
         email_label.setForeground(new java.awt.Color(255, 255, 255));
@@ -1576,42 +1672,48 @@ public class Home extends javax.swing.JFrame {
         menu_panel.setLayout(menu_panelLayout);
         menu_panelLayout.setHorizontalGroup(
             menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(menu_panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(menu_panelLayout.createSequentialGroup()
-                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(reports_dropdown_seperator)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
-                                .addComponent(email_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                                .addComponent(email_label, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(patient_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(menu_panelLayout.createSequentialGroup()
+                                    .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(menu_panelLayout.createSequentialGroup()
+                                    .addComponent(email_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(email_label, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(menu_panelLayout.createSequentialGroup()
+                                    .addComponent(prescription_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(prescription_label, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(patient_dropdown_seperator)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
+                                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(menu_panelLayout.createSequentialGroup()
+                                                .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(patient_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(dashboard_label, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addContainerGap(15, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menu_panelLayout.createSequentialGroup()
+                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(menu_panelLayout.createSequentialGroup()
-                                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(patient_icon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(dashboard_icon, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(prescription_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(11, 11, 11)
-                                .addComponent(prescription_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(menu_panelLayout.createSequentialGroup()
-                        .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
-                                .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, menu_panelLayout.createSequentialGroup()
-                                .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(search_patient_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(dashboard_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18))))
         );
         menu_panelLayout.setVerticalGroup(
             menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1623,29 +1725,30 @@ public class Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(patient_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(menu_panelLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(patient_label, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-                            .addComponent(search_patient_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(patient_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(patient_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(patient_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(patient_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(prescription_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(prescription_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(reports_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(reports_dropdown_icon_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reports_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(email_icon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(email_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(749, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(email_icon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(email_label, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(659, 659, 659))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -2180,7 +2283,7 @@ public class Home extends javax.swing.JFrame {
         );
         prescrption_left_panelLayout.setVerticalGroup(
             prescrption_left_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1046, Short.MAX_VALUE)
+            .addGap(0, 1058, Short.MAX_VALUE)
         );
 
         Prescription.add(prescrption_left_panel, java.awt.BorderLayout.LINE_START);
@@ -2196,7 +2299,7 @@ public class Home extends javax.swing.JFrame {
         );
         prescrption_right_panelLayout.setVerticalGroup(
             prescrption_right_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1046, Short.MAX_VALUE)
+            .addGap(0, 1058, Short.MAX_VALUE)
         );
 
         Prescription.add(prescrption_right_panel, java.awt.BorderLayout.LINE_END);
@@ -2568,7 +2671,7 @@ public class Home extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cancle_previous_editing_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cancle_click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 607, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 619, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -2586,7 +2689,7 @@ public class Home extends javax.swing.JFrame {
         report_show_panel.setLayout(report_show_panelLayout);
         report_show_panelLayout.setHorizontalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1973, Short.MAX_VALUE)
+            .addGap(0, 1961, Short.MAX_VALUE)
         );
         report_show_panelLayout.setVerticalGroup(
             report_show_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3144,7 +3247,7 @@ public class Home extends javax.swing.JFrame {
         );
         patient_left_panelLayout.setVerticalGroup(
             patient_left_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 1058, Short.MAX_VALUE)
         );
 
         Patient.add(patient_left_panel, java.awt.BorderLayout.LINE_START);
@@ -3160,12 +3263,15 @@ public class Home extends javax.swing.JFrame {
         );
         patient_right_panelLayout.setVerticalGroup(
             patient_right_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 1058, Short.MAX_VALUE)
         );
 
         Patient.add(patient_right_panel, java.awt.BorderLayout.LINE_END);
 
         main_panel.add(Patient, "patient");
+
+        document_panel.setLayout(new java.awt.BorderLayout());
+        main_panel.add(document_panel, "document");
 
         search_patient_main_panel.setLayout(new java.awt.BorderLayout());
         main_panel.add(search_patient_main_panel, "search_patient");
@@ -3936,6 +4042,25 @@ public class Home extends javax.swing.JFrame {
             }
         }
     }
+    public void showPatientOptionOnWindow(String page_name) {
+       
+        HashMap<String, JLabel> mp = new HashMap<String, JLabel>();
+        mp.put("patient", new_patient_dropdown);
+        mp.put("document", document_dropdown);
+        mp.put("search_patient", search_dropdown);
+        JLabel menu_panel_label_list[] = {new_patient_dropdown, document_dropdown, search_dropdown};
+
+        // mp.get(page_name).setForeground(Color.CYAN);
+        for (JLabel menu_panel_label_list1 : menu_panel_label_list) {
+            if (menu_panel_label_list1 == mp.get(page_name)) {
+                menu_panel_label_list1.setForeground(Color.CYAN);
+
+            } else {
+                menu_panel_label_list1.setForeground(Color.white);
+            }
+        }
+    
+    }
 
     private void medical_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_report_labelMouseClicked
 
@@ -4665,17 +4790,30 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_prescription_name_inputActionPerformed
 
-    private void search_patient_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseClicked
-        showPageOnWindow("search_patient");
-    }//GEN-LAST:event_search_patient_panelMouseClicked
+    boolean is_patient_right_icon = false;
+    private void patient_dropdown_icon_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_dropdown_icon_panelMouseClicked
+        if (is_patient_right_icon) {
 
-    private void search_patient_panelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_patient_panelMouseEntered
+            setRightArrowIconForPatientDropdown();
+            patient_dropdown_panel.setVisible(false);
+            patient_dropdown_seperator.setVisible(false);
+            is_patient_right_icon = false;
+        } else {
+            setDownArrowIconForPatientDropdown();
+            patient_dropdown_panel.setVisible(true);
+            patient_dropdown_seperator.setVisible(true);
 
-    private void search_patient_panelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseExited
+            is_patient_right_icon = true;
+        }       
+    }//GEN-LAST:event_patient_dropdown_icon_panelMouseClicked
+
+    private void patient_dropdown_icon_panelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_dropdown_icon_panelMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_search_patient_panelMouseExited
+    }//GEN-LAST:event_patient_dropdown_icon_panelMouseEntered
+
+    private void patient_dropdown_icon_panelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_dropdown_icon_panelMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_patient_dropdown_icon_panelMouseExited
 
     private void email_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_email_labelMouseClicked
         showPageOnWindow("email");
@@ -4714,6 +4852,20 @@ public class Home extends javax.swing.JFrame {
         LOGIN_USER = null;
         Log.removeUserLog();
     }//GEN-LAST:event_logout_icon_panelMouseClicked
+
+    private void new_patient_dropdownMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_new_patient_dropdownMouseClicked
+        showPageOnWindow("patient");
+    }//GEN-LAST:event_new_patient_dropdownMouseClicked
+
+    private void document_dropdownMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_document_dropdownMouseClicked
+       showPageOnWindow("document");
+       showPatientOptionOnWindow("document");
+    }//GEN-LAST:event_document_dropdownMouseClicked
+
+    private void search_dropdownMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_dropdownMouseClicked
+               showPageOnWindow("search_patient");
+               showPatientOptionOnWindow("search_patient");
+    }//GEN-LAST:event_search_dropdownMouseClicked
 
     public void resetFeesSection() {
         fees_pno_input.setText("");
@@ -4780,6 +4932,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JCheckBox diarrhea_chk;
     private javax.swing.JPanel doctor_icon_panel;
     private javax.swing.JLabel doctor_name;
+    private javax.swing.JLabel document_dropdown;
+    private javax.swing.JPanel document_panel;
     private javax.swing.JButton edit_report;
     private javax.swing.JPanel email_icon;
     private javax.swing.JTextField email_input;
@@ -4846,9 +5000,13 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel name_label8;
     private javax.swing.JLabel name_label9;
     private javax.swing.JTextField name_report_input;
+    private javax.swing.JLabel new_patient_dropdown;
     private javax.swing.JButton next_btn;
     private javax.swing.JTextArea other_symptoms_input;
     private javax.swing.JPanel patient_back;
+    private javax.swing.JPanel patient_dropdown_icon_panel;
+    private javax.swing.JPanel patient_dropdown_panel;
+    private javax.swing.JSeparator patient_dropdown_seperator;
     private javax.swing.JPanel patient_foot_panel;
     private javax.swing.JPanel patient_form_panel;
     private javax.swing.JPanel patient_form_panel1;
@@ -4905,8 +5063,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton save;
     private javax.swing.JButton save_and_print_btn;
     private javax.swing.JButton save_btn;
+    private javax.swing.JLabel search_dropdown;
     private javax.swing.JPanel search_patient_main_panel;
-    private javax.swing.JPanel search_patient_panel;
     private javax.swing.JButton search_report;
     private javax.swing.JPanel selected_medicine_panel;
     private javax.swing.JLabel status_label;

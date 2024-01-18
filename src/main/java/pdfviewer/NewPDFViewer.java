@@ -20,10 +20,14 @@ public class NewPDFViewer extends JPanel {
     private final JPanel card;
 
     private final JProgressBar progressBar;
-
+    private head head_panel;
+    int total_pages = 0;
     File file = null;
+    String book = "C:\\Users\\haris\\OneDrive\\Desktop\\TYBOOKS\\Java_Programming.pdf";
 
     public NewPDFViewer(File file) {
+
+//        this.file = new File(book);
         this.file = file;
 
         setLayout(new BorderLayout());
@@ -57,9 +61,8 @@ public class NewPDFViewer extends JPanel {
 
         // Add button panel to the JFrame
 //        add(buttonPanel, BorderLayout.PAGE_START);
-
-
-        add(new head(), BorderLayout.PAGE_START);
+        head_panel = new head(this);
+        add(head_panel, BorderLayout.PAGE_START);
 
         add(card, BorderLayout.CENTER);
 
@@ -67,6 +70,7 @@ public class NewPDFViewer extends JPanel {
 
         // Show the first page initially
         loadPDFPagesInBackground();
+
     }
 
     private class ZoomMouseWheelListener implements MouseWheelListener {
@@ -104,6 +108,7 @@ public class NewPDFViewer extends JPanel {
         try {
             PDDocument document = PDDocument.load(this.file);
             int numberOfPages = document.getNumberOfPages();
+            total_pages = numberOfPages;
             pdfPanels = new JPanel[numberOfPages];
             pdfScrollPanes = new JScrollPane[numberOfPages];
 
@@ -152,7 +157,7 @@ public class NewPDFViewer extends JPanel {
                 int centerX = (int) (pageSize.width * zoomFactor) / 2;
                 int centerY = (int) (pageSize.height * zoomFactor) / 2;
 
-                int x = (width / 2) - centerX+20;
+                int x = (width / 2) - centerX + 20;
                 int y = (height / 2) - centerY;
 
                 Graphics2D g2d = (Graphics2D) g.create();
@@ -188,36 +193,42 @@ public class NewPDFViewer extends JPanel {
         pdfPanels[pageIndex].repaint();
     }
 
-    private void showPage(int pageIndex) {
+    public void showPage(int pageIndex) {
         CardLayout mycard = (CardLayout) card.getLayout();
         mycard.show(card, String.valueOf(pageIndex));
-//        setTitle("PDF Viewer - Page " + (pageIndex + 1));
+
+//        head_panel.setFileName("PDF Viewer - Page " + (pageIndex+1));
+//        head_panel.setFileName(this.file.getName() + "- Page " + (pageIndex+1) +"/" + total_pages);
+        head_panel.setFileName(this.file.getName());
+        head_panel.setTotalPage(total_pages);
+        head_panel.setCurrentPage(pageIndex + 1);
         card.revalidate();
         card.repaint();
+        currentPage = pageIndex;
     }
 
-    private void showPreviousPage() {
+    public void showPreviousPage() {
         if (currentPage > 0) {
             currentPage--;
             showPage(currentPage);
         }
     }
 
-    private void showNextPage() {
+    public void showNextPage() {
         if (currentPage < pdfPanels.length - 1) {
             currentPage++;
             showPage(currentPage);
         }
     }
 
-    private void zoomIn() {
+    public void zoomIn() {
         zoomFactor += 0.1f;
         updateZoom();
         card.revalidate();
         card.repaint();
     }
 
-    private void zoomOut() {
+    public void zoomOut() {
         if (zoomFactor > 0.1f) {
             zoomFactor -= 0.1f;
             updateZoom();
@@ -233,17 +244,24 @@ public class NewPDFViewer extends JPanel {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         String book = "C:\\Users\\haris\\OneDrive\\Desktop\\TYBOOKS\\Java_Programming.pdf";
-        NewPDFViewer pdfViewer = new NewPDFViewer(new File(book));
-        Frame fr = new JFrame();
-        fr.setLayout(new BorderLayout());
-        fr.add(pdfViewer, BorderLayout.CENTER);
-        fr.setSize(800, 800);
-        fr.setLocationRelativeTo(null);
-//        fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fr.setVisible(true);
+//        NewPDFViewer pdfViewer = new NewPDFViewer(new File(book));
+//       
+//        Frame fr = new JFrame();
+//        fr.setLayout(new BorderLayout());
+//        fr.add(pdfViewer, BorderLayout.CENTER);
+//        fr.setSize(800, 800);
+//        fr.setLocationRelativeTo(null);
+//        
+////        fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        fr.setVisible(true);
+
+        File file = new File(book);
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
+        //desktop.print(file);
 
     }
 }
