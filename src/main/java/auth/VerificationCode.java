@@ -1,6 +1,7 @@
 package auth;
 
 import email.SendingEmailWithoutAttachment;
+import email.SendingOtp;
 import java.util.Random;
 
 /**
@@ -15,7 +16,7 @@ public class VerificationCode {
         String subject = "Verification Code";
         this.code = getRandomCode();
       
-        SendingEmailWithoutAttachment sendingEmailWithoutAttachment = new SendingEmailWithoutAttachment(to, subject, this.code);
+        SendingOtp sendingEmailWithoutAttachment = new SendingOtp(to, subject, this.code);
         sendingEmailWithoutAttachment.usingAdminEmail();
         sendingEmailWithoutAttachment.start();
         try {
