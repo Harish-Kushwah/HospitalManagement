@@ -109,36 +109,34 @@ public class NewPDFViewer extends JPanel {
     private void loadPDFPages() {
         try {
             document = PDDocument.load(this.file);
-            int numberOfPages = document.getNumberOfPages();
-            total_pages = numberOfPages;
-            pdfPanels = new JPanel[numberOfPages];
-            pdfScrollPanes = new JScrollPane[numberOfPages];
-
-            PDFRenderer renderer = new PDFRenderer(document);
-
-            for (int i = 0; i < numberOfPages; i++) {
-
-                final int pageIndex = i;
-                Runnable rh = new Runnable() {
-                    @Override
-                    public void run() {
-                        addPages(pageIndex, document, renderer);
-
-                    }
-
-                };
-                new Thread(rh).run();
-
-                // Update progress
-                int progress = (int) (((i + 1.0) / numberOfPages) * 100);
-                progressBar.setValue(progress);
-
-            }
-
-            // Do not close the document here; let it remain open for the lifetime of your application.
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(NewPDFViewer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        int numberOfPages = document.getNumberOfPages();
+        total_pages = numberOfPages;
+        pdfPanels = new JPanel[numberOfPages];
+        pdfScrollPanes = new JScrollPane[numberOfPages];
+        PDFRenderer renderer = new PDFRenderer(document);
+        for (int i = 0; i < numberOfPages; i++) {
+            
+            final int pageIndex = i;
+            Runnable rh = new Runnable() {
+                @Override
+                public void run() {
+                    addPages(pageIndex, document, renderer);
+                    
+                }
+                
+            };
+            new Thread(rh).run();
+            
+            // Update progress
+            int progress = (int) (((i + 1.0) / numberOfPages) * 100);
+            progressBar.setValue(progress);
+            
+        }
+        
+        // Do not close the document here; let it remain open for the lifetime of your application.
     }
 
     private void addPages(int pageIndex, PDDocument document, PDFRenderer renderer) {
