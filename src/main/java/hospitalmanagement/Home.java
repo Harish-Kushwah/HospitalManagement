@@ -89,12 +89,14 @@ public class Home extends javax.swing.JFrame {
     String english_translation_icon = "./images/translation_icon2.png";
     String marathi_translation_icon = "./images/translation_icon_marathi.png";
     String search_icon = "./images/search.png";
+    String heart = "./images/heart.gif";
 
     TestReport test;
     MedicalReport medical;
     SearchPatient search_patient;
     Email email_panel;
     InternetThread INTERNET_THREAD = new InternetThread();
+    Document document;
 
 //=============================================[CONSTRUCTOR WORK START]====================================================
     public Home() {
@@ -167,7 +169,8 @@ public class Home extends javax.swing.JFrame {
             search_patient = new SearchPatient(this);
             search_patient_main_panel.add(search_patient, BorderLayout.CENTER);
             
-            document_panel.add(new Document(this,getPatientPagePatientDetailsObject()), BorderLayout.CENTER);
+            document = new Document(this,getPatientPagePatientDetailsObject());
+            document_panel.add(document, BorderLayout.CENTER);
 
             setMarathiFontForInputes();
 
@@ -2283,7 +2286,7 @@ public class Home extends javax.swing.JFrame {
         );
         prescrption_left_panelLayout.setVerticalGroup(
             prescrption_left_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1062, Short.MAX_VALUE)
         );
 
         Prescription.add(prescrption_left_panel, java.awt.BorderLayout.LINE_START);
@@ -2299,7 +2302,7 @@ public class Home extends javax.swing.JFrame {
         );
         prescrption_right_panelLayout.setVerticalGroup(
             prescrption_right_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1062, Short.MAX_VALUE)
         );
 
         Prescription.add(prescrption_right_panel, java.awt.BorderLayout.LINE_END);
@@ -2671,7 +2674,7 @@ public class Home extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cancle_previous_editing_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cancle_click_here, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 619, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 623, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -3247,7 +3250,7 @@ public class Home extends javax.swing.JFrame {
         );
         patient_left_panelLayout.setVerticalGroup(
             patient_left_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1062, Short.MAX_VALUE)
         );
 
         Patient.add(patient_left_panel, java.awt.BorderLayout.LINE_START);
@@ -3263,7 +3266,7 @@ public class Home extends javax.swing.JFrame {
         );
         patient_right_panelLayout.setVerticalGroup(
             patient_right_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1058, Short.MAX_VALUE)
+            .addGap(0, 1062, Short.MAX_VALUE)
         );
 
         Patient.add(patient_right_panel, java.awt.BorderLayout.LINE_END);

@@ -72,6 +72,7 @@ public class Document extends javax.swing.JPanel {
 
     Home home;
     ArrayList<DocumentInformation> DOCUMENTS = null;
+    NewPDFViewer PDFViewer;
 
     public Document(Home home, PatientDetails patientDetails) {
         initComponents();
@@ -223,6 +224,7 @@ public class Document extends javax.swing.JPanel {
         remove_document_btn = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         remove_selected_report_btn = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
         report_show_panel = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 51));
@@ -538,7 +540,7 @@ public class Document extends javax.swing.JPanel {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(12, 16, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, test_report_formLayout.createSequentialGroup()
-                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, test_report_formLayout.createSequentialGroup()
                                 .addGap(42, 42, 42)
                                 .addComponent(document_status, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -570,7 +572,10 @@ public class Document extends javax.swing.JPanel {
                                         .addComponent(document_input, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(add_document_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, test_report_formLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jSeparator2)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -606,21 +611,23 @@ public class Document extends javax.swing.JPanel {
                     .addComponent(remove_document_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(update, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(remove_selected_report_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                    .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
                 .addComponent(document_status, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(report_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(15, 15, 15))
         );
 
         jPanel1.add(test_report_form, java.awt.BorderLayout.WEST);
@@ -653,6 +660,7 @@ public class Document extends javax.swing.JPanel {
 
     private void pno_report_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pno_report_inputKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            removeAllFiles();
             searchDocument();
         }
     }//GEN-LAST:event_pno_report_inputKeyPressed
@@ -683,6 +691,7 @@ public class Document extends javax.swing.JPanel {
     }//GEN-LAST:event_search_reportMouseExited
 
     private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
+        removeAllFiles();
         searchDocument();
     }//GEN-LAST:event_search_reportActionPerformed
 
@@ -768,8 +777,14 @@ public class Document extends javax.swing.JPanel {
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
         saveFilesFor(TEST_REPORT_PATIENT_DETAILS.getPid());
+
         list_model.removeAllElements();
         selected_files.clear();
+        document_status.setText("File inserted successfull");
+        document_status.setForeground(SUCCESS_COLOR);
+
+        searchDocument();
+
 
     }//GEN-LAST:event_updateActionPerformed
 
@@ -857,7 +872,7 @@ public class Document extends javax.swing.JPanel {
     }//GEN-LAST:event_report_refreshMouseReleased
 
     private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
-        home.showReportOnWindow("Prescription");
+        home.showPageOnWindow("patient");
     }//GEN-LAST:event_report_backMouseClicked
 
     private void report_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseExited
@@ -950,7 +965,7 @@ public class Document extends javax.swing.JPanel {
 
     }
     private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
-        home.showReportOnWindow("Medical");
+        home.showPageOnWindow("search_patient");
     }//GEN-LAST:event_report_nextMouseClicked
 
     private void report_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseExited
@@ -979,51 +994,29 @@ public class Document extends javax.swing.JPanel {
     public void removeSelectedReport() {
 
         int index = selected_report_list.getSelectedIndex();
-        System.out.println("\nSelected index :" + index);
         if (index >= 0) {
 
             DocumentInformation doc = DOCUMENTS.get(index);
             boolean status = pdf_database.deleteFile(doc);
-            /*delete from the current folder*/
 
-//            
-//            selected_report_list.setModel(lm);
-//            
-////            selected_report_list.remove(index);
-//            report_show_panel.removeAll();
-//            report_show_panel.revalidate();
-//            report_show_panel.repaint();
-//
-            System.out.println("Before deleting file :");
-            showAllFiles();
+            resetPDFViewer();
+
             if (doc.getFile().delete()) {
                 System.out.println("File removed successfully ");
 
             } else {
                 System.out.println("Unable to remove file");
             }
-//            for (DocumentInformation document : DOCUMENTS) {
-//                if (document.getFile_id() == doc.getFile_id()) {
-//                    if(document.getFile().delete()){
-//                    System.out.println("File removed successfully ");
-//                    break;
-//                    }
-//                }
-//            }
 
             lm.remove(index);
 
-            System.out.println("After deleting file :");
-
-            showAllFiles();
-
             if (status) {
-                document_status.setText("Test Removed");
+                document_status.setText("Document Removed");
                 document_status.setForeground(SUCCESS_COLOR);
             }
 
         } else {
-            document_status.setText("First Select Test");
+            document_status.setText("First Select Document");
             document_status.setForeground(WARNING_COLOR);
         }
         revalidate();
@@ -1096,12 +1089,10 @@ public class Document extends javax.swing.JPanel {
         report_show_panel.revalidate();
         report_show_panel.repaint();
 
-        System.out.print(document.getFile());
-        System.out.print(document.getFile().getAbsolutePath());
-        System.out.print(document.getFile().getName());
-
         if (document.getFile().getName().endsWith(".pdf")) {
-            report_show_panel.add(new NewPDFViewer(document.getFile()), BorderLayout.CENTER);
+            PDFViewer = new NewPDFViewer(document.getFile());
+            report_show_panel.add(PDFViewer, BorderLayout.CENTER);
+
         } else {
             Desktop desktop = Desktop.getDesktop();
             try {
@@ -1115,14 +1106,21 @@ public class Document extends javax.swing.JPanel {
     }
 
     public void removeAllFiles() {
-        for (DocumentInformation document : DOCUMENTS) {
-            document.getFile().delete();
+        if (DOCUMENTS != null) {
+            
+            resetPDFViewer();
+             
+            for (DocumentInformation document : DOCUMENTS) {
+                document.getFile().delete();
+            }
         }
     }
 
     public void showAllFiles() {
-        for (DocumentInformation document : DOCUMENTS) {
-            System.out.println(document.getFile_name());
+        if (DOCUMENTS != null) {
+            for (DocumentInformation document : DOCUMENTS) {
+                System.out.println(document.getFile_name());
+            }
         }
     }
 
@@ -1168,11 +1166,23 @@ public class Document extends javax.swing.JPanel {
         document_input.setText("");
         document_status.setText("");
 
-        report_show_panel.removeAll();
-        report_show_panel.revalidate();
-        report_show_panel.repaint();
-
+     
         removeAllFiles();
+    }
+    public void resetPDFViewer()
+    {
+         /*delete from the current folder*/
+            report_show_panel.removeAll();
+            report_show_panel.revalidate();
+            report_show_panel.repaint();
+            
+            /**
+             * When the user using the external any viewer at that time internal
+             * pdf viewer is null
+             */
+            if (PDFViewer != null) {
+                PDFViewer.closeDocuemnt();
+            }
     }
 
     public void updateTestReport() {
@@ -1215,6 +1225,7 @@ public class Document extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField name_report_inputs;
     private javax.swing.JLabel patient_panel_header_title1;
     private javax.swing.JTextField pno_report_input;

@@ -37,13 +37,15 @@ public class PDFUtility {
                     while ((bytesRead = inflaterInputStream.read(buffer)) != -1) {
                         outputStream.write(buffer, 0, bytesRead);
                     }
+                    inflaterInputStream.close();
                 }
             }
             default ->
                 throw new IllegalArgumentException("Unsupported compression type: " + compressionType);
         }
         // Add more cases for other compression types if needed
-
+        outputStream.close();
+        inputStream.close();
         return outputStream.toByteArray();
     }
 
@@ -57,15 +59,24 @@ public class PDFUtility {
 
             // Create an output stream with a DeflaterOutputStream
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
-            try (DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(outputStream, deflater)) {
+            try {
+                DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(outputStream, deflater);
+
                 deflaterOutputStream.write(data);
+                deflaterOutputStream.close();
+
+            } catch (Exception exp) {
+
             }
+
+            outputStream.close();
 
             // Get the compressed data from the ByteArrayOutputStream
             return outputStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        } finally {
         }
     }
 
@@ -75,7 +86,7 @@ public class PDFUtility {
 
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
-
+            fis.close();
             return data;
         } catch (IOException ex) {
             System.out.println(ex.getMessage());

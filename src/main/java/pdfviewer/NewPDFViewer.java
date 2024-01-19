@@ -9,6 +9,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NewPDFViewer extends JPanel {
 
@@ -24,7 +26,7 @@ public class NewPDFViewer extends JPanel {
     int total_pages = 0;
     File file = null;
     String book = "C:\\Users\\haris\\OneDrive\\Desktop\\TYBOOKS\\Java_Programming.pdf";
-
+    PDDocument document;
     public NewPDFViewer(File file) {
 
 //        this.file = new File(book);
@@ -106,7 +108,7 @@ public class NewPDFViewer extends JPanel {
 
     private void loadPDFPages() {
         try {
-            PDDocument document = PDDocument.load(this.file);
+            document = PDDocument.load(this.file);
             int numberOfPages = document.getNumberOfPages();
             total_pages = numberOfPages;
             pdfPanels = new JPanel[numberOfPages];
@@ -243,25 +245,32 @@ public class NewPDFViewer extends JPanel {
             pdfPanel.repaint();
         }
     }
-
-    public static void main(String[] args) throws IOException {
-
-        String book = "C:\\Users\\haris\\OneDrive\\Desktop\\TYBOOKS\\Java_Programming.pdf";
-//        NewPDFViewer pdfViewer = new NewPDFViewer(new File(book));
-//       
-//        Frame fr = new JFrame();
-//        fr.setLayout(new BorderLayout());
-//        fr.add(pdfViewer, BorderLayout.CENTER);
-//        fr.setSize(800, 800);
-//        fr.setLocationRelativeTo(null);
-//        
-////        fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        fr.setVisible(true);
-
-        File file = new File(book);
-        Desktop desktop = Desktop.getDesktop();
-        desktop.open(file);
-        //desktop.print(file);
-
+    public void closeDocuemnt()
+    {
+        try {
+            document.close();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
+//    public static void main(String[] args) throws IOException {
+//
+//        String book = "C:\\Users\\haris\\OneDrive\\Desktop\\TYBOOKS\\Java_Programming.pdf";
+////        NewPDFViewer pdfViewer = new NewPDFViewer(new File(book));
+////       
+////        Frame fr = new JFrame();
+////        fr.setLayout(new BorderLayout());
+////        fr.add(pdfViewer, BorderLayout.CENTER);
+////        fr.setSize(800, 800);
+////        fr.setLocationRelativeTo(null);
+////        
+//////        fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////        fr.setVisible(true);
+//
+//        File file = new File(book);
+//        Desktop desktop = Desktop.getDesktop();
+//        desktop.open(file);
+//        //desktop.print(file);
+//
+//    }
 }
