@@ -1,4 +1,3 @@
-
 package email;
 
 import java.io.File;
@@ -41,7 +40,7 @@ public class SendingEmailWithAttachment extends SendingEmail {
             msg.setSubject(this.subject);
             msg.setText(this.message);
 
-             MimeMultipart mimeMultipart = new MimeMultipart();
+            MimeMultipart mimeMultipart = new MimeMultipart();
             MimeBodyPart fileMime = new MimeBodyPart();
 
             MimeBodyPart textMime = new MimeBodyPart();

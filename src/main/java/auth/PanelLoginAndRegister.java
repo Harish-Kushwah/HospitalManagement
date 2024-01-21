@@ -465,6 +465,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
                 login_name.setPrefixIcon(new ImageIcon("./images/user.png"));
                 login_name.setHint("Name");
                 login.add(login_name, "w 60%", 3);
+                
                 login_btn.setText("SUBMIT");
 
                 cmdForget.setForeground(new Color(0, 196, 147));
