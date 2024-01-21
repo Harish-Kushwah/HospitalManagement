@@ -234,7 +234,7 @@ public class SendingOtp extends SendingEmail {
 "      <td style=\"overflow-wrap:break-word;word-break:break-word;padding:30px 10px 10px;font-family:arial,helvetica,sans-serif;\" align=\"left\">\n" +
 "        \n" +
 "  <div style=\"font-size: 14px; line-height: 140%; text-align: center; word-wrap: break-word;\">\n" +
-"    <p style=\"line-height: 140%;\">Please verify you're really you by entering this</p>\n" +
+"    <p style=\"line-height: 140%;\">Please verify your email by entering this</p>\n" +
 "<p style=\"line-height: 140%;\">6-digit code when you sign in. Just a heads up, this code will expire</p>\n" +
 "<p style=\"line-height: 140%;\">in 20 minutes for security reasons.</p>\n" +
 "  </div>\n" +
