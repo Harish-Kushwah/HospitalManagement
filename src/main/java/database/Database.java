@@ -1231,9 +1231,7 @@ public class Database {
                 user_info.setHospitalName(rs.getString("hospital_name"));
                 user_info.setEmail(rs.getString("email"));
                 user_info.setUserType(rs.getString("type"));
-                user_info.setPassword(rs.getString("password"));
 
-                System.out.println(user_info);
                 return user_info;
                 // user_info.setUserName(rs.getString("username"));
 
@@ -1245,6 +1243,34 @@ public class Database {
 
         }
         return null;
+
+    }
+    //using this for getting details of user who forgot the password
+    public boolean updateUserAccountPassword(User user) {
+        System.out.println(user);
+        //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
+       
+        String UPDATE_ACCOUNT_PASSWORD = "UPDATE public.\"user\" SET password=? WHERE username=? and email=? and type=?";
+        try {
+            Connection conn = getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_ACCOUNT_PASSWORD);
+            
+            String hash = SHA.getHash(user.getPassword() , user.getEmail());
+            
+            preparedStatement.setString(1, hash);
+            preparedStatement.setString(2, user.getUserName());
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setString(4, user.getUserType());
+
+            System.out.println(user);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+
+            System.out.println(e);
+
+        }
+        return false;
 
     }
 

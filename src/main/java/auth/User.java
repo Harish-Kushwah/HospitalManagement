@@ -78,10 +78,11 @@ public class User implements Serializable {
     {
         return this.status;
     }
-  
+
     @Override
-    public String toString()
-    {
-       return this.username +"\t" + this.email + "\t" +this.type; 
+    public String toString() {
+        return "User{" + "email=" + email + ", username=" + username + ", hospital_name=" + hospital_name + ", password=" + password + ", type=" + type + ", email_password=" + email_password + ", user_id=" + user_id + ", status=" + status + '}';
     }
+  
+    
 }
