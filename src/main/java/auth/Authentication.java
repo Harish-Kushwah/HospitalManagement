@@ -31,7 +31,7 @@ public class Authentication extends javax.swing.JFrame {
     Home home;
 
     public Authentication(Home home) {
-       // setLookAndFeel();
+        // setLookAndFeel();
         initComponents();
         this.home = home;
 
@@ -111,7 +111,6 @@ public class Authentication extends javax.swing.JFrame {
         animator.setDeceleration(0.5f);
         animator.setResolution(0);  //  for smooth animation
         bg.setLayout(layout);
-  
 
         bg.add(cover, "width " + coverSize + "%, pos " + (isLogin ? "1al" : "0al") + " 0 n 100%");
         bg.add(loginAndRegister, "width " + loginSize + "%, pos " + (isLogin ? "0al" : "1al") + " 0 n 100%"); //  1al as 100%
@@ -201,7 +200,6 @@ public class Authentication extends javax.swing.JFrame {
     private void login() {
         if (loginAndRegister.isForgotBtnActive()) {
             forgotBtnAction();
-
         } else {
             loginBtnAction();
         }
@@ -216,6 +214,7 @@ public class Authentication extends javax.swing.JFrame {
             showMessage(Message.MessageType.ERROR, "Enter All the details first");
         } else {
 
+            System.out.println("here");
             User login_user = db.isValidUser(login_page_user);
 
             if (login_user != null) {
@@ -235,20 +234,26 @@ public class Authentication extends javax.swing.JFrame {
     private void forgotBtnAction() {
         Database db = Database.getInstance();
         User login_page_user = loginAndRegister.getLoginUser();
-        if (login_page_user.getEmail() == null || login_page_user.getUserName() == null) {
+        if (login_page_user.getEmail() == null || login_page_user.getUserName() == null || login_page_user.getPassword() == null) {
             showMessage(Message.MessageType.ERROR, "Enter All the details first");
         } else {
             User login_user = db.isValidUserByName(login_page_user);
             if (login_user != null) {
-                System.err.println(login_user);
-                String to = login_user.getEmail();
+                
+                String to = login_page_user.getEmail();
                 String subject = "Healix Password";
-                String message = login_user.getPassword();
-                SendingEmailWithoutAttachment sendPasswordToEmail = new SendingEmailWithoutAttachment(to, subject, message);
-                sendPasswordToEmail.usingAdminEmail();
-                sendPasswordToEmail.start();
-                showMessage(Message.MessageType.SUCCESS, "Password Send at you email");
+                String message = "Your password updated successfully";
 
+                if (db.updateUserAccountPassword(login_page_user)) {
+                    SendingEmailWithoutAttachment sendPasswordToEmail = new SendingEmailWithoutAttachment(to, subject, message);
+                    sendPasswordToEmail.usingAdminEmail();
+                    sendPasswordToEmail.start();
+                    showMessage(Message.MessageType.SUCCESS, "Password Update Successfully");
+                    loginAndRegister.resetLogin();
+                
+                } else {
+                    showMessage(Message.MessageType.ERROR, "No Details found");
+                }
             } else {
                 showMessage(Message.MessageType.ERROR, "No Details found");
             }

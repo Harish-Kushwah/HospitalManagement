@@ -48,7 +48,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         return user;
     }
 
-    private ActionListener eventRegister;
+    private ActionListener eventRegister , eventLogin;
 
     public void setResendMouseAdapter(MouseAdapter resendAdapter) {
         this.resendAdapter = resendAdapter;
@@ -57,7 +57,8 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
     public PanelLoginAndRegister(ActionListener eventRegister, ActionListener eventLogin) {
 
         initComponents();
-        initLogin(eventLogin);
+        this.eventLogin = eventLogin;
+        initLogin();
         initRegister(eventRegister);
 
         login.setVisible(false);
@@ -96,7 +97,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
                 } else {
                     initRegisterCompounder(eventRegister);
                 }
-                 
+
             }
 
         });
@@ -108,7 +109,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
     private void initRegisterCompounder(ActionListener eventRegister) {
         register.removeAll();
         //register.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]25[]push"));
-         MigLayout m = new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]10[]10[]25[]push");
+        MigLayout m = new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]10[]10[]25[]push");
         register.setLayout(m);
         JLabel label = new JLabel("Create Account");
         label.setFont(new Font("sansserif", 1, 30));
@@ -155,7 +156,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
 //        register.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]25[]push"));
 
         //register.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]25[]push"));
-       MigLayout m = new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]10[]10[]25[]push");
+        MigLayout m = new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]10[]10[]25[]push");
         register.setLayout(m);
 
         JLabel label = new JLabel("Create Account");
@@ -227,6 +228,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         repaint();
 
     }
+    
     JPanel info = new JPanel();
 
     public void setLoadingGif() {
@@ -356,8 +358,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         login_doctor.setFocusPainted(false);
         login_admin.setFocusPainted(false);
         login_com.setFocusPainted(false);
-        
-       
+
     }
 
     public void addRadioBtnsOnLoginPage() {
@@ -425,7 +426,9 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         login_user.setPassword(password);
     }
 
-    private void initLogin(ActionListener eventLogin) {
+    
+    JButton cmdForget;
+    public void initLogin() {
 
 //        login.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]25[]push"));
         login.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]10[]10[]25[]push"));
@@ -447,7 +450,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         login_txtPass.setHint("Password");
         login.add(login_txtPass, "w 60%");
 
-        JButton cmdForget = new JButton("Forgot your password ?");
+        cmdForget = new JButton("Forgot your password ?");
         cmdForget.setForeground(new Color(100, 100, 100));
         cmdForget.setFont(new Font("sansserif", 1, 12));
         cmdForget.setContentAreaFilled(false);
@@ -465,13 +468,21 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
                 login_name.setPrefixIcon(new ImageIcon("./images/user.png"));
                 login_name.setHint("Name");
                 login.add(login_name, "w 60%", 3);
+
+                login_txtPass = new MyPasswordField();
+                login_txtPass.setPrefixIcon(new ImageIcon("./images/pass.png"));
+                login_txtPass.setHint("New Password");
+                login.add(login_txtPass, "w 60%",4);
+
                 login_btn.setText("SUBMIT");
 
                 cmdForget.setForeground(new Color(0, 196, 147));
                 forgot_btn_clicked = false;
             } else {
                 login.remove(login_name);
+                
                 login.add(login_txtPass, "w 60%", 3);
+                login_txtPass.setHint("Password");
                 login_btn.setText("LOGIN");
 
                 cmdForget.setForeground(new Color(100, 100, 100));
@@ -488,7 +499,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         login_btn.setForeground(new Color(250, 250, 250));
         login_btn.setText("LOGIN");
 
-        login_btn.addActionListener(eventLogin);
+        login_btn.addActionListener(this.eventLogin);
 
         login_btn.addActionListener((ActionEvent e) -> {
             setLoginUserDetails();
@@ -497,6 +508,25 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         login.add(login_btn, "w 40%, h 40");
     }
 
+   public void resetLogin()
+   {
+       login.removeAll();
+       
+       resetLoginPage();
+       initLogin();
+       setCutomeLookAndFeel();
+       forgot_btn_clicked = true;
+
+   }
+    public void resetLoginPage() {
+        login_txtPass.setText("");
+        login_textEmail.setText("");
+        login_name.setText("");
+        revalidate();
+        repaint();
+       
+    }
+    
     public boolean isForgotBtnActive() {
         return !forgot_btn_clicked;
     }
