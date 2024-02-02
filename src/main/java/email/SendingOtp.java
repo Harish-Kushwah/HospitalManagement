@@ -40,6 +40,7 @@ public class SendingOtp extends SendingEmail {
             msg.setContent(OtpVerification.getHtml(message), "text/html");
             Transport.send(msg);
             System.out.println("Email send successfully");
+            System.out.println("OTP :" + message);
             status = true;
 
         } catch (MessagingException ex) {

@@ -29,7 +29,7 @@ public class SendingEmailWithAttachment extends SendingEmail {
     @Override
     public void run() {
 
-        session.setDebug(true);
+        //session.setDebug(true);
         //step 2:compose the message 
         MimeMessage msg = new MimeMessage(SendingEmail.session);
 
