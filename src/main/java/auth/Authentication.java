@@ -1,6 +1,5 @@
 package auth;
 
-import email.SendingEmailWithoutAttachment;
 import hospitalmanagement.Home;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +19,9 @@ import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
-
+import EmailTemplates.*;
+import email.SendingHtmlMail;
+import email.SendingOtp;
 public class Authentication extends javax.swing.JFrame {
 
     private final DecimalFormat df = new DecimalFormat("##0.###", DecimalFormatSymbols.getInstance(Locale.US));
@@ -286,10 +287,10 @@ public class Authentication extends javax.swing.JFrame {
 
                 String to = login_page_user.getEmail();
                 String subject = "Healix Password";
-                String message = "Your password updated successfully";
+                String message = UpdatePassword.getHtml(login_page_user.getUserName());
 
                 if (db.updateUserAccountPassword(login_page_user)) {
-                    SendingEmailWithoutAttachment sendPasswordToEmail = new SendingEmailWithoutAttachment(to, subject, message);
+                    SendingHtmlMail sendPasswordToEmail = new SendingHtmlMail(to, subject, message);
                     sendPasswordToEmail.usingAdminEmail();
                     sendPasswordToEmail.start();
                     showMessage(Message.MessageType.SUCCESS, "Password Update Successfully");
