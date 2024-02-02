@@ -1,4 +1,6 @@
 # Project exclude paths
 /target/
+/logs/
+
 ./PrescriptionReport.java
 .gitignore
