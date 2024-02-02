@@ -1,4 +1,4 @@
-package database;
+package pdfviewer;
 
 import java.io.File;
 

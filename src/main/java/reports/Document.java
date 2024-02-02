@@ -26,7 +26,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import database.Database;
-import database.DocumentInformation;
+import pdfviewer.DocumentInformation;
 import database.PDFDatabase;
 import java.awt.Desktop;
 import java.awt.HeadlessException;

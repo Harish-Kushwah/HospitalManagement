@@ -1,11 +1,11 @@
 package database;
 
-
-
 import auth.User;
 import email.EmailInformation;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import myutil.MedicineDetails;
 import myutil.PatientDetails;
 import myutil.ReportInfomartion;
@@ -36,7 +36,7 @@ public class Database {
 
     /**
      * Medicine Related All queries
-     */    
+     */
     private static final String GET_MEDI_PEDI = "SELECT* FROM pdetail,medi;";
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
     private static final String INSERT_MEDECINE_INFO = "INSERT INTO medi (pno, pname, medicin, mqty, mtime, ba, qty) VALUES (?, ?, ?, ?, ?, ?, ?);";
@@ -44,9 +44,9 @@ public class Database {
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
     private static final String INSERT_MEDICINE = "INSERT INTO medilist (medicine) VALUES (?);";
 
-   /**
-    * Bookmark Relates All queries
-    */
+    /**
+     * Bookmark Relates All queries
+     */
     private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM bookmark WHERE bname=?";
     private static final String INSERT_BOOKMARK = "INSERT INTO bookmark (bname, medicin, mqty, mtime, ba, qty) VALUES (?,?,?,?,?,?);";
 
@@ -75,37 +75,33 @@ public class Database {
     private static final String UPDATE_EMAIL_TEMPLATE = "UPDATE email_template SET  template=?, subject=?, body=?, attach_file=? WHERE email_id =?;";
     private static final String INSERT_USER_EMAIL_DETAILS = "INSERT INTO public.email_users(user_id, email, password,status) VALUES (?, ?,?,?);";
 
-   /**
-    * User Relates All queries
-    */
-    private static final String INSERT_NEW_USER = "INSERT INTO  public.\"user\"(username, email, type, hospital_name, password) VALUES (?, ?, ?, ?, ?);";
-    private static final String GET_LOGIN_USER = "SELECT  * FROM public.\"user\" where email=? and password=? and type=?";
-    private static final String GET_LOGIN_USER_BY_NAME = "SELECT  * FROM public.\"user\" where email=? and username=? and type=?";
-
-
-    static Database singletone_database = null;
-    Connection connection = null;
+    private static Database singletone_database = null;
+    private static Connection connection = null;
 
     private Database() {
     }
 
     //creates the database connection
     public Connection getConnection() {
-        try {
-            if (connection == null) {
-                connection = DriverManager.getConnection(url, user, password);
-                return connection;
-            }
+        if (connection == null) {
+            connection = DatabaseConfig.getDestinationConnection();
             return connection;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
         }
-        return null;
+        return connection;
+    }
+
+    public void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+        }
+        connection = null;
     }
 
     /**
-     * give the instance of database 
-     * @return 
+     * give the instance of database
+     *
+     * @return
      */
     public static Database getInstance() {
         if (singletone_database == null) {
@@ -117,7 +113,8 @@ public class Database {
 
     /**
      * return the total number of patients data present in database
-     * @return 
+     *
+     * @return
      */
     public String getTotalNumberOfUser() {
         try {
@@ -325,7 +322,7 @@ public class Database {
         }
         return null;
     }
-    
+
     public void updatePatientDate(PatientDetails patientdetails) {
 
         try {
@@ -1078,34 +1075,6 @@ public class Database {
         }
     }
 
-    public boolean insertNewUser(User user) {
-
-        try {
-            Connection conn = getConnection();
-            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_NEW_USER);
-
-            preparedStatement.setString(1, user.getUserName());
-            preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, user.getUserType());
-            preparedStatement.setString(4, user.getHospitalName());
-            
-            /**
-             * This hash is generated using SHA-512 
-             * public key i.e salt is email id of user
-             * private key i.e password of user
-             */
-            String hash = SHA.getHash(user.getPassword() , user.getEmail());
-            
-            preparedStatement.setString(5, hash);
-            preparedStatement.executeUpdate();
-            return true;
-            //conn.commit();
-        } catch (SQLException e) {
-            System.out.println(e);
-            return false;
-        }
-    }
-
     public boolean insertUserEmailInforamtion(User user) {
         try {
             Connection conn = getConnection();
@@ -1124,8 +1093,7 @@ public class Database {
             return false;
         }
     }
-   
-    
+
     public boolean updateUserEmailInforamtion(User user) {
         try {
             Connection conn = getConnection();
@@ -1144,13 +1112,13 @@ public class Database {
             return false;
         }
     }
-    public User getEmailSecurityCodes(User user)
-    {
-         try {
+
+    public User getEmailSecurityCodes(User user) {
+        try {
             Connection conn = getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = conn.prepareStatement("SELECT password, status FROM public.email_users where user_id = ?;");
-            preparedStatement.setInt(1,user.getUserId());
+            preparedStatement.setInt(1, user.getUserId());
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
             // Step 4: Process the ResultSet object.
@@ -1170,108 +1138,6 @@ public class Database {
             System.out.println(e);
         }
         return null;
-    }
-
-    public User isValidUser(User user) {
-        try {
-            Connection conn = getConnection();
-            PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER);
-            preparedStatement.setString(1, user.getEmail());
-            
-            /**
-             * This hash is generated using SHA-512 
-             * public key i.e salt is email id of user
-             * private key i.e password of user
-             */
-            String hash = SHA.getHash(user.getPassword() , user.getEmail());
-            preparedStatement.setString(2, hash);
-            preparedStatement.setString(3, user.getUserType());
-
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-
-                User user_info = new User();
-                user_info.setUserName(rs.getString("username"));
-                user_info.setHospitalName(rs.getString("hospital_name"));
-                user_info.setEmail(rs.getString("email"));
-                user_info.setUserType(rs.getString("type"));
-                user_info.setUserId(rs.getInt("user_id"));
-
-                System.out.println(user_info);
-                return user_info;
-                // user_info.setUserName(rs.getString("username"));
-
-                // return patientdetails;
-            }
-        } catch (SQLException e) {
-
-            System.out.println(e);
-
-        }
-        return null;
-
-    }
-
-    //using this for getting details of user who forgot the password
-    public User isValidUserByName(User user) {
-        System.out.println(user);
-        //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
-        try {
-            Connection conn = getConnection();
-            PreparedStatement preparedStatement = conn.prepareStatement(GET_LOGIN_USER_BY_NAME);
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getUserName());
-            preparedStatement.setString(3, user.getUserType());
-
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-
-                User user_info = new User();
-                user_info.setUserName(rs.getString("username"));
-                user_info.setHospitalName(rs.getString("hospital_name"));
-                user_info.setEmail(rs.getString("email"));
-                user_info.setUserType(rs.getString("type"));
-
-                return user_info;
-                // user_info.setUserName(rs.getString("username"));
-
-                // return patientdetails;
-            }
-        } catch (SQLException e) {
-
-            System.out.println(e);
-
-        }
-        return null;
-
-    }
-    //using this for getting details of user who forgot the password
-    public boolean updateUserAccountPassword(User user) {
-        System.out.println(user);
-        //final String GET_USER = "SELECT  * FROM public.\"user\" where email="+"\'" + user.getEmail()+"\'" + " password= " + \123'; = \'" + username + "\'";
-       
-        String UPDATE_ACCOUNT_PASSWORD = "UPDATE public.\"user\" SET password=? WHERE username=? and email=? and type=?";
-        try {
-            Connection conn = getConnection();
-            PreparedStatement preparedStatement = conn.prepareStatement(UPDATE_ACCOUNT_PASSWORD);
-            
-            String hash = SHA.getHash(user.getPassword() , user.getEmail());
-            
-            preparedStatement.setString(1, hash);
-            preparedStatement.setString(2, user.getUserName());
-            preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, user.getUserType());
-
-            System.out.println(user);
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-
-            System.out.println(e);
-
-        }
-        return false;
-
     }
 
     public ArrayList<String> getLikeTemplate(String template_name) {

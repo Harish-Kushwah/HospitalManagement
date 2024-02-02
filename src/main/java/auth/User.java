@@ -10,6 +10,15 @@ public class User implements Serializable {
     private String email=null , username , hospital_name=null , password, type,email_password;
     private int user_id;
     private boolean status = false;
+    private String database_name = null;
+
+    public String getDatabase_name() {
+        return database_name;
+    }
+
+    public void setDatabase_name(String database_name) {
+        this.database_name = database_name;
+    }
     
     public void setEmailVerificationStatus(boolean status)
     {

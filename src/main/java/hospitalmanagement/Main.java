@@ -2,7 +2,9 @@ package hospitalmanagement;
 
 import auth.Authentication;
 import auth.Log;
+import auth.Message;
 import auth.User;
+import database.DatabaseConfig;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -16,9 +18,9 @@ public class Main extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
         this.setIconImage(icon.getImage());
 
-        String name = "./images/healix_logo4.png";   
-        hospital_icon_panel.add(new SetImageIcon(new ImageIcon(name), 258, 197) , BorderLayout.CENTER);
- 
+        String name = "./images/healix_logo4.png";
+        hospital_icon_panel.add(new SetImageIcon(new ImageIcon(name), 258, 197), BorderLayout.CENTER);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -125,9 +127,18 @@ public class Main extends javax.swing.JFrame {
 
     public static void main(String args[]) {
         Main sc = new Main();
-        Home home = new Home();
-      
-         java.awt.EventQueue.invokeLater(() -> {
+//        Home home = new Home();
+
+        Home home = null;
+        User user = Log.getUserLog();
+        if (user != null) {
+            if (DatabaseConfig.LoadDatabase(user)) {
+                home = new Home(user);
+            }
+
+        }
+
+        java.awt.EventQueue.invokeLater(() -> {
             sc.setVisible(true);
         });
 
@@ -165,19 +176,14 @@ public class Main extends javax.swing.JFrame {
 
         }
         new Main().setVisible(false);
-      
-      
-         User user = Log.getUserLog();
-         if(user!=null){
-             home.setUserForHome(user);
-             home.setVisible(true);
-             
-         }
-         else{
-         Authentication authentication  = new Authentication(home);
-         authentication.setVisible(true);
-         }
-        
+
+        if (user != null && home!=null) {
+            home.setVisible(true);
+
+        } else {
+            Authentication authentication = new Authentication();
+            authentication.setVisible(true);
+        }
 
         sc.dispose();
     }
