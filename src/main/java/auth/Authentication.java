@@ -22,6 +22,12 @@ import org.jdesktop.animation.timing.TimingTargetAdapter;
 import EmailTemplates.*;
 import email.SendingHtmlMail;
 import email.SendingOtp;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 public class Authentication extends javax.swing.JFrame {
 
     private final DecimalFormat df = new DecimalFormat("##0.###", DecimalFormatSymbols.getInstance(Locale.US));
@@ -44,6 +50,9 @@ public class Authentication extends javax.swing.JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         init();
+        
+        addEnterKeyForLoginPage();
+        addEnterKeyForSignUpPage();
     }
 
     private void init() {
@@ -131,6 +140,36 @@ public class Authentication extends javax.swing.JFrame {
         });
 
     }
+    
+    public void addEnterKeyForLoginPage() {
+        KeyStroke enter_key = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+
+        Action submit = new AbstractAction("submit") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               loginAndRegister.setLoginUserDetails();
+               login();   
+            }
+        };
+        String k = "submit";
+        loginAndRegister.getLoginPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(enter_key, k);
+        loginAndRegister.getLoginPanel().getActionMap().put(k, submit);
+    }
+    public void addEnterKeyForSignUpPage() {
+        KeyStroke enter_key = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+
+        Action submit = new AbstractAction("submit") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               loginAndRegister.setUserDetails();
+               register();   
+            }
+        };
+        String k = "submit";
+        loginAndRegister.getSignUpPanel().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(enter_key, k);
+        loginAndRegister.getSignUpPanel().getActionMap().put(k, submit);
+    }
+    
     VerificationCode verificationCode = new VerificationCode();
     User user;
     Runnable sendVerificationThread;

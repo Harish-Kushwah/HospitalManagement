@@ -1148,8 +1148,14 @@ public class SearchPatient extends javax.swing.JPanel {
     }
 
     private void add_medicine_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btnActionPerformed
+       try{
         long date_in_time_format = date_input.getDate().getTime();
         searchByDate(date_in_time_format);
+       }
+       catch(NullPointerException exp){
+           System.out.println("No date selected");
+                 
+       }
 
     }//GEN-LAST:event_add_medicine_btnActionPerformed
 

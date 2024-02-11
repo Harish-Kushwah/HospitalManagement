@@ -14,17 +14,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.KeyStroke;
 import myutil.SetImageIcon;
 import net.miginfocom.swing.MigLayout;
 
@@ -48,7 +54,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         return user;
     }
 
-    private ActionListener eventRegister , eventLogin;
+    private ActionListener eventRegister, eventLogin;
 
     public void setResendMouseAdapter(MouseAdapter resendAdapter) {
         this.resendAdapter = resendAdapter;
@@ -228,7 +234,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         repaint();
 
     }
-    
+
     JPanel info = new JPanel();
 
     public void setLoadingGif() {
@@ -261,17 +267,23 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         String password = String.valueOf(txtPass.getPassword());
         if (email.length() == 0) {
             email = null;
+        } else {
+            user.setEmail(email.trim());
+
         }
         if (username.length() == 0) {
             username = null;
+        } else {
+            user.setUserName(username.trim());
+
         }
         if (password.length() == 0) {
             password = null;
+        } else {
+            user.setPassword(password.trim());
+
         }
 
-        user.setEmail(email.trim());
-        user.setUserName(username.trim());
-        user.setPassword(password.trim());
     }
 
     public boolean isSubmitBtnMode() {
@@ -426,8 +438,8 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         login_user.setPassword(password);
     }
 
-    
     JButton cmdForget;
+
     public void initLogin() {
 
 //        login.setLayout(new MigLayout("wrap", "push[center]push", "push[]25[]10[]10[]25[]push"));
@@ -472,7 +484,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
                 login_txtPass = new MyPasswordField();
                 login_txtPass.setPrefixIcon(new ImageIcon("./images/pass.png"));
                 login_txtPass.setHint("New Password");
-                login.add(login_txtPass, "w 60%",4);
+                login.add(login_txtPass, "w 60%", 4);
 
                 login_btn.setText("SUBMIT");
 
@@ -480,7 +492,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
                 forgot_btn_clicked = false;
             } else {
                 login.remove(login_name);
-                
+
                 login.add(login_txtPass, "w 60%", 3);
                 login_txtPass.setHint("Password");
                 login_btn.setText("LOGIN");
@@ -508,25 +520,25 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         login.add(login_btn, "w 40%, h 40");
     }
 
-   public void resetLogin()
-   {
-       login.removeAll();
-       
-       resetLoginPage();
-       initLogin();
-       setCutomeLookAndFeel();
-       forgot_btn_clicked = true;
+    public void resetLogin() {
+        login.removeAll();
 
-   }
+        resetLoginPage();
+        initLogin();
+        setCutomeLookAndFeel();
+        forgot_btn_clicked = true;
+
+    }
+
     public void resetLoginPage() {
         login_txtPass.setText("");
         login_textEmail.setText("");
         login_name.setText("");
         revalidate();
         repaint();
-       
+
     }
-    
+
     public boolean isForgotBtnActive() {
         return !forgot_btn_clicked;
     }
@@ -541,6 +553,14 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         }
     }
 
+    public JPanel getLoginPanel() {
+        return this.login;
+    }
+
+    public JPanel getSignUpPanel() {
+        return this.register;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -551,6 +571,11 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         setLayout(new java.awt.CardLayout());
 
         login.setBackground(new java.awt.Color(255, 255, 255));
+        login.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                loginKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout loginLayout = new javax.swing.GroupLayout(login);
         login.setLayout(loginLayout);
@@ -580,6 +605,13 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
 
         add(register, "card2");
     }// </editor-fold>//GEN-END:initComponents
+
+    private void loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            System.out.println("Enter key pressed");
+        }
+    }//GEN-LAST:event_loginKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel login;

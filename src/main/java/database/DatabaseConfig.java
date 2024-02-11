@@ -216,13 +216,4 @@ public class DatabaseConfig {
         } catch (SQLException ex) {
         }
     }
-
-    public static void main(String args[]) {
-        DatabaseConfig.to_database = "db_" + String.valueOf(45);
-        if (copyTables(DatabaseConfig.to_database)) {
-            System.out.println("Tables created successfully");
-        } else {
-            System.out.println("Unabel to create tables");
-        }
-    }
 }
