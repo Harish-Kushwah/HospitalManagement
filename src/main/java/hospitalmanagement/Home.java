@@ -64,7 +64,7 @@ public class Home extends javax.swing.JFrame {
     public final Color CLICKED_LABEL_COLOR = new Color(0, 0, 204);
     public final Color REPORT_LABEL_COLOR = new Color(0, 0, 102);
 
-    JPanel newDashboardPanel = new NewDashboardPanel();
+    JPanel newDashboardPanel;
     JPanel main_list;
     CardLayout card, reports_card;
     String page_showing = null;
@@ -124,14 +124,10 @@ public class Home extends javax.swing.JFrame {
             ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
             this.setIconImage(icon.getImage());
             menu_panel.setBackground(new Color(0x021036));
-//            reports_dropdown_panel.setBackground(new Color(0x021036));
-//            patient_dropdown_panel.setBackground(new Color(0x021036));
             addAllNavigationButtons();
         };
 
-        Runnable dashboard_thread = () -> {  
-            Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
-        };
+       
 
         Runnable other = () -> {
             addMedicineRowInPanelForm();
@@ -176,12 +172,7 @@ public class Home extends javax.swing.JFrame {
             setMarathiFontForInputes();
 
         };
-        
-        Runnable email_thread = ()-> {
-            
-
-        };
-
+       
         Runnable bookmark_thread = ()-> {
             BOOK_MARK_PANEL = new BookmarkPanel(this);
             prescription_form_panel.add(BOOK_MARK_PANEL, BorderLayout.CENTER);
@@ -210,6 +201,10 @@ public class Home extends javax.swing.JFrame {
             email_panel = new Email();
             EmailPage.add(email_panel, BorderLayout.CENTER);
             email_panel.setUserOnEmailPage(user);
+            
+            newDashboardPanel = new NewDashboardPanel(user);
+            Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
+
         };
         
         new Thread(user_th).start();
@@ -221,9 +216,7 @@ public class Home extends javax.swing.JFrame {
         new Thread(bookmark_thread).start();
         new Thread(imp_thread).start();
 
-        new Thread(email_thread).start();
         new Thread(reports_thread).start();
-        new Thread(dashboard_thread).start();
 
         new Thread(last).start();
 
@@ -3300,7 +3293,7 @@ public class Home extends javax.swing.JFrame {
 
     private void dashboard_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboard_labelMouseClicked
         Dashboard.remove(newDashboardPanel);
-        newDashboardPanel = new NewDashboardPanel();
+        newDashboardPanel = new NewDashboardPanel(this.LOGIN_USER);
 
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
         showPageOnWindow("Dashboard");
@@ -3492,7 +3485,7 @@ public class Home extends javax.swing.JFrame {
     //===================================================[ICONS MOUSE LISTENER STARTS]============================================================
     private void dashboard_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboard_iconMouseClicked
         Dashboard.remove(newDashboardPanel);
-        newDashboardPanel = new NewDashboardPanel();
+        newDashboardPanel = new NewDashboardPanel(this.LOGIN_USER);
 
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
         showPageOnWindow("Dashboard");

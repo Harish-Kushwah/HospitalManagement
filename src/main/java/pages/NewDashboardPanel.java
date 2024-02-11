@@ -1,5 +1,6 @@
 
 package pages;
+import auth.User;
 import database.Database;
 import swing.LibraryTable;
 import javax.swing.*;
@@ -95,11 +96,14 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
     String TOTAL_PATIENT=database.getTotalNumberOfUser();
     String TOTAL_MONTH_PATIENT=database.getTotalMonthlyPatient();
     String TOTAL_TODAY_PATIENT=database.getTotalTodayPatient();
+    
+    User user;
 
-    public NewDashboardPanel(){
+    public NewDashboardPanel(User user){
       
             // this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
             //this.getRootPane().setWindowDecorationStyle();
+         this.user = user;
          
         this.setLayout(new BorderLayout());
 
@@ -164,7 +168,7 @@ public  class NewDashboardPanel extends JPanel implements WindowStateListener, M
         head_title_panel.add(title,gbc );
 
 
-        JLabel sub_title = new JLabel("Admin Dashboard");
+        JLabel sub_title = new JLabel("Dr." + user.getUserName());
         sub_title.setFont(new Font("Arial",Font.PLAIN,12));
         sub_title.setPreferredSize(new Dimension(200,10));
 

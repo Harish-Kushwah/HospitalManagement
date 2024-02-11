@@ -268,6 +268,9 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
         if (email.length() == 0) {
             email = null;
         } else {
+             if(!email.endsWith("@gmail.com")){
+               email+="@gmail.com";
+             }
             user.setEmail(email.trim());
 
         }
@@ -430,6 +433,9 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
 
         if (email.length() == 0) {
             email = null;
+        }
+        else if(!email.endsWith("@gmail.com")){
+            email+="@gmail.com";
         }
         if (password.length() == 0) {
             password = null;
