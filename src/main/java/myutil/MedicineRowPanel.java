@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -84,7 +87,6 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         delete_chk.setFocusPainted(false);
 
         total_tablet.addMouseListener(this);
-
         name.add(medicine_name);
         p.add(morning_chk);
         p.add(afternoon_chk);
@@ -98,7 +100,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         add(name, BorderLayout.WEST);
         add(p, BorderLayout.CENTER);
 
-        Font marathi_bold = new Font("Mangal", Font.BOLD, 12);
+        //Font marathi_bold = new Font("Mangal", Font.BOLD, 12);
         // medicine_name.setFont(marathi_bold);
 
     }
@@ -210,10 +212,13 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
     @Override
     public void mouseClicked(MouseEvent e) {
         //((MedicineRowPanel)e.getSource()).setBackground(new Color(204, 204, 255));
+        
         p.setEndColor(new Color(204, 204, 255));
+        
         this.setBackground(new Color(255, 51, 51));
         System.out.println("clicked");
-        total_tablet.setText("");
+//        if(e.getSource() == total_tablet)
+//          total_tablet.setText("");
     }
 
     @Override
@@ -255,4 +260,15 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
             this.setBackground(new Color(0xC5C5EF));
         }
     }
+
+    @Override
+    public String toString() {
+        return "MedicineRowPanel{" + "medicine_quantity=" + medicine_quantity + ", medicine_name=" + medicine_name + ", morning_chk=" + morning_chk + ", afternoon_chk=" + afternoon_chk + ", evening_chk=" + evening_chk + ", delete_chk=" + delete_chk + ", btg=" + btg + ", before=" + before + ", after=" + after + ", total_tablet=" + total_tablet + ", comboBox=" + comboBox + ", name=" + name + ", p=" + p + '}';
+    }
+    
+    public void setNewLineColor(){
+        this.p.setEndColor(new Color(204, 204, 255));
+        this.setBackground(new Color(255, 51, 51));
+    }
+    
 }
