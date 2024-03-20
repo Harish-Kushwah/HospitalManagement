@@ -83,6 +83,56 @@ public class SearchPatient extends javax.swing.JPanel {
         return name_input;
     }
 
+
+    public void setPatientOnPatientInputField() {
+        DocumentListener dl = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            void updateFieldState() {
+                
+                 InputValidation validate = new InputValidation();
+                resetMedicinePanel();
+                String name = name_input.getText();
+                String pno = pno_input.getText();
+               
+                String mobile_number = mobile_number_input.getText();
+                 if(validate.isVlalidName(name)) {
+                    searchByName(name);
+                } else if (pno.length() != 0) {
+                    try {
+                        searchByPno(Integer.parseInt(pno));
+                    } catch (NumberFormatException exp) {
+                        System.err.println("Enter valid patien number");
+                    }
+
+                } else if (mobile_number.length() != 0) {
+                    searchByMobileNumber(mobile_number);
+                }
+                else{
+                    System.out.println("Enter valid name");
+                }
+
+            }
+        };
+        name_input.getDocument().addDocumentListener(dl);
+        pno_input.getDocument().addDocumentListener(dl);
+        mobile_number_input.getDocument().addDocumentListener(dl);
+
+    }
+
     public void AddlisterOnGenderRadioBtn() {
 
         male_btn.addItemListener(new ItemListener() {
