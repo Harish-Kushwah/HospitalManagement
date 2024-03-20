@@ -95,7 +95,7 @@ public class Home extends javax.swing.JFrame {
         initComponents();
         REPORTS_THREAD.start();
         //make the frame of full page
-//        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //        setSize(1366,768);
         setLocationRelativeTo(null);
 //        this.pack();
@@ -153,13 +153,15 @@ public class Home extends javax.swing.JFrame {
         //  addEnterBtnActionTotalTablet();
         reports_dropdown_panel.setVisible(false);
         reports_dropdown_seperator.setVisible(false);
-        setMarathiTranslateIcon();
+        setEnglishTranslateIcon();
         addShortKeyForLanguageTranslation();
-        setMarathiFontForInputes();
+//        setMarathiFontForInputes();
+        setEnglishFontForInputes();
         addShortArrowKeyForReportsNavigation();
         /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
 //        addShortArrowKeyForPagesNavigation();
 
+        MedicinePanelShortCutKey.setHome(this);
     }
 
     public JLabel getMedicalReportsDropdownLabel() {
@@ -172,7 +174,7 @@ public class Home extends javax.swing.JFrame {
 
     public void setMarathiFontForInputes() {
         Font marathi_plain = new Font("Mangal", Font.PLAIN, 13);
-       // Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
+        // Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
         medicine_input.setFont(marathi_plain);
         prescription_name_input.setFont(marathi_plain);
         name_report_input.setFont(marathi_plain);
@@ -191,7 +193,7 @@ public class Home extends javax.swing.JFrame {
 
     public void setEnglishFontForInputes() {
         Font english_plain = new Font("Segoe UI", Font.PLAIN, 13);
-       // Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
+        // Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
         medicine_input.setFont(english_plain);
         prescription_name_input.setFont(english_plain);
         name_report_input.setFont(english_plain);
@@ -309,13 +311,15 @@ public class Home extends javax.swing.JFrame {
         gbc.weighty = -1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         for (int i = 0; i < medi.size(); i++) {
-            
+
             MedicineRowPanel p = new MedicineRowPanel(medi.get(i));
             medicine_arraylist.add(p);
             main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
+
             
-            addShortCutForTotalTabletInput(p);
-            
+            MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
+            MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
+
             total_medicine_selected++;
         }
 
@@ -845,51 +849,8 @@ public class Home extends javax.swing.JFrame {
 
     }
 
-      private void transferFocusToNextComponent(MedicineRowPanel p) {
-        // Get the currently focused text field
-        JTextField currentTextField = p.total_tablet;
+   
 
-        // Find the index of the current panel in the list
-        int currentIndex = medicine_arraylist.indexOf(p);
-       
-        // Calculate the index of the next panel
-        int nextIndex = (currentIndex + 1) % medicine_arraylist.size();
-
-        // Get the next panel
-        MedicineRowPanel nextPanel = medicine_arraylist.get(nextIndex);
-
-        // Transfer focus to the name text field of the next panel
-        nextPanel.total_tablet.requestFocus();
-       
-        p.setNewLineColor();
-    }
-      private void transferFocusToRightComponent(MedicineRowPanel p ) {
-        p.comboBox.requestFocus();
-     }
-     private void transferFocusToLeftComponent(MedicineRowPanel p){
-        p.after.requestFocus();
-     }
-      
-      private void transferFocusToPreviousComponent(MedicineRowPanel p ) {
-        // Get the currently focused text field
-        JTextField currentTextField = p.total_tablet;
-
-        // Find the index of the current panel in the list
-        int currentIndex = medicine_arraylist.indexOf(p);
-        int previousIndex = currentIndex;
-         if(currentIndex!=0){
-        // Calculate the index of the next panel
-         previousIndex = (currentIndex - 1) % medicine_arraylist.size();
-  
-        }
-
-        // Get the next panel
-        MedicineRowPanel nextPanel = medicine_arraylist.get(previousIndex);
-
-        // Transfer focus to the name text field of the next panel
-        nextPanel.total_tablet.requestFocus();
-    }
-      
     public void addMedicineRowInPanelForm() {
         main_list = new JPanel();
         main_list.setLayout(new GridBagLayout());
@@ -899,17 +860,12 @@ public class Home extends javax.swing.JFrame {
 //        gbc.weighty = 1;
         //main_list.add(new JPanel(), gbc,0);
 
-        
-        
         //sc.setAlignmentY(TOP_ALIGNMENT);
-        
-        
         JPanel jp = new JPanel(new BorderLayout());
         jp.add(main_list, BorderLayout.PAGE_START);
         JScrollPane sc = new JScrollPane(jp);
-        
+
 //        selected_medicine_panel.setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
-        
         selected_medicine_panel.add(sc);
     }
 
@@ -924,6 +880,27 @@ public class Home extends javax.swing.JFrame {
 //            return nextComponent;
 //        }
 //    }
+    
+    public void removeSelectedMedicine(){
+//        medicine_arraylist = MedicinePanelShortCutKey.getMedicineList();
+        
+       for (int i = 0; i < medicine_arraylist.size(); i++) {
+            MedicineRowPanel p = medicine_arraylist.get(i);
+            if (p.getDeleteCheckStatus()) {
+                main_list.remove(p);
+                medicine_arraylist.remove(p);
+
+                if (total_medicine_selected != 0) {
+                    total_medicine_selected--;
+                }
+                i--;
+            }
+        }
+        validate();
+        repaint();
+        
+        
+    }
     public void removeAllSelectedMedicine() {
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
@@ -932,7 +909,7 @@ public class Home extends javax.swing.JFrame {
 
             validate();
             repaint();
-
+       
         }
         //  main_list.removeAll();
         //  addMedicineRowInPanelForm();
@@ -964,79 +941,23 @@ public class Home extends javax.swing.JFrame {
         gbc.weighty = -1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         medicine_arraylist.add(new MedicineRowPanel(medicine_name.toUpperCase()));
-        
+
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
-            addShortCutForTotalTabletInput(p);
-          
+            MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
+            MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
+
         }
-        
+
         main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
         total_medicine_selected++;
-        
+
         validate();
         repaint();
     }
 
-    public void addShortCutForTotalTabletInput(MedicineRowPanel p)
-    {
-        p.total_tablet.addActionListener((ActionEvent e) -> {
-                transferFocusToNextComponent(p);
-        });
-        
-        p.comboBox.addKeyListener(new KeyAdapter(){
-            
-            @Override
-            public void keyPressed(KeyEvent e) {
-                
-                if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                     transferFocusToNextComponent(p);
-                }
-//                if(e.getKeyCode() == KeyEvent.VK_UP){
-//                     transferFocusToPreviousComponent(p);
-//                }
-//                else if(e.getKeyCode() == KeyEvent.VK_DOWN){
-//                     transferFocusToNextComponent(p);
-//                }
-//                else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-//                    transferFocusToRightComponent(p);
-//                }
-//                else if(e.getKeyCode() == KeyEvent.VK_LEFT){
-//                    transferFocusToLeftComponent(p);
-//                }
-            }
-        });
-        
-        
-        p.total_tablet.addKeyListener(new KeyListener(){
-            @Override
-            public void keyTyped(KeyEvent e) {
-                
-            }
+   
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_UP){
-                     transferFocusToPreviousComponent(p);
-                }
-                else if(e.getKeyCode() == KeyEvent.VK_DOWN){
-                     transferFocusToNextComponent(p);
-                }
-                else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-                    transferFocusToRightComponent(p);
-                }
-                else if(e.getKeyCode() == KeyEvent.VK_LEFT){
-                    transferFocusToLeftComponent(p);
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                
-            }
-        
-        });
-    }
     private void addMedicine(String medicine_name) {
         if (medicine_name == null) {
             medicine_name = medicine_input.getText();
@@ -1051,7 +972,8 @@ public class Home extends javax.swing.JFrame {
 
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
-            addShortCutForTotalTabletInput(p);
+            MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
+            MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
         }
         main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
         total_medicine_selected++;
@@ -1068,8 +990,9 @@ public class Home extends javax.swing.JFrame {
 
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
-            addShortCutForTotalTabletInput(p);
-        }  
+            MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
+            MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
+        }
         main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
         total_medicine_selected++;
         validate();
@@ -1495,7 +1418,7 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
                     .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1633,6 +1556,11 @@ public class Home extends javax.swing.JFrame {
         prescription_name_input.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 prescription_name_inputActionPerformed(evt);
+            }
+        });
+        prescription_name_input.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                prescription_name_inputKeyPressed(evt);
             }
         });
 
@@ -1777,12 +1705,24 @@ public class Home extends javax.swing.JFrame {
         prescription_male_btn.setBackground(new java.awt.Color(251, 252, 224));
         prescription_radio_btn_grp.add(prescription_male_btn);
         prescription_male_btn.setText("Male");
+        prescription_male_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         prescription_male_btn.setFocusPainted(false);
+        prescription_male_btn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                prescription_male_btnKeyPressed(evt);
+            }
+        });
 
         prescription_female_btn.setBackground(new java.awt.Color(251, 252, 224));
         prescription_radio_btn_grp.add(prescription_female_btn);
         prescription_female_btn.setText("Female");
+        prescription_female_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         prescription_female_btn.setFocusPainted(false);
+        prescription_female_btn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                prescription_female_btnKeyPressed(evt);
+            }
+        });
 
         save_and_print_btn.setBackground(new java.awt.Color(51, 102, 255));
         save_and_print_btn.setForeground(new java.awt.Color(255, 255, 255));
@@ -1907,6 +1847,11 @@ public class Home extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 prescription_mobile_number_inputMouseExited(evt);
+            }
+        });
+        prescription_mobile_number_input.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                prescription_mobile_number_inputKeyPressed(evt);
             }
         });
 
@@ -4009,8 +3954,8 @@ public class Home extends javax.swing.JFrame {
             report_status.setForeground(Color.red);
         }
     }
-    public void setTestReport(PatientDetails patientDetails)
-    {
+
+    public void setTestReport(PatientDetails patientDetails) {
         test.searchReport(patientDetails);
     }
 
@@ -4534,6 +4479,30 @@ public class Home extends javax.swing.JFrame {
     private void search_patient_panelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_search_patient_panelMouseExited
+
+    private void prescription_name_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prescription_name_inputKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            prescription_mobile_number_input.requestFocus();
+        }
+    }//GEN-LAST:event_prescription_name_inputKeyPressed
+
+    private void prescription_mobile_number_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prescription_mobile_number_inputKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            medicine_input.requestFocus();
+        }
+    }//GEN-LAST:event_prescription_mobile_number_inputKeyPressed
+
+    private void prescription_male_btnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prescription_male_btnKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            prescription_female_btn.requestFocus();
+        }
+    }//GEN-LAST:event_prescription_male_btnKeyPressed
+
+    private void prescription_female_btnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prescription_female_btnKeyPressed
+         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            medicine_input.requestFocus();
+        }
+    }//GEN-LAST:event_prescription_female_btnKeyPressed
 
     public void resetFeesSection() {
         fees_pno_input.setText("");

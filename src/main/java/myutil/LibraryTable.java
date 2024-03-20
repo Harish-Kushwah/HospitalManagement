@@ -41,7 +41,7 @@ class CustomRenderer extends DefaultTableCellRenderer
     {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         setForeground(this.text_color);
-        setFont(this.text_font);
+//        setFont(this.text_font);
         setHorizontalAlignment(JLabel.CENTER);
         c.setBackground(row % 2 == 0 ? this.first_row_color : this.second_row_color);
 //        setBorder(new LineBorder(new Color(0x5A81EF),1,true));

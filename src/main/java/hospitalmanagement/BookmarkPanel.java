@@ -8,6 +8,7 @@ import static hospitalmanagement.Home.total_medicine_selected;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -166,6 +167,11 @@ public class BookmarkPanel extends javax.swing.JPanel {
         bookmark_list.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 bookmark_listMouseClicked(evt);
+            }
+        });
+        bookmark_list.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                bookmark_listKeyPressed(evt);
             }
         });
         bookmark_list_panel.add(bookmark_list, "card2");
@@ -477,6 +483,13 @@ public class BookmarkPanel extends javax.swing.JPanel {
     private void nextMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nextMouseReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_nextMouseReleased
+
+    private void bookmark_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bookmark_listKeyPressed
+         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+             home.addBookmarkMedicine(bookmark_list);
+            bookmark_input.setText("");
+        }
+    }//GEN-LAST:event_bookmark_listKeyPressed
 
     public void resetBookmarkPanel() {
         bookmark_input.setText("");

@@ -20,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 
 public class MedicineRowPanel extends JPanel implements MouseListener, ItemListener {
@@ -93,7 +94,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         p.add(evening_chk);
         p.add(before);
         p.add(after);
-        p.add(total_tablet);
+        p.add(total_tablet); 
         p.add(comboBox);
         p.add(delete_chk);
         //p.add(save);
@@ -217,8 +218,8 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         
         this.setBackground(new Color(255, 51, 51));
         System.out.println("clicked");
-//        if(e.getSource() == total_tablet)
-//          total_tablet.setText("");
+        if(e.getSource() == total_tablet)
+          total_tablet.setText("");
     }
 
     @Override
@@ -251,13 +252,11 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (delete_chk.isSelected()) {
-            p.setEndColor(new Color(0xff6666));
-            this.setBackground(new Color(0xff3333));
+           setColorForDeleteChkMode();
 
             //Home.removeMedicine(this);
         } else {
-            p.setEndColor(new Color(0xC5C5EF));
-            this.setBackground(new Color(0xC5C5EF));
+           eraseColorForDeleteChkMode();
         }
     }
 
@@ -270,5 +269,20 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
         this.p.setEndColor(new Color(204, 204, 255));
         this.setBackground(new Color(255, 51, 51));
     }
-    
+    public void erasePreviousLineColor(){
+         p.setEndColor(new Color(0xC5C5EF));
+         this.setBackground(new Color(0xC5C5EF));
+    }
+    public void setColorForDeleteChkMode(){
+         p.setEndColor(new Color(0xff6666));
+         this.setBackground(new Color(0xff3333));
+         revalidate();
+         repaint();
+    }
+    public void eraseColorForDeleteChkMode(){
+         p.setEndColor(new Color(0xC5C5EF));
+         this.setBackground(new Color(0xC5C5EF));
+         revalidate();
+         repaint();
+    }
 }

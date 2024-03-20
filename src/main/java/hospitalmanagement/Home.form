@@ -524,7 +524,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="test_reports_dropdown_label" max="32767" attributes="0"/>
-                          <Component id="prescription_reports_dropdown_label" alignment="0" max="32767" attributes="0"/>
+                          <Component id="prescription_reports_dropdown_label" alignment="0" pref="87" max="32767" attributes="0"/>
                           <Component id="medical_reports_dropdown_label" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -918,6 +918,7 @@
                         <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_name_inputMouseEntered"/>
                         <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_name_inputMouseExited"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prescription_name_inputActionPerformed"/>
+                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="prescription_name_inputKeyPressed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="name_label17">
@@ -1156,8 +1157,14 @@
                           <ComponentRef name="prescription_radio_btn_grp"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Male"/>
+                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                          <Color id="Hand Cursor"/>
+                        </Property>
                         <Property name="focusPainted" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="prescription_male_btnKeyPressed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JRadioButton" name="prescription_female_btn">
                       <Properties>
@@ -1168,8 +1175,14 @@
                           <ComponentRef name="prescription_radio_btn_grp"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Female"/>
+                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                          <Color id="Hand Cursor"/>
+                        </Property>
                         <Property name="focusPainted" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="prescription_female_btnKeyPressed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="save_and_print_btn">
                       <Properties>
@@ -1351,6 +1364,7 @@
                       <Events>
                         <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_mobile_number_inputMouseEntered"/>
                         <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_mobile_number_inputMouseExited"/>
+                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="prescription_mobile_number_inputKeyPressed"/>
                       </Events>
                     </Component>
                   </SubComponents>
