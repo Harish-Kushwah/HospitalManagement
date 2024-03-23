@@ -153,10 +153,10 @@ public class Home extends javax.swing.JFrame {
         //  addEnterBtnActionTotalTablet();
         reports_dropdown_panel.setVisible(false);
         reports_dropdown_seperator.setVisible(false);
-        setEnglishTranslateIcon();
+        setMarathiTranslateIcon();
         addShortKeyForLanguageTranslation();
-//        setMarathiFontForInputes();
-        setEnglishFontForInputes();
+        setMarathiFontForInputes();
+//        setEnglishFontForInputes();
         addShortArrowKeyForReportsNavigation();
         /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
 //        addShortArrowKeyForPagesNavigation();
@@ -197,7 +197,7 @@ public class Home extends javax.swing.JFrame {
         medicine_input.setFont(english_plain);
         prescription_name_input.setFont(english_plain);
         name_report_input.setFont(english_plain);
-        medicine_list.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        medicine_list.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         name_input.setFont(english_plain);
 
         JTextField test_report_input = test.getName_report_inputs();
@@ -1418,7 +1418,7 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                    .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1543,7 +1543,6 @@ public class Home extends javax.swing.JFrame {
         name_label16.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
         name_label16.setText("Name :-");
 
-        prescription_name_input.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         prescription_name_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
         prescription_name_input.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
