@@ -132,19 +132,19 @@ public class Main extends javax.swing.JFrame {
             for (int i = 0; i < 100; i++) {
                
                 if(i==60){
-                    Thread.sleep(1000);
+//                    Thread.sleep(1000);
                 }
                 if(i<30){
-                   Thread.sleep(40);
+//                   Thread.sleep(40);
                 }
                 else if(i<60){
-                    Thread.sleep(60);
+//                    Thread.sleep(60);
                 }
                 else if(i<80){
-                     Thread.sleep(30);
+//                     Thread.sleep(30);
                 }
                 else{
-                     Thread.sleep(20);
+                     Thread.sleep(0);
 
                 }
                 info_msg.setText(msg[k]);
