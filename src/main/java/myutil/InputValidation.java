@@ -25,7 +25,7 @@ public class InputValidation {
     public boolean isValidMobileNumber(String mobile)
     {
       
-        String special_str = "+ 1234567890";
+        String special_str = "+ 1234567890१२३४५६७८९०";
         for(int i=0;i<mobile.length();i++)
         {
             if(special_str.indexOf(mobile.charAt(i))==-1 || mobile.length()>10 ){

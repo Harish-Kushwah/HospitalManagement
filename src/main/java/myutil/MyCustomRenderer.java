@@ -10,7 +10,7 @@ import java.awt.*;
 public class MyCustomRenderer extends DefaultTableCellRenderer
 {
     Color text_color=new Color(0x535354);
-    Font text_font=new Font("Mangal",Font.CENTER_BASELINE,13);
+    Font text_font=new Font("Aparajita", Font.PLAIN, 15);
 
     Color first_row_color = new Color(0xf2f2f7);
     Color second_row_color = Color.white;

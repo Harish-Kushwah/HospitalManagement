@@ -3,7 +3,6 @@ package myutil;
 import java.sql.*;
 import java.util.ArrayList;
 
-import myutil.PatientDetails;
 
 /*
   In Database Singleton Design pattern used for reducing the instance of databases and their connection
@@ -27,6 +26,8 @@ public class Database {
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
+    private static final String DELETE_MEDICINE_BY_NAME = "delete  from medilist where medicine =?";
+    
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
     private static final String UPDATE_PATIENT_MOBILE_NO = "update pdetail set mno = ? where pno = ?;";
     private static final String DELETE_BOOKMARK_BY_NAME = "DELETE FROM `bookmark` WHERE bname=?";
@@ -806,6 +807,25 @@ public class Database {
         }
 
     }
+    
+    public boolean removeMedicine(String medicine_name)
+    {
+        boolean flag = false;
+         try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_MEDICINE_BY_NAME);
+            preparedStatement.setString(1, medicine_name);
+
+            preparedStatement.executeUpdate();
+            flag = true;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            flag = false;
+        }
+         
+        return flag;
+    }
 
     public ArrayList<String> getBookmark() {
 
@@ -862,9 +882,9 @@ public class Database {
         return test_report;
     }
 
-    public ArrayList<String> getLikeBookmarkMedicine(String str) {
+    public ArrayList<MedicineDetails> getLikeBookmarkMedicine(String str) {
 
-        ArrayList<String> medi = new ArrayList<String>();
+        ArrayList<MedicineDetails> medi = new ArrayList<>();
 
         try {
             Connection conn = connect();
@@ -877,7 +897,33 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                medi.add(rs.getString("medicin"));
+               MedicineDetails medicineDetails = new MedicineDetails();
+                medicineDetails.setMedicineName(rs.getString("medicin"));
+                medicineDetails.setMedicineQuantity(rs.getString("mqty"));
+                String before = rs.getString("ba");
+                if (before.equalsIgnoreCase("1")) {
+                    medicineDetails.setMedicineMealTime(true);
+                } else {
+                    medicineDetails.setMedicineMealTime(false);
+                }
+                String doses_time = rs.getString("mtime");
+                boolean morning_status = false;
+                boolean afternoon_status = false;
+                boolean evening_status = false;
+                if (doses_time.charAt(0) == '1') {
+                    morning_status = true;
+                }
+                if (doses_time.charAt(3) == '1') {
+                    afternoon_status = true;
+                }
+                if (doses_time.charAt(6) == '1') {
+                    evening_status = true;
+                }
+
+                medicineDetails.setMedicineTime(morning_status, afternoon_status, evening_status);
+                medicineDetails.setTotalQuantity(rs.getString("qty"));
+                medi.add(medicineDetails);
+              
                 i++;
             }
             return medi;

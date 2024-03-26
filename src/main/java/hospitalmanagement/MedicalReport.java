@@ -155,6 +155,9 @@ public class MedicalReport extends javax.swing.JPanel {
     public JTextField getMedicalReportNameInput() {
         return name_report_input;
     }
+    public JTextField getDoctorNameInput() {
+        return report_input;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

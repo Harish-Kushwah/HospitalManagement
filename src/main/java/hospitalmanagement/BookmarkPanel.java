@@ -154,6 +154,11 @@ public class BookmarkPanel extends javax.swing.JPanel {
                 bookmark_inputMouseExited(evt);
             }
         });
+        bookmark_input.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                bookmark_inputKeyPressed(evt);
+            }
+        });
 
         bookmark_list_panel.setLayout(new java.awt.CardLayout());
 
@@ -490,6 +495,28 @@ public class BookmarkPanel extends javax.swing.JPanel {
             bookmark_input.setText("");
         }
     }//GEN-LAST:event_bookmark_listKeyPressed
+
+    private void bookmark_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bookmark_inputKeyPressed
+         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            home.addBookmarkMedicine(bookmark_list);
+            bookmark_input.setText("");
+        }
+
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            bookmark_list.grabFocus();
+            bookmark_list.setSelectedIndex(0);
+
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+
+            if (bookmark_list.getSelectedIndex() == 0) {
+                bookmark_list.grabFocus();
+            } else {
+                bookmark_list.grabFocus();
+            }
+
+        }
+    }//GEN-LAST:event_bookmark_inputKeyPressed
 
     public void resetBookmarkPanel() {
         bookmark_input.setText("");

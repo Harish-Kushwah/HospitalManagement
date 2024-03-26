@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import myutil.GradientPanel;
 import myutil.SetImageIcon;
 
+
 public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
@@ -50,7 +51,7 @@ public class Main extends javax.swing.JFrame {
         completed.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("V.3.0.0  by Patil Infotech");
+        jLabel1.setText("V 4.0.0  by Patil Infotech");
 
         info_msg.setForeground(new java.awt.Color(255, 255, 255));
         info_msg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -119,6 +120,7 @@ public class Main extends javax.swing.JFrame {
 
     public static void main(String args[]) {
         Main sc = new Main();
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 sc.setVisible(true);
@@ -127,12 +129,16 @@ public class Main extends javax.swing.JFrame {
         
         String [] msg ={"Establishing Database Connection...","Loading Patient Records...","Preparing User Interface...","Syncing Data...","Preparing Dashboard..."};
         int k = 0;
-            
+          
+        
+     
+       Home home = null;
         try {
             for (int i = 0; i < 100; i++) {
                
                 if(i==60){
-                    Thread.sleep(1000);
+                    home = new Home();
+                    Thread.sleep(100);
                 }
                 if(i<30){
                    Thread.sleep(40);
@@ -162,7 +168,7 @@ public class Main extends javax.swing.JFrame {
 
         }
         new Main().setVisible(false);
-        new Home().setVisible(true);
+         home.setVisible(true);
 
         sc.dispose();
     }

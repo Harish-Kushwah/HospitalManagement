@@ -1,17 +1,12 @@
 package hospitalmanagement;
 
-import java.sql.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultListModel;
@@ -43,15 +38,12 @@ public class TestReport extends javax.swing.JPanel {
 
     final LineBorder HOVER_BTN_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
     final LineBorder DEFAULT_BTN_BORDER = new LineBorder(Color.WHITE, 1, true);
-    final LineBorder DEFAULT_BORDER = new LineBorder(Color.blue, 1, true);
     final LineBorder INPUT_BORDER = new LineBorder(new Color(0x7c7cf1), 1, true);
     final LineBorder HOVER_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
     final LineBorder WARNING_BORDER = new LineBorder(new Color(0xff3333), 2, true);
 
     final Color WARNING_COLOR = new Color(16724787);
     final Color SUCCESS_COLOR = new Color(0, 153, 0);
-    final Color CLICKED_LABEL_COLOR = new Color(0, 0, 204);
-    final Color REPORT_LABEL_COLOR = new Color(0, 0, 102);
 
     PatientDetails TEST_REPORT_PATIENT_DETAILS = null;
     @SuppressWarnings("empty-statement")
@@ -75,6 +67,9 @@ public class TestReport extends javax.swing.JPanel {
 
     public JTextField getName_report_inputs() {
         return name_report_inputs;
+    }
+    public JTextField getReportNameInput() {
+        return report_input;
     }
 
     public void addAllNavigationButtons() {

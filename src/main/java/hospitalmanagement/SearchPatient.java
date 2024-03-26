@@ -76,7 +76,7 @@ public class SearchPatient extends javax.swing.JPanel {
         this.home = home;
 
         refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
-
+        date_input.setDate(getCurrentDate());
     }
 
     public JTextField getSearchPatientNameField() {
@@ -84,6 +84,9 @@ public class SearchPatient extends javax.swing.JPanel {
     }
 
 
+    public void setPno(String pno){
+        pno_input.setText(pno);
+    }
     public void setPatientOnPatientInputField() {
         DocumentListener dl = new DocumentListener() {
             @Override
@@ -411,6 +414,12 @@ public class SearchPatient extends javax.swing.JPanel {
         }
         test_list.setModel(lm);
 
+    }
+    public void initPage(int patient_number){
+        searchByPno(patient_number);
+        addPatientDetails(patient_number);
+        addMedicineOnPanel(patient_number);
+        addTestReport(patient_number);
     }
 
     @SuppressWarnings("unchecked")

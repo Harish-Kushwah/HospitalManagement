@@ -540,14 +540,12 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER ->
-                        transferComboBoxFocusToNextComponent(p);
-                    case KeyEvent.VK_RIGHT ->
-                        transferComboBoxFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferComboBoxFocusToLeftComponent(p);
+                    case KeyEvent.VK_ENTER -> transferComboBoxFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferComboBoxFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferComboBoxFocusToLeftComponent(p);
                     default -> {
                     }
+                    
                 }
             }
         });
@@ -556,16 +554,11 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP ->
-                        transferTotalTabletFocusToPreviousComponent(p);
-                    case KeyEvent.VK_DOWN ->
-                        transferTotalTabletFocusToNextComponent(p);
-                    case KeyEvent.VK_RIGHT ->
-                        transferTotalTabletFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferTotalTabletFocusToLeftComponent(p);
-                    default -> {
-                    }
+                    case KeyEvent.VK_UP -> transferTotalTabletFocusToPreviousComponent(p);
+                    case KeyEvent.VK_DOWN -> transferTotalTabletFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferTotalTabletFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferTotalTabletFocusToLeftComponent(p);
+                   
                 }
             }
             
@@ -574,18 +567,12 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER ->
-                        removeSelectedMedicineAndTransferFocus(p);
-                    case KeyEvent.VK_UP ->
-                        transferDeleteChkFocusToPreviousComponent(p);
-                    case KeyEvent.VK_DOWN ->
-                        transferDeleteChkFocusToNextComponent(p);
-                    case KeyEvent.VK_RIGHT ->
-                        transferDeleteChkFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferDeleteChkFocusToLeftComponent(p);
-                    default -> {
-                    }
+                    case KeyEvent.VK_ENTER -> removeSelectedMedicineAndTransferFocus(p);
+                    case KeyEvent.VK_UP -> transferDeleteChkFocusToPreviousComponent(p);
+                    case KeyEvent.VK_DOWN -> transferDeleteChkFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferDeleteChkFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferDeleteChkFocusToLeftComponent(p);
+                    
                 }
             }
             
@@ -594,18 +581,12 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER ->
-                        selectMorningChk(p);
-                    case KeyEvent.VK_UP ->
-                        transferMorningChkFocusToPreviousComponent(p);
-                    case KeyEvent.VK_DOWN ->
-                        transferMorningChkFocusToNextComponent(p);
-                    case KeyEvent.VK_RIGHT ->
-                        transferMorningChkFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferMorningChkFocusToLeftComponent(p);
-                    default -> {
-                    }
+                    case KeyEvent.VK_ENTER -> selectMorningChk(p);
+                    case KeyEvent.VK_UP -> transferMorningChkFocusToPreviousComponent(p);
+                    case KeyEvent.VK_DOWN -> transferMorningChkFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferMorningChkFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferMorningChkFocusToLeftComponent(p);
+                    
                 }
             }
             
@@ -614,18 +595,12 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER ->
-                        selectAfternoonChk(p);
-                    case KeyEvent.VK_UP ->
-                        transferAfternoonChkFocusToPreviousComponent(p);
-                    case KeyEvent.VK_DOWN ->
-                        transferAfternoonChkFocusToNextComponent(p);
-                    case KeyEvent.VK_RIGHT ->
-                        transferAfternoonChkFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferAfternoonChkFocusToLeftComponent(p);
-                    default -> {
-                    }
+                    case KeyEvent.VK_ENTER -> selectAfternoonChk(p);
+                    case KeyEvent.VK_UP -> transferAfternoonChkFocusToPreviousComponent(p);
+                    case KeyEvent.VK_DOWN -> transferAfternoonChkFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferAfternoonChkFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferAfternoonChkFocusToLeftComponent(p);
+                   
                 }
             }
             
@@ -634,18 +609,12 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER ->
-                        selectEveningChk(p);
-                    case KeyEvent.VK_UP ->
-                        transferEveningChkFocusToPreviousComponent(p);
-                    case KeyEvent.VK_DOWN ->
-                        transferEveningChkFocusToNextComponent(p);
-                    case KeyEvent.VK_RIGHT ->
-                        transferEveningChkFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferEveningChkFocusToLeftComponent(p);
-                    default -> {
-                    }
+                    case KeyEvent.VK_ENTER -> selectEveningChk(p);
+                    case KeyEvent.VK_UP -> transferEveningChkFocusToPreviousComponent(p);
+                    case KeyEvent.VK_DOWN -> transferEveningChkFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferEveningChkFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferEveningChkFocusToLeftComponent(p);
+                   
                 }
             }
             
@@ -655,19 +624,12 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER ->
-                        transferAfterBtnFocusToNextComponent(p);
-                    
-                    case KeyEvent.VK_UP ->
-                        transferAfterBtnFocusToPreviousComponent(p);
-                    case KeyEvent.VK_DOWN ->
-                        transferAfterBtnFocusToNextComponent(p);
-                    case KeyEvent.VK_RIGHT ->
-                        transferAfterBtnFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferAfterBtnFocusToLeftComponent(p);
-                    default -> {
-                    }
+                    case KeyEvent.VK_ENTER -> transferAfterBtnFocusToNextComponent(p);
+                    case KeyEvent.VK_UP -> transferAfterBtnFocusToPreviousComponent(p);
+                    case KeyEvent.VK_DOWN -> transferAfterBtnFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferAfterBtnFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferAfterBtnFocusToLeftComponent(p);
+                   
                 }
             }
             
@@ -676,15 +638,10 @@ public class MedicinePanelShortCutKey {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER ->
-                        transferBeforBtnFocusToNextComponent(p);
-
-                    case KeyEvent.VK_RIGHT ->
-                        transferBeforBtnFocusToRightComponent(p);
-                    case KeyEvent.VK_LEFT ->
-                        transferBeforBtnFocusToLeftComponent(p);
-                    default -> {
-                    }
+                    case KeyEvent.VK_ENTER -> transferBeforBtnFocusToNextComponent(p);
+                    case KeyEvent.VK_RIGHT -> transferBeforBtnFocusToRightComponent(p);
+                    case KeyEvent.VK_LEFT -> transferBeforBtnFocusToLeftComponent(p);
+                    
                 }
             }
             
