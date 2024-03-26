@@ -88,7 +88,7 @@ public class Home extends javax.swing.JFrame {
     TestReport test;
     MedicalReport medical;
     SearchPatient search_patient;
-    MedicalCertificate medical_certificate;
+    MedicalCertificate1 medical_certificate;
 //=============================================[CONSTRUCTOR WORK START]====================================================
 
     public Home() {
@@ -135,7 +135,7 @@ public class Home extends javax.swing.JFrame {
         test_report_panel.add(test, BorderLayout.CENTER);
         
         medical_certificate_panel.removeAll();
-        medical_certificate = new MedicalCertificate();
+        medical_certificate = new MedicalCertificate1(this,getPatientPagePatientDetailsObject() );
         medical_certificate_panel.add(medical_certificate, BorderLayout.CENTER);
 
         
