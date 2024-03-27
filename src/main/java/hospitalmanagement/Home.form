@@ -322,7 +322,7 @@
                   <Component id="reports_dropdown_seperator" min="-2" pref="3" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="reports_dropdown_panel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="789" max="32767" attributes="0"/>
+                  <EmptySpace pref="749" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -525,7 +525,8 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="test_reports_dropdown_label" max="32767" attributes="0"/>
                           <Component id="prescription_reports_dropdown_label" alignment="0" max="32767" attributes="0"/>
-                          <Component id="medical_reports_dropdown_label" alignment="0" max="32767" attributes="0"/>
+                          <Component id="medical_reports_dropdown_label" alignment="0" pref="96" max="32767" attributes="0"/>
+                          <Component id="medical_certificate_dropdown_label" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -540,6 +541,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="test_reports_dropdown_label" min="-2" pref="24" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="medical_certificate_dropdown_label" min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace pref="16" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -570,7 +573,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="        Medical"/>
+                <Property name="text" type="java.lang.String" value="Referal Letter"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
@@ -594,6 +597,23 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="test_reports_dropdown_labelMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="medical_certificate_dropdown_label">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Malgun Gothic Semilight" size="14" style="1"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="     Certificate"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="medical_certificate_dropdown_labelMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>
@@ -1659,8 +1679,10 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="test_report_label" min="-2" pref="87" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="medical_report_label" min="-2" pref="108" max="-2" attributes="0"/>
-                              <EmptySpace pref="1857" max="32767" attributes="0"/>
+                              <Component id="medical_report_label" min="-2" pref="102" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="medical_certificate_label" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="1792" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1672,6 +1694,7 @@
                                   <Component id="prescription_report_label" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                                   <Component id="medical_report_label" alignment="3" max="32767" attributes="0"/>
                                   <Component id="test_report_label" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                                  <Component id="medical_certificate_label" alignment="3" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                           </Group>
@@ -1687,7 +1710,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="66" green="0" red="0" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Medical Report"/>
+                        <Property name="text" type="java.lang.String" value="Referal Letter"/>
                         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                           <Color id="Hand Cursor"/>
                         </Property>
@@ -1728,6 +1751,23 @@
                       </Properties>
                       <Events>
                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_report_labelMouseClicked"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="medical_certificate_label">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="1"/>
+                        </Property>
+                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="66" green="0" red="0" type="rgb"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Certificate"/>
+                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                          <Color id="Hand Cursor"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="medical_certificate_labelMouseClicked"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -2215,7 +2255,7 @@
                       </AccessibilityProperties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                          <CardConstraints cardName="Medical"/>
+                          <CardConstraints cardName="Referal"/>
                         </Constraint>
                       </Constraints>
 
@@ -2233,6 +2273,20 @@
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
                           <CardConstraints cardName="Test"/>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="medical_certificate_panel">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="ff" green="ff" red="99" type="rgb"/>
+                        </Property>
+                      </Properties>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                          <CardConstraints cardName="Certificate"/>
                         </Constraint>
                       </Constraints>
 

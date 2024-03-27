@@ -87,7 +87,9 @@ public class Home extends javax.swing.JFrame {
 
     TestReport test;
     MedicalReport medical;
+
     public SearchPatient search_patient;
+    MedicalCertificate medical_certificate;
 //=============================================[CONSTRUCTOR WORK START]====================================================
 
     public Home() {
@@ -132,7 +134,12 @@ public class Home extends javax.swing.JFrame {
         test_report_panel.removeAll();
         test = new TestReport(this, getPatientPagePatientDetailsObject());
         test_report_panel.add(test, BorderLayout.CENTER);
+        
+        medical_certificate_panel.removeAll();
+        medical_certificate = new MedicalCertificate(this,getPatientPagePatientDetailsObject() );
+        medical_certificate_panel.add(medical_certificate, BorderLayout.CENTER);
 
+        
         medical_report_panel.removeAll();
         medical = new MedicalReport(this, getPatientPagePatientDetailsObject());
         medical_report_panel.add(medical, BorderLayout.CENTER);
@@ -585,8 +592,8 @@ public class Home extends javax.swing.JFrame {
     public void addShortArrowKeyForReportsNavigation() {
         //Vector<String> vec = new Vector<String>();
 
-        String[] right_reports_name = {"Test", "Medical", "Prescription"};
-        String[] left_reports_name = {"Medical", "Test", "Prescription"};
+        String[] right_reports_name = {"Test", "Referal", "Certificate" ,"Prescription"};
+        String[] left_reports_name = {"Certificate" , "Referal", "Test", "Prescription"};
 
         KeyStroke right_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         KeyStroke left_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
@@ -596,7 +603,7 @@ public class Home extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Right:" + report_showing_index);
                 showReportOnWindow(right_reports_name[report_showing_index]);
-                report_showing_index = (report_showing_index + 1) % 3;
+                report_showing_index = (report_showing_index + 1) % 4;
             }
 
         };
@@ -609,7 +616,7 @@ public class Home extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Left:" + report_showing_index);
                 showReportOnWindow(left_reports_name[report_showing_index]);
-                report_showing_index = (report_showing_index + 1) % 3;
+                report_showing_index = (report_showing_index + 1) % 4;
 
             }
 
@@ -1050,6 +1057,7 @@ public class Home extends javax.swing.JFrame {
         prescription_reports_dropdown_label = new javax.swing.JLabel();
         medical_reports_dropdown_label = new javax.swing.JLabel();
         test_reports_dropdown_label = new javax.swing.JLabel();
+        medical_certificate_dropdown_label = new javax.swing.JLabel();
         reports_dropdown_seperator = new javax.swing.JSeparator();
         search_patient_panel = new javax.swing.JPanel();
         main_panel = new javax.swing.JPanel();
@@ -1108,6 +1116,7 @@ public class Home extends javax.swing.JFrame {
         medical_report_label = new javax.swing.JLabel();
         test_report_label = new javax.swing.JLabel();
         prescription_report_label = new javax.swing.JLabel();
+        medical_certificate_label = new javax.swing.JLabel();
         reports_card_panel = new javax.swing.JPanel();
         prescription_report_panel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -1133,6 +1142,7 @@ public class Home extends javax.swing.JFrame {
         report_show_panel = new javax.swing.JPanel();
         medical_report_panel = new javax.swing.JPanel();
         test_report_panel = new javax.swing.JPanel();
+        medical_certificate_panel = new javax.swing.JPanel();
         Dashboard = new javax.swing.JPanel();
         Patient = new javax.swing.JPanel();
         patient_panel_head = new javax.swing.JPanel();
@@ -1400,7 +1410,7 @@ public class Home extends javax.swing.JFrame {
 
         medical_reports_dropdown_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
         medical_reports_dropdown_label.setForeground(new java.awt.Color(255, 255, 255));
-        medical_reports_dropdown_label.setText("        Medical");
+        medical_reports_dropdown_label.setText("Referal Letter");
         medical_reports_dropdown_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         medical_reports_dropdown_label.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1418,6 +1428,16 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        medical_certificate_dropdown_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
+        medical_certificate_dropdown_label.setForeground(new java.awt.Color(255, 255, 255));
+        medical_certificate_dropdown_label.setText("     Certificate");
+        medical_certificate_dropdown_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        medical_certificate_dropdown_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                medical_certificate_dropdown_labelMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout reports_dropdown_panelLayout = new javax.swing.GroupLayout(reports_dropdown_panel);
         reports_dropdown_panel.setLayout(reports_dropdown_panelLayout);
         reports_dropdown_panelLayout.setHorizontalGroup(
@@ -1427,7 +1447,8 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(reports_dropdown_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(prescription_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                    .addComponent(medical_certificate_dropdown_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         reports_dropdown_panelLayout.setVerticalGroup(
@@ -1438,7 +1459,9 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(medical_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(test_reports_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(medical_certificate_dropdown_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         search_patient_panel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1525,7 +1548,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(789, Short.MAX_VALUE))
+                .addContainerGap(749, Short.MAX_VALUE))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -2160,7 +2183,7 @@ public class Home extends javax.swing.JFrame {
 
         medical_report_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         medical_report_label.setForeground(new java.awt.Color(0, 0, 102));
-        medical_report_label.setText("Medical Report");
+        medical_report_label.setText("Referal Letter");
         medical_report_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         medical_report_label.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2188,6 +2211,16 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        medical_certificate_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        medical_certificate_label.setForeground(new java.awt.Color(0, 0, 102));
+        medical_certificate_label.setText("Certificate");
+        medical_certificate_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        medical_certificate_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                medical_certificate_labelMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout medical_report_panel_headLayout = new javax.swing.GroupLayout(medical_report_panel_head);
         medical_report_panel_head.setLayout(medical_report_panel_headLayout);
         medical_report_panel_headLayout.setHorizontalGroup(
@@ -2198,8 +2231,10 @@ public class Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(test_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(medical_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(1857, Short.MAX_VALUE))
+                .addComponent(medical_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(medical_certificate_label)
+                .addContainerGap(1792, Short.MAX_VALUE))
         );
         medical_report_panel_headLayout.setVerticalGroup(
             medical_report_panel_headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2208,7 +2243,8 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(medical_report_panel_headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(prescription_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(medical_report_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(test_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(test_report_label, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(medical_certificate_label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(55, 55, 55))
         );
 
@@ -2537,13 +2573,17 @@ public class Home extends javax.swing.JFrame {
 
         medical_report_panel.setBackground(new java.awt.Color(204, 255, 255));
         medical_report_panel.setLayout(new java.awt.BorderLayout());
-        reports_card_panel.add(medical_report_panel, "Medical");
+        reports_card_panel.add(medical_report_panel, "Referal");
         medical_report_panel.getAccessibleContext().setAccessibleName("");
 
         test_report_panel.setBackground(new java.awt.Color(153, 255, 255));
         test_report_panel.setLayout(new java.awt.BorderLayout());
         reports_card_panel.add(test_report_panel, "Test");
         test_report_panel.getAccessibleContext().setAccessibleName("");
+
+        medical_certificate_panel.setBackground(new java.awt.Color(153, 255, 255));
+        medical_certificate_panel.setLayout(new java.awt.BorderLayout());
+        reports_card_panel.add(medical_certificate_panel, "Certificate");
 
         all_reports_panel.add(reports_card_panel, java.awt.BorderLayout.CENTER);
 
@@ -3817,8 +3857,8 @@ public class Home extends javax.swing.JFrame {
         reports_card = (CardLayout) reports_card_panel.getLayout();
         reports_card.show(reports_card_panel, report_name);
 
-        JLabel report_panel_label_list[] = {prescription_report_label, test_report_label, medical_report_label};
-        JLabel dropdown_report_panel_label_list[] = {prescription_reports_dropdown_label, test_reports_dropdown_label, medical_reports_dropdown_label};
+        JLabel report_panel_label_list[] = {prescription_report_label, test_report_label, medical_report_label , medical_certificate_label};
+        JLabel dropdown_report_panel_label_list[] = {prescription_reports_dropdown_label, test_reports_dropdown_label, medical_reports_dropdown_label,medical_certificate_dropdown_label};
 
         for (int i = 0; i < report_panel_label_list.length; i++) {
 
@@ -3835,7 +3875,7 @@ public class Home extends javax.swing.JFrame {
 
     private void medical_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_report_labelMouseClicked
 
-        showReportOnWindow("Medical");
+        showReportOnWindow("Referal");
     }//GEN-LAST:event_medical_report_labelMouseClicked
 
 
@@ -4500,7 +4540,7 @@ public class Home extends javax.swing.JFrame {
 
     private void medical_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_reports_dropdown_labelMouseClicked
         showPageOnWindow("reports");
-        showReportOnWindow("Medical");
+        showReportOnWindow("Referal");
 
 //        prescription_reports_dropdown_label.setForeground(Color.white);
 //        medical_reports_dropdown_label.setForeground(Color.cyan);
@@ -4662,6 +4702,17 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_date_inputKeyPressed
 
+    private void medical_certificate_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_certificate_dropdown_labelMouseClicked
+        showPageOnWindow("reports");
+         showReportOnWindow("Certificate");
+
+    }//GEN-LAST:event_medical_certificate_dropdown_labelMouseClicked
+
+    private void medical_certificate_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_certificate_labelMouseClicked
+        showReportOnWindow("Certificate");
+    }//GEN-LAST:event_medical_certificate_labelMouseClicked
+
+
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -4766,6 +4817,9 @@ public class Home extends javax.swing.JFrame {
     private com.toedter.components.JSpinField jSpinField1;
     private javax.swing.JPanel main_panel;
     private javax.swing.JRadioButton male_radio_btn;
+    private javax.swing.JLabel medical_certificate_dropdown_label;
+    private javax.swing.JLabel medical_certificate_label;
+    private javax.swing.JPanel medical_certificate_panel;
     private javax.swing.JLabel medical_report_label;
     private javax.swing.JPanel medical_report_panel;
     private javax.swing.JPanel medical_report_panel_head;
