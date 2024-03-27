@@ -908,7 +908,7 @@ public class TestReport extends javax.swing.JPanel {
     }//GEN-LAST:event_report_listKeyPressed
 
     private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
-        home.showReportOnWindow("Medical");
+        home.showReportOnWindow("Referal");
     }//GEN-LAST:event_report_nextMouseClicked
 
     private void report_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseExited

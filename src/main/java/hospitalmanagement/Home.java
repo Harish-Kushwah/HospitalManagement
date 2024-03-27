@@ -88,7 +88,7 @@ public class Home extends javax.swing.JFrame {
     TestReport test;
     MedicalReport medical;
     SearchPatient search_patient;
-    MedicalCertificate1 medical_certificate;
+    MedicalCertificate medical_certificate;
 //=============================================[CONSTRUCTOR WORK START]====================================================
 
     public Home() {
@@ -135,7 +135,7 @@ public class Home extends javax.swing.JFrame {
         test_report_panel.add(test, BorderLayout.CENTER);
         
         medical_certificate_panel.removeAll();
-        medical_certificate = new MedicalCertificate1(this,getPatientPagePatientDetailsObject() );
+        medical_certificate = new MedicalCertificate(this,getPatientPagePatientDetailsObject() );
         medical_certificate_panel.add(medical_certificate, BorderLayout.CENTER);
 
         
@@ -584,8 +584,8 @@ public class Home extends javax.swing.JFrame {
     public void addShortArrowKeyForReportsNavigation() {
         //Vector<String> vec = new Vector<String>();
 
-        String[] right_reports_name = {"Test", "Medical", "Prescription"};
-        String[] left_reports_name = {"Medical", "Test", "Prescription"};
+        String[] right_reports_name = {"Test", "Referal", "Certificate" ,"Prescription"};
+        String[] left_reports_name = {"Certificate" , "Referal", "Test", "Prescription"};
 
         KeyStroke right_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         KeyStroke left_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
@@ -595,7 +595,7 @@ public class Home extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Right:" + report_showing_index);
                 showReportOnWindow(right_reports_name[report_showing_index]);
-                report_showing_index = (report_showing_index + 1) % 3;
+                report_showing_index = (report_showing_index + 1) % 4;
             }
 
         };
@@ -608,7 +608,7 @@ public class Home extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Left:" + report_showing_index);
                 showReportOnWindow(left_reports_name[report_showing_index]);
-                report_showing_index = (report_showing_index + 1) % 3;
+                report_showing_index = (report_showing_index + 1) % 4;
 
             }
 
