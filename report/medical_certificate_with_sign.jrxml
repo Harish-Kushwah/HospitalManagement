@@ -21,7 +21,7 @@
 	<parameter name="total_rest_days" class="java.lang.String"/>
 	<parameter name="resume_date" class="java.util.Date"/>
 	<queryString>
-		<![CDATA[SELECT * FROM doctor_names WHERE doc_id = $P{dno};]]>
+		<![CDATA[SELECT * FROM doctor_names;]]>
 	</queryString>
 	<background>
 		<band splitType="Stretch"/>
