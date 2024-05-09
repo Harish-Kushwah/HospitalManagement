@@ -402,7 +402,7 @@ public class PanelLoginAndRegister extends javax.swing.JLayeredPane {
 
         login_radio_panel.add(login_doctor);
         login_radio_panel.add(login_com);
-        login_radio_panel.add(login_admin);
+//        login_radio_panel.add(login_admin);
 
         login.add(login_radio_panel);
     }

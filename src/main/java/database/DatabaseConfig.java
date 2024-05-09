@@ -114,7 +114,7 @@ public class DatabaseConfig {
             System.out.println(DESTINATION_URL);
 //            destinationConnection = getDestinationConnection();
             destinationConnection = DriverManager.getConnection(local_url, DESTINATION_USER, DESTINATION_PASSWORD);
-
+            DESTINATION_CONNECTION = destinationConnection;
             // Create a statement for the destination database
             destinationStatement = destinationConnection.createStatement();
 
