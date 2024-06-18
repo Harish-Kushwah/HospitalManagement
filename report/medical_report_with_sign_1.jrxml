@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="107"/>
+	<property name="ireport.y" value="100"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
 	<parameter name="dname" class="java.lang.String"/>
 	<parameter name="date" class="java.util.Date"/>
@@ -61,7 +61,7 @@
 				<text><![CDATA[Dear Dr.]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="FixRelativeToBottom" x="53" y="20" width="100" height="20" uuid="efa7f55c-cfbd-47e1-b9e8-6e0e1657cf46"/>
+				<reportElement positionType="FixRelativeToBottom" x="53" y="20" width="285" height="20" uuid="efa7f55c-cfbd-47e1-b9e8-6e0e1657cf46"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isPdfEmbedded="true"/>
 				</textElement>

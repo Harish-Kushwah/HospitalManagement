@@ -180,7 +180,8 @@ public class Home extends javax.swing.JFrame {
     }
 
     public void setMarathiFontForInputes() {
-        Font marathi_plain = new Font("Aparajita", Font.PLAIN, 16);
+//        Font marathi_plain = new Font("Aparajita", Font.PLAIN, 17);
+        Font marathi_plain = new Font("Aparajita", Font.BOLD, 17);
         // Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
         medicine_input.setFont(marathi_plain);
         prescription_name_input.setFont(marathi_plain);
@@ -189,20 +190,17 @@ public class Home extends javax.swing.JFrame {
         name_input.setFont(marathi_plain);
         prescription_mobile_number_input.setFont(marathi_plain);
         
-        JTextField test_report_input = test.getName_report_inputs();
-        test_report_input.setFont(marathi_plain);
+        test.getName_report_inputs().setFont(marathi_plain);
+        test.getReportNameInput().setFont(marathi_plain);
 
-        JTextField report_input = test.getReportNameInput();
-        report_input.setFont(marathi_plain);
-
-        JTextField medical_report_input = medical.getMedicalReportNameInput();
-        medical_report_input.setFont(marathi_plain);
-
-        JTextField medical_dr_input = medical.getDoctorNameInput();
-        medical_dr_input.setFont(marathi_plain);
-
-        JTextField search_patient_name_input = search_patient.getSearchPatientNameField();
-        search_patient_name_input.setFont(marathi_plain);
+        medical.getMedicalReportNameInput().setFont(marathi_plain);
+        medical.getDoctorNameInput().setFont(marathi_plain);
+        
+        search_patient.getSearchPatientNameField().setFont(marathi_plain); 
+        
+        medical_certificate.getName_report_inputs().setFont(marathi_plain);
+        medical_certificate.getName_Diagonosis_inputs().setFont(marathi_plain);
+        
 
     }
 

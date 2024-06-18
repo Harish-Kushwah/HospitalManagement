@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -13,6 +17,8 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import myutil.MultithredingReports;
 import myutil.PatientDetails;
 import myutil.SetImageIcon;
@@ -57,10 +63,64 @@ public class MedicalCertificate extends javax.swing.JPanel {
         shortKeyForRefreshingPage();
         certificate_date.setDate(home.getCurrentDate());
 
+        addDLListener();
+        setReportPrint();
+        resetReportPage();
+
     }
 
     public JTextField getName_report_inputs() {
         return name_input;
+    }
+
+    public JTextField getName_Diagonosis_inputs() {
+        return diagnosis_input;
+    }
+
+    public void addDLListener() {
+        DocumentListener dl = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            void updateFieldState() {
+                setReportPrint();
+
+                if (total_rest_days.getText() != null) {
+                    String days = total_rest_days.getText().trim();
+                    if (days.length() != 0) {
+                        try{
+                        int days_no = Integer.parseInt(days);
+                        LocalDate ld = LocalDate.now().plusDays(days_no);
+                        resume_date.setDate(Date.from(ld.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+                        }
+                        catch(Exception exp)
+                        {
+                            exp.printStackTrace();
+                        }
+                        
+                     }
+
+                }
+            }
+        };
+
+        name_input.getDocument().addDocumentListener(dl);
+        age_input.getDocument().addDocumentListener(dl);
+        diagnosis_input.getDocument().addDocumentListener(dl);
+        total_rest_days.getDocument().addDocumentListener(dl);
+        other_note.getDocument().addDocumentListener(dl);
     }
 
     public void addAllNavigationButtons() {
@@ -87,7 +147,6 @@ public class MedicalCertificate extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         test_report_form = new javax.swing.JPanel();
         name_input = new javax.swing.JTextField();
-        report_status = new javax.swing.JLabel();
         print = new javax.swing.JButton();
         generate_report = new javax.swing.JButton();
         report_refresh = new javax.swing.JPanel();
@@ -98,17 +157,17 @@ public class MedicalCertificate extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         diagnosis_input = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        point1 = new javax.swing.JCheckBox();
         treatment_type = new javax.swing.JComboBox<>();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        point2 = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
-        jCheckBox3 = new javax.swing.JCheckBox();
+        point3 = new javax.swing.JCheckBox();
         admitted_date = new com.toedter.calendar.JDateChooser();
         jLabel7 = new javax.swing.JLabel();
-        jCheckBox4 = new javax.swing.JCheckBox();
+        point4 = new javax.swing.JCheckBox();
         total_rest_days = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jCheckBox5 = new javax.swing.JCheckBox();
+        point5 = new javax.swing.JCheckBox();
         resume_date = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
         certificate_date = new com.toedter.calendar.JDateChooser();
@@ -117,6 +176,8 @@ public class MedicalCertificate extends javax.swing.JPanel {
         opd_to_date = new com.toedter.calendar.JDateChooser();
         discharged_date = new com.toedter.calendar.JDateChooser();
         jSeparator1 = new javax.swing.JSeparator();
+        other_note = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         report_show_panel = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 51));
@@ -148,8 +209,6 @@ public class MedicalCertificate extends javax.swing.JPanel {
                 name_inputActionPerformed(evt);
             }
         });
-
-        report_status.setBackground(new java.awt.Color(0, 204, 0));
 
         print.setBackground(new java.awt.Color(102, 255, 102));
         print.setText("Print");
@@ -243,6 +302,11 @@ public class MedicalCertificate extends javax.swing.JPanel {
         salutaion_input.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mr", "Mrs", "Mast", "Miss" }));
         salutaion_input.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         salutaion_input.setPreferredSize(new java.awt.Dimension(72, 26));
+        salutaion_input.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                salutaion_inputItemStateChanged(evt);
+            }
+        });
 
         jLabel3.setText("Age:- ");
 
@@ -264,52 +328,82 @@ public class MedicalCertificate extends javax.swing.JPanel {
             }
         });
 
-        jCheckBox1.setBackground(new java.awt.Color(255, 255, 204));
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Is under my treatment as an");
-        jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jCheckBox1.setEnabled(false);
-        jCheckBox1.setFocusPainted(false);
+        point1.setBackground(new java.awt.Color(255, 255, 204));
+        point1.setSelected(true);
+        point1.setText("Is under my treatment as an");
+        point1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        point1.setFocusPainted(false);
+        point1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                point1ItemStateChanged(evt);
+            }
+        });
 
         treatment_type.setBackground(new java.awt.Color(255, 255, 204));
-        treatment_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "out-patient", "in Patient at this clinic", "Hospital" }));
+        treatment_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--select--", "out-patient", "in Patient at this clinic", "Hospital" }));
         treatment_type.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        treatment_type.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                treatment_typeItemStateChanged(evt);
+            }
+        });
 
-        jCheckBox2.setBackground(new java.awt.Color(255, 255, 204));
-        jCheckBox2.setSelected(true);
-        jCheckBox2.setText("Was treated as an OPD Patient from");
-        jCheckBox2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jCheckBox2.setFocusPainted(false);
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+        point2.setBackground(new java.awt.Color(255, 255, 204));
+        point2.setSelected(true);
+        point2.setText("Was treated as an OPD Patient from");
+        point2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        point2.setFocusPainted(false);
+        point2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                point2ItemStateChanged(evt);
+            }
+        });
+        point2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+                point2ActionPerformed(evt);
             }
         });
 
         jLabel6.setText("to");
 
-        jCheckBox3.setBackground(new java.awt.Color(255, 255, 204));
-        jCheckBox3.setSelected(true);
-        jCheckBox3.setText("Was admitted as an in-door Patient on");
-        jCheckBox3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jCheckBox3.setFocusPainted(false);
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+        point3.setBackground(new java.awt.Color(255, 255, 204));
+        point3.setSelected(true);
+        point3.setText("Was admitted as an in-door Patient on");
+        point3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        point3.setFocusPainted(false);
+        point3.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                point3ItemStateChanged(evt);
+            }
+        });
+        point3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
+                point3ActionPerformed(evt);
+            }
+        });
+
+        admitted_date.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                admitted_datePropertyChange(evt);
             }
         });
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 204));
         jLabel7.setText("and discharged on");
 
-        jCheckBox4.setBackground(new java.awt.Color(255, 255, 204));
-        jCheckBox4.setSelected(true);
-        jCheckBox4.setText("had been advised rest for");
-        jCheckBox4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jCheckBox4.setFocusPainted(false);
-        jCheckBox4.addActionListener(new java.awt.event.ActionListener() {
+        point4.setBackground(new java.awt.Color(255, 255, 204));
+        point4.setSelected(true);
+        point4.setText("had been advised rest for");
+        point4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        point4.setFocusPainted(false);
+        point4.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                point4ItemStateChanged(evt);
+            }
+        });
+        point4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox4ActionPerformed(evt);
+                point4ActionPerformed(evt);
             }
         });
 
@@ -322,20 +416,36 @@ public class MedicalCertificate extends javax.swing.JPanel {
         jLabel8.setBackground(new java.awt.Color(255, 255, 204));
         jLabel8.setText("days");
 
-        jCheckBox5.setBackground(new java.awt.Color(255, 255, 204));
-        jCheckBox5.setSelected(true);
-        jCheckBox5.setText("is fit to resume normal duties from");
-        jCheckBox5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jCheckBox5.setFocusPainted(false);
-        jCheckBox5.addActionListener(new java.awt.event.ActionListener() {
+        point5.setBackground(new java.awt.Color(255, 255, 204));
+        point5.setSelected(true);
+        point5.setText("is fit to resume normal duties from");
+        point5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        point5.setFocusPainted(false);
+        point5.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                point5ItemStateChanged(evt);
+            }
+        });
+        point5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox5ActionPerformed(evt);
+                point5ActionPerformed(evt);
+            }
+        });
+
+        resume_date.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                resume_datePropertyChange(evt);
             }
         });
 
         jLabel9.setText("Date:-");
 
         certificate_date.setPreferredSize(new java.awt.Dimension(96, 26));
+        certificate_date.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                certificate_datePropertyChange(evt);
+            }
+        });
 
         age_input.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         age_input.setPreferredSize(new java.awt.Dimension(64, 26));
@@ -353,6 +463,42 @@ public class MedicalCertificate extends javax.swing.JPanel {
             }
         });
 
+        opd_from_date.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                opd_from_datePropertyChange(evt);
+            }
+        });
+
+        opd_to_date.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                opd_to_datePropertyChange(evt);
+            }
+        });
+
+        discharged_date.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                discharged_datePropertyChange(evt);
+            }
+        });
+
+        other_note.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        other_note.setPreferredSize(new java.awt.Dimension(64, 26));
+        other_note.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                other_noteMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                other_noteMouseExited(evt);
+            }
+        });
+        other_note.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                other_noteActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Note:");
+
         javax.swing.GroupLayout test_report_formLayout = new javax.swing.GroupLayout(test_report_form);
         test_report_form.setLayout(test_report_formLayout);
         test_report_formLayout.setHorizontalGroup(
@@ -362,85 +508,92 @@ public class MedicalCertificate extends javax.swing.JPanel {
                     .addGroup(test_report_formLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(point3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(test_report_formLayout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(diagnosis_input, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(point1)
+                                .addGroup(test_report_formLayout.createSequentialGroup()
+                                    .addGap(21, 21, 21)
+                                    .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(treatment_type, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(admitted_date, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))))
+                                .addGroup(test_report_formLayout.createSequentialGroup()
+                                    .addGap(134, 134, 134)
+                                    .addComponent(discharged_date, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(test_report_formLayout.createSequentialGroup()
+                                    .addGap(23, 23, 23)
+                                    .addComponent(opd_from_date, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(opd_to_date, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(point2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(test_report_formLayout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(jSeparator1))
+                                .addGroup(test_report_formLayout.createSequentialGroup()
+                                    .addComponent(salutaion_input, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(name_input, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(test_report_formLayout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(age_input, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(certificate_date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(test_report_formLayout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(diagnosis_input, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jCheckBox1)
-                                    .addGroup(test_report_formLayout.createSequentialGroup()
-                                        .addGap(21, 21, 21)
-                                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(treatment_type, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(admitted_date, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))))
-                                    .addGroup(test_report_formLayout.createSequentialGroup()
-                                        .addGap(134, 134, 134)
-                                        .addComponent(discharged_date, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(test_report_formLayout.createSequentialGroup()
-                                        .addGap(23, 23, 23)
-                                        .addComponent(opd_from_date, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(opd_to_date, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(test_report_formLayout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jSeparator1))
-                                    .addGroup(test_report_formLayout.createSequentialGroup()
-                                        .addComponent(salutaion_input, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(name_input, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(test_report_formLayout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(age_input, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(certificate_date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addComponent(jCheckBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(point4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(total_rest_days, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, test_report_formLayout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(79, 79, 79)
-                                .addComponent(report_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(22, 22, 22))
                     .addGroup(test_report_formLayout.createSequentialGroup()
-                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addGap(60, 60, 60)
-                                .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel2))
-                            .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, test_report_formLayout.createSequentialGroup()
+                                .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(test_report_formLayout.createSequentialGroup()
                                         .addGap(21, 21, 21)
-                                        .addComponent(resume_date, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jCheckBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(test_report_formLayout.createSequentialGroup()
+                                                .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addGap(99, 99, 99)
+                                        .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(test_report_formLayout.createSequentialGroup()
+                                        .addGap(126, 126, 126)
+                                        .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(79, 79, 79)
+                                        .addComponent(report_next, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(13, 13, 13))
                             .addGroup(test_report_formLayout.createSequentialGroup()
-                                .addGap(21, 21, 21)
                                 .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGroup(test_report_formLayout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(jLabel2))
+                                    .addGroup(test_report_formLayout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(point5, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(test_report_formLayout.createSequentialGroup()
+                                                .addGap(21, 21, 21)
+                                                .addComponent(resume_date, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(32, 32, 32)))
+                        .addGap(9, 9, 9)))
                 .addContainerGap())
+            .addGroup(test_report_formLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(other_note, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         test_report_formLayout.setVerticalGroup(
             test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,18 +618,18 @@ public class MedicalCertificate extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox1)
+                        .addComponent(point1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(treatment_type, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox2)
+                        .addComponent(point2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(opd_from_date, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(opd_to_date, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox3)
+                        .addComponent(point3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(admitted_date, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -485,31 +638,33 @@ public class MedicalCertificate extends javax.swing.JPanel {
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jCheckBox4)
+                                    .addComponent(point4)
                                     .addComponent(total_rest_days, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(discharged_date, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(report_next, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, test_report_formLayout.createSequentialGroup()
-                                .addComponent(jCheckBox5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(resume_date, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(report_status, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(point5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(resume_date, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
                     .addGroup(test_report_formLayout.createSequentialGroup()
                         .addComponent(certificate_date, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(217, 217, 217))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(other_note, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))))
+                .addGap(14, 14, 14)
+                .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(report_next, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, test_report_formLayout.createSequentialGroup()
+                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(print, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(generate_report, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(test_report_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(report_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(report_back, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(208, 208, 208))
         );
 
         jPanel1.add(test_report_form, java.awt.BorderLayout.WEST);
@@ -564,8 +719,8 @@ public class MedicalCertificate extends javax.swing.JPanel {
             if (medical_jasper_print != null) {
                 JasperPrintManager.printReport(medical_jasper_print, false);
                 resetReportPage();
-                report_status.setText("Report printed Succesfully");
-                report_status.setForeground(SUCCESS_COLOR);
+//                report_status.setText("Report printed Succesfully");
+//                report_status.setForeground(SUCCESS_COLOR);
                 medical_jasper_print = null;
             } else {
                 setReportPrint();
@@ -573,8 +728,8 @@ public class MedicalCertificate extends javax.swing.JPanel {
 
             }
         } catch (JRException ex) {
-            report_status.setText("Report not printed");
-            report_status.setForeground(WARNING_COLOR);
+//            report_status.setText("Report not printed");
+//            report_status.setForeground(WARNING_COLOR);
         }
     }//GEN-LAST:event_printActionPerformed
 
@@ -644,25 +799,25 @@ public class MedicalCertificate extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_diagnosis_inputActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void point2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_point2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    }//GEN-LAST:event_point2ActionPerformed
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+    private void point3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_point3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
+    }//GEN-LAST:event_point3ActionPerformed
 
-    private void jCheckBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox4ActionPerformed
+    private void point4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_point4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox4ActionPerformed
+    }//GEN-LAST:event_point4ActionPerformed
 
     private void total_rest_daysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_total_rest_daysActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_total_rest_daysActionPerformed
 
-    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox5ActionPerformed
+    private void point5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_point5ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox5ActionPerformed
+    }//GEN-LAST:event_point5ActionPerformed
 
     private void age_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_age_inputMouseEntered
         // TODO add your handling code here:
@@ -675,6 +830,72 @@ public class MedicalCertificate extends javax.swing.JPanel {
     private void age_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_age_inputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_age_inputActionPerformed
+
+    private void treatment_typeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_treatment_typeItemStateChanged
+        setReportPrint();
+    }//GEN-LAST:event_treatment_typeItemStateChanged
+
+    private void point1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_point1ItemStateChanged
+        setReportPrint();
+
+    }//GEN-LAST:event_point1ItemStateChanged
+
+    private void point2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_point2ItemStateChanged
+        setReportPrint();
+    }//GEN-LAST:event_point2ItemStateChanged
+
+    private void point3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_point3ItemStateChanged
+        setReportPrint();
+    }//GEN-LAST:event_point3ItemStateChanged
+
+    private void point4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_point4ItemStateChanged
+        setReportPrint();
+    }//GEN-LAST:event_point4ItemStateChanged
+
+    private void point5ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_point5ItemStateChanged
+        setReportPrint();
+    }//GEN-LAST:event_point5ItemStateChanged
+
+    private void salutaion_inputItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_salutaion_inputItemStateChanged
+        setReportPrint();
+    }//GEN-LAST:event_salutaion_inputItemStateChanged
+
+    private void opd_from_datePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_opd_from_datePropertyChange
+        setReportPrint();
+    }//GEN-LAST:event_opd_from_datePropertyChange
+
+    private void opd_to_datePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_opd_to_datePropertyChange
+        setReportPrint();
+    }//GEN-LAST:event_opd_to_datePropertyChange
+
+    private void admitted_datePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_admitted_datePropertyChange
+        setReportPrint();
+    }//GEN-LAST:event_admitted_datePropertyChange
+
+    private void discharged_datePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_discharged_datePropertyChange
+        setReportPrint();
+    }//GEN-LAST:event_discharged_datePropertyChange
+
+    private void resume_datePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_resume_datePropertyChange
+        setReportPrint();
+    }//GEN-LAST:event_resume_datePropertyChange
+
+    private void certificate_datePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_certificate_datePropertyChange
+        setReportPrint();
+    }//GEN-LAST:event_certificate_datePropertyChange
+
+    private void other_noteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_other_noteMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_other_noteMouseEntered
+
+    private void other_noteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_other_noteMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_other_noteMouseExited
+
+    private void other_noteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_other_noteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_other_noteActionPerformed
+
     public void removeSelecetdReportUsingKey() {
         KeyStroke clt_x = KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK);
         Action remove = new AbstractAction("remove") {
@@ -729,40 +950,13 @@ public class MedicalCertificate extends javax.swing.JPanel {
         try {
 
             HashMap a = new HashMap();
-
             int id = 2;
-
-            String patient_name = name_input.getText();
-            String patient_age = age_input.getText();
-            String designation = salutaion_input.getSelectedItem().toString();
-
-            String gender_type = "She";
-            if (designation.equalsIgnoreCase("mr") || designation.equalsIgnoreCase("mast")) {
-                gender_type = "He";
-            }
-            if (id == -1 || patient_name == null) {
+            if (id == -1 || name_input.getText() == null) {
                 throw new ValidInputException();
             }
 
             a.put("date", certificate_date.getDate());
-            a.put("opd_from_date", opd_from_date.getDate());
-            a.put("opd_to_date", opd_to_date.getDate());
-            a.put("admitted_date", admitted_date.getDate());
-            a.put("discharged_date", discharged_date.getDate());
-            a.put("resume_date", resume_date.getDate());
-
-            a.put("total_rest_days", total_rest_days.getText());
-            a.put("gender_type", gender_type);
-
-            a.put("dno", id);
-            a.put("name", patient_name);
-            a.put("age", patient_age);
-
-            designation += '.';
-
-            a.put("designation", designation);
-            a.put("diagnosis", diagnosis_input.getText());
-            a.put("treatment_type", treatment_type.getSelectedItem().toString());
+            a.put("point1", getContent());
 
             Connection con = REPORTS_THREAD.getConnection();
             if (con != null) {
@@ -775,21 +969,126 @@ public class MedicalCertificate extends javax.swing.JPanel {
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
                 } else {
-                    report_status.setText("No report is availalble");
-                    report_status.setForeground(Color.red);
+                    //report_status.setText("No report is availalble");
+                    //report_status.setForeground(Color.red);
                 }
 
             }
         } catch (NumberFormatException | JRException ex) {
             System.out.println(ex.getMessage());
-            report_status.setText("No report is availalble ");
-            report_status.setForeground(Color.red);
+//            report_status.setText("No report is availalble ");
+//            report_status.setForeground(Color.red);
         } catch (ValidInputException exp) {
-            report_status.setText("Enter valid inputs");
-            report_status.setForeground(Color.red);
+//            report_status.setText("Enter valid inputs");
+//            report_status.setForeground(Color.red);
         }
         report_show_panel.revalidate();
         report_show_panel.repaint();
+    }
+
+    public String getContent() {
+
+        boolean isPointSelected = false;
+
+        String content = "";
+        String patient_name = getFullCapitaliseName(name_input.getText().trim());
+        String patient_age = age_input.getText().trim();
+        String designation = salutaion_input.getSelectedItem().toString();
+        String dignosis = diagnosis_input.getText().trim();
+
+        String gender_type = "She";
+        if (designation.equalsIgnoreCase("mr") || designation.equalsIgnoreCase("mast")) {
+            gender_type = "He";
+        }
+
+        if (patient_name != null && patient_name.length() != 0) {
+            content += "This is to certify that " + designation + ". " + patient_name + ".\n";
+        }
+        if (patient_age != null && patient_age.length() != 0) {
+            content += "Age " + patient_age + " years" + ". ";
+        }
+        if (dignosis != null && dignosis.length() != 0) {
+            content += "Diagnosis " + dignosis + ".\n";
+        } else {
+            content += "\n";
+        }
+        content += "\n";
+        if (point1.isSelected() && !treatment_type.getSelectedItem().toString().equals("--select--")) {
+            content += getBulletChar();
+            content += " Is under my treatment as " + treatment_type.getSelectedItem().toString() + ".\n";
+            isPointSelected = true;
+        }
+
+        if (point2.isSelected()) {
+            if (opd_from_date.getDate() != null && opd_to_date.getDate() != null) {
+                content += getBulletChar();
+                content += " Was treated as an OPD Patient from " + getStrDate(opd_from_date.getDate()) + " to " + getStrDate(opd_to_date.getDate()) + ".\n";
+            }
+            isPointSelected = true;
+        }
+        if (point3.isSelected()) {
+            if (admitted_date.getDate() != null && discharged_date.getDate() != null) {
+                content += getBulletChar();
+                content += " Was admitted as an in-door Patient on " + getStrDate(admitted_date.getDate()) + " and discharged on " + getStrDate(discharged_date.getDate()) + ".\n";
+            }
+        }
+        if (point4.isSelected()) {
+            if (total_rest_days.getText().length() != 0) {
+                content += getBulletChar();
+                content += " " + gender_type + " had been advised rest for " + total_rest_days.getText() + " days " + ".\n";
+            }
+            isPointSelected = true;
+        }
+        if (point5.isSelected()) {
+            if (resume_date.getDate() != null) {
+                content += getBulletChar();
+                content += " " + gender_type + " is fit to resume normal duties from " + getStrDate(resume_date.getDate()) + ".\n";
+            }
+            isPointSelected = true;
+        }
+        if (other_note.getText() != null && other_note.getText().trim().length() != 0) {
+            if (isPointSelected) {
+                content += "\n";
+            }
+            content += getCapitaliseName(other_note.getText().trim());
+        }
+
+        return content;
+    }
+
+    public String getStrDate(Date date) {
+        if (date != null) {
+            SimpleDateFormat ft = new SimpleDateFormat("dd/MM/yyyy");
+            return ft.format(date);
+        }
+        return null;
+    }
+
+    public String getBulletChar() {
+        String circleBulletPoint = "\u2022";
+        String triangleBulletPoint = "\u2023";
+
+        return circleBulletPoint;
+    }
+
+    public String getFullCapitaliseName(String name) {
+        String names[] = name.split("\\s+");
+
+        String ans = "";
+        for (String str : names) {
+            ans += getCapitaliseName(str);
+            ans += " ";
+        }
+        return ans.trim();
+    }
+
+    public String getCapitaliseName(String name) {
+        if (name.length() > 0) {
+            StringBuffer sb = new StringBuffer(name);
+            sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+            return new String(sb);
+        }
+        return null;
     }
 
     /*
@@ -835,9 +1134,9 @@ public class MedicalCertificate extends javax.swing.JPanel {
         resume_date.setDate(null);
 
         total_rest_days.setText("");
+        other_note.setText("");
 
-        report_status.setText("");
-
+//        report_status.setText("");
         report_show_panel.removeAll();
         report_show_panel.revalidate();
         report_show_panel.repaint();
@@ -850,11 +1149,7 @@ public class MedicalCertificate extends javax.swing.JPanel {
     private javax.swing.JTextField diagnosis_input;
     private com.toedter.calendar.JDateChooser discharged_date;
     private javax.swing.JButton generate_report;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -867,13 +1162,18 @@ public class MedicalCertificate extends javax.swing.JPanel {
     private javax.swing.JTextField name_input;
     private com.toedter.calendar.JDateChooser opd_from_date;
     private com.toedter.calendar.JDateChooser opd_to_date;
+    private javax.swing.JTextField other_note;
+    private javax.swing.JCheckBox point1;
+    private javax.swing.JCheckBox point2;
+    private javax.swing.JCheckBox point3;
+    private javax.swing.JCheckBox point4;
+    private javax.swing.JCheckBox point5;
     private javax.swing.JPanel prescription_report_panel;
     private javax.swing.JButton print;
     private javax.swing.JPanel report_back;
     private javax.swing.JPanel report_next;
     private javax.swing.JPanel report_refresh;
     private javax.swing.JPanel report_show_panel;
-    private javax.swing.JLabel report_status;
     private com.toedter.calendar.JDateChooser resume_date;
     private javax.swing.JComboBox<String> salutaion_input;
     private javax.swing.JPanel test_report_form;

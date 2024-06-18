@@ -15,7 +15,7 @@ public class MultithredingReports extends Thread {
     String testReportPath = ".\\report\\test_report_with_sign.jrxml";
     String medicalReportPath =".\\report\\medical_report_with_sign_1.jrxml";
     String medicalReportPathForFormat2 =".\\report\\medical_report_with_sign.jrxml";
-    String medicalCertificatePath =".\\report\\medical_certificate_with_sign.jrxml";
+    String medicalCertificatePath =".\\report\\medical_certificate_with_sign_updated.jrxml";
     JasperReport jr ;
     JasperReport testReportJr;
     JasperReport medicalReportJr;

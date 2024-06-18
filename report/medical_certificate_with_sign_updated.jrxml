@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="77"/>
+	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
+	<subDataset name="dataset2" uuid="51a69fc4-1b12-4684-87c1-481b94512e4f"/>
+	<parameter name="dname" class="java.lang.String"/>
+	<parameter name="date" class="java.util.Date"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="dno" class="java.lang.String"/>
+	<parameter name="age" class="java.lang.String"/>
+	<parameter name="designation" class="java.lang.String"/>
+	<parameter name="point1" class="java.lang.String"/>
+	<parameter name="discharged_date" class="java.util.Date"/>
+	<parameter name="total_rest_days" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM medilist limit 1;]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="90" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="96" splitType="Stretch">
+			<staticText>
+				<reportElement x="278" y="8" width="37" height="20" uuid="efac5722-9a6a-442f-939d-c217c92283e8"/>
+				<textElement>
+					<font isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="315" y="7" width="55" height="20" uuid="30785230-e649-41b8-ae57-995eab3570ee"/>
+				<textElement>
+					<font isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="128" y="64" width="119" height="20" uuid="d890e8d1-af4e-400b-a019-03e5a94a08e6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="13" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Medical Certificate]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="42" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="213" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="40" y="0" width="135" height="20" uuid="7111d251-525a-48e1-bf65-5ec7b0c806e0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="12" isBold="false" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="297" y="196" width="73" height="17" uuid="ed9b2a39-0f88-4c4d-9b30-746b17c5b7f1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="false" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Dr.Ajit Pawar]]></text>
+			</staticText>
+			<image>
+				<reportElement x="306" y="159" width="64" height="37" uuid="10062db4-c20a-4410-9875-b62cdbf43257"/>
+				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="40" y="-42" width="310" height="201" isRemoveLineWhenBlank="true" uuid="2bccd7a1-80cc-40d0-8a67-fe216d7d7ef7"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Georgia" size="12" isBold="false" isUnderline="false" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{point1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="11" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch"/>
+	</summary>
+</jasperReport>

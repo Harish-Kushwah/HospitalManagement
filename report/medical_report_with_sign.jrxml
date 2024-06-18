@@ -54,7 +54,7 @@
 				<text><![CDATA[Dr.]]></text>
 			</staticText>
 			<textField>
-				<reportElement positionType="FixRelativeToBottom" x="59" y="0" width="100" height="20" uuid="efa7f55c-cfbd-47e1-b9e8-6e0e1657cf46"/>
+				<reportElement positionType="FixRelativeToBottom" x="59" y="0" width="272" height="20" uuid="efa7f55c-cfbd-47e1-b9e8-6e0e1657cf46"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isPdfEmbedded="true"/>
 				</textElement>
