@@ -8,6 +8,9 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import javaswingdev.swing.table.TablePanel;
+import raven.toast.Notifications;
+//import raven.toast.Notifications;
 
 //This class is for the making the card with the label and icon
 class InfoBoxPanel {
@@ -342,14 +345,24 @@ public class NewDashboardPanel extends JPanel implements WindowStateListener, Mo
                 // super.mouseClicked(e);
                 int rowIndex = new_books_table.getSelectedRow();
 
-                 String pno = (String) tableModel.getValueAt(rowIndex, 0);
-                if (home != null) {
-                    home.search_patient.setPno(pno);
-                     home.search_patient.initPage(Integer.parseInt(pno));
-                    home.showPageOnWindow("search_patient");
-
+                if (rowIndex >= 0 && home != null) {
+                    int pno = Integer.parseInt((String) tableModel.getValueAt(rowIndex, 0));
+                    String patientName = (String) tableModel.getValueAt(rowIndex, 2);
+                    
+                    Notifications.getInstance().clearAll();
+                    Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(patientName, pno));
+//                    
+//                    home.search_patient.setPno(pno);
+//                    home.search_patient.initPage(Integer.parseInt(pno));
+//                    home.showPageOnWindow("search_patient");
                 }
             }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+//                Notifications.getInstance().clearAll();
+            }
+
         });
 //        new_books_table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 //            public void valueChanged(ListSelectionEvent event) {
@@ -397,15 +410,23 @@ public class NewDashboardPanel extends JPanel implements WindowStateListener, Mo
                 // super.mouseClicked(e);
                 int rowIndex = new_memeber_table.getSelectedRow();
 
-                String pno = (String) tableModel.getValueAt(rowIndex, 0);
-                if (home != null) {
-                  home.search_patient.setPno(pno);
-                  home.search_patient.initPage(Integer.parseInt(pno));
-                  
-                    home.showPageOnWindow("search_patient");
-
+                if (rowIndex >= 0 && home != null) {
+                    int pno = Integer.parseInt((String) tableModel.getValueAt(rowIndex, 0));
+                    String patientName = (String) tableModel.getValueAt(rowIndex, 2);
+                    
+                    Notifications.getInstance().clearAll();
+                    Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(patientName, pno));
+//                    
+//                    home.search_patient.setPno(pno);
+//                    home.search_patient.initPage(Integer.parseInt(pno));
+//                    home.showPageOnWindow("search_patient");
                 }
 
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+//                Notifications.getInstance().clearAll();
             }
         });
 

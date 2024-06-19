@@ -1,5 +1,6 @@
 package hospitalmanagement;
 
+import javaswingdev.system.SystemUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -10,6 +11,8 @@ import myutil.SetImageIcon;
 public class Main extends javax.swing.JFrame {
     public Main() {
         initComponents();
+        SystemUI.installFlatLafUI();
+        
         ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
         this.setIconImage(icon.getImage());
         

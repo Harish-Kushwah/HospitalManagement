@@ -40,8 +40,11 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
+import raven.toast.Notifications;
+//import raven.toast.Notifications;
 
 public class Home extends javax.swing.JFrame {
+
 
     PatientDetails PATIENT_DETAILS = null;
     MultithredingReports REPORTS_THREAD = new MultithredingReports();
@@ -94,8 +97,10 @@ public class Home extends javax.swing.JFrame {
 
     public Home() {
 
+
         initComponents();
         REPORTS_THREAD.start();
+
         //make the frame of full page
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //        setSize(1366,768);
@@ -169,6 +174,9 @@ public class Home extends javax.swing.JFrame {
 //        addShortArrowKeyForPagesNavigation();
 
         MedicinePanelShortCutKey.setHome(this);
+        
+
+         Notifications.getInstance().setJFrame(this);
     }
 
     public JLabel getMedicalReportsDropdownLabel() {
@@ -194,7 +202,7 @@ public class Home extends javax.swing.JFrame {
         test.getReportNameInput().setFont(marathi_plain);
 
         medical.getMedicalReportNameInput().setFont(marathi_plain);
-        medical.getDoctorNameInput().setFont(marathi_plain);
+//        medical.getDoctorNameInput().setFont(marathi_plain);
         
         search_patient.getSearchPatientNameField().setFont(marathi_plain); 
         

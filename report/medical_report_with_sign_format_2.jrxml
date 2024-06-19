@@ -2,20 +2,13 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d65db4a4-6d2a-4b06-b8b2-88a51dbe24ae">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="77"/>
+	<property name="ireport.y" value="69"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
-	<subDataset name="dataset2" uuid="51a69fc4-1b12-4684-87c1-481b94512e4f"/>
-	<parameter name="dname" class="java.lang.String"/>
 	<parameter name="date" class="java.util.Date"/>
-	<parameter name="name" class="java.lang.String"/>
-	<parameter name="dno" class="java.lang.String"/>
-	<parameter name="age" class="java.lang.String"/>
-	<parameter name="designation" class="java.lang.String"/>
-	<parameter name="point1" class="java.lang.String"/>
-	<parameter name="discharged_date" class="java.util.Date"/>
-	<parameter name="total_rest_days" class="java.lang.String"/>
+	<parameter name="content" class="java.lang.String"/>
+	
 	<queryString>
-		<![CDATA[SELECT * FROM doctor_names;]]>
+		<![CDATA[SELECT * FROM medilist limit 1;]]>
 	</queryString>
 	<background>
 		<band splitType="Stretch"/>
@@ -40,11 +33,11 @@
 				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="128" y="64" width="119" height="20" uuid="d890e8d1-af4e-400b-a019-03e5a94a08e6"/>
+				<reportElement positionType="FixRelativeToBottom" x="128" y="42" width="119" height="20" uuid="ae9a5cc4-26e2-4b2a-89b2-6a6f867fc4e3"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="13" isBold="true" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[Medical Certificate]]></text>
+				<text><![CDATA[Referral Letter]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -52,32 +45,33 @@
 		<band height="42" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="213" splitType="Stretch">
-			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="40" y="0" width="135" height="20" uuid="7111d251-525a-48e1-bf65-5ec7b0c806e0"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="12" isBold="false" isPdfEmbedded="true"/>
+		<band height="206" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="40" y="-64" width="291" height="196" uuid="e136de44-627a-4180-810c-927048bc9944"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Georgia" isUnderline="false" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[]]></text>
+                         
+				<textFieldExpression><![CDATA[$P{content}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="286" y="132" width="84" height="20" uuid="00d4895f-bd92-4d89-a580-c3218408ad0a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Sincerely yours]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="FixRelativeToBottom" x="297" y="196" width="73" height="17" uuid="ed9b2a39-0f88-4c4d-9b30-746b17c5b7f1"/>
+				<reportElement positionType="FixRelativeToBottom" x="297" y="189" width="73" height="17" uuid="ed9b2a39-0f88-4c4d-9b30-746b17c5b7f1"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Arial" size="11" isBold="false" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Dr.Ajit Pawar]]></text>
 			</staticText>
 			<image>
-				<reportElement x="306" y="159" width="64" height="37" uuid="10062db4-c20a-4410-9875-b62cdbf43257"/>
+				<reportElement x="306" y="152" width="64" height="37" uuid="10062db4-c20a-4410-9875-b62cdbf43257"/>
 				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
 			</image>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="40" y="-42" width="310" height="201" isRemoveLineWhenBlank="true" uuid="2bccd7a1-80cc-40d0-8a67-fe216d7d7ef7"/>
-				<textElement verticalAlignment="Top">
-					<font fontName="Georgia" size="12" isBold="false" isUnderline="false" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{point1}]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 	<columnFooter>
