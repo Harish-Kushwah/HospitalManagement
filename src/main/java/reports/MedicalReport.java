@@ -1,5 +1,6 @@
-package hospitalmanagement;
+package reports;
 
+import hospitalmanagement.Home;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -22,8 +23,8 @@ import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import myutil.MultithredingReports;
-import myutil.PatientDetails;
+import reports.MultithredingReports;
+import model.PatientDetails;
 import myutil.SetImageIcon;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;

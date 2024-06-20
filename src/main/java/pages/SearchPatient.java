@@ -1,50 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
-package hospitalmanagement;
+package pages;
 
-import static hospitalmanagement.Home.total_medicine_selected;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import myutil.MyCustomRenderer;
-import myutil.Database;
-import myutil.GradientPanel;
+import javaswingdev.swing.table.MyCustomRenderer;
+import database.Database;
+import hospitalmanagement.Home;
+import util.swing.panel.GradientPanel;
 import myutil.InputValidation;
-import myutil.LibraryTable;
-import myutil.MedicineDetails;
-import myutil.MedicineRowPanel;
-import myutil.PatientDetails;
-import myutil.ReportInfomartion;
+import medcine.MedicineDetails;
+import medcine.MedicineRowPanel;
+import model.PatientDetails;
+import model.ReportInfomartion;
 import myutil.SetImageIcon;
-import java.util.regex.*;
 
 /**
  *

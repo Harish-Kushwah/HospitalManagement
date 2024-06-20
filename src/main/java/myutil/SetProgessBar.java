@@ -41,9 +41,6 @@ public class SetProgessBar extends JFrame {
         });
         progess_timer.start();
     }
-     public static void main(String[] args)
-    {
-        new SetProgessBar();
-    }
+   
 
 }

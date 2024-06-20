@@ -1,5 +1,6 @@
-package myutil;
+package medcine;
 
+import hospitalmanagement.Home;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import database.Database;
 import net.miginfocom.swing.MigLayout;
 import raven.crazypanel.CrazyPanel;
 import raven.toast.Notifications;
@@ -32,14 +34,33 @@ public class MedicineDetailsPanel extends CrazyPanel {
     public TablePanel outputTablePanel;
     public JPanel outputPanel;
 
-    public MedicineDetailsPanel(String patientName , int pno) {
+    int pno;
+    Home home;
+
+    public MedicineDetailsPanel(String patientName, int pno, Home home) {
+        this.pno = pno;
+        this.home = home;
         setLayout(new MigLayout("fillx , insets 10 "));
 
         //===================================================================================
         /* Header of the form with the gradient line below */
         String selectedPatientName = "Name :" + patientName;
-        add(new JLabel(selectedPatientName), "split 3 ,growx ");
-        add(new JButton("More"), "al right");
+
+        JPanel info = new JPanel(new MigLayout("fillx "));
+        info.add(new JLabel("Pno :" + Integer.toString(pno)), "wrap");
+        info.add(new JLabel(selectedPatientName));
+
+        add(info, "split 3 ,growx ");
+        JButton more = new JButton("More");
+        add(more, "al right");
+        
+        more.addActionListener((e) -> {
+            home.search_patient.setPno(Integer.toString(pno));
+            home.search_patient.initPage(pno);
+            home.showPageOnWindow("search_patient");
+            Notifications.getInstance().clear(Notifications.Location.TOP_RIGHT);
+
+        });
 
 //        ImageIcon icon = new ImageIcon("images/cross_arrow.png");
         JButton close = new JButton("X");
@@ -48,11 +69,13 @@ public class MedicineDetailsPanel extends CrazyPanel {
             public void mouseClicked(MouseEvent e) {
                 Notifications.getInstance().clear(Notifications.Location.TOP_RIGHT);
             }
+
             @Override
             public void mouseEntered(MouseEvent e) {
                 close.setBackground(Color.red);
                 close.setForeground(Color.white);
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 close.setForeground(new Color(51, 51, 255));
@@ -73,22 +96,20 @@ public class MedicineDetailsPanel extends CrazyPanel {
 
     public void addTableSection() {
         String columns[] = new String[]{
-            "Medicine Name", "Qty", "Time", "before"
+            "Medicine Name", "Before/After", "Quantity", "Time"
         };
         outputTablePanel = new TablePanel(columns);
 
         Table table = outputTablePanel.getTable();
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
-        table.addRow(new String[]{"Paracetamole", "10", "After meal", "after"});
 
+        Database db = Database.getInstance();
+
+        ArrayList<MedicineDetails> list = db.getMedicineList(pno);
+
+        for (MedicineDetails medicine : list) {
+            table.addRow(new String[]{medicine.getMedicineName(), medicine.getMedicineMealTimeInWords(), medicine.getMedicineQuantity(), medicine.getMedicineTime()});
+
+        }
     }
 
 }

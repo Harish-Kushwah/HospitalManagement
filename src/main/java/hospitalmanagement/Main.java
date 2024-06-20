@@ -4,7 +4,7 @@ import javaswingdev.system.SystemUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.ImageIcon;
-import myutil.GradientPanel;
+import util.swing.panel.GradientPanel;
 import myutil.SetImageIcon;
 
 

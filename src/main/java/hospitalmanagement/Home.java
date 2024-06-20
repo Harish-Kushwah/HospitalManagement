@@ -1,14 +1,20 @@
 package hospitalmanagement;
 
+import pages.SearchPatient;
+import reports.MedicalReport;
+import reports.TestReport;
+import reports.MedicalCertificate;
+import pages.BookmarkPanel;
+import reports.MultithredingReports;
+import model.PatientDetails;
+import pages.NewDashboardPanel;
+import medcine.MedicineDetails;
+import medcine.MedicinePanelShortCutKey;
+import medcine.MedicineRowPanel;
 import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
 
 import java.util.ArrayList;
@@ -18,22 +24,21 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Queue;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import myutil.Database;
-import myutil.GradientPanel;
+import database.Database;
+import javaswingdev.system.SystemFont;
+import javaswingdev.system.SystemIcon;
+import javaswingdev.system.SystemStrings;
+import util.swing.panel.GradientPanel;
 import myutil.*;
-import myutil.M_BandType;
+import medcine.M_BandType;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -45,8 +50,6 @@ import raven.toast.Notifications;
 
 public class Home extends javax.swing.JFrame {
 
-
-    PatientDetails PATIENT_DETAILS = null;
     MultithredingReports REPORTS_THREAD = new MultithredingReports();
     static int total_medicine_selected = 0;
 
@@ -68,7 +71,7 @@ public class Home extends javax.swing.JFrame {
     String page_showing = null;
     String report_showing = null;
 
-    ArrayList<MedicineRowPanel> medicine_arraylist = new ArrayList<MedicineRowPanel>();
+    ArrayList<MedicineRowPanel> medicine_arraylist = new ArrayList<>();
     Dictionary<String, Integer> valid_patients_inputes = new Hashtable();
     Dictionary<String, Integer> valid_prescription_inputes = new Hashtable();
     Dictionary<String, Integer> valid_reports_inputes = new Hashtable();
@@ -76,17 +79,6 @@ public class Home extends javax.swing.JFrame {
     public BookmarkPanel BOOK_MARK_PANEL = null;
 
     public boolean font_value = true;
-
-    String refresh_page_icon = "./images/refresh3.png";
-    String refresh_page_icon_on_click = "./images/refresh3.png";
-    String refresh_page_icon_on_exit = "./images/refresh3.png";
-    String back_page_icon = "./images/left_arrow.png";
-    String next_page_icon = "./images/right_arrow.png";
-    String report_dropdown_right_arrow = "./images/right_arrow3.png";
-    String report_dropdown_down_arrow = "./images/down_arrow1.png";
-    String english_translation_icon = "./images/translation_icon2.png";
-    String marathi_translation_icon = "./images/translation_icon_marathi.png";
-    String search_icon = "./images/search.png";
 
     TestReport test;
     MedicalReport medical;
@@ -97,7 +89,6 @@ public class Home extends javax.swing.JFrame {
 
     public Home() {
 
-
         initComponents();
         REPORTS_THREAD.start();
 
@@ -107,7 +98,7 @@ public class Home extends javax.swing.JFrame {
         setLocationRelativeTo(null);
 //        this.pack();
 
-        ImageIcon icon = new ImageIcon("./images/doctor_icon1.png");
+        ImageIcon icon = new ImageIcon(SystemIcon.DOCTOR_APP_ICON);
         this.setIconImage(icon.getImage());
         menu_panel.setBackground(new Color(0x021036));
         reports_dropdown_panel.setBackground(new Color(0x021036));
@@ -117,7 +108,7 @@ public class Home extends javax.swing.JFrame {
         Dashboard.setLayout(new BorderLayout());
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER);
 
-        showPageOnWindow("prescription");
+        showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
 
         addMedicineRowInPanelForm();
         setMedicineOnMedicineInputField();
@@ -139,12 +130,11 @@ public class Home extends javax.swing.JFrame {
         test_report_panel.removeAll();
         test = new TestReport(this, getPatientPagePatientDetailsObject());
         test_report_panel.add(test, BorderLayout.CENTER);
-        
+
         medical_certificate_panel.removeAll();
-        medical_certificate = new MedicalCertificate(this,getPatientPagePatientDetailsObject() );
+        medical_certificate = new MedicalCertificate(this, getPatientPagePatientDetailsObject());
         medical_certificate_panel.add(medical_certificate, BorderLayout.CENTER);
 
-        
         medical_report_panel.removeAll();
         medical = new MedicalReport(this, getPatientPagePatientDetailsObject());
         medical_report_panel.add(medical, BorderLayout.CENTER);
@@ -174,9 +164,8 @@ public class Home extends javax.swing.JFrame {
 //        addShortArrowKeyForPagesNavigation();
 
         MedicinePanelShortCutKey.setHome(this);
-        
 
-         Notifications.getInstance().setJFrame(this);
+        Notifications.getInstance().setJFrame(this);
     }
 
     public JLabel getMedicalReportsDropdownLabel() {
@@ -188,47 +177,31 @@ public class Home extends javax.swing.JFrame {
     }
 
     public void setMarathiFontForInputes() {
-//        Font marathi_plain = new Font("Aparajita", Font.PLAIN, 17);
-        Font marathi_plain = new Font("Aparajita", Font.BOLD, 17);
-        // Font marathi_bold = new Font("Mangal", Font.BOLD, 13);
-        medicine_input.setFont(marathi_plain);
-        prescription_name_input.setFont(marathi_plain);
-        name_report_input.setFont(marathi_plain);
-        medicine_list.setFont(marathi_plain);
-        name_input.setFont(marathi_plain);
-        prescription_mobile_number_input.setFont(marathi_plain);
-        
-        test.getName_report_inputs().setFont(marathi_plain);
-        test.getReportNameInput().setFont(marathi_plain);
 
-        medical.getMedicalReportNameInput().setFont(marathi_plain);
-//        medical.getDoctorNameInput().setFont(marathi_plain);
-        
-        search_patient.getSearchPatientNameField().setFont(marathi_plain); 
-        
-        medical_certificate.getName_report_inputs().setFont(marathi_plain);
-        medical_certificate.getName_Diagonosis_inputs().setFont(marathi_plain);
-        
+        medicine_input.setFont(SystemFont.MARATHI_FONT);
+        prescription_name_input.setFont(SystemFont.MARATHI_FONT);
+        name_report_input.setFont(SystemFont.MARATHI_FONT);
+        medicine_list.setFont(SystemFont.MARATHI_FONT);
+        name_input.setFont(SystemFont.MARATHI_FONT);
+        prescription_mobile_number_input.setFont(SystemFont.MARATHI_FONT);
+        test.getName_report_inputs().setFont(SystemFont.MARATHI_FONT);
+        test.getReportNameInput().setFont(SystemFont.MARATHI_FONT);
+        medical.getMedicalReportNameInput().setFont(SystemFont.MARATHI_FONT);
+        search_patient.getSearchPatientNameField().setFont(SystemFont.MARATHI_FONT);
+        medical_certificate.getName_report_inputs().setFont(SystemFont.MARATHI_FONT);
+        medical_certificate.getName_Diagonosis_inputs().setFont(SystemFont.MARATHI_FONT);
 
     }
 
     public void setEnglishFontForInputes() {
-        Font english_plain = new Font("Segoe UI", Font.PLAIN, 13);
-        // Font english_bold = new Font("Segoe UI", Font.BOLD, 13);
-        medicine_input.setFont(english_plain);
-        prescription_name_input.setFont(english_plain);
-        name_report_input.setFont(english_plain);
-        medicine_list.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        name_input.setFont(english_plain);
-
-        JTextField test_report_input = test.getName_report_inputs();
-        test_report_input.setFont(english_plain);
-
-        JTextField medical_report_input = medical.getMedicalReportNameInput();
-        medical_report_input.setFont(english_plain);
-
-        JTextField search_patient_name_input = search_patient.getSearchPatientNameField();
-        search_patient_name_input.setFont(english_plain);
+        medicine_input.setFont(SystemFont.ENGLISH_FONT);
+        prescription_name_input.setFont(SystemFont.ENGLISH_FONT);
+        name_report_input.setFont(SystemFont.ENGLISH_FONT);
+        medicine_list.setFont(SystemFont.ENGLISH_FONT);
+        name_input.setFont(SystemFont.ENGLISH_FONT);
+        test.getName_report_inputs().setFont(SystemFont.ENGLISH_FONT);
+        medical.getMedicalReportNameInput().setFont(SystemFont.ENGLISH_FONT);
+        search_patient.getSearchPatientNameField().setFont(SystemFont.ENGLISH_FONT);
     }
 
     /*
@@ -273,38 +246,38 @@ public class Home extends javax.swing.JFrame {
 //=============================================[CONSTRUCTOR WORK ENDS]====================================================
     public void addAllNavigationButtons() {
 
-        report_refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
-        refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
-        back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
+        report_refresh.add(new SetImageIcon(new ImageIcon(SystemIcon.REFRESH_PAGE_ICON), 30, 30), BorderLayout.CENTER);
+        refresh.add(new SetImageIcon(new ImageIcon(SystemIcon.REFRESH_PAGE_ICON), 30, 30), BorderLayout.CENTER);
+        back.add(new SetImageIcon(new ImageIcon(SystemIcon.BACK_PAGE_ICON), 25, 25), BorderLayout.CENTER);
 
-        patient_next.add(new SetImageIcon(new ImageIcon(next_page_icon), 25, 25), BorderLayout.CENTER);
-        patient_back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
+        patient_next.add(new SetImageIcon(new ImageIcon(SystemIcon.NEXT_PAGE_ICON), 25, 25), BorderLayout.CENTER);
+        patient_back.add(new SetImageIcon(new ImageIcon(SystemIcon.BACK_PAGE_ICON), 25, 25), BorderLayout.CENTER);
 
-        report_back.add(new SetImageIcon(new ImageIcon(back_page_icon), 25, 25), BorderLayout.CENTER);
-        report_next.add(new SetImageIcon(new ImageIcon(next_page_icon), 25, 25), BorderLayout.CENTER);
+        report_back.add(new SetImageIcon(new ImageIcon(SystemIcon.BACK_PAGE_ICON), 25, 25), BorderLayout.CENTER);
+        report_next.add(new SetImageIcon(new ImageIcon(SystemIcon.NEXT_PAGE_ICON), 25, 25), BorderLayout.CENTER);
         setRightArrowIconForReportDropdown();
 
-        search_patient_panel.add(new SetImageIcon(new ImageIcon(search_icon), 15, 10), BorderLayout.CENTER);
+        search_patient_panel.add(new SetImageIcon(new ImageIcon(SystemIcon.SEARCH_ICON), 15, 10), BorderLayout.CENTER);
 
     }
 
     public void setRightArrowIconForReportDropdown() {
         reports_dropdown_icon_panel.removeAll();
-        reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_right_arrow), 15, 13), BorderLayout.CENTER);
+        reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(SystemIcon.REPORT_DROPDOWN_RIGHT_ARROW), 15, 13), BorderLayout.CENTER);
         validate();
         repaint();
     }
 
     public void setDownArrowIconForReportDropdown() {
         reports_dropdown_icon_panel.removeAll();
-        reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(report_dropdown_down_arrow), 15, 13), BorderLayout.CENTER);
+        reports_dropdown_icon_panel.add(new SetImageIcon(new ImageIcon(SystemIcon.REPORT_DROPDOWN_DOWN_ARROW), 15, 13), BorderLayout.CENTER);
         validate();
         repaint();
     }
 
     public void setEnglishTranslateIcon() {
         font_translate_icon_pannel.removeAll();
-        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(english_translation_icon), 35, 34), BorderLayout.CENTER);
+        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(SystemIcon.ENGLISH_TRANSLATION_ICON), 35, 34), BorderLayout.CENTER);
         String s1 = "<html> <div  style=\"color:rgb(5,7,35);text-align:center; font-size:bold; padding:0px; margin:0px border:1px solid black; border-radius:100px 10px; background-color:rgb(141,221,247); \";> English Language <br> Applied </div></html>";
         font_translate_icon_pannel.setToolTipText(s1);
         validate();
@@ -313,7 +286,7 @@ public class Home extends javax.swing.JFrame {
 
     public void setMarathiTranslateIcon() {
         font_translate_icon_pannel.removeAll();
-        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(marathi_translation_icon), 35, 34), BorderLayout.CENTER);
+        font_translate_icon_pannel.add(new SetImageIcon(new ImageIcon(SystemIcon.MARATHI_TRANSLATION_ICON), 35, 34), BorderLayout.CENTER);
         String s1 = "<html> <div  style=\"color:rgb(5,7,35);text-align:center; font-size:bold; padding:0px; margin:0px border:1px solid black; border-radius:100px 10px; background-color:rgb(141,221,247); \";> Marathi Language <br> Applied </div></html>";
         font_translate_icon_pannel.setToolTipText(s1);
         validate();
@@ -322,17 +295,13 @@ public class Home extends javax.swing.JFrame {
 
     public void addBookmarkMedicine(JList<String> bookmark_list) {
         String bookmark_name = bookmark_list.getSelectedValue();
-        Database database = Database.getInstance();
-        // String text = medicine_input.getText();
-        ArrayList<MedicineDetails> medi = database.getLikeBookmarkMedicine(bookmark_name);
-
+        ArrayList<MedicineDetails> medi = Database.getInstance().getLikeBookmarkMedicine(bookmark_name);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
         gbc.weighty = -1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         for (int i = 0; i < medi.size(); i++) {
-
             MedicineRowPanel p = new MedicineRowPanel(medi.get(i));
             medicine_arraylist.add(p);
             main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
@@ -593,13 +562,25 @@ public class Home extends javax.swing.JFrame {
 //        font_translate_icon_pannel.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
 
     }
+
     int report_showing_index = 0;
 
     public void addShortArrowKeyForReportsNavigation() {
         //Vector<String> vec = new Vector<String>();
 
-        String[] right_reports_name = {"Test", "Referal", "Certificate" ,"Prescription"};
-        String[] left_reports_name = {"Certificate" , "Referal", "Test", "Prescription"};
+        String[] right_reports_name = {
+            SystemStrings.TEST_REPORT_NAME,
+            SystemStrings.REFFERAL_REPORT_NAME,
+            SystemStrings.MEDICAL_CERTIFICATE_REPORT_NAME,
+            SystemStrings.PRESCRIPTION_REPORT_NAME
+        };
+
+        String[] left_reports_name = {
+            SystemStrings.MEDICAL_CERTIFICATE_REPORT_NAME,
+            SystemStrings.REFFERAL_REPORT_NAME,
+            SystemStrings.TEST_REPORT_NAME,
+            SystemStrings.PRESCRIPTION_REPORT_NAME
+        };
 
         KeyStroke right_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0);
         KeyStroke left_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0);
@@ -638,8 +619,18 @@ public class Home extends javax.swing.JFrame {
     public void addShortArrowKeyForPagesNavigation() {
         //Vector<String> vec = new Vector<String>();
         //here
-        String[] upper_pages_name = {"patient", "Dashboard", "reports", "prescription"};
-        String[] down_pages_name = {"reports", "Dashboard", "patient", "prescription"};
+        String[] upper_pages_name = {
+            SystemStrings.PATIENT_PAGE_NAME,
+            SystemStrings.DASHBOARD_PAGE_NAME,
+            SystemStrings.REPORTS_PAGE_NAME,
+            SystemStrings.PRESCRIPTION_PAGE_NAME
+        };
+        String[] down_pages_name = {
+            SystemStrings.REPORTS_PAGE_NAME,
+            SystemStrings.DASHBOARD_PAGE_NAME,
+            SystemStrings.PATIENT_PAGE_NAME,
+            SystemStrings.PRESCRIPTION_PAGE_NAME
+        };
 
         KeyStroke up_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
         KeyStroke down_arrow = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
@@ -872,35 +863,13 @@ public class Home extends javax.swing.JFrame {
     public void addMedicineRowInPanelForm() {
         main_list = new JPanel();
         main_list.setLayout(new GridBagLayout());
-//        GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.gridwidth = GridBagConstraints.REMAINDER;
-//        gbc.weightx = -1;
-//        gbc.weighty = 1;
-        //main_list.add(new JPanel(), gbc,0);
-
-        //sc.setAlignmentY(TOP_ALIGNMENT);
         JPanel jp = new JPanel(new BorderLayout());
         jp.add(main_list, BorderLayout.PAGE_START);
         JScrollPane sc = new JScrollPane(jp);
-
-//        selected_medicine_panel.setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
         selected_medicine_panel.add(sc);
     }
 
-//    static class CustomFocusTraversalPolicy extends javax.swing.LayoutFocusTraversalPolicy {
-//        @Override
-//        public Component getComponentAfter(Container aContainer, Component aComponent) {
-//            int currentIndex = aContainer.getComponentZOrder(aComponent);
-//            Component nextComponent = aContainer.getComponent((currentIndex + 1) % aContainer.getComponentCount());
-//            if (!nextComponent.isEnabled() || !nextComponent.isFocusable()) {
-//                return super.getComponentAfter(aContainer, aComponent);
-//            }
-//            return nextComponent;
-//        }
-//    }
     public void removeSelectedMedicine() {
-//        medicine_arraylist = MedicinePanelShortCutKey.getMedicineList();
-
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
             if (p.getDeleteCheckStatus()) {
@@ -928,8 +897,6 @@ public class Home extends javax.swing.JFrame {
             repaint();
 
         }
-        //  main_list.removeAll();
-        //  addMedicineRowInPanelForm();
         medicine_arraylist.clear();
         total_medicine_selected = 0;
         validate();
@@ -942,9 +909,7 @@ public class Home extends javax.swing.JFrame {
         String medicine_name = medicine_list.getSelectedValue();
         if (medicine_name == null) {
             medicine_name = medicine_input.getText();
-
         }
-
         int total_medicines = medicine_list.getModel().getSize();
         if (total_medicines == 0 || medicine_name == null) {
             Database db = Database.getInstance();
@@ -957,7 +922,7 @@ public class Home extends javax.swing.JFrame {
         gbc.weightx = 1;
         gbc.weighty = -1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
+
         MedicineRowPanel p = new MedicineRowPanel(medicine_name.toUpperCase());
         medicine_arraylist.add(p);
         MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
@@ -3130,22 +3095,22 @@ public class Home extends javax.swing.JFrame {
         newDashboardPanel = new NewDashboardPanel(this);
 
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
-        showPageOnWindow("Dashboard");
+        showPageOnWindow(SystemStrings.DASHBOARD_PAGE_NAME);
 
     }//GEN-LAST:event_dashboard_labelMouseClicked
 
     private void patient_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_labelMouseClicked
-        showPageOnWindow("patient");
+        showPageOnWindow(SystemStrings.PATIENT_PAGE_NAME);
     }//GEN-LAST:event_patient_labelMouseClicked
 
     private void prescription_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_labelMouseClicked
-        showPageOnWindow("prescription");
+        showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
     }//GEN-LAST:event_prescription_labelMouseClicked
 
     private void reports_labelMouseClicked(java.awt.event.MouseEvent evt)
     {//GEN-FIRST:event_reports_labelMouseClicked
-        showPageOnWindow("reports");
-        showReportOnWindow("Prescription");
+        showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        showReportOnWindow(SystemStrings.PRESCRIPTION_REPORT_NAME);
     }//GEN-LAST:event_reports_labelMouseClicked
 
     private StringBuffer getAllSymptoms() {
@@ -3210,11 +3175,6 @@ public class Home extends javax.swing.JFrame {
         other_symptoms_input.setText("");
         status_label.setText("");
 
-    }
-
-    //this method will use to set the one patient details global to acess detials on any page
-    public void setGlobalPatientDetails(PatientDetails patientDetails) {
-        //this.PATIENT_DETAILS = patientDetails;
     }
 
     //===================================================[ALL PAGES PATIENT DETAILS OBJECT START]============================================================
@@ -3316,20 +3276,20 @@ public class Home extends javax.swing.JFrame {
 
         Dashboard.add(newDashboardPanel, BorderLayout.CENTER); //to refresh while running system    
 
-        showPageOnWindow("dashboard");
+        showPageOnWindow(SystemStrings.DASHBOARD_PAGE_NAME);
     }//GEN-LAST:event_dashboard_iconMouseClicked
 
     private void patient_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_iconMouseClicked
-        showPageOnWindow("patient");
+        showPageOnWindow(SystemStrings.PATIENT_PAGE_NAME);
     }//GEN-LAST:event_patient_iconMouseClicked
 
     private void prescription_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_iconMouseClicked
-        showPageOnWindow("prescription");
+        showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
     }//GEN-LAST:event_prescription_iconMouseClicked
 
     private void reports_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reports_iconMouseClicked
-        showPageOnWindow("reports");
-        showReportOnWindow("Prescription");
+        showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        showReportOnWindow(SystemStrings.PRESCRIPTION_REPORT_NAME);
     }//GEN-LAST:event_reports_iconMouseClicked
 
     private void save_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_save_btnMouseEntered
@@ -3462,7 +3422,7 @@ public class Home extends javax.swing.JFrame {
         if (patient_page_obj != null) {
 
             if (status_label.getText().startsWith("Patient Details Saved")) {
-                showPageOnWindow("prescription");
+                showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
                 resetPrescriptionPage();
 
                 PatientDetails pd = getPatientPagePatientDetailsObject();
@@ -3554,7 +3514,7 @@ public class Home extends javax.swing.JFrame {
                 //after updating change the button name to save
                 prescription_save_btn.setText("Save");
                 //show the reports and rest the prescription page
-                showPageOnWindow("reports");
+                showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
                 resetPrescriptionPage();
 
                 setReportPagePatientDetailsObject(prescription_patient_object);
@@ -3863,8 +3823,8 @@ public class Home extends javax.swing.JFrame {
         reports_card = (CardLayout) reports_card_panel.getLayout();
         reports_card.show(reports_card_panel, report_name);
 
-        JLabel report_panel_label_list[] = {prescription_report_label, test_report_label, medical_report_label , medical_certificate_label};
-        JLabel dropdown_report_panel_label_list[] = {prescription_reports_dropdown_label, test_reports_dropdown_label, medical_reports_dropdown_label,medical_certificate_dropdown_label};
+        JLabel report_panel_label_list[] = {prescription_report_label, test_report_label, medical_report_label, medical_certificate_label};
+        JLabel dropdown_report_panel_label_list[] = {prescription_reports_dropdown_label, test_reports_dropdown_label, medical_reports_dropdown_label, medical_certificate_dropdown_label};
 
         for (int i = 0; i < report_panel_label_list.length; i++) {
 
@@ -3881,18 +3841,19 @@ public class Home extends javax.swing.JFrame {
 
     private void medical_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_report_labelMouseClicked
 
-        showReportOnWindow("Referal");
+        showReportOnWindow(SystemStrings.REFFERAL_REPORT_NAME);
+
     }//GEN-LAST:event_medical_report_labelMouseClicked
 
 
     private void prescription_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_report_labelMouseClicked
 
-        showReportOnWindow("Prescription");
+        showReportOnWindow(SystemStrings.PRESCRIPTION_REPORT_NAME);
     }//GEN-LAST:event_prescription_report_labelMouseClicked
 
 
     private void test_report_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test_report_labelMouseClicked
-        showReportOnWindow("Test");
+        showReportOnWindow(SystemStrings.TEST_REPORT_NAME);
     }//GEN-LAST:event_test_report_labelMouseClicked
 
     public void setReportPageInfo(PatientDetails patientDetails) {
@@ -3991,7 +3952,7 @@ public class Home extends javax.swing.JFrame {
                         setPrescriptionPagePatientDetails(patientDetails);
 
                         //setGlobalPatientDetails(patientDetails);
-                        showPageOnWindow("prescription");
+                        showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
                         resetReportPage();
 
                     } else {
@@ -4200,7 +4161,7 @@ public class Home extends javax.swing.JFrame {
         resetPrescriptionPage();
         BOOK_MARK_PANEL.resetBookmarkPanel();
         refresh.removeAll();
-        refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_click), 30, 30), BorderLayout.CENTER);
+        refresh.add(new SetImageIcon(new ImageIcon(SystemIcon.REFRESH_PAGE_ICON_ON_CLICK), 30, 30), BorderLayout.CENTER);
 
         fees_status_label.setText("");
         validate();
@@ -4209,7 +4170,7 @@ public class Home extends javax.swing.JFrame {
 
     private void refreshMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_refreshMouseExited
         refresh.removeAll();
-        refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon_on_exit), 30, 30), BorderLayout.CENTER);
+        refresh.add(new SetImageIcon(new ImageIcon(SystemIcon.REFRESH_PAGE_ICON_ON_EXIT), 30, 30), BorderLayout.CENTER);
         validate();
         repaint();
 
@@ -4220,7 +4181,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_refreshMouseReleased
 
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
-        showPageOnWindow("patient");
+        showPageOnWindow(SystemStrings.PATIENT_PAGE_NAME);
     }//GEN-LAST:event_backMouseClicked
 
     private void backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseExited
@@ -4232,7 +4193,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseReleased
 
     private void patient_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_backMouseClicked
-        showPageOnWindow("Dashboard");
+        showPageOnWindow(SystemStrings.DASHBOARD_PAGE_NAME);
     }//GEN-LAST:event_patient_backMouseClicked
 
     private void patient_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_backMouseExited
@@ -4244,7 +4205,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_patient_backMouseReleased
 
     private void patient_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_nextMouseClicked
-        showPageOnWindow("prescription");
+        showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
     }//GEN-LAST:event_patient_nextMouseClicked
 
     private void patient_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_patient_nextMouseExited
@@ -4372,7 +4333,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_report_nextMouseExited
 
     private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
-        showReportOnWindow("Test");
+        showReportOnWindow(SystemStrings.TEST_REPORT_NAME);
     }//GEN-LAST:event_report_nextMouseClicked
 
     private void report_refreshMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_refreshMouseReleased
@@ -4397,7 +4358,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_report_backMouseExited
 
     private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
-        showPageOnWindow("prescription");
+        showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
     }//GEN-LAST:event_report_backMouseClicked
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -4429,7 +4390,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_printMouseEntered
 
     private void click_hereMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_click_hereMouseClicked
-        showPageOnWindow("prescription");
+        showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
         reports_label.setForeground(Color.white);
 
         if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
@@ -4536,21 +4497,13 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_reports_dropdown_icon_panelMouseClicked
 
     private void prescription_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_reports_dropdown_labelMouseClicked
-        showPageOnWindow("reports");
-        showReportOnWindow("Prescription");
-
-//        prescription_reports_dropdown_label.setForeground(Color.CYAN);
-//        medical_reports_dropdown_label.setForeground(Color.white);
-//        test_reports_dropdown_label.setForeground(Color.white);
+        showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        showReportOnWindow(SystemStrings.PRESCRIPTION_REPORT_NAME);
     }//GEN-LAST:event_prescription_reports_dropdown_labelMouseClicked
 
     private void medical_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_reports_dropdown_labelMouseClicked
-        showPageOnWindow("reports");
-        showReportOnWindow("Referal");
-
-//        prescription_reports_dropdown_label.setForeground(Color.white);
-//        medical_reports_dropdown_label.setForeground(Color.cyan);
-//        test_reports_dropdown_label.setForeground(Color.white);
+        showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        showReportOnWindow(SystemStrings.REFFERAL_REPORT_NAME);
     }//GEN-LAST:event_medical_reports_dropdown_labelMouseClicked
 
     private void test_reports_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_test_reports_dropdown_labelMouseClicked
@@ -4559,12 +4512,8 @@ public class Home extends javax.swing.JFrame {
         if (patient != null) {
             test.searchReport(patient.getPid());
         }
-        showPageOnWindow("reports");
-        showReportOnWindow("Test");
-
-//        prescription_reports_dropdown_label.setForeground(Color.white);
-//        medical_reports_dropdown_label.setForeground(Color.white);
-//        test_reports_dropdown_label.setForeground(Color.cyan);
+        showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        showReportOnWindow(SystemStrings.TEST_REPORT_NAME);
     }//GEN-LAST:event_test_reports_dropdown_labelMouseClicked
 
     private void font_translate_icon_pannelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_font_translate_icon_pannelMouseClicked
@@ -4594,7 +4543,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_prescription_name_inputActionPerformed
 
     private void search_patient_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseClicked
-        showPageOnWindow("search_patient");
+        showPageOnWindow(SystemStrings.SEARCH_PATIENT_PAGE_NAME);
     }//GEN-LAST:event_search_patient_panelMouseClicked
 
     private void search_patient_panelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseEntered
@@ -4637,23 +4586,22 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_medicine_delete_btnMouseExited
 
-    public void reloadAllMedicine()
-    {
-         DefaultListModel lm1 =  (DefaultListModel) medicine_list.getModel();
-         lm1.removeAllElements();
-        
-           ArrayList<String> medi = database.getAllMedicine();
-                DefaultListModel lm = new DefaultListModel();
-                for (String m : medi) {
-                    lm.addElement(m);
-                }
-                medicine_list.setModel(lm);
+    public void reloadAllMedicine() {
+        DefaultListModel lm1 = (DefaultListModel) medicine_list.getModel();
+        lm1.removeAllElements();
+
+        ArrayList<String> medi = database.getAllMedicine();
+        DefaultListModel lm = new DefaultListModel();
+        for (String m : medi) {
+            lm.addElement(m);
+        }
+        medicine_list.setModel(lm);
     }
     private void medicine_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicine_delete_btnActionPerformed
         String medicine_name = medicine_list.getSelectedValue();
         Database db = Database.getInstance();
         if (db.removeMedicine(medicine_name)) {
-            
+
             reloadAllMedicine();
             prescription_status_label.setText("Successfully Medicine Removed");
             prescription_status_label.setForeground(SUCCESS_COLOR);
@@ -4667,7 +4615,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medicine_delete_btnActionPerformed
 
     private void name_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_name_inputKeyPressed
-          if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             mobile_number_input.requestFocus();
         }
     }//GEN-LAST:event_name_inputKeyPressed
@@ -4685,7 +4633,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_age_inputKeyPressed
 
     private void weight_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_weight_inputKeyPressed
-       if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             sugar_input.requestFocus();
         }
     }//GEN-LAST:event_weight_inputKeyPressed
@@ -4709,15 +4657,14 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_date_inputKeyPressed
 
     private void medical_certificate_dropdown_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_certificate_dropdown_labelMouseClicked
-        showPageOnWindow("reports");
-         showReportOnWindow("Certificate");
+        showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        showReportOnWindow(SystemStrings.MEDICAL_CERTIFICATE_REPORT_NAME);
 
     }//GEN-LAST:event_medical_certificate_dropdown_labelMouseClicked
 
     private void medical_certificate_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_certificate_labelMouseClicked
-        showReportOnWindow("Certificate");
+        showReportOnWindow(SystemStrings.MEDICAL_CERTIFICATE_REPORT_NAME);
     }//GEN-LAST:event_medical_certificate_labelMouseClicked
-
 
     public void resetFeesSection() {
         fees_pno_input.setText("");

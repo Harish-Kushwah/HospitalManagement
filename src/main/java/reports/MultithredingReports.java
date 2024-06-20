@@ -1,5 +1,6 @@
-package myutil;
+package reports;
 
+import database.Database;
 import java.sql.Connection;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;

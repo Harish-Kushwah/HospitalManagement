@@ -1,7 +1,10 @@
-package myutil;
+package database;
 
+import medcine.MedicineDetails;
 import java.sql.*;
 import java.util.ArrayList;
+import model.PatientDetails;
+import model.ReportInfomartion;
 
 
 /*

@@ -1,4 +1,4 @@
-package myutil;
+package util.swing.panel;
 
 import javax.swing.*;
 import java.awt.*;

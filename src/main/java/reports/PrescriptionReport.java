@@ -2,14 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package hospitalmanagement;
+package reports;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import myutil.Database;
+import database.Database;
+import hospitalmanagement.Home;
 import net.sf.jasperreports.engine.JRException;
 
 /**

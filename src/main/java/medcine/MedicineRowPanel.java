@@ -1,4 +1,4 @@
-package myutil;
+package medcine;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import util.swing.panel.GradientPanel;
 
 public class MedicineRowPanel extends JPanel implements MouseListener, ItemListener {
 

@@ -1,4 +1,4 @@
-package myutil;
+package javaswingdev.swing.table;
 
 
 import javax.swing.*;

@@ -1,4 +1,6 @@
-package myutil;
+package medcine;
+
+import model.PatientDetails;
 
 /**
  *
@@ -61,6 +63,16 @@ public class MedicineDetails {
         }
         else{
             return "0";
+        }
+    }
+    public String getMedicineMealTimeInWords()
+    {
+         if(this.before==true)
+        {
+            return "Before";
+        }
+        else{
+            return "After";
         }
     }
    

@@ -1,4 +1,4 @@
-package myutil;
+package medcine;
 
 import hospitalmanagement.Home;
 import java.awt.Color;

@@ -1,14 +1,19 @@
-package myutil;
+package pages;
 
+import database.Database;
+import util.swing.panel.GradientPanel;
+import medcine.MedicineDetailsPanel;
+import javaswingdev.swing.table.LibraryTable;
 import hospitalmanagement.Home;
-import hospitalmanagement.SearchPatient;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import javaswingdev.swing.table.TablePanel;
+import model.BooksPanelInfo;
+import model.PatientDetails;
+import myutil.SetImageIcon;
 import raven.toast.Notifications;
 //import raven.toast.Notifications;
 
@@ -350,7 +355,7 @@ public class NewDashboardPanel extends JPanel implements WindowStateListener, Mo
                     String patientName = (String) tableModel.getValueAt(rowIndex, 2);
                     
                     Notifications.getInstance().clearAll();
-                    Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(patientName, pno));
+                    Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(patientName, pno,home));
 //                    
 //                    home.search_patient.setPno(pno);
 //                    home.search_patient.initPage(Integer.parseInt(pno));
@@ -415,7 +420,7 @@ public class NewDashboardPanel extends JPanel implements WindowStateListener, Mo
                     String patientName = (String) tableModel.getValueAt(rowIndex, 2);
                     
                     Notifications.getInstance().clearAll();
-                    Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(patientName, pno));
+                    Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(patientName, pno,home));
 //                    
 //                    home.search_patient.setPno(pno);
 //                    home.search_patient.initPage(Integer.parseInt(pno));

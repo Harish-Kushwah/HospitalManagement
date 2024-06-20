@@ -60,7 +60,7 @@ public class TablePanel extends RoundPanel{
             columns
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -72,23 +72,24 @@ public class TablePanel extends RoundPanel{
         javax.swing.GroupLayout roundPanel1Layout = new javax.swing.GroupLayout(this);
         this.setLayout(roundPanel1Layout);
         roundPanel1Layout.setHorizontalGroup(
-            roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
             .addGroup(roundPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(sp)
+//                .addComponent(sp)
+                    .addComponent(sp, 250, 600, 600)
                 .addContainerGap())
         );
         roundPanel1Layout.setVerticalGroup(
-            roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
             .addGroup(roundPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(sp, 250, 300, 400)
+                .addComponent(sp, 250, 250, 250)
                 .addContainerGap(10, 20))
         );
         
        
         table.fixTable(sp);
-//        table.setPreferredSize(new Dimension(500,200));
+//        table.setPreferredSize(new Dimension(600,300));
 
     }
 }
