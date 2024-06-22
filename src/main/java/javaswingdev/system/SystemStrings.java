@@ -6,6 +6,8 @@ package javaswingdev.system;
  */
 public class SystemStrings {
     
+    public static final boolean CATEGORY = true;
+    public static final boolean BOOKMARK = false;
     /**
      * Report Page Name
      * This names are give to the card name in card layout

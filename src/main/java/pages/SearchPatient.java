@@ -26,7 +26,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javaswingdev.swing.table.MyCustomRenderer;
 import database.Database;
-import hospitalmanagement.Home;
+import javaswingdev.system.SystemBorder;
+import javaswingdev.system.SystemIcon;
+import javaswingdev.system.SystemStrings;
 import util.swing.panel.GradientPanel;
 import myutil.InputValidation;
 import medcine.MedicineDetails;
@@ -41,20 +43,10 @@ import myutil.SetImageIcon;
  */
 public class SearchPatient extends javax.swing.JPanel {
 
-    public final LineBorder HOVER_BTN_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
-    public final LineBorder DEFAULT_BTN_BORDER = new LineBorder(Color.WHITE, 1, true);
-    public final LineBorder DEFAULT_BORDER = new LineBorder(Color.blue, 1, true);
-    public final LineBorder INPUT_BORDER = new LineBorder(new Color(0x7c7cf1), 1, true);
-    public final LineBorder HOVER_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
-    public final LineBorder WARNING_BORDER = new LineBorder(new Color(0xff3333), 2, true);
-
-    public final Color WARNING_COLOR = new Color(16724787);
-    public final Color SUCCESS_COLOR = new Color(0, 153, 0);
-    public final Color CLICKED_LABEL_COLOR = new Color(0, 0, 204);
-    public final Color REPORT_LABEL_COLOR = new Color(0, 0, 102);
+    
     static int total_medicine_selected = 0;
     ArrayList<MedicineRowPanel> temp_medicine_arraylist = new ArrayList<MedicineRowPanel>();
-    String refresh_page_icon = "./images/refresh3.png";
+    
     Home home;
     PatientDetails patient_for_report_page;
 
@@ -64,7 +56,7 @@ public class SearchPatient extends javax.swing.JPanel {
         AddlisterOnGenderRadioBtn();
         this.home = home;
 
-        refresh.add(new SetImageIcon(new ImageIcon(refresh_page_icon), 30, 30), BorderLayout.CENTER);
+        refresh.add(new SetImageIcon(new ImageIcon(SystemIcon.REFRESH_PAGE_ICON), 30, 30), BorderLayout.CENTER);
         date_input.setDate(getCurrentDate());
     }
 
@@ -1141,19 +1133,19 @@ public class SearchPatient extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mobile_number_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mobile_number_inputMouseExited
-        mobile_number_input.setBorder(INPUT_BORDER);
+        mobile_number_input.setBorder(SystemBorder.INPUT_BORDER);
     }//GEN-LAST:event_mobile_number_inputMouseExited
 
     private void mobile_number_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mobile_number_inputMouseEntered
-        mobile_number_input.setBorder(HOVER_BORDER);
+        mobile_number_input.setBorder(SystemBorder.HOVER_BORDER);
     }//GEN-LAST:event_mobile_number_inputMouseEntered
 
     private void pno_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_inputMouseExited
-        pno_input.setBorder(INPUT_BORDER);
+        pno_input.setBorder(SystemBorder.INPUT_BORDER);
     }//GEN-LAST:event_pno_inputMouseExited
 
     private void pno_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_inputMouseEntered
-        pno_input.setBorder(HOVER_BORDER);
+        pno_input.setBorder(SystemBorder.HOVER_BORDER);
     }//GEN-LAST:event_pno_inputMouseEntered
 
     private void refreshMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_refreshMouseReleased
@@ -1239,13 +1231,13 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_add_medicine_btnMouseEntered
 
     private void new_test_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_test_btnActionPerformed
-        home.showPageOnWindow("reports");
-        home.showReportOnWindow("Test");
+        home.showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        home.showReportOnWindow(SystemStrings.TEST_REPORT_NAME);
         //        savePrescriptionPatientDetails();
     }//GEN-LAST:event_new_test_btnActionPerformed
 
     private void new_test_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_new_test_btnMouseExited
-        new_test_btn.setBorder(HOVER_BTN_BORDER);
+        new_test_btn.setBorder(SystemBorder.HOVER_BTN_BORDER);
     }//GEN-LAST:event_new_test_btnMouseExited
 
     private void new_test_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_new_test_btnMouseEntered
@@ -1254,14 +1246,14 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_new_test_btnMouseEntered
 
     private void name_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_inputMouseExited
-        if (name_input.getBorder() != WARNING_BORDER) {
-            name_input.setBorder(INPUT_BORDER);
+        if (name_input.getBorder() != SystemBorder.WARNING_BORDER) {
+            name_input.setBorder(SystemBorder.INPUT_BORDER);
         }
     }//GEN-LAST:event_name_inputMouseExited
 
     private void name_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_name_inputMouseEntered
-        if (name_input.getBorder() != WARNING_BORDER) {
-            name_input.setBorder(HOVER_BORDER);
+        if (name_input.getBorder() != SystemBorder.WARNING_BORDER) {
+            name_input.setBorder(SystemBorder.HOVER_BORDER);
         }
     }//GEN-LAST:event_name_inputMouseEntered
 
@@ -1274,7 +1266,7 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_new_prescription_btnMouseExited
 
     private void new_prescription_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_new_prescription_btnActionPerformed
-        home.showPageOnWindow("prescription");
+        home.showPageOnWindow(SystemStrings.PRESCRIPTION_PAGE_NAME);
     }//GEN-LAST:event_new_prescription_btnActionPerformed
 
     private void old_test_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_old_test_btnMouseEntered
@@ -1286,8 +1278,8 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_old_test_btnMouseExited
 
     private void old_test_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_old_test_btnActionPerformed
-        home.showPageOnWindow("reports");
-        home.showReportOnWindow("Test");
+        home.showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        home.showReportOnWindow(SystemStrings.TEST_REPORT_NAME);
         home.setTestReport(patient_for_report_page);
     }//GEN-LAST:event_old_test_btnActionPerformed
 
@@ -1300,8 +1292,8 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_old_prescription_btnMouseExited
 
     private void old_prescription_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_old_prescription_btnActionPerformed
-        home.showPageOnWindow("reports");
-        home.showReportOnWindow("Prescription");
+        home.showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        home.showReportOnWindow(SystemStrings.PRESCRIPTION_REPORT_NAME);
         home.searchReport(patient_for_report_page);
 
     }//GEN-LAST:event_old_prescription_btnActionPerformed
@@ -1315,8 +1307,8 @@ public class SearchPatient extends javax.swing.JPanel {
     }//GEN-LAST:event_reffer_btnMouseExited
 
     private void reffer_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reffer_btnActionPerformed
-        home.showPageOnWindow("reports");
-        home.showReportOnWindow("Medical");
+        home.showPageOnWindow(SystemStrings.REPORTS_PAGE_NAME);
+        home.showReportOnWindow(SystemStrings.REFFERAL_REPORT_NAME);
     }//GEN-LAST:event_reffer_btnActionPerformed
 
     private void name_inputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_name_inputCaretUpdate

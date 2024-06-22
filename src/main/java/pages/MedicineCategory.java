@@ -13,10 +13,16 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import database.Database;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javaswingdev.system.SystemBorder;
 import javaswingdev.system.SystemColor;
 import javaswingdev.system.SystemIcon;
 import javaswingdev.system.SystemStrings;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import medcine.M_BandType;
 import medcine.MedicineDetails;
 import medcine.MedicineDetailsPanel;
@@ -28,14 +34,14 @@ import raven.toast.Notifications;
  *
  * @author haris
  */
-public class BookmarkPanel extends javax.swing.JPanel {
+public class MedicineCategory extends javax.swing.JPanel {
 
     /**
      * Creates new form BookmarkPanel
      */
     Home home;
 
-    public BookmarkPanel(JFrame home) {
+    public MedicineCategory(JFrame home) {
         initComponents();
 
         this.home = (Home) home;
@@ -48,7 +54,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
 
     public void displayBookmark() {
         Database database = Database.getInstance();
-        ArrayList<String> medi = database.getBookmark();
+        ArrayList<String> medi = database.getCategory();
         DefaultListModel lm = new DefaultListModel();
         for (String m : medi) {
             lm.addElement(m);
@@ -83,19 +89,18 @@ public class BookmarkPanel extends javax.swing.JPanel {
                     Database database = Database.getInstance();
                     String text = bookmark_input.getText();
                     if (text.length() > 0) {
-                        ArrayList<String> bookmark = database.getLikeBookmark(text);
+                        ArrayList<String> bookmark = database.getLikeCategory(text);
                         DefaultListModel lm = new DefaultListModel();
 
                         for (String m : bookmark) {
                             lm.addElement(m);
                         }
                         bookmark_list.setModel(lm);
-                    }
-                   else{
-                      displayBookmark();  
+                    } else {
+                        displayBookmark();
                     }
                 } catch (Exception exp) {
-                    System.out.println("No bookmark found");
+                    System.out.println("No Category found");
                 }
                 System.out.println("worked");
             }
@@ -133,7 +138,6 @@ public class BookmarkPanel extends javax.swing.JPanel {
         jSeparator4 = new javax.swing.JSeparator();
         bookmark_status_label = new javax.swing.JLabel();
         next = new javax.swing.JPanel();
-        bookmark_update_btn = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(251, 252, 224));
         setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -144,7 +148,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
         bookmark_panel.setAutoscrolls(true);
         bookmark_panel.setPreferredSize(new java.awt.Dimension(200, 528));
 
-        jLabel7.setText("Bookmark");
+        jLabel7.setText("Medicine Category");
 
         bookmark_input.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -230,9 +234,9 @@ public class BookmarkPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel15.setText("Add New Bookmark");
+        jLabel15.setText("Add New Category");
 
-        jLabel16.setText("Bookmark Name :-");
+        jLabel16.setText("Category Name :-");
 
         jLabel17.setText("Select the medicine from adjacent window");
 
@@ -274,27 +278,6 @@ public class BookmarkPanel extends javax.swing.JPanel {
         });
         next.setLayout(new java.awt.BorderLayout());
 
-        bookmark_update_btn.setBackground(new java.awt.Color(0, 51, 255));
-        bookmark_update_btn.setForeground(new java.awt.Color(255, 255, 255));
-        bookmark_update_btn.setText("Update");
-        bookmark_update_btn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 51, 255), 1, true));
-        bookmark_update_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        bookmark_update_btn.setFocusPainted(false);
-        bookmark_update_btn.setPreferredSize(new java.awt.Dimension(27, 18));
-        bookmark_update_btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                bookmark_update_btnMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                bookmark_update_btnMouseExited(evt);
-            }
-        });
-        bookmark_update_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bookmark_update_btnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout bookmark_panelLayout = new javax.swing.GroupLayout(bookmark_panel);
         bookmark_panel.setLayout(bookmark_panelLayout);
         bookmark_panelLayout.setHorizontalGroup(
@@ -313,20 +296,13 @@ public class BookmarkPanel extends javax.swing.JPanel {
                         .addGroup(bookmark_panelLayout.createSequentialGroup()
                             .addGap(16, 16, 16)
                             .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(bookmark_panelLayout.createSequentialGroup()
-                                        .addGap(94, 94, 94)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
-                                        .addComponent(bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(add_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(bookmark_panelLayout.createSequentialGroup()
+                                    .addComponent(bookmark_input, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(add_bookmark_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jSeparator3)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
-                                        .addComponent(bookmark_update_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(bookmark_delete_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(bookmark_delete_btn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(bookmark_list_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -339,13 +315,16 @@ public class BookmarkPanel extends javax.swing.JPanel {
                                         .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(12, 12, 12)))))))
                 .addGap(10, 10, 10))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookmark_panelLayout.createSequentialGroup()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(86, 86, 86))
         );
         bookmark_panelLayout.setVerticalGroup(
             bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bookmark_panelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -354,9 +333,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bookmark_list_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bookmark_delete_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bookmark_update_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(bookmark_delete_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(bookmark_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(bookmark_panelLayout.createSequentialGroup()
@@ -382,7 +359,8 @@ public class BookmarkPanel extends javax.swing.JPanel {
 
     private void add_bookmark_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_bookmark_btnActionPerformed
 
-        home.addBookmarkMedicine(bookmark_list);
+//        home.addBookmarkMedicine(bookmark_list);
+        System.out.println("Added");
     }//GEN-LAST:event_add_bookmark_btnActionPerformed
 
     private void bookmark_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookmark_delete_btnActionPerformed
@@ -393,15 +371,18 @@ public class BookmarkPanel extends javax.swing.JPanel {
             int index = bookmark_list.getSelectedIndex();
 
             Database database = Database.getInstance();
-            database.removeBookmark(bookmark_list.getSelectedValue());
+            database.removeCategory(bookmark_list.getSelectedValue());
             lm.remove(index);
 
-            bookmark_status_label.setText("Bookmark Removed Successfuly.");
+            bookmark_status_label.setText("Category Removed Successfuly.");
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "Category Removed Successfuly.");
             bookmark_status_label.setForeground(SystemColor.SUCCESS_COLOR);
             validate();
             repaint();
         } catch (Exception exp) {
-            bookmark_status_label.setText("Unabel to remove bookmark");
+            bookmark_status_label.setText("Unabel to remove Category");
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Unabel to remove Category");
+
             bookmark_status_label.setForeground(SystemColor.WARNING_COLOR);
         }
     }//GEN-LAST:event_bookmark_delete_btnActionPerformed
@@ -413,20 +394,17 @@ public class BookmarkPanel extends javax.swing.JPanel {
         try {
             ArrayList<MedicineRowPanel> medicine_arraylist = home.getMedicineList();
 
-            String bookmark_name = new_bookmark_input.getText();
-            if (!medicine_arraylist.isEmpty() && bookmark_name.length() > 0) {
+            String category_name = new_bookmark_input.getText();
+            if (!medicine_arraylist.isEmpty() && category_name.length() > 0) {
                 Database database = Database.getInstance();
                 for (int i = 0; i < medicine_arraylist.size(); i++) {
                     M_BandType row = medicine_arraylist.get(i).getDetials();
                     if (row != null) {
 
-                        MedicineDetails medicineDetails = new MedicineDetails();
-                        medicineDetails.setMedicineName(row.medicine_name);
-                        medicineDetails.setMedicineMealTime(row.before);
-                        medicineDetails.setMedicineQuantity(row.selected_combo);
-                        medicineDetails.setTotalQuantity(row.tab);
-                        medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
-                        database.addBookmark(bookmark_name, medicineDetails);
+                        int medicineNo = database.getMedicineNo(row.medicine_name);
+                        if (medicineNo != -1) {
+                            database.addCategory(category_name, medicineNo);
+                        }
 
                     }
                 }
@@ -495,10 +473,11 @@ public class BookmarkPanel extends javax.swing.JPanel {
 
     private void bookmark_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_listMouseClicked
         if (evt.getClickCount() == 1) {
-            home.addBookmarkMedicine(bookmark_list);
-            bookmark_input.setText("");
-           //resetBookmarkPanel();
+//            home.addBookmarkMedicine(bookmark_list);
+//            bookmark_input.setText("");
+            //resetBookmarkPanel();
 
+            Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(bookmark_list.getSelectedValue(),  home ,SystemStrings.CATEGORY));
         }
     }//GEN-LAST:event_bookmark_listMouseClicked
 
@@ -516,14 +495,15 @@ public class BookmarkPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_nextMouseReleased
 
     private void bookmark_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bookmark_listKeyPressed
-         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-             home.addBookmarkMedicine(bookmark_list);
-            bookmark_input.setText("");
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_RIGHT, bookmark_list.getSelectedValue());
         }
+
+//list clicked
     }//GEN-LAST:event_bookmark_listKeyPressed
 
     private void bookmark_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bookmark_inputKeyPressed
-         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             home.addBookmarkMedicine(bookmark_list);
             bookmark_input.setText("");
         }
@@ -544,18 +524,6 @@ public class BookmarkPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_bookmark_inputKeyPressed
 
-    private void bookmark_update_btnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_update_btnMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bookmark_update_btnMouseEntered
-
-    private void bookmark_update_btnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_update_btnMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_bookmark_update_btnMouseExited
-
-    private void bookmark_update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookmark_update_btnActionPerformed
-            Notifications.getInstance().show(Notifications.Location.TOP_RIGHT, 1000 * 60 * 5, new MedicineDetailsPanel(bookmark_list.getSelectedValue(),  home ,SystemStrings.BOOKMARK));
-    }//GEN-LAST:event_bookmark_update_btnActionPerformed
-
     public void resetBookmarkPanel() {
         bookmark_input.setText("");
         new_bookmark_input.setText("");
@@ -566,6 +534,7 @@ public class BookmarkPanel extends javax.swing.JPanel {
         validate();
         repaint();
     }
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_bookmark_btn;
@@ -575,7 +544,6 @@ public class BookmarkPanel extends javax.swing.JPanel {
     private javax.swing.JPanel bookmark_list_panel;
     private javax.swing.JPanel bookmark_panel;
     private javax.swing.JLabel bookmark_status_label;
-    private javax.swing.JButton bookmark_update_btn;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;

@@ -514,6 +514,33 @@ public class Database {
         }
         return null;
     }
+    public ArrayList<String> getLikeCategoryMedicine(String str) {
+
+        ArrayList<String> medi = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT * FROM medicine_category WHERE name LIKE ");
+            GET_LIKE_MEDICINE.append("\'");
+            GET_LIKE_MEDICINE.append("%");
+            GET_LIKE_MEDICINE.append(new StringBuffer(str.toUpperCase()));
+            GET_LIKE_MEDICINE.append("%';");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                String medicineName = this.getMedicineName(rs.getInt("medicine_id"));
+                medi.add(medicineName);
+                i++;
+            }
+            return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
     
     public ArrayList<String> getLikePatient(String str) {
 
@@ -830,6 +857,50 @@ public class Database {
         return flag;
     }
 
+    public int getMedicineNo(String medicineName)
+    {
+         try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(" select * from medilist where medicine =?");
+            preparedStatement.setString(1, medicineName);
+           
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                return rs.getInt("medino");
+            
+            }
+           
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+         
+        return -1;
+        
+    }
+    public String getMedicineName(int medicineNo)
+    {
+         try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(" select * from medilist where medino =?");
+            preparedStatement.setInt(1, medicineNo);
+           
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                return rs.getString("medicine");
+            
+            }
+           
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+         
+        return null;
+        
+    }
     public ArrayList<String> getBookmark() {
 
         ArrayList<String> medi = new ArrayList<String>();
@@ -846,6 +917,54 @@ public class Database {
                 i++;
             }
             return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public ArrayList<String> getCategory()
+    {
+        ArrayList<String> categoryList = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_MEDICINE = new StringBuffer("SELECT DISTINCT name FROM medicine_category;");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_MEDICINE));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                categoryList.add(rs.getString("name").toUpperCase());
+                i++;
+            }
+            return categoryList;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    public ArrayList<String> getAllCategoryMedicine(String categoryName)
+    {
+        ArrayList<String> categoryList = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT medicine_id FROM medicine_category where name = ?;");
+            preparedStatement.setString(1, categoryName);
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                int id  = rs.getInt("medicine_id");
+                String name = getMedicineName(id);
+                if(name!=null){
+                  categoryList.add(name);
+                }
+                i++;
+            }
+            return categoryList;
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -963,6 +1082,32 @@ public class Database {
         }
         return null;
     }
+    public ArrayList<String> getLikeCategory(String str) {
+
+        ArrayList<String> medi = new ArrayList<String>();
+
+        try {
+            Connection conn = connect();
+            StringBuffer GET_LIKE_BOOKMARK = new StringBuffer("SELECT  DISTINCT  name FROM `medicine_category` WHERE name LIKE ");
+
+            GET_LIKE_BOOKMARK.append("\'");
+            GET_LIKE_BOOKMARK.append("%");
+            GET_LIKE_BOOKMARK.append(new StringBuffer(str.toUpperCase()));
+            GET_LIKE_BOOKMARK.append("%';");
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_BOOKMARK));
+            ResultSet rs = preparedStatement.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                medi.add(rs.getString("name").toUpperCase());
+                i++;
+            }
+            return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
     public void removeBookmark(String name) {
 
@@ -977,8 +1122,21 @@ public class Database {
         }
 
     }
+    public void removeCategory(String name) {
 
-    public void addBookmark(String bookmark_name, MedicineDetails medicineDetails) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM medicine_category WHERE name=?");
+            preparedStatement.setString(1, name);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public boolean addBookmark(String bookmark_name, MedicineDetails medicineDetails) {
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(INSERT_BOOKMARK);
@@ -990,12 +1148,70 @@ public class Database {
             preparedStatement.setString(5, medicineDetails.getMedicineMealTime());
             preparedStatement.setString(6, medicineDetails.getTotalQuantity());
 
+            if(preparedStatement.executeUpdate()!=0){
+                return true;
+            }
+            
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+    public void addCategory(String category_name,int medicineNo) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO medicine_category(name , medicine_id) values(?,?);");
+
+            preparedStatement.setString(1, category_name);
+            preparedStatement.setInt(2, medicineNo);
+   
+
             preparedStatement.executeUpdate();
             //conn.commit();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
+    public boolean removeCategoryMedicine(String category_name,int medicineNo) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM medicine_category where name = ? and medicine_id = ?;");
+
+            preparedStatement.setString(1, category_name);
+            preparedStatement.setInt(2, medicineNo);
+   
+
+            if(preparedStatement.executeUpdate()>0){
+                return true;
+            }
+                
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+    public boolean removeBookmarkMedicine(String bookmark_name,String medicineName) {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM bookmark where bname = ? and medicin = ?;");
+
+            preparedStatement.setString(1, bookmark_name);
+            preparedStatement.setString(2, medicineName);
+   
+
+            if(preparedStatement.executeUpdate()>0){
+                return true;
+            }
+                
+            //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+    
 
 //    doctor related 
     public void insertDoctorName(String doctor_name)

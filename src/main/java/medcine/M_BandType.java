@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package medcine;
 
 /**
@@ -17,6 +13,7 @@ public class M_BandType {
     public String selected_combo ;
     public String tab,selected_index;
     
+    
   
    public M_BandType(String medicine_name, boolean morning_status,boolean afternoon_status,boolean evening_status,boolean before,boolean after, String tab , String selected_combo,boolean delete_chk) {
     this.medicine_name = medicine_name;
@@ -29,7 +26,19 @@ public class M_BandType {
     this.selected_combo = selected_combo;
    // this.selected_index = selected_index;
     this.delete_chk = delete_chk;
+   
   }
+   public MedicineDetails getMedicineDetails()
+   {
+       MedicineDetails medicine = new MedicineDetails();
+       medicine.setMedicineName(medicine_name);
+       medicine.setMedicineMealTime(before);
+       medicine.setMedicineQuantity(selected_combo);
+       medicine.setTotalQuantity(tab);
+       medicine.setMedicineTime(morning_status, after, before);
+      return medicine;
+       
+   }
   public void showDetails()
   {
        System.out.println(this.medicine_name);

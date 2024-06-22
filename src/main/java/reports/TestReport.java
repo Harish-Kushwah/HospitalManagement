@@ -19,7 +19,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import database.Database;
-import hospitalmanagement.Home;
+import pages.Home;
+import javaswingdev.system.SystemStrings;
 import reports.MultithredingReports;
 import model.PatientDetails;
 import model.ReportInfomartion;
@@ -835,7 +836,7 @@ public class TestReport extends javax.swing.JPanel {
     }//GEN-LAST:event_report_refreshMouseReleased
 
     private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
-        home.showReportOnWindow("Prescription");
+        home.showReportOnWindow(SystemStrings.PRESCRIPTION_REPORT_NAME);
     }//GEN-LAST:event_report_backMouseClicked
 
     private void report_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseExited
@@ -904,7 +905,7 @@ public class TestReport extends javax.swing.JPanel {
     }//GEN-LAST:event_report_listKeyPressed
 
     private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
-        home.showReportOnWindow("Referal");
+        home.showReportOnWindow(SystemStrings.REFFERAL_REPORT_NAME);
     }//GEN-LAST:event_report_nextMouseClicked
 
     private void report_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseExited

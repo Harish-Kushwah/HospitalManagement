@@ -1,6 +1,6 @@
 package reports;
 
-import hospitalmanagement.Home;
+import pages.Home;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import javaswingdev.system.SystemStrings;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -20,7 +21,6 @@ import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import reports.MultithredingReports;
 import model.PatientDetails;
 import myutil.SetImageIcon;
 import net.sf.jasperreports.engine.JRException;
@@ -761,7 +761,7 @@ public class MedicalCertificate extends javax.swing.JPanel {
     }//GEN-LAST:event_report_refreshMouseReleased
 
     private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
-        home.showReportOnWindow("Referal");
+        home.showReportOnWindow(SystemStrings.REFFERAL_REPORT_NAME);
     }//GEN-LAST:event_report_backMouseClicked
 
     private void report_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseExited
@@ -773,7 +773,7 @@ public class MedicalCertificate extends javax.swing.JPanel {
     }//GEN-LAST:event_report_backMouseReleased
 
     private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
-        home.showReportOnWindow("Prescription");
+        home.showReportOnWindow(SystemStrings.PRESCRIPTION_REPORT_NAME);
     }//GEN-LAST:event_report_nextMouseClicked
 
     private void report_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseExited

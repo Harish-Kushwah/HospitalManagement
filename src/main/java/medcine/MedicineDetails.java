@@ -10,6 +10,15 @@ public class MedicineDetails {
      private String medicine_name,medicine_quantity , qty,medicine_time,medicine_meal_time;
      boolean before, morning, afternoon, evening;
      PatientDetails patientDetails;
+     int medicine_no;
+
+    public int getMedicine_no() {
+        return medicine_no;
+    }
+
+    public void setMedicine_no(int medicine_no) {
+        this.medicine_no = medicine_no;
+    }
    
     
     public MedicineDetails(){

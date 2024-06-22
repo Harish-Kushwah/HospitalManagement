@@ -1,16 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package reports;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import database.Database;
-import hospitalmanagement.Home;
+import pages.Home;
+import javaswingdev.system.SystemBorder;
+import javaswingdev.system.SystemStrings;
 import net.sf.jasperreports.engine.JRException;
 
 /**
@@ -391,15 +384,15 @@ public class PrescriptionReport extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pno_report_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_report_inputMouseEntered
-        if (pno_report_input.getBorder() != home.WARNING_BORDER) {
-            pno_report_input.setBorder(home.HOVER_BORDER);
+        if (pno_report_input.getBorder() != SystemBorder.WARNING_BORDER) {
+            pno_report_input.setBorder(SystemBorder.HOVER_BORDER);
         }
 
     }//GEN-LAST:event_pno_report_inputMouseEntered
 
     private void pno_report_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pno_report_inputMouseExited
-        if (pno_report_input.getBorder() != home.WARNING_BORDER) {
-            pno_report_input.setBorder(home.INPUT_BORDER);
+        if (pno_report_input.getBorder() != SystemBorder.WARNING_BORDER) {
+            pno_report_input.setBorder(SystemBorder.INPUT_BORDER);
         }
     }//GEN-LAST:event_pno_report_inputMouseExited
 
@@ -430,11 +423,11 @@ public class PrescriptionReport extends javax.swing.JPanel {
     }//GEN-LAST:event_name_report_inputActionPerformed
 
     private void edit_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseEntered
-        edit_report.setBorder(home.HOVER_BORDER);
+        edit_report.setBorder(SystemBorder.HOVER_BORDER);
     }//GEN-LAST:event_edit_reportMouseEntered
 
     private void edit_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_reportMouseExited
-        edit_report.setBorder(home.DEFAULT_BTN_BORDER);
+        edit_report.setBorder(SystemBorder.DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_edit_reportMouseExited
 
     private void edit_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_reportActionPerformed
@@ -443,11 +436,11 @@ public class PrescriptionReport extends javax.swing.JPanel {
 
     private void search_reportMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseEntered
 
-        search_report.setBorder(home.HOVER_BORDER);
+        search_report.setBorder(SystemBorder.HOVER_BORDER);
     }//GEN-LAST:event_search_reportMouseEntered
 
     private void search_reportMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_reportMouseExited
-        search_report.setBorder(home.DEFAULT_BTN_BORDER);
+        search_report.setBorder(SystemBorder.DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_search_reportMouseExited
 
     private void search_reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reportActionPerformed
@@ -469,11 +462,11 @@ public class PrescriptionReport extends javax.swing.JPanel {
     }//GEN-LAST:event_click_hereMouseClicked
 
     private void printMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseEntered
-        print.setBorder(home.HOVER_BORDER);
+        print.setBorder(SystemBorder.HOVER_BORDER);
     }//GEN-LAST:event_printMouseEntered
 
     private void printMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_printMouseExited
-        print.setBorder(home.DEFAULT_BTN_BORDER);
+        print.setBorder(SystemBorder.DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_printMouseExited
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
@@ -484,11 +477,11 @@ public class PrescriptionReport extends javax.swing.JPanel {
     }//GEN-LAST:event_printActionPerformed
 
     private void saveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseEntered
-        save.setBorder(home.HOVER_BORDER);
+        save.setBorder(SystemBorder.HOVER_BORDER);
     }//GEN-LAST:event_saveMouseEntered
 
     private void saveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseExited
-        save.setBorder(home.DEFAULT_BTN_BORDER);
+        save.setBorder(SystemBorder.DEFAULT_BTN_BORDER);
     }//GEN-LAST:event_saveMouseExited
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
@@ -522,7 +515,7 @@ public class PrescriptionReport extends javax.swing.JPanel {
     }//GEN-LAST:event_report_refreshMouseReleased
 
     private void report_nextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseClicked
-        home.showReportOnWindow("Test");
+        home.showReportOnWindow(SystemStrings.TEST_REPORT_NAME);
     }//GEN-LAST:event_report_nextMouseClicked
 
     private void report_nextMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_nextMouseExited

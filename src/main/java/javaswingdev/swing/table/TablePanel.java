@@ -16,7 +16,24 @@ public class TablePanel extends RoundPanel{
     private int MAX_COL = 10;
     private String columns[] = new String[MAX_COL];
     private Table table = new Table();
+    private int MAX_WIDTH = 600;
 
+    public int getMAX_WIDTH() {
+        return MAX_WIDTH;
+    }
+
+    public void setMAX_WIDTH(int MAX_WIDTH) {
+        this.MAX_WIDTH = MAX_WIDTH;
+    }
+
+    public int getPREF_WIDTH() {
+        return PREF_WIDTH;
+    }
+
+    public void setPREF_WIDTH(int PREF_WIDTH) {
+        this.PREF_WIDTH = PREF_WIDTH;
+    }
+    private int PREF_WIDTH = 600;
         
     public void setColumnNames(String col[])
     {
@@ -32,7 +49,6 @@ public class TablePanel extends RoundPanel{
         while(model.getRowCount()>0){ 
           this.table.removeRow();
         }
-        
     }
     public void setRowHeight(int height)
     {
@@ -45,8 +61,10 @@ public class TablePanel extends RoundPanel{
     }
     
     
-    public TablePanel(String columns[])
+    public TablePanel(String columns[] , int MAX_WIDTH)
     {
+        this.MAX_WIDTH = MAX_WIDTH;
+        this.PREF_WIDTH = MAX_WIDTH;
 //        setRound(10);
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -76,7 +94,7 @@ public class TablePanel extends RoundPanel{
             .addGroup(roundPanel1Layout.createSequentialGroup()
                 .addContainerGap()
 //                .addComponent(sp)
-                    .addComponent(sp, 250, 600, 600)
+                    .addComponent(sp, 250, this.PREF_WIDTH, this.MAX_WIDTH)
                 .addContainerGap())
         );
         roundPanel1Layout.setVerticalGroup(

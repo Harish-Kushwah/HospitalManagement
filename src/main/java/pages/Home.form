@@ -787,7 +787,6 @@
                                                       </Group>
                                                       <Component id="medicine_list_panel" alignment="1" min="-2" pref="238" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="delete_mode_checkbox" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="32767" attributes="0"/>
@@ -829,6 +828,12 @@
                                               </Group>
                                           </Group>
                                           <Component id="jSeparator2" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="category_mode_checkbox" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
@@ -858,7 +863,10 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabel8" min="-2" pref="27" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel8" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
+                                          <Component id="category_mode_checkbox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
                                           <Component id="medicine_input" alignment="3" min="-2" pref="27" max="-2" attributes="0"/>
@@ -1033,7 +1041,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel8">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Enter Medicine :-"/>
+                        <Property name="text" type="java.lang.String" value="Enter Medicine "/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="medicine_input">
@@ -1436,6 +1444,18 @@
                         <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="medicine_delete_btnMouseExited"/>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="medicine_delete_btnActionPerformed"/>
                       </Events>
+                    </Component>
+                    <Component class="javax.swing.JCheckBox" name="category_mode_checkbox">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="e0" green="fc" red="fb" type="rgb"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="By Category"/>
+                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                          <Color id="Hand Cursor"/>
+                        </Property>
+                        <Property name="focusPainted" type="boolean" value="false"/>
+                      </Properties>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -2312,7 +2332,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="Dashboard"/>
+              <CardConstraints cardName="dashboard"/>
             </Constraint>
           </Constraints>
 

@@ -1,5 +1,6 @@
 package hospitalmanagement;
 
+import pages.Home;
 import javaswingdev.system.SystemUI;
 import java.awt.BorderLayout;
 import java.awt.Color;

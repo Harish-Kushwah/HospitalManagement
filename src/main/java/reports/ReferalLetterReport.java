@@ -1,6 +1,6 @@
 package reports;
 
-import hospitalmanagement.Home;
+import pages.Home;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.sql.Connection;
 
 import java.util.HashMap;
+import javaswingdev.system.SystemStrings;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -53,7 +54,7 @@ class ValidInputException extends Exception {
     }
 }
 
-public class MedicalReport extends javax.swing.JPanel {
+public class ReferalLetterReport extends javax.swing.JPanel {
 
     final LineBorder HOVER_BTN_BORDER = new LineBorder(new Color(0x7C7CF1), 2, true);
     final LineBorder DEFAULT_BTN_BORDER = new LineBorder(Color.WHITE, 1, true);
@@ -73,7 +74,7 @@ public class MedicalReport extends javax.swing.JPanel {
 
     boolean report_showing_format_1 = true;
 
-    public MedicalReport(Home home, PatientDetails patientDetails) {
+    public ReferalLetterReport(Home home, PatientDetails patientDetails) {
         initComponents();
         REPORTS_THREAD.start();
         this.home = home;
@@ -756,7 +757,7 @@ public class MedicalReport extends javax.swing.JPanel {
     }//GEN-LAST:event_report_refreshMouseReleased
 
     private void report_backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseClicked
-        home.showReportOnWindow("Test");
+        home.showReportOnWindow(SystemStrings.TEST_REPORT_NAME);
     }//GEN-LAST:event_report_backMouseClicked
 
     private void report_backMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_report_backMouseExited

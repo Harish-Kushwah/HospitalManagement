@@ -2,64 +2,59 @@ package reports;
 
 import database.Database;
 import java.sql.Connection;
+import javaswingdev.system.SystemReports;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
+
 /*
   This class is created for generating the compiled reports 
   Reason for using mltithreading, To reduce the time during printing , 
   keep the compiled report first and just use each time 
-*/
+ */
 public class MultithredingReports extends Thread {
-   
-    String reportPath = ".\\report\\prescription_report_with_sign.jrxml";
-    String testReportPath = ".\\report\\test_report_with_sign.jrxml";
-    String medicalReportPath =".\\report\\medical_report_with_sign_format_1.jrxml";
-    String medicalReportPathForFormat2 =".\\report\\medical_report_with_sign_format_2.jrxml";
-    String medicalCertificatePath =".\\report\\medical_certificate_with_sign_updated.jrxml";
-    JasperReport jr ;
+
+    JasperReport jr;
     JasperReport testReportJr;
     JasperReport medicalReportJr;
     JasperReport medicalReportJrFormat2;
     JasperReport medicalCertificate;
-    Database DB = Database.getInstance();
+
     @Override
-    public void run()
-    {
+    public void run() {
         try {
-           this.jr = JasperCompileManager.compileReport(reportPath);
-           this.testReportJr = JasperCompileManager.compileReport(testReportPath);
-           this.medicalReportJr = JasperCompileManager.compileReport(medicalReportPath);
-           this.medicalReportJrFormat2 = JasperCompileManager.compileReport(medicalReportPathForFormat2);
-           this.medicalCertificate = JasperCompileManager.compileReport(medicalCertificatePath);
-         
+            this.jr = JasperCompileManager.compileReport(SystemReports.PRESCRIPTION_REPORT);
+            this.testReportJr = JasperCompileManager.compileReport(SystemReports.TEST_REPORT);
+            this.medicalReportJr = JasperCompileManager.compileReport(SystemReports.REFEREL_LETTER_FORMAT_1);
+            this.medicalReportJrFormat2 = JasperCompileManager.compileReport(SystemReports.REFEREL_LETTER_FORMAT_2);
+            this.medicalCertificate = JasperCompileManager.compileReport(SystemReports.MEDICAL_CERTIFICATE);
+
         } catch (JRException ex) {
         }
     }
-    public JasperReport getCompiledPrescriptionReport()
-    {
+
+    public JasperReport getCompiledPrescriptionReport() {
         return this.jr;
     }
-    public JasperReport getCompliedTestReport()
-    {
+
+    public JasperReport getCompliedTestReport() {
         return this.testReportJr;
     }
-     public JasperReport getCompliedMedicalReportFormat1()
-    {
+
+    public JasperReport getCompliedMedicalReportFormat1() {
         return this.medicalReportJr;
     }
-      public JasperReport getCompliedMedicalReportFormat2()
-    {
+
+    public JasperReport getCompliedMedicalReportFormat2() {
         return this.medicalReportJrFormat2;
     }
-      public JasperReport getCompliedMedicalCertificate()
-    {
+
+    public JasperReport getCompliedMedicalCertificate() {
         return this.medicalCertificate;
     }
-    
-    public Connection getConnection()
-    {
-        return DB.connect();
+
+    public Connection getConnection() {
+        return Database.getInstance().connect();
     }
-    
+
 }
