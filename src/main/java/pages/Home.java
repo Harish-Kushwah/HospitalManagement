@@ -102,7 +102,7 @@ public class Home extends javax.swing.JFrame {
         setMedicineOnMedicineInputField();
 
         setValidationListenerOnInputs();  //for patient
-
+        setAutocompleForNameInput();
         //set cuurent date on the patient page when loads
         date_input.setDate(getCurrentDate());
         male_radio_btn.setSelected(true);
@@ -566,6 +566,40 @@ public class Home extends javax.swing.JFrame {
 
         name_report_input.getDocument().addDocumentListener(dl);
         pno_report_input.getDocument().addDocumentListener(dl);
+    }
+    public void setAutocompleForNameInput()
+    {
+        DocumentListener dl = new DocumentListener(){
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+            void updateFieldState(){
+                 String name = prescription_name_input.getText();
+                    if (name.length() != 0) {
+                        String data ="harish";
+                        prescription_name_input.setToolTipText(name+data);
+                        prescription_name_input.setOpaque(true);
+//                        prescription_name_input.setText(name+data);
+                        System.out.println(prescription_name_input.getText());
+                    }
+            }
+        
+        };
+        
+        prescription_name_input.getDocument().addDocumentListener(dl);
+
+        
     }
 
     public void addShortKeyForLanguageTranslation() {

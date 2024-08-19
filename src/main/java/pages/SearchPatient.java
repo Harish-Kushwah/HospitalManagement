@@ -87,7 +87,7 @@ public class SearchPatient extends javax.swing.JPanel {
 
             void updateFieldState() {
                 
-                 InputValidation validate = new InputValidation();
+                InputValidation validate = new InputValidation();
                 resetMedicinePanel();
                 String name = name_input.getText();
                 String pno = pno_input.getText();
