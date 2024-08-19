@@ -55,7 +55,7 @@ public class Main extends javax.swing.JFrame {
         completed.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("V 4.0.0  by Patil Infotech");
+        jLabel1.setText("V 6.1.0  by Patil Infotech");
 
         info_msg.setForeground(new java.awt.Color(255, 255, 255));
         info_msg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -136,23 +136,22 @@ public class Main extends javax.swing.JFrame {
           
         
      
-       Home home = null;
+       Home home = new Home();
         try {
             for (int i = 0; i < 100; i++) {
                
                 if(i==60){
-                    home = new Home();
-                    Thread.sleep(100);
-
+                   
+                    Thread.sleep(30);
                 }
                 if(i<30){
-//                   Thread.sleep(40);
+                   Thread.sleep(30);
                 }
                 else if(i<60){
-//                    Thread.sleep(60);
+                    Thread.sleep(50);
                 }
                 else if(i<80){
-//                     Thread.sleep(30);
+                     Thread.sleep(30);
                 }
                 else{
                      Thread.sleep(0);

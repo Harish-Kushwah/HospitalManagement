@@ -104,7 +104,8 @@ public class MedicalCertificate extends javax.swing.JPanel {
                         try{
                         int days_no = Integer.parseInt(days);
                         LocalDate ld = LocalDate.now().plusDays(days_no);
-                        resume_date.setDate(Date.from(ld.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+                        resume_date.setDate(opd_to_date.getDate());
+//                        resume_date.setDate(Date.from(ld.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
                         }
                         catch(Exception exp)
                         {
@@ -341,7 +342,7 @@ public class MedicalCertificate extends javax.swing.JPanel {
         });
 
         treatment_type.setBackground(new java.awt.Color(255, 255, 204));
-        treatment_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--select--", "out-patient", "in Patient at this clinic", "Hospital" }));
+        treatment_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--select--", "out-patient", "in Patient at this clinic" }));
         treatment_type.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         treatment_type.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1021,6 +1022,13 @@ public class MedicalCertificate extends javax.swing.JPanel {
                 content += getBulletChar();
                 content += " Was treated as an OPD Patient from " + getStrDate(opd_from_date.getDate()) + " to " + getStrDate(opd_to_date.getDate()) + ".\n";
             }
+            
+//            if (opd_from_date.getDate() != null && opd_to_date.getDate() != null) {
+//                content += getBulletChar();
+//                resume_date.setDate(opd_to_date.getDate());
+//                content += " " + gender_type + " is fit to resume normal duties from " + getStrDate(opd_to_date.getDate()) + ".\n";
+//            }
+            isPointSelected = true;
             isPointSelected = true;
         }
         if (point3.isSelected()) {
@@ -1037,9 +1045,9 @@ public class MedicalCertificate extends javax.swing.JPanel {
             isPointSelected = true;
         }
         if (point5.isSelected()) {
-            if (resume_date.getDate() != null) {
+            if (opd_from_date.getDate() != null && opd_to_date.getDate() != null) {
                 content += getBulletChar();
-                content += " " + gender_type + " is fit to resume normal duties from " + getStrDate(resume_date.getDate()) + ".\n";
+                content += " " + gender_type + " is fit to resume normal duties from " + getStrDate(opd_to_date.getDate()) + ".\n";
             }
             isPointSelected = true;
         }

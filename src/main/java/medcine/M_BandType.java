@@ -35,7 +35,7 @@ public class M_BandType {
        medicine.setMedicineMealTime(before);
        medicine.setMedicineQuantity(selected_combo);
        medicine.setTotalQuantity(tab);
-       medicine.setMedicineTime(morning_status, after, before);
+       medicine.setMedicineTime(morning_status, afternoon_status, evening_status);
       return medicine;
        
    }

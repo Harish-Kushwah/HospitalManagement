@@ -1,0 +1,153 @@
+   Cryptography and Network Security
+--------------------------------------------
+CIA Triad
+-> Confidentiality
+   Ex. Account Information
+-> Integrity
+   Ex. Patient's Information 
+-> Availability
+   Ex. Authentication service
+
+Levels of impact of security breach 
+-> Low 
+   Affected with minor level
+-> Medium
+   Significant loss of finance , system
+-> Hight
+   Sever loss ,disaster for company 
+
+Additional element of CIA Triad 
+-> Authenticity
+-> Accountability
+------------------------------------------------------------------------
+Threat vs Attack
+Threat :
+Potential violation of security , which exists when there is a 
+circumstance,capability,action or event that could breach security and cause 
+harm.That is, a threat is a possible danger that might exploit a vulnerability 
+
+Attack:
+An assault on system security that derives from an intelligent threat; that is 
+an intelligent act that is a deliberate attempt(especially in the sense of method or technique) to 
+evade security service and violate the security policy of system
+
+If someone steal the information then is called as attack
+
+* The OSI Security architecture
+-> security attack : Action that compromises the security
+    - Passive Attack
+      > Attempts to learn or make use of information from the system
+      > Does not affect system resources
+      > Eavesdropping or monitoring of transmissions
+      > Goal:Obtain information that is being transmitted
+        Types of passive attack
+        |--> Release of message contents
+        |--> Traffic Analysis
+
+    - Active Attack
+      > Active attacks involve some modification of the data stream or the creation of a false stream
+      > Subdivided into four categories
+        1.Masquerade
+        2.Replay
+        3.Modification of message 
+        4.Denial of service(DoS)
+
+-> security mechanism : detect,prevent or recover from a security attack 
+    Types of security mechanism
+    |-->Specific security mechanism
+        - Encipherment
+        - Digital signature
+        - Access Control
+        - Data Integrity
+        - Authentication Exchange
+        - Traffic Padding
+        - Routing Control
+        - Notarization
+    |-->Pervasive security mechanism
+        - Trusted functionality
+        - Security label
+        - Event detection
+        - Security audit trail
+        - Security recovery
+
+-> security service : Enhances the security , counter security attacks and provide the service
+    - Authentication 
+      Types of Authentication
+      |--> Peer entity authentication 
+      |--> Data origin authentication
+
+    - Access Control 
+    - Data Confidentiality
+    - Data Integrity 
+    - Nonrepudiation
+
+------------------------------------------------------------------------
+* Network Security Model 
+
+four major tasks 
+1.Design an algorithm
+2.Generate the secrete information
+3.Develope methods for distribution and sharing of information
+4.Specify a protocol
+
+Network Access Security Model 
+[ Opponent ]       <===================> [ Gatekeeper function ]  | Information system |
+Human(attacker)         Access channel                            |                    |
+software(virus,worm)                                              |                    |
+
+------------------------------------------------------------------------
+* Cryptography 
+- The art of science encompassing the principles and methods of transforming an intelligible message into one 
+that is unintelligible and then retransforming  that message back to its original form
+
+                       {key}                                                     {key}                          
+[Plain Text] ==> Encryption Algorithm ===> [Transmitted Cipher text] ===> Decryption  Algorithm ===> [Plain Text]
+
+Types Of Cryptography 
+|--> Symmetric Cryptography(Private Key Cryptography )
+    >Same key is used for Encryption and Decryption
+|--> Asymmetric Cryptography(Public Key Cryptography )
+    >Different key is used for Encryption and Decryption
+
+Encryption Scheme 
+->Unconditionally secure 
+->Computational secure 
+
+Key terms of Cryptography
+1.Cryptography 
+2.Plain Text :- actual message 
+3.Ciphertext :- Encrypted message 
+4.Cipher :- Encryption algorithm 
+5.Key :- A key in cryptography is a piece of information, usually a string of numbers or letters
+that are stored in a file, which, when processed through a cryptographic algorithm,
+can encode or decode cryptographic data
+6.Cryptanalysis :- The study of principles and methods of transforming ciphertext back into plaintext
+without knowledge of the key is called as cryptanalysis
+7.Cryptology :- Cryptography + Cryptanalysis 
+
+Classical Encryption technique 
+1.Substitution technique 
+  - Caesar Cipher 
+  - Monolithic Cipher 
+  - Playfair Cipher
+  - Hill Cipher 
+  - Polyalphabetic Cipher 
+  - One-Time Pad  
+
+2.Transposition technique
+  -Rail Fence 
+  -Row Column Transposition
+
+
+=============
+Data Encryption Standard 
+-> Symmetric block cipher 
+-> A.k.a Data Encryption Algorithm 
+-> Adopted by NIST in 1977
+-> Advanced Encryption Standard(AES) in  2001 
+input : 64 bit
+output : 64 bit
+main key : 64 bit 
+subkey : 56 bit 
+round key  :48bit 
+No.of rounds :16 rounds 

@@ -13,18 +13,11 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import database.Database;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javaswingdev.system.SystemBorder;
 import javaswingdev.system.SystemColor;
 import javaswingdev.system.SystemIcon;
 import javaswingdev.system.SystemStrings;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import medcine.M_BandType;
-import medcine.MedicineDetails;
 import medcine.MedicineDetailsPanel;
 import medcine.MedicineRowPanel;
 import myutil.SetImageIcon;
@@ -409,7 +402,7 @@ public class MedicineCategory extends javax.swing.JPanel {
                     }
                 }
 
-                bookmark_status_label.setText("Bookmark added Successfuly.");
+                bookmark_status_label.setText("Category added Successfuly.");
                 bookmark_status_label.setForeground(SystemColor.SUCCESS_COLOR);
                 new_bookmark_input.setText("");
 
@@ -420,10 +413,9 @@ public class MedicineCategory extends javax.swing.JPanel {
                 throw new NullPointerException();
             }
         } catch (NullPointerException expt) {
-            bookmark_status_label.setText("Unabel to add bookmark");
+            bookmark_status_label.setText("Unabel to add category");
             bookmark_status_label.setForeground(SystemColor.WARNING_COLOR);
         }
-        System.out.println("save btn clicked");
     }//GEN-LAST:event_save_bookmark_btnActionPerformed
 
     private void bookmark_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookmark_inputMouseEntered

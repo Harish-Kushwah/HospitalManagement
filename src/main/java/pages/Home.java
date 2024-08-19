@@ -115,50 +115,70 @@ public class Home extends javax.swing.JFrame {
         //make the male radio button auto selected on prescriotion page
         prescription_male_btn.setSelected(true);
 
-        test_report_panel.removeAll();
-        test = new TestReport(this, getPatientPagePatientDetailsObject());
-        test_report_panel.add(test, BorderLayout.CENTER);
+        Runnable testReportRn = () -> {
+            test_report_panel.removeAll();
+            test = new TestReport(this, getPatientPagePatientDetailsObject());
+            test_report_panel.add(test, BorderLayout.CENTER);
+            setMarathiFontForTestReportInputs();
+        };
 
-        medical_certificate_panel.removeAll();
-        medical_certificate = new MedicalCertificate(this, getPatientPagePatientDetailsObject());
-        medical_certificate_panel.add(medical_certificate, BorderLayout.CENTER);
+        Runnable mediclaCertificateRn = () -> {
+            medical_certificate_panel.removeAll();
+            medical_certificate = new MedicalCertificate(this, getPatientPagePatientDetailsObject());
+            medical_certificate_panel.add(medical_certificate, BorderLayout.CENTER);
+            setMarathiFontForMedicalCertificateInputs();
+        };
+        Runnable refferealLetterRn = () -> {
+            medical_report_panel.removeAll();
+            medical = new ReferalLetterReport(this, getPatientPagePatientDetailsObject());
+            medical_report_panel.add(medical, BorderLayout.CENTER);
+            setMarathiFontForMedicalReportInputs();
+        };
 
-        medical_report_panel.removeAll();
-        medical = new ReferalLetterReport(this, getPatientPagePatientDetailsObject());
-        medical_report_panel.add(medical, BorderLayout.CENTER);
-
-        search_patient = new SearchPatient(this);
-        search_patient_main_panel.add(search_patient, BorderLayout.CENTER);
+        Runnable searchPatientPageRn = () -> {
+            search_patient = new SearchPatient(this);
+            search_patient_main_panel.add(search_patient, BorderLayout.CENTER);
+            setMarathiFontForSearchPatientInputs();
+        };
 
         // prescription_report_panel.add(new PrescriptionReport() , BorderLayout.CENTER);
         prescription_save_btn.setVisible(false);
 
-        BOOK_MARK_PANEL = new BookmarkPanel(this);
-        
-        JPanel newpanel = new JPanel(new MigLayout("fillx , insets 0"));
-        newpanel.setBackground(SystemColor.BACKGROUND_COLOR);
-        newpanel.add(new JScrollPane(BOOK_MARK_PANEL),"wrap 1,grow ");
-        newpanel.add(new JScrollPane(new MedicineCategory(this)),"grow ");
-        prescription_form_panel.add(newpanel, BorderLayout.CENTER);
-        //prescription_form_panel.add(new JPanel());
-        prescription_form_panel.revalidate();
-        prescription_form_panel.repaint();
+        Runnable bookMarkAndMedicineRn = () -> {
+            BOOK_MARK_PANEL = new BookmarkPanel(this);
+            JPanel newpanel = new JPanel(new MigLayout("fillx , insets 0"));
+            newpanel.setBackground(SystemColor.BACKGROUND_COLOR);
+            newpanel.add(new JScrollPane(BOOK_MARK_PANEL), "wrap 1,grow ");
+            newpanel.add(new JScrollPane(new MedicineCategory(this)), "grow ");
+            prescription_form_panel.add(newpanel, BorderLayout.CENTER);
+            //prescription_form_panel.add(new JPanel());
+            prescription_form_panel.revalidate();
+            prescription_form_panel.repaint();
+        };
 
-        // setMarathiFontForInputes();
-        //  addEnterBtnActionTotalTablet();
         reports_dropdown_panel.setVisible(false);
         reports_dropdown_seperator.setVisible(false);
-        setMarathiTranslateIcon();
-        addShortKeyForLanguageTranslation();
-        setMarathiFontForInputes();
-//        setEnglishFontForInputes();
-        addShortArrowKeyForReportsNavigation();
-        /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
-//        addShortArrowKeyForPagesNavigation();
 
-        MedicinePanelShortCutKey.setHome(this);
+        Runnable fontsAndIconRn = () -> {
+            setMarathiTranslateIcon();
+            addShortKeyForLanguageTranslation();
 
-        Notifications.getInstance().setJFrame(this);
+            addShortArrowKeyForReportsNavigation();
+            /*Up down Arrow keys were binded on list as well that's why some proper functions not working */
+
+            MedicinePanelShortCutKey.setHome(this);
+            Notifications.getInstance().setJFrame(this);
+            setMarathiFontForInputes();
+
+        };
+
+        new Thread(testReportRn).start();
+        new Thread(bookMarkAndMedicineRn).start();
+        new Thread(searchPatientPageRn).start();
+        new Thread(refferealLetterRn).start();
+        new Thread(mediclaCertificateRn).start();
+        new Thread(fontsAndIconRn).start();
+
     }
 
     public JLabel getMedicalReportsDropdownLabel() {
@@ -177,13 +197,25 @@ public class Home extends javax.swing.JFrame {
         medicine_list.setFont(SystemFont.MARATHI_FONT);
         name_input.setFont(SystemFont.MARATHI_FONT);
         prescription_mobile_number_input.setFont(SystemFont.MARATHI_FONT);
+
+    }
+
+    public void setMarathiFontForTestReportInputs() {
         test.getName_report_inputs().setFont(SystemFont.MARATHI_FONT);
         test.getReportNameInput().setFont(SystemFont.MARATHI_FONT);
-        medical.getMedicalReportNameInput().setFont(SystemFont.MARATHI_FONT);
+    }
+
+    public void setMarathiFontForSearchPatientInputs() {
         search_patient.getSearchPatientNameField().setFont(SystemFont.MARATHI_FONT);
+    }
+
+    public void setMarathiFontForMedicalReportInputs() {
+        medical.getMedicalReportNameInput().setFont(SystemFont.MARATHI_FONT);
+    }
+
+    public void setMarathiFontForMedicalCertificateInputs() {
         medical_certificate.getName_report_inputs().setFont(SystemFont.MARATHI_FONT);
         medical_certificate.getName_Diagonosis_inputs().setFont(SystemFont.MARATHI_FONT);
-
     }
 
     public void setEnglishFontForInputes() {
@@ -844,10 +876,9 @@ public class Home extends javax.swing.JFrame {
                 Database database = Database.getInstance();
                 String text = medicine_input.getText();
                 ArrayList<String> medi;
-                if(category_mode_checkbox.isSelected()){
+                if (category_mode_checkbox.isSelected()) {
                     medi = database.getLikeCategoryMedicine(text);
-                }
-                else{
+                } else {
                     medi = database.getLikeMedicine(text);
                 }
 
@@ -930,7 +961,7 @@ public class Home extends javax.swing.JFrame {
         medicine_arraylist.add(p);
         MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
         MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
-            MedicinePanelShortCutKey.getCurrentClicked(p);
+        MedicinePanelShortCutKey.getCurrentClicked(p);
 //        for (int i = 0; i < medicine_arraylist.size(); i++) {
 //            MedicineRowPanel p = medicine_arraylist.get(i);
 //            MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
@@ -962,7 +993,7 @@ public class Home extends javax.swing.JFrame {
             MedicineRowPanel p = medicine_arraylist.get(i);
             MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
             MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
-                MedicinePanelShortCutKey.getCurrentClicked(p);
+            MedicinePanelShortCutKey.getCurrentClicked(p);
         }
         main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
         total_medicine_selected++;
@@ -981,7 +1012,7 @@ public class Home extends javax.swing.JFrame {
             MedicineRowPanel p = medicine_arraylist.get(i);
             MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
             MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
-                MedicinePanelShortCutKey.getCurrentClicked(p);
+            MedicinePanelShortCutKey.getCurrentClicked(p);
         }
         main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
         total_medicine_selected++;

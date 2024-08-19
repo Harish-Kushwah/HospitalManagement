@@ -22,7 +22,7 @@ public class MedicineRowPanel extends JPanel implements MouseListener, ItemListe
 
     private static String DEFAULT = "0";
 
-    public final String[] medicine_quantity = {"1 TAB", "1 CAP", "1/2 TAB", "10 ML", "5 ML", "_____"};
+    public final String[] medicine_quantity = {"1 TAB", "१ गोळी","1 CAP", "1/2 TAB", "10 ML", "5 ML","५ मिली", "_____","१ चमचा ","२ चमचा","१ दि.आड","१ थेंब","२ थेंब"," थेंब"};
     public final JLabel medicine_name = new JLabel("none");
     public final JCheckBox morning_chk = new JCheckBox("M");
     public final JCheckBox afternoon_chk = new JCheckBox("A");
