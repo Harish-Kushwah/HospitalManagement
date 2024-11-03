@@ -17,4 +17,5 @@ public class SystemIcon {
     public final static String MARATHI_TRANSLATION_ICON = "./images/translation_icon_marathi.png";
     public final static String SEARCH_ICON = "./images/search.png";
     public final static String DOCTOR_APP_ICON = "./images/doctor_icon1.png";
+    public final static String DELETE_ICON = "./icon/delete.png";
 }

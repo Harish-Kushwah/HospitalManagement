@@ -264,7 +264,8 @@ public class Database {
                 patientdetails.setPulse(rs.getString("pls"));
                 patientdetails.setSymptoms(rs.getString("pdis"));
                 patientdetails.setWeight(rs.getString("wht"));
-                patientdetails.setSugar(rs.getString("sugar"));
+                patientdetails.setMobileNo(rs.getString("mno"));
+//                patientdetails.setSugar(rs.getString("sugar"));
 
                 Date date = rs.getDate("date");
                 patientdetails.setDate(date);
@@ -546,8 +547,6 @@ public class Database {
 
         ArrayList<String> patient_details  = new ArrayList<>();
         
-        
-       
         try {
             Connection conn = connect();
             StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE name LIKE ");
@@ -560,7 +559,7 @@ public class Database {
             ResultSet rs = preparedStatement.executeQuery();
             int i = 0;
             while (rs.next()) {
-                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0];
+                String info = rs.getString("pno") +"/"+ rs.getString("name") +"/"+ (rs.getString("date").split(" "))[0]+"/"+ rs.getString("mno") ;
                
                 patient_details.add(info);
                 i++;
@@ -572,6 +571,52 @@ public class Database {
         }
         return null;
     }
+   public ArrayList<PatientDetails> getLikePatients(String str) {
+
+        ArrayList<PatientDetails> patientDetailsList = new ArrayList<>();
+
+        try {
+            // Step 1: Establishing a Connection
+            Connection conn = connect();
+            // Step 2:Create a statement using connection object
+                       StringBuffer GET_LIKE_PATIENT = new StringBuffer("SELECT * FROM `pdetail` WHERE name LIKE");
+            GET_LIKE_PATIENT.append("\'");
+            GET_LIKE_PATIENT.append("%");
+            GET_LIKE_PATIENT.append(new StringBuffer(str.toUpperCase()));
+            GET_LIKE_PATIENT.append("%'");
+            GET_LIKE_PATIENT.append("ORDER BY 'date' DESC;");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(new String(GET_LIKE_PATIENT));
+            ResultSet rs = preparedStatement.executeQuery();
+            // Step 4: Process the ResultSet object.
+//            int i = 0;
+            while (rs.next()) {
+
+                PatientDetails patientdetails = new PatientDetails();
+                patientdetails.setPid(rs.getInt("pno"));
+                patientdetails.setName(rs.getString("name"));
+                patientdetails.setGender(rs.getString("gen"));
+                patientdetails.setAge(rs.getString("age"));
+                patientdetails.setPulse(rs.getString("pls"));
+                patientdetails.setSymptoms(rs.getString("pdis"));
+                patientdetails.setWeight(rs.getString("wht"));
+                patientdetails.setMobileNo(rs.getString("mno"));
+//                patientdetails.setSugar(rs.getString("sugar"));
+
+                Date date = rs.getDate("date");
+                patientdetails.setDate(date);
+
+                patientDetailsList.add(0,patientdetails);
+//                i++;
+            }
+            return patientDetailsList;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public ArrayList<String> getLikePatient(int  patient_number) {
 
         ArrayList<String> patient_details  = new ArrayList<>();

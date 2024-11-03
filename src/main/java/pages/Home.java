@@ -46,7 +46,8 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.swing.JRViewer;
 import raven.toast.Notifications;
-//import raven.toast.Notifications;
+import search_suggection.swing.EventClick;
+import search_suggection.swing.PanelSearch;
 
 public class Home extends javax.swing.JFrame {
 
@@ -74,6 +75,7 @@ public class Home extends javax.swing.JFrame {
     public SearchPatient search_patient;
     MedicalCertificate medical_certificate;
 //=============================================[CONSTRUCTOR WORK START]====================================================
+    private java.util.List<String> ALL_PATIENT_RECORDS = new ArrayList<>();
 
     public Home() {
 
@@ -172,12 +174,22 @@ public class Home extends javax.swing.JFrame {
 
         };
 
+        Runnable loadRecords = () -> {
+            Database db = Database.getInstance();
+            ArrayList<PatientDetails> patient_details = db.getAllUsers();
+            for (PatientDetails patient : patient_details) {
+                ALL_PATIENT_RECORDS.add(patient.getName());
+            }
+
+        };
+
         new Thread(testReportRn).start();
         new Thread(bookMarkAndMedicineRn).start();
         new Thread(searchPatientPageRn).start();
         new Thread(refferealLetterRn).start();
         new Thread(mediclaCertificateRn).start();
         new Thread(fontsAndIconRn).start();
+        new Thread(loadRecords).start();
 
     }
 
@@ -467,7 +479,7 @@ public class Home extends javax.swing.JFrame {
                 else if (page_showing.equalsIgnoreCase("prescription")) {
 
                     String p_name = prescription_name_input.getText();
-                    if (p_name.length() != 0 && !validate.isVlalidName(p_name)) {
+                    if (p_name.length() > 0 && !validate.isVlalidName(p_name)) {
                         prescription_name_input.setBorder(SystemBorder.WARNING_BORDER);
                         prescription_status_label.setText("Enter valid name");
                         Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_LEFT, "Enter valid name");
@@ -475,7 +487,6 @@ public class Home extends javax.swing.JFrame {
                     } else {
                         prescription_name_input.setBorder(SystemBorder.INPUT_BORDER);
                         valid_prescription_inputes.put("p_name", 1);
-
                     }
 
                     String p_mobile = prescription_mobile_number_input.getText();
@@ -560,48 +571,81 @@ public class Home extends javax.swing.JFrame {
         blood_pressure_input.getDocument().addDocumentListener(dl);
         pulse_input.getDocument().addDocumentListener(dl);
         sugar_input.getDocument().addDocumentListener(dl);
-
         prescription_name_input.getDocument().addDocumentListener(dl);
         prescription_mobile_number_input.getDocument().addDocumentListener(dl);
 
         name_report_input.getDocument().addDocumentListener(dl);
         pno_report_input.getDocument().addDocumentListener(dl);
     }
-    public void setAutocompleForNameInput()
-    {
-        DocumentListener dl = new DocumentListener(){
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
 
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
+    private JPopupMenu menu;
+    private PanelSearch search;
+    int popupheight = 400;
+    int popupwidth = 233;
 
+    public void setAutocompleForNameInput() {
+
+        menu = new JPopupMenu();
+        search = new PanelSearch();
+        menu.setPopupSize(popupwidth, popupheight);
+        menu.add(new JScrollPane(search));
+        menu.setFocusable(false);
+
+        search.addEventClick(new EventClick() {
             @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateFieldState();
-            }
-            void updateFieldState(){
-                 String name = prescription_name_input.getText();
-                    if (name.length() != 0) {
-                        String data ="harish";
-                        prescription_name_input.setToolTipText(name+data);
-                        prescription_name_input.setOpaque(true);
-//                        prescription_name_input.setText(name+data);
-                        System.out.println(prescription_name_input.getText());
+            public void itemClick(PatientDetails selectedPatient) {
+                menu.setVisible(false);
+                if (selectedPatient != null) {
+                    removeAllSelectedMedicine();
+                    ArrayList<MedicineDetails> medi = database.getMedicineList(selectedPatient.getPid());
+                    if (medi != null) {
+                        for (MedicineDetails m : medi) {
+                            addMedicineForEditing(m);
+                        }
                     }
+                    setPrescriptionPagePatientDetails(selectedPatient);
+                    prescription_date_input.setDate(getCurrentDate());
+                } else {
+                    System.out.println("Selected Patient is null");
+                }
             }
-        
-        };
-        
-        prescription_name_input.getDocument().addDocumentListener(dl);
 
-        
+//            @Override
+//            public void itemRemove(Component com, PatientDetails data) {
+//                search.remove(com);
+//                menu.setPopupSize(menu.getWidth(), popupheight);
+//                if (search.getItemSize() == 0) {
+//                    menu.setVisible(false);
+//                }
+//                System.out.println("Remove Item : " + data.getName());
+//            }
+        });
     }
 
+    private java.util.List<PatientDetails> search(String search) {
+        int limitData = 500;
+        java.util.List<PatientDetails> list = new ArrayList<>();
+        try {
+            ArrayList<PatientDetails> patientDetails = Database.getInstance().getLikePatients(search);
+
+            for (PatientDetails patient : patientDetails) {
+                if (patient.getName().length() > 0) {
+                    if (patient.getName().toLowerCase().contains(search)) {
+                        list.add(patient);
+                        if (list.size() == limitData) {
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+        return list;
+
+    }
+
+//    ========================================
     public void addShortKeyForLanguageTranslation() {
 
         KeyStroke clt_m = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.CTRL_DOWN_MASK);
@@ -612,8 +656,6 @@ public class Home extends javax.swing.JFrame {
                 System.out.println("changed");
                 revalidate();
                 repaint();
-
-                //find
             }
 
         };
@@ -1108,7 +1150,6 @@ public class Home extends javax.swing.JFrame {
         prescription_form = new JPanel();
         prescription_form.setBackground(new Color(202,177,18));
         name_label16 = new javax.swing.JLabel();
-        prescription_name_input = new javax.swing.JTextField();
         name_label17 = new javax.swing.JLabel();
         prescription_save_btn = new javax.swing.JButton();
         prescription_next_btn = new javax.swing.JButton();
@@ -1145,6 +1186,7 @@ public class Home extends javax.swing.JFrame {
         delete_mode_checkbox = new javax.swing.JCheckBox();
         medicine_delete_btn = new javax.swing.JButton();
         category_mode_checkbox = new javax.swing.JCheckBox();
+        prescription_name_input = new javax.swing.JTextField();
         prescription_foot_panel = new javax.swing.JPanel();
         prescription_head_panel = new javax.swing.JPanel();
         prescription_panel_head1 = new javax.swing.JPanel();
@@ -1617,26 +1659,6 @@ public class Home extends javax.swing.JFrame {
         name_label16.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
         name_label16.setText("Name :-");
 
-        prescription_name_input.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(124, 124, 241), 1, true));
-        prescription_name_input.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                prescription_name_inputMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                prescription_name_inputMouseExited(evt);
-            }
-        });
-        prescription_name_input.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prescription_name_inputActionPerformed(evt);
-            }
-        });
-        prescription_name_input.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                prescription_name_inputKeyPressed(evt);
-            }
-        });
-
         name_label17.setBackground(new java.awt.Color(251, 252, 224));
         name_label17.setFont(new java.awt.Font("Segoe UI Emoji", 0, 14)); // NOI18N
         name_label17.setText("Gender :-");
@@ -1959,16 +1981,32 @@ public class Home extends javax.swing.JFrame {
         category_mode_checkbox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         category_mode_checkbox.setFocusPainted(false);
 
+        prescription_name_input.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                prescription_name_inputMouseClicked(evt);
+            }
+        });
+        prescription_name_input.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prescription_name_inputActionPerformed(evt);
+            }
+        });
+        prescription_name_input.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                prescription_name_inputKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout prescription_formLayout = new javax.swing.GroupLayout(prescription_form);
         prescription_form.setLayout(prescription_formLayout);
         prescription_formLayout.setHorizontalGroup(
             prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(prescription_formLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addComponent(name_label16, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(prescription_name_input, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(prescription_name_input, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(prescription_mobile_number_input, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1982,7 +2020,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(name_label23)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(prescription_date_input, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 57, Short.MAX_VALUE))
+                .addGap(0, 73, Short.MAX_VALUE))
             .addGroup(prescription_formLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1991,7 +2029,7 @@ public class Home extends javax.swing.JFrame {
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(fees_status_label, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fees_pno_input, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2059,7 +2097,7 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(category_mode_checkbox)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(0, 685, Short.MAX_VALUE)))
                         .addGap(28, 28, 28))))
         );
         prescription_formLayout.setVerticalGroup(
@@ -2070,14 +2108,14 @@ public class Home extends javax.swing.JFrame {
                     .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(name_label23, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(name_label17, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(prescription_name_input, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(name_label16, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(prescription_male_btn)
                         .addComponent(prescription_female_btn)
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(prescription_mobile_number_input, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(prescription_mobile_number_input, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(prescription_name_input, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(prescription_date_input, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(7, 7, 7)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -3556,10 +3594,7 @@ public class Home extends javax.swing.JFrame {
     }
 
     public boolean isPrescriptionPageSavingMode() {
-        if (prescription_save_btn.getText().equalsIgnoreCase("save")) {
-            return true;
-        }
-        return false;
+        return prescription_save_btn.getText().equalsIgnoreCase("save");
     }
 
     public void setPrescriptionPagePatientDetails(PatientDetails patientDetails) {
@@ -3811,18 +3846,6 @@ public class Home extends javax.swing.JFrame {
         }
 
     }
-    private void prescription_name_inputMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_name_inputMouseExited
-        if (prescription_name_input.getBorder() != SystemBorder.WARNING_BORDER) {
-            prescription_name_input.setBorder(SystemBorder.INPUT_BORDER);
-        }
-    }//GEN-LAST:event_prescription_name_inputMouseExited
-
-    private void prescription_name_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_name_inputMouseEntered
-        if (prescription_name_input.getBorder() != SystemBorder.WARNING_BORDER) {
-            prescription_name_input.setBorder(SystemBorder.INPUT_BORDER);
-        }
-    }//GEN-LAST:event_prescription_name_inputMouseEntered
-
     private void add_medicine_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btnActionPerformed
         addMedicine();
     }//GEN-LAST:event_add_medicine_btnActionPerformed
@@ -4624,10 +4647,6 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_font_translate_icon_pannelMouseExited
 
-    private void prescription_name_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_name_inputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_prescription_name_inputActionPerformed
-
     private void search_patient_panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseClicked
         showPageOnWindow(SystemStrings.SEARCH_PATIENT_PAGE_NAME);
     }//GEN-LAST:event_search_patient_panelMouseClicked
@@ -4639,12 +4658,6 @@ public class Home extends javax.swing.JFrame {
     private void search_patient_panelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_patient_panelMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_search_patient_panelMouseExited
-
-    private void prescription_name_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prescription_name_inputKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            prescription_mobile_number_input.requestFocus();
-        }
-    }//GEN-LAST:event_prescription_name_inputKeyPressed
 
     private void prescription_mobile_number_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prescription_mobile_number_inputKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -4751,6 +4764,28 @@ public class Home extends javax.swing.JFrame {
     private void medical_certificate_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medical_certificate_labelMouseClicked
         showReportOnWindow(SystemStrings.MEDICAL_CERTIFICATE_REPORT_NAME);
     }//GEN-LAST:event_medical_certificate_labelMouseClicked
+
+    private void prescription_name_inputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_name_inputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_prescription_name_inputActionPerformed
+
+    private void prescription_name_inputMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prescription_name_inputMouseClicked
+        if (search.getItemSize() > 0) {
+            menu.show(prescription_name_input, 0, prescription_name_input.getHeight());
+        }
+    }//GEN-LAST:event_prescription_name_inputMouseClicked
+
+    private void prescription_name_inputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prescription_name_inputKeyReleased
+        String text = prescription_name_input.getText().trim().toLowerCase();
+        search.setData(search(text));
+        if (search.getItemSize() > 0) {
+            //  * 2 top and bot border
+            menu.show(prescription_name_input, 0, prescription_name_input.getHeight());
+            menu.setPopupSize(menu.getWidth(), popupheight);
+        } else {
+            menu.setVisible(false);
+        }
+    }//GEN-LAST:event_prescription_name_inputKeyReleased
 
     public void resetFeesSection() {
         fees_pno_input.setText("");

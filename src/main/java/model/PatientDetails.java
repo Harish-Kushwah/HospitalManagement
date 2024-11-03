@@ -135,4 +135,16 @@ public class PatientDetails {
         return this.name_input;
     }
 
+    public String getInfo() {
+        return "PatientDetails{" + "name_input=" + name_input + ", gender=" + gender + ", symptoms=" + symptoms + ", others=" + others + ", mobileno_input=" + mobileno_input + ", bloodpressure_input=" + bloodpressure_input + ", pulse_input=" + pulse_input + ", sugar_input=" + sugar_input + ", pid=" + pid + ", age_input=" + age_input + ", weight_input=" + weight_input + ", date=" + date + ", fees=" + fees + '}';
+    }
+   
+    @Override
+    public String toString() {
+        return name_input;
+//        return name_input.toUpperCase() +" "+date.toString();
+    }
+
+
+
 }

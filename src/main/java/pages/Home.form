@@ -718,11 +718,11 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="16" max="32767" attributes="0"/>
                               <Component id="name_label16" min="-2" pref="51" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="prescription_name_input" min="-2" pref="212" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="prescription_name_input" min="-2" pref="198" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel18" min="-2" pref="37" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="prescription_mobile_number_input" min="-2" pref="130" max="-2" attributes="0"/>
@@ -736,7 +736,7 @@
                               <Component id="name_label23" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="prescription_date_input" min="-2" pref="104" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="57" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="73" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
@@ -746,7 +746,7 @@
                                       <Component id="jLabel17" min="-2" pref="104" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                                       <Component id="fees_status_label" min="-2" pref="334" max="-2" attributes="0"/>
-                                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="fees_pno_input" min="-2" pref="78" max="-2" attributes="0"/>
@@ -832,7 +832,7 @@
                                               <Component id="category_mode_checkbox" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                              <EmptySpace min="0" pref="685" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
@@ -849,16 +849,16 @@
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                       <Component id="name_label23" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="name_label17" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                                      <Component id="prescription_name_input" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                                       <Component id="name_label16" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="prescription_male_btn" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="prescription_female_btn" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel18" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                                       <Component id="prescription_mobile_number_input" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                                      <Component id="prescription_name_input" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="prescription_date_input" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                               <Component id="jSeparator2" min="-2" pref="9" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
@@ -939,23 +939,6 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="Name :-"/>
                       </Properties>
-                    </Component>
-                    <Component class="javax.swing.JTextField" name="prescription_name_input">
-                      <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                            <LineBorder roundedCorners="true">
-                              <Color PropertyName="color" blue="f1" green="7c" red="7c" type="rgb"/>
-                            </LineBorder>
-                          </Border>
-                        </Property>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_name_inputMouseEntered"/>
-                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_name_inputMouseExited"/>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prescription_name_inputActionPerformed"/>
-                        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="prescription_name_inputKeyPressed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="name_label17">
                       <Properties>
@@ -1456,6 +1439,13 @@
                         </Property>
                         <Property name="focusPainted" type="boolean" value="false"/>
                       </Properties>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="prescription_name_input">
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="prescription_name_inputMouseClicked"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prescription_name_inputActionPerformed"/>
+                        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="prescription_name_inputKeyReleased"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

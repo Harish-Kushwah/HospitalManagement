@@ -7,8 +7,6 @@ public class BooksPanelInfo
 {
     String title_name;
     String total;
-   
-
     ImageIcon icon;
     Color color;
 
