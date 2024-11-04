@@ -28,7 +28,7 @@ public class Search_Item extends javax.swing.JPanel {
     private void setData(PatientDetails data) {
         addEventMouse(this);
         addEventMouse(lbText);
-//        addEventMouse(lbRemove);
+        addEventMouse(date);
         lbText.setText(data.getName());
         date.setText(getFormatedDate(data.getDate()));
 //        if (data.isStory()) {
@@ -125,7 +125,7 @@ public class Search_Item extends javax.swing.JPanel {
     }//GEN-LAST:event_lbTextMouseClicked
 
     private void dateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dateMouseClicked
-        // TODO add your handling code here:
+         eventClick.actionPerformed(null);
     }//GEN-LAST:event_dateMouseClicked
 
 

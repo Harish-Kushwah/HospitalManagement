@@ -27,5 +27,6 @@ public class SystemStrings {
     public static final String PATIENT_PAGE_NAME = "patient";
     public static final String DASHBOARD_PAGE_NAME = "dashboard";
     public static final String SEARCH_PATIENT_PAGE_NAME = "search_patient";
+    public static final String SETTINGS_PAGE_NAME = "settings";
     
 }
