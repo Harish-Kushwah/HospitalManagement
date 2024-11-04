@@ -1151,9 +1151,6 @@ public class Home extends javax.swing.JFrame {
         medical_certificate_dropdown_label = new javax.swing.JLabel();
         reports_dropdown_seperator = new javax.swing.JSeparator();
         search_patient_panel = new javax.swing.JPanel();
-        setting_label = new javax.swing.JLabel();
-        setting_icon = new JPanel();
-        setting_icon.add(new SetImageIcon(new ImageIcon("./images/settings.png"),30,30)) ;
         main_panel = new javax.swing.JPanel();
         Prescription = new javax.swing.JPanel();
         prescription_form_panel = prescription_form_panel = new GradientPanel(new Color(0xe8feff),new Color(0xe8f3ff) , 300,600);
@@ -1578,27 +1575,6 @@ public class Home extends javax.swing.JFrame {
         });
         search_patient_panel.setLayout(new java.awt.BorderLayout());
 
-        setting_label.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 14)); // NOI18N
-        setting_label.setForeground(new java.awt.Color(255, 255, 255));
-        setting_label.setText("Settings");
-        setting_label.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        setting_label.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                setting_labelMouseClicked(evt);
-            }
-        });
-
-        setting_icon.setBackground(new java.awt.Color(0, 0, 102));
-        setting_icon.setForeground(new java.awt.Color(0, 0, 102));
-        setting_icon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        setting_icon.setPreferredSize(new java.awt.Dimension(30, 30));
-        setting_icon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                setting_iconMouseClicked(evt);
-            }
-        });
-        setting_icon.setLayout(new java.awt.CardLayout());
-
         javax.swing.GroupLayout menu_panelLayout = new javax.swing.GroupLayout(menu_panel);
         menu_panel.setLayout(menu_panelLayout);
         menu_panelLayout.setHorizontalGroup(
@@ -1635,12 +1611,7 @@ public class Home extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(menu_panelLayout.createSequentialGroup()
-                        .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(menu_panelLayout.createSequentialGroup()
-                                .addComponent(setting_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(setting_label, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1672,11 +1643,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(reports_dropdown_seperator, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(reports_dropdown_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 717, Short.MAX_VALUE)
-                .addGroup(menu_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(setting_icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(setting_label, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(753, Short.MAX_VALUE))
         );
 
         dashboard_label.getAccessibleContext().setAccessibleName("Dashborad");
@@ -4884,21 +4851,6 @@ public class Home extends javax.swing.JFrame {
          removeAllSelectedMedicine();
     }//GEN-LAST:event_remove_all_medicineActionPerformed
 
-    private void setting_labelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_setting_labelMouseClicked
-        showSettingsPage();
-    }//GEN-LAST:event_setting_labelMouseClicked
-
-    private void setting_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_setting_iconMouseClicked
-        showSettingsPage();
-    }//GEN-LAST:event_setting_iconMouseClicked
-
-    JPanel settingsPanel=new SettingsPanel(this);
-    public void showSettingsPage(){
-       Settings.remove(settingsPanel);
-       settingsPanel = new SettingsPanel(this);
-       Settings.add(settingsPanel, BorderLayout.CENTER); //to refresh while running system    
-       showPageOnWindow(SystemStrings.SETTINGS_PAGE_NAME);
-    }
     public void resetFeesSection() {
         fees_pno_input.setText("");
         fees_input.setText("");
@@ -5093,8 +5045,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel search_patient_panel;
     private javax.swing.JButton search_report;
     private javax.swing.JPanel selected_medicine_panel;
-    private javax.swing.JPanel setting_icon;
-    private javax.swing.JLabel setting_label;
     private javax.swing.JLabel status_label;
     private javax.swing.JTextField sugar_input;
     private javax.swing.JLabel test_report_label;
