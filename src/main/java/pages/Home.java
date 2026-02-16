@@ -633,8 +633,10 @@ public class Home extends javax.swing.JFrame {
         int limitData = 500;
         java.util.List<PatientDetails> list = new ArrayList<>();
         try {
-            ArrayList<PatientDetails> patientDetails = Database.getInstance().getLikePatients(search);
-
+            ArrayList<PatientDetails> patientDetails  = Database.getInstance().getLikePatients(search);
+            if(get_all_records_checkbox.isSelected()){
+              limitData = patientDetails.size();
+            }
             for (PatientDetails patient : patientDetails) {
                 if (patient.getName().length() > 0) {
                     if (patient.getName().toLowerCase().contains(search)) {
@@ -645,6 +647,7 @@ public class Home extends javax.swing.JFrame {
                     }
                 }
             }
+            
         } catch (Exception exp) {
             exp.printStackTrace();
         }
@@ -1196,6 +1199,7 @@ public class Home extends javax.swing.JFrame {
         prescription_name_input = new javax.swing.JTextField();
         get_modicines_checkbox = new javax.swing.JCheckBox();
         remove_all_medicine = new javax.swing.JButton();
+        get_all_records_checkbox = new javax.swing.JCheckBox();
         prescription_foot_panel = new javax.swing.JPanel();
         prescription_head_panel = new javax.swing.JPanel();
         prescription_panel_head1 = new javax.swing.JPanel();
@@ -2034,6 +2038,11 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        get_all_records_checkbox.setBackground(new java.awt.Color(251, 252, 224));
+        get_all_records_checkbox.setText("Get All Records");
+        get_all_records_checkbox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        get_all_records_checkbox.setFocusPainted(false);
+
         javax.swing.GroupLayout prescription_formLayout = new javax.swing.GroupLayout(prescription_form);
         prescription_form.setLayout(prescription_formLayout);
         prescription_formLayout.setHorizontalGroup(
@@ -2137,6 +2146,8 @@ public class Home extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(get_all_records_checkbox)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(get_modicines_checkbox)))
                         .addGap(28, 28, 28))))
         );
@@ -2172,7 +2183,9 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(add_medicine_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(4, 4, 4))
                     .addGroup(prescription_formLayout.createSequentialGroup()
-                        .addComponent(get_modicines_checkbox)
+                        .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(get_modicines_checkbox)
+                            .addComponent(get_all_records_checkbox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4927,6 +4940,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel font_translate_icon_pannel;
     private javax.swing.JPanel footer;
     private javax.swing.ButtonGroup gender_radio_group;
+    private javax.swing.JCheckBox get_all_records_checkbox;
     private javax.swing.JCheckBox get_modicines_checkbox;
     private javax.swing.JCheckBox headache_chk;
     private javax.swing.JLabel heade_label;

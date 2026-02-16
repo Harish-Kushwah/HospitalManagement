@@ -1024,7 +1024,7 @@ public class MedicalCertificate extends javax.swing.JPanel {
         if (point2.isSelected()) {
             if (opd_from_date.getDate() != null && opd_to_date.getDate() != null) {
                 content += getBulletChar();
-                content += " Was treated as an OPD Patient from " + getStrDate(opd_from_date.getDate()) + " to " + getStrDate(resume_date.getDate()) + ".\n";
+                content += " Was treated as an OPD Patient from " + getStrDate(opd_from_date.getDate()) + " to " + getStrDate(opd_to_date.getDate()) + ".\n";
             }
             
 //            if (opd_from_date.getDate() != null && opd_to_date.getDate() != null) {

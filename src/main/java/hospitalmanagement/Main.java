@@ -55,7 +55,7 @@ public class Main extends javax.swing.JFrame {
         completed.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("V 6.1.0  by Patil Infotech");
+        jLabel1.setText("V 7.0.0  by Patil Infotech");
 
         info_msg.setForeground(new java.awt.Color(255, 255, 255));
         info_msg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
