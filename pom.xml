@@ -5,7 +5,7 @@
     <artifactId>HospitalManagement</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+    
     <repositories>
         <repository>
             <id>unknown-jars-temp-repo</id>
@@ -24,12 +24,6 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.1</version>
-        </dependency>
-
 
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -42,44 +36,82 @@
             <artifactId>jasperreports-fonts</artifactId>
             <version>6.8.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.6.2</version>
-        </dependency>
 
         <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
+            <groupId>mylibrary</groupId>
+            <artifactId>swing-tost</artifactId>
+            <version>0.55</version>
         </dependency>
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>javax.mail-api</artifactId>
-            <version>1.6.2</version>
-            <type>jar</type>
-        </dependency>
-
+         <!-- https://mvnrepository.com/artifact/com.miglayout/miglayout-core -->
         <dependency>
             <groupId>com.miglayout</groupId>
-            <artifactId>miglayout</artifactId>
-            <version>3.7.4</version>
+            <artifactId>miglayout-core</artifactId>
+            <version>5.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.java.dev.timingframework/timingframework -->
+        <!-- https://mvnrepository.com/artifact/com.kitfox.svg/svg-salamander -->
+
+
         <dependency>
-            <groupId>net.java.dev.timingframework</groupId>
-            <artifactId>timingframework</artifactId>
-            <version>1.0</version>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-extras</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-fonts-roboto</artifactId>
+            <version>2.137</version>
             <type>jar</type>
         </dependency>
-
         <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.1</version>
+            <groupId>mylibrary</groupId>
+            <artifactId>raven-bean-pack</artifactId>
+            <version>2.0.0</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>mylibrary</groupId>
+            <artifactId>swing-crazy-panel</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mylibrary</groupId>
+            <artifactId>gradient-icon-font</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mylibrary</groupId>
+            <artifactId>swing-glassmorphism-icon</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>mylibrary</groupId>
+            <artifactId>TimmingFramework</artifactId>
+            <version>0.55</version>
+        </dependency>
+        <dependency>
+            <groupId>mylibrary</groupId>
+            <artifactId>svgSalamander</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+      
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.4.2</version>
+            <type>jar</type>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/com.twelvemonkeys.common/common-image -->
+        <dependency>
+            <groupId>com.twelvemonkeys.common</groupId>
+            <artifactId>common-image</artifactId>
+            <version>3.9.4</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -87,8 +119,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <exec.mainClass>hospitalmanagement.Main</exec.mainClass>
     </properties>
-
-
+     
+     
     <build>
         <plugins>
             <plugin>
@@ -106,7 +138,7 @@
                     </archive>
                 </configuration>
             </plugin>
-
+    
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -120,14 +152,14 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
-
-
-
-
+    
+        
+            
+        
 
         </plugins>
     </build>
-
-
-
+    
+   
+   
 </project>
