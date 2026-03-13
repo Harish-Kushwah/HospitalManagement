@@ -28,6 +28,10 @@ public class Database {
     private static final String INSERT_MEDECINE_INFO = "INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
     private static final String CREATE_GUIDELINES_TABLE = "CREATE TABLE IF NOT EXISTS `guidelines` (`id` INT NOT NULL AUTO_INCREMENT, `pno` INT NOT NULL, `pname` VARCHAR(255), `guideline` TEXT NOT NULL, PRIMARY KEY (`id`))";
     private static final String INSERT_GUIDELINE_INFO = "INSERT INTO `guidelines` (`pno`, `pname`, `guideline`) VALUES (?,?,?);";
+    private static final String CREATE_GUIDELINE_MASTER_TABLE = "CREATE TABLE IF NOT EXISTS `guideline_list` (`id` INT NOT NULL AUTO_INCREMENT, `guideline` VARCHAR(500) NOT NULL UNIQUE, PRIMARY KEY (`id`))";
+    private static final String INSERT_GUIDELINE_MASTER = "INSERT IGNORE INTO `guideline_list` (`guideline`) VALUES (?);";
+    private static final String FIND_LIKE_GUIDELINE_MASTER = "SELECT guideline FROM guideline_list WHERE guideline LIKE ? ORDER BY guideline";
+    private static final String GET_ALL_GUIDELINE_MASTER = "SELECT guideline FROM guideline_list ORDER BY guideline";
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
     private static final String FIND_GUIDELINES_BY_PNO = "select * from guidelines where pno = ?";
@@ -448,6 +452,16 @@ public class Database {
         }
     }
 
+    private void ensureGuidelineMasterTable() {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(CREATE_GUIDELINE_MASTER_TABLE);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
     public void insertGuideline(int patientNo, String patientName, String guideline) {
         try {
             if (guideline == null || guideline.trim().isEmpty()) {
@@ -459,6 +473,21 @@ public class Database {
             preparedStatement.setInt(1, patientNo);
             preparedStatement.setString(2, patientName);
             preparedStatement.setString(3, guideline.trim());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void insertGuidelineMaster(String guideline) {
+        try {
+            if (guideline == null || guideline.trim().isEmpty()) {
+                return;
+            }
+            ensureGuidelineMasterTable();
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_GUIDELINE_MASTER);
+            preparedStatement.setString(1, guideline.trim());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -540,6 +569,28 @@ public class Database {
                 i++;
             }
             return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public ArrayList<String> getLikeGuideline(String str) {
+
+        ArrayList<String> guidelines = new ArrayList<String>();
+
+        try {
+            ensureGuidelineMasterTable();
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(FIND_LIKE_GUIDELINE_MASTER);
+            preparedStatement.setString(1, "%" + str + "%");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                guidelines.add(rs.getString("guideline"));
+            }
+            return guidelines;
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -782,6 +833,26 @@ public class Database {
                 i++;
             }
             return medi;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public ArrayList<String> getAllGuidelines() {
+
+        ArrayList<String> guidelines = new ArrayList<String>();
+
+        try {
+            ensureGuidelineMasterTable();
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_ALL_GUIDELINE_MASTER);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                guidelines.add(rs.getString("guideline"));
+            }
+            return guidelines;
 
         } catch (SQLException e) {
             System.out.println(e);

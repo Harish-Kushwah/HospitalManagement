@@ -988,14 +988,12 @@ public class Home extends javax.swing.JFrame {
             }
 
             void updateFieldState() {
-                if (is_guideline_mode) {
-                    medicine_list.setModel(new DefaultListModel<String>());
-                    return;
-                }
                 Database database = Database.getInstance();
                 String text = medicine_input.getText();
                 ArrayList<String> medi;
-                if (category_mode_checkbox.isSelected()) {
+                if (is_guideline_mode) {
+                    medi = database.getLikeGuideline(text);
+                } else if (category_mode_checkbox.isSelected()) {
                     medi = database.getLikeCategoryMedicine(text);
                 } else {
                     medi = database.getLikeMedicine(text);
@@ -1040,7 +1038,7 @@ public class Home extends javax.swing.JFrame {
         if (guidelineMode) {
             main_list = guideline_main_list;
             setSelectedRowsPanel(guideline_main_list);
-            medicine_list_panel.setVisible(false);
+            medicine_list_panel.setVisible(true);
             get_all_records_checkbox.setVisible(false);
             get_modicines_checkbox.setVisible(false);
             category_mode_checkbox.setVisible(false);
@@ -1049,6 +1047,7 @@ public class Home extends javax.swing.JFrame {
             jLabel7.setVisible(false);
             medicine_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
             guidelines_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
+            resetGuidelineInputList();
         } else {
             main_list = medicine_main_list;
             setSelectedRowsPanel(medicine_main_list);
@@ -1061,6 +1060,7 @@ public class Home extends javax.swing.JFrame {
             jLabel7.setVisible(true);
             medicine_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
             guidelines_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+            resetMedicineInputList();
         }
         validate();
         repaint();
@@ -1170,12 +1170,17 @@ public class Home extends javax.swing.JFrame {
 
     private void addGuideline() {
 
-        String guideline_text = medicine_input.getText();
+        String guideline_text = medicine_list.getSelectedValue();
+        if (guideline_text == null || guideline_text.trim().isEmpty()) {
+            guideline_text = medicine_input.getText();
+        }
         if (guideline_text == null || guideline_text.trim().isEmpty()) {
             prescription_status_label.setText("Enter guideline text");
             prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
             return;
         }
+
+        database.insertGuidelineMaster(guideline_text);
 
         medicine_input.setText("");
 
@@ -1189,6 +1194,8 @@ public class Home extends javax.swing.JFrame {
         guideline_arraylist.add(p);
         guideline_main_list.add(guideline_arraylist.get(total_guideline_selected), gbc);
         total_guideline_selected++;
+
+        resetGuidelineInputList();
 
         validate();
         repaint();
@@ -4096,11 +4103,14 @@ public class Home extends javax.swing.JFrame {
     ArrayList<String> all_medicine = database.getAllMedicine();
     private void medicine_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_listMouseClicked
 
-        if (!is_guideline_mode && !delete_mode_checkbox.isSelected()) {
+        if (!delete_mode_checkbox.isSelected()) {
             if (evt.getClickCount() == 1) {
-
-                addMedicine();
-                resetMedicineInputList();
+                if (is_guideline_mode) {
+                    addGuideline();
+                } else {
+                    addMedicine();
+                    resetMedicineInputList();
+                }
                 medicine_input.grabFocus();
                 evt.consume();
             }
@@ -4595,12 +4605,12 @@ public class Home extends javax.swing.JFrame {
             }
         }
 
-        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_DOWN) {
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
             medicine_list.grabFocus();
             medicine_list.setSelectedIndex(0);
 
         }
-        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_UP) {
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
 
             if (medicine_list.getSelectedIndex() == 0) {
                 medicine_input.grabFocus();
@@ -4613,12 +4623,17 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medicine_inputKeyPressed
 
     private void medicine_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_listKeyPressed
-        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            addMedicine();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (is_guideline_mode) {
+                addGuideline();
+            } else {
+                addMedicine();
+                resetMedicineInputList();
+            }
             medicine_input.grabFocus();
         }
 
-        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_UP) {
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
 
             if (medicine_list.getSelectedIndex() == 0) {
                 medicine_input.grabFocus();
@@ -4900,6 +4915,17 @@ public class Home extends javax.swing.JFrame {
         DefaultListModel lm = new DefaultListModel();
         for (String m : medi) {
             lm.addElement(m);
+        }
+        medicine_list.setModel(lm);
+    }
+
+    public void resetGuidelineInputList() {
+        ArrayList<String> guidelines = database.getAllGuidelines();
+        DefaultListModel lm = new DefaultListModel();
+        if (guidelines != null) {
+            for (String guideline : guidelines) {
+                lm.addElement(guideline);
+            }
         }
         medicine_list.setModel(lm);
     }
