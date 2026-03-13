@@ -1026,6 +1026,7 @@ public class Home extends javax.swing.JFrame {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.add(rowsPanel, BorderLayout.PAGE_START);
         JScrollPane sc = new JScrollPane(wrapper);
+        sc.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         selected_medicine_panel.removeAll();
         selected_medicine_panel.setLayout(new BorderLayout());
         selected_medicine_panel.add(sc, BorderLayout.CENTER);
@@ -4930,17 +4931,31 @@ public class Home extends javax.swing.JFrame {
         medicine_list.setModel(lm);
     }
     private void medicine_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicine_delete_btnActionPerformed
-        String medicine_name = medicine_list.getSelectedValue();
+        String selected_text = medicine_list.getSelectedValue();
         Database db = Database.getInstance();
-        if (db.removeMedicine(medicine_name)) {
-
-            reloadAllMedicine();
-            prescription_status_label.setText("Successfully Medicine Removed");
-            prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
-
+        if (is_guideline_mode) {
+            if (!delete_mode_checkbox.isSelected()) {
+                prescription_status_label.setText("Enable Delete Mode to remove guideline suggestion");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            } else if (db.removeGuidelineMaster(selected_text)) {
+                resetGuidelineInputList();
+                prescription_status_label.setText("Successfully Guideline Removed");
+                prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
+            } else {
+                prescription_status_label.setText("Guideline Not Removed");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            }
         } else {
-            prescription_status_label.setText("Medicine Not Removed");
-            prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            if (db.removeMedicine(selected_text)) {
+
+                reloadAllMedicine();
+                prescription_status_label.setText("Successfully Medicine Removed");
+                prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
+
+            } else {
+                prescription_status_label.setText("Medicine Not Removed");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            }
         }
         revalidate();
         repaint();

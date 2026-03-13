@@ -30,6 +30,7 @@ public class Database {
     private static final String INSERT_GUIDELINE_INFO = "INSERT INTO `guidelines` (`pno`, `pname`, `guideline`) VALUES (?,?,?);";
     private static final String CREATE_GUIDELINE_MASTER_TABLE = "CREATE TABLE IF NOT EXISTS `guideline_list` (`id` INT NOT NULL AUTO_INCREMENT, `guideline` VARCHAR(500) NOT NULL UNIQUE, PRIMARY KEY (`id`))";
     private static final String INSERT_GUIDELINE_MASTER = "INSERT IGNORE INTO `guideline_list` (`guideline`) VALUES (?);";
+    private static final String DELETE_GUIDELINE_MASTER = "DELETE FROM `guideline_list` WHERE guideline = ?";
     private static final String FIND_LIKE_GUIDELINE_MASTER = "SELECT guideline FROM guideline_list WHERE guideline LIKE ? ORDER BY guideline";
     private static final String GET_ALL_GUIDELINE_MASTER = "SELECT guideline FROM guideline_list ORDER BY guideline";
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
@@ -492,6 +493,25 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public boolean removeGuidelineMaster(String guideline) {
+        boolean flag = false;
+        try {
+            if (guideline == null || guideline.trim().isEmpty()) {
+                return false;
+            }
+            ensureGuidelineMasterTable();
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_GUIDELINE_MASTER);
+            preparedStatement.setString(1, guideline.trim());
+            int rows = preparedStatement.executeUpdate();
+            flag = rows > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            flag = false;
+        }
+        return flag;
     }
     public void insertMedicine(String medicine_name) {
         try {
