@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.JasperReport;
 public class MultithredingReports extends Thread {
 
     JasperReport jr;
+    JasperReport prescriptionGuidelinesJr;
     JasperReport testReportJr;
     JasperReport medicalReportJr;
     JasperReport medicalReportJrFormat2;
@@ -24,6 +25,7 @@ public class MultithredingReports extends Thread {
     public void run() {
         try {
             this.jr = JasperCompileManager.compileReport(SystemReports.PRESCRIPTION_REPORT);
+            this.prescriptionGuidelinesJr = JasperCompileManager.compileReport(SystemReports.PRESCRIPTION_GUIDELINES_REPORT);
             this.testReportJr = JasperCompileManager.compileReport(SystemReports.TEST_REPORT);
             this.medicalReportJr = JasperCompileManager.compileReport(SystemReports.REFEREL_LETTER_FORMAT_1);
             this.medicalReportJrFormat2 = JasperCompileManager.compileReport(SystemReports.REFEREL_LETTER_FORMAT_2);
@@ -35,6 +37,10 @@ public class MultithredingReports extends Thread {
 
     public JasperReport getCompiledPrescriptionReport() {
         return this.jr;
+    }
+
+    public JasperReport getCompiledPrescriptionGuidelinesReport() {
+        return this.prescriptionGuidelinesJr;
     }
 
     public JasperReport getCompliedTestReport() {

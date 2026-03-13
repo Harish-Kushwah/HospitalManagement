@@ -26,9 +26,13 @@ public class Database {
     private static final String GET_MEDI_PEDI = "SELECT* FROM pdetail,medi;";
     private static final String GET_MAX_INDEX = "SELECT MAX(pno) FROM pdetail;";
     private static final String INSERT_MEDECINE_INFO = "INSERT INTO `medi` (`pno`, `pname`, `medicin`, `mqty`, `mtime`, `ba`, `qty`) VALUES (?,?,?,?,?,?,?);";
+    private static final String CREATE_GUIDELINES_TABLE = "CREATE TABLE IF NOT EXISTS `guidelines` (`id` INT NOT NULL AUTO_INCREMENT, `pno` INT NOT NULL, `pname` VARCHAR(255), `guideline` TEXT NOT NULL, PRIMARY KEY (`id`))";
+    private static final String INSERT_GUIDELINE_INFO = "INSERT INTO `guidelines` (`pno`, `pname`, `guideline`) VALUES (?,?,?);";
     private static final String FIND_PATIENT_BY_PNO = "select * from pdetail where pno = ?";
     private static final String FIND_MEDICINE_BY_PNO = "select * from medi where pno = ?";
+    private static final String FIND_GUIDELINES_BY_PNO = "select * from guidelines where pno = ?";
     private static final String DELETE_MEDICINE_BY_PNO = "delete  from medi where pno =?";
+    private static final String DELETE_GUIDELINES_BY_PNO = "delete  from guidelines where pno =?";
     private static final String DELETE_MEDICINE_BY_NAME = "delete  from medilist where medicine =?";
     
     private static final String UPDATE_PATIENT_DATE = "update pdetail set date = ? where pno = ?;";
@@ -429,6 +433,33 @@ public class Database {
 
             preparedStatement.executeUpdate();
             //conn.commit();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    private void ensureGuidelinesTable() {
+        try {
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(CREATE_GUIDELINES_TABLE);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void insertGuideline(int patientNo, String patientName, String guideline) {
+        try {
+            if (guideline == null || guideline.trim().isEmpty()) {
+                return;
+            }
+            ensureGuidelinesTable();
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(INSERT_GUIDELINE_INFO);
+            preparedStatement.setInt(1, patientNo);
+            preparedStatement.setString(2, patientName);
+            preparedStatement.setString(3, guideline.trim());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -868,11 +899,49 @@ public class Database {
         return null;
     }
 
+    public ArrayList<String> getGuidelinesList(int patient_number) {
+
+        ArrayList<String> guidelineList = new ArrayList<String>();
+
+        try {
+            ensureGuidelinesTable();
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(FIND_GUIDELINES_BY_PNO);
+            preparedStatement.setInt(1, patient_number);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                guidelineList.add(rs.getString("guideline"));
+            }
+            return guidelineList;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public void removeAllMedicinesOf(int patient_number) {
 
         try {
             Connection conn = connect();
             PreparedStatement preparedStatement = conn.prepareStatement(DELETE_MEDICINE_BY_PNO);
+            preparedStatement.setInt(1, patient_number);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public void removeAllGuidelinesOf(int patient_number) {
+
+        try {
+            ensureGuidelinesTable();
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(DELETE_GUIDELINES_BY_PNO);
             preparedStatement.setInt(1, patient_number);
 
             preparedStatement.executeUpdate();

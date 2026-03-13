@@ -6,6 +6,7 @@ import reports.MedicalCertificate;
 import reports.MultithredingReports;
 import model.PatientDetails;
 import medcine.MedicineDetails;
+import medcine.GuidelineRowPanel;
 import medcine.MedicinePanelShortCutKey;
 import medcine.MedicineRowPanel;
 import java.awt.CardLayout;
@@ -53,14 +54,19 @@ public class Home extends javax.swing.JFrame {
 
     MultithredingReports REPORTS_THREAD = new MultithredingReports();
     static int total_medicine_selected = 0;
+    static int total_guideline_selected = 0;
 
     JPanel newDashboardPanel = new NewDashboardPanel(this);
     JPanel main_list;
+    JPanel medicine_main_list;
+    JPanel guideline_main_list;
     CardLayout card, reports_card;
     String page_showing = null;
     String report_showing = null;
 
     ArrayList<MedicineRowPanel> medicine_arraylist = new ArrayList<>();
+    ArrayList<GuidelineRowPanel> guideline_arraylist = new ArrayList<>();
+    boolean is_guideline_mode = false;
     Dictionary<String, Integer> valid_patients_inputes = new Hashtable();
     Dictionary<String, Integer> valid_prescription_inputes = new Hashtable();
     Dictionary<String, Integer> valid_reports_inputes = new Hashtable();
@@ -102,6 +108,22 @@ public class Home extends javax.swing.JFrame {
 
         addMedicineRowInPanelForm();
         setMedicineOnMedicineInputField();
+        setPrescriptionEntryMode(false);
+
+        medicine_label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        guidelines_label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        medicine_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                setPrescriptionEntryMode(false);
+            }
+        });
+        guidelines_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                setPrescriptionEntryMode(true);
+            }
+        });
 
         setValidationListenerOnInputs();  //for patient
         setAutocompleForNameInput();
@@ -341,7 +363,7 @@ public class Home extends javax.swing.JFrame {
         for (int i = 0; i < medi.size(); i++) {
             MedicineRowPanel p = new MedicineRowPanel(medi.get(i));
             medicine_arraylist.add(p);
-            main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
+            medicine_main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
 
             MedicinePanelShortCutKey.setMedicineList(medicine_arraylist);
             MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
@@ -599,10 +621,17 @@ public class Home extends javax.swing.JFrame {
                     
                     if(get_modicines_checkbox.isSelected()){
                         removeAllSelectedMedicine();
+                        removeAllSelectedGuidelines();
                         ArrayList<MedicineDetails> medi = database.getMedicineList(selectedPatient.getPid());
                         if (medi != null) {
                             for (MedicineDetails m : medi) {
                                 addMedicineForEditing(m);
+                            }
+                        }
+                        ArrayList<String> guidelines = database.getGuidelinesList(selectedPatient.getPid());
+                        if (guidelines != null) {
+                            for (String guideline : guidelines) {
+                                addGuidelineForEditing(guideline);
                             }
                         }
                     }
@@ -959,6 +988,10 @@ public class Home extends javax.swing.JFrame {
             }
 
             void updateFieldState() {
+                if (is_guideline_mode) {
+                    medicine_list.setModel(new DefaultListModel<String>());
+                    return;
+                }
                 Database database = Database.getInstance();
                 String text = medicine_input.getText();
                 ArrayList<String> medi;
@@ -968,7 +1001,7 @@ public class Home extends javax.swing.JFrame {
                     medi = database.getLikeMedicine(text);
                 }
 
-                DefaultListModel lm = new DefaultListModel();
+                DefaultListModel<String> lm = new DefaultListModel<String>();
                 for (String m : medi) {
                     lm.addElement(m);
                 }
@@ -981,19 +1014,63 @@ public class Home extends javax.swing.JFrame {
     }
 
     public void addMedicineRowInPanelForm() {
-        main_list = new JPanel();
-        main_list.setLayout(new GridBagLayout());
-        JPanel jp = new JPanel(new BorderLayout());
-        jp.add(main_list, BorderLayout.PAGE_START);
-        JScrollPane sc = new JScrollPane(jp);
-        selected_medicine_panel.add(sc);
+        medicine_main_list = new JPanel();
+        medicine_main_list.setLayout(new GridBagLayout());
+
+        guideline_main_list = new JPanel();
+        guideline_main_list.setLayout(new GridBagLayout());
+
+        main_list = medicine_main_list;
+        setSelectedRowsPanel(medicine_main_list);
+    }
+
+    private void setSelectedRowsPanel(JPanel rowsPanel) {
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.add(rowsPanel, BorderLayout.PAGE_START);
+        JScrollPane sc = new JScrollPane(wrapper);
+        selected_medicine_panel.removeAll();
+        selected_medicine_panel.setLayout(new BorderLayout());
+        selected_medicine_panel.add(sc, BorderLayout.CENTER);
+        selected_medicine_panel.revalidate();
+        selected_medicine_panel.repaint();
+    }
+
+    private void setPrescriptionEntryMode(boolean guidelineMode) {
+        is_guideline_mode = guidelineMode;
+        if (guidelineMode) {
+            main_list = guideline_main_list;
+            setSelectedRowsPanel(guideline_main_list);
+            medicine_list_panel.setVisible(false);
+            get_all_records_checkbox.setVisible(false);
+            get_modicines_checkbox.setVisible(false);
+            category_mode_checkbox.setVisible(false);
+            jLabel8.setText("Enter Guideline");
+            jLabel6.setVisible(false);
+            jLabel7.setVisible(false);
+            medicine_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+            guidelines_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
+        } else {
+            main_list = medicine_main_list;
+            setSelectedRowsPanel(medicine_main_list);
+            medicine_list_panel.setVisible(true);
+            get_all_records_checkbox.setVisible(true);
+            get_modicines_checkbox.setVisible(true);
+            category_mode_checkbox.setVisible(true);
+            jLabel8.setText("Enter Medicine");
+            jLabel6.setVisible(true);
+            jLabel7.setVisible(true);
+            medicine_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
+            guidelines_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+        }
+        validate();
+        repaint();
     }
 
     public void removeSelectedMedicine() {
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
             if (p.getDeleteCheckStatus()) {
-                main_list.remove(p);
+                medicine_main_list.remove(p);
                 medicine_arraylist.remove(p);
 
                 if (total_medicine_selected > 0) {
@@ -1011,7 +1088,7 @@ public class Home extends javax.swing.JFrame {
         for (int i = 0; i < medicine_arraylist.size(); i++) {
             MedicineRowPanel p = medicine_arraylist.get(i);
 
-            main_list.remove(p);
+            medicine_main_list.remove(p);
 
             validate();
             repaint();
@@ -1022,6 +1099,34 @@ public class Home extends javax.swing.JFrame {
         validate();
         repaint();
 
+    }
+
+    public void removeSelectedGuideline() {
+        for (int i = 0; i < guideline_arraylist.size(); i++) {
+            GuidelineRowPanel p = guideline_arraylist.get(i);
+            if (p.getDeleteCheckStatus()) {
+                guideline_main_list.remove(p);
+                guideline_arraylist.remove(p);
+
+                if (total_guideline_selected > 0) {
+                    total_guideline_selected--;
+                }
+                i--;
+            }
+        }
+        validate();
+        repaint();
+    }
+
+    public void removeAllSelectedGuidelines() {
+        for (int i = 0; i < guideline_arraylist.size(); i++) {
+            GuidelineRowPanel p = guideline_arraylist.get(i);
+            guideline_main_list.remove(p);
+        }
+        guideline_arraylist.clear();
+        total_guideline_selected = 0;
+        validate();
+        repaint();
     }
 
     private void addMedicine() {
@@ -1056,8 +1161,34 @@ public class Home extends javax.swing.JFrame {
 //
 //        }
 
-        main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
+        medicine_main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
         total_medicine_selected++;
+
+        validate();
+        repaint();
+    }
+
+    private void addGuideline() {
+
+        String guideline_text = medicine_input.getText();
+        if (guideline_text == null || guideline_text.trim().isEmpty()) {
+            prescription_status_label.setText("Enter guideline text");
+            prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            return;
+        }
+
+        medicine_input.setText("");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.weighty = -1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        GuidelineRowPanel p = new GuidelineRowPanel(guideline_text);
+        guideline_arraylist.add(p);
+        guideline_main_list.add(guideline_arraylist.get(total_guideline_selected), gbc);
+        total_guideline_selected++;
 
         validate();
         repaint();
@@ -1081,7 +1212,7 @@ public class Home extends javax.swing.JFrame {
             MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
             MedicinePanelShortCutKey.getCurrentClicked(p);
         }
-        main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
+        medicine_main_list.add(medicine_arraylist.get(total_medicine_selected), gbc);
         total_medicine_selected++;
         validate();
         repaint();
@@ -1100,8 +1231,20 @@ public class Home extends javax.swing.JFrame {
             MedicinePanelShortCutKey.addShortCutForTotalTabletInput(p);
             MedicinePanelShortCutKey.getCurrentClicked(p);
         }
-        main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
+        medicine_main_list.add(medicine_arraylist.get(total_medicine_selected), gbc, 0);
         total_medicine_selected++;
+        validate();
+        repaint();
+    }
+
+    public void addGuidelineForEditing(String guideline) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        guideline_arraylist.add(new GuidelineRowPanel(guideline));
+        guideline_main_list.add(guideline_arraylist.get(total_guideline_selected), gbc, 0);
+        total_guideline_selected++;
         validate();
         repaint();
     }
@@ -3597,6 +3740,7 @@ public class Home extends javax.swing.JFrame {
     //===================================================[PRESCRIPTION PAGE STARTS]============================================================
     public void resetPrescriptionPage() {
         removeAllSelectedMedicine();
+        removeAllSelectedGuidelines();
         medicine_input.setText("");
         prescription_name_input.setText("");
         prescription_date_input.setDate(getCurrentDate());
@@ -3605,6 +3749,7 @@ public class Home extends javax.swing.JFrame {
         prescription_save_btn.setVisible(false);
         prescription_mobile_number_input.setText("");
         new_patient = true;
+        setPrescriptionEntryMode(false);
 
         validate();
         repaint();
@@ -3762,7 +3907,8 @@ public class Home extends javax.swing.JFrame {
 
                         if (prescription_patient_object != null) {
                             //Issue
-                            //add medicine details
+                            //add medicine and guideline details
+                            boolean hasPrescriptionData = false;
                             if (!medicine_arraylist.isEmpty()) {
                                 int size = medicine_arraylist.size();
                                 for (int i = 0; i < size; i++) {
@@ -3782,15 +3928,28 @@ public class Home extends javax.swing.JFrame {
 
                                         fees_pno_input.setText(Integer.toString(prescription_patient_object.getPid()));
                                         fees_status_label.setText("");
-
-                                        prescription_status_label.setText("Saved Susscessfuly..!");
-                                        new_patient = false;
+                                        hasPrescriptionData = true;
                                     }
                                 }
-                                return true;
+                            }
 
+                            if (!guideline_arraylist.isEmpty()) {
+                                for (GuidelineRowPanel row : guideline_arraylist) {
+                                    String guideline = row.getGuidelineText();
+                                    if (is_patient_exists && guideline.length() > 0) {
+                                        Database database = Database.getInstance();
+                                        database.insertGuideline(prescription_patient_object.getPid(), prescription_patient_object.getName(), guideline);
+                                        hasPrescriptionData = true;
+                                    }
+                                }
+                            }
+
+                            if (hasPrescriptionData) {
+                                prescription_status_label.setText("Saved Susscessfuly..!");
+                                new_patient = false;
+                                return true;
                             } else {
-                                prescription_status_label.setText("No Medicine Prescribed..!");
+                                prescription_status_label.setText("No Medicine/Guideline added..!");
                                 prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
                             }
                         } else {
@@ -3827,6 +3986,7 @@ public class Home extends javax.swing.JFrame {
         //remove all the medicine info of pno and add new pno medicine
 
         database.removeAllMedicinesOf(patientDetails.getPid());
+        database.removeAllGuidelinesOf(patientDetails.getPid());
 
         patientDetails.setDate(prescription_date_input.getDate());
         patientDetails.setMobileNo(prescription_mobile_number_input.getText());
@@ -3834,6 +3994,8 @@ public class Home extends javax.swing.JFrame {
         //here updatong the the date of patient for editing the recipt
         database.updatePatientDate(patientDetails);
         database.updatePatientMobileNo(patientDetails);
+
+        boolean hasPrescriptionData = false;
 
         if (!medicine_arraylist.isEmpty()) {
             int size = medicine_arraylist.size();
@@ -3851,9 +4013,23 @@ public class Home extends javax.swing.JFrame {
                     medicineDetails.setMedicineTime(row.morning_status, row.afternoon_status, row.evening_status);
 
                     database.insertRecordInMedicine(medicineDetails);
+                    hasPrescriptionData = true;
 
                 }
             }
+        }
+
+        if (!guideline_arraylist.isEmpty()) {
+            for (GuidelineRowPanel row : guideline_arraylist) {
+                String guideline = row.getGuidelineText();
+                if (!guideline.isEmpty()) {
+                    database.insertGuideline(patientDetails.getPid(), patientDetails.getName(), guideline);
+                    hasPrescriptionData = true;
+                }
+            }
+        }
+
+        if (hasPrescriptionData) {
             prescription_status_label.setText("Updated Susscessfuly..!");
             prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
 
@@ -3861,13 +4037,17 @@ public class Home extends javax.swing.JFrame {
 //                    prescriptionNextBtnAction();
 
         } else {
-            prescription_status_label.setText("No Medicine Prescribed..!");
+            prescription_status_label.setText("No Medicine/Guideline added..!");
             prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
         }
 
     }
     private void add_medicine_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btnActionPerformed
-        addMedicine();
+        if (is_guideline_mode) {
+            addGuideline();
+        } else {
+            addMedicine();
+        }
     }//GEN-LAST:event_add_medicine_btnActionPerformed
 
     private void medicine_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_inputMouseEntered
@@ -3880,21 +4060,11 @@ public class Home extends javax.swing.JFrame {
 
 
     private void prescription_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_delete_btnActionPerformed
-
-        for (int i = 0; i < medicine_arraylist.size(); i++) {
-            MedicineRowPanel p = medicine_arraylist.get(i);
-            if (p.getDeleteCheckStatus()) {
-                main_list.remove(p);
-                medicine_arraylist.remove(p);
-
-                if (total_medicine_selected != 0) {
-                    total_medicine_selected--;
-                }
-                i--;
-            }
+        if (is_guideline_mode) {
+            removeSelectedGuideline();
+        } else {
+            removeSelectedMedicine();
         }
-        validate();
-        repaint();
 
     }//GEN-LAST:event_prescription_delete_btnActionPerformed
 
@@ -3926,7 +4096,7 @@ public class Home extends javax.swing.JFrame {
     ArrayList<String> all_medicine = database.getAllMedicine();
     private void medicine_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_listMouseClicked
 
-        if (!delete_mode_checkbox.isSelected()) {
+        if (!is_guideline_mode && !delete_mode_checkbox.isSelected()) {
             if (evt.getClickCount() == 1) {
 
                 addMedicine();
@@ -4014,28 +4184,53 @@ public class Home extends javax.swing.JFrame {
         report_show_panel.repaint();
         try {
 
-            HashMap a = new HashMap();
-            a.put("pno", Integer.parseInt(pno_report_input.getText()));
-
-            Connection con = REPORTS_THREAD.getConnection();
-            if (con != null) {
-                JasperReport jr = REPORTS_THREAD.getCompiledPrescriptionReport();
-                if (jr != null) {
-                    JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
-
+            PatientDetails patientDetails = getReportPagePatientDetailsObject();
+            if (patientDetails == null && pno_report_input.getText() != null && !pno_report_input.getText().trim().isEmpty()) {
+                patientDetails = new PatientDetails();
+                patientDetails.setPid(Integer.parseInt(pno_report_input.getText().trim()));
+            }
+            if (patientDetails != null) {
+                JasperPrint jp = getCombinedPrescriptionPrint(patientDetails);
+                if (jp != null) {
                     JRViewer v = new JRViewer(jp);
                     report_show_panel.setLayout(new BorderLayout());
                     report_show_panel.add(v);
-                } else {
-                    report_status.setText("No report is availalble");
-                    report_status.setForeground(Color.red);
                 }
-                report_show_panel.revalidate();
-                report_show_panel.repaint();
             }
+            report_show_panel.revalidate();
+            report_show_panel.repaint();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private JasperPrint getCombinedPrescriptionPrint(PatientDetails patientDetails) throws JRException {
+        if (patientDetails == null) {
+            return null;
+        }
+        HashMap<String, Object> a = new HashMap<String, Object>();
+        a.put("pno", patientDetails.getPid());
+
+        Connection con = REPORTS_THREAD.getConnection();
+        if (con == null) {
+            return null;
+        }
+
+        JasperReport prescriptionReport = REPORTS_THREAD.getCompiledPrescriptionReport();
+        if (prescriptionReport == null) {
+            return null;
+        }
+
+        JasperPrint medicinePrint = JasperFillManager.fillReport(prescriptionReport, a, con);
+        database.getGuidelinesList(patientDetails.getPid());
+        JasperReport guidelineReport = REPORTS_THREAD.getCompiledPrescriptionGuidelinesReport();
+        if (guidelineReport != null) {
+            JasperPrint guidelinePrint = JasperFillManager.fillReport(guidelineReport, a, con);
+            if (guidelinePrint != null && !guidelinePrint.getPages().isEmpty()) {
+                medicinePrint.getPages().addAll(guidelinePrint.getPages());
+            }
+        }
+        return medicinePrint;
     }
 
     ArrayList<MedicineRowPanel> temp_medicine_arraylist = new ArrayList<MedicineRowPanel>();
@@ -4070,10 +4265,17 @@ public class Home extends javax.swing.JFrame {
                 if (patientDetails != null) {
                     ArrayList<MedicineDetails> medi = database.getMedicineList(patient_report_number);
                     if (medi != null) {
-                        DefaultListModel lm = new DefaultListModel();
+                        removeAllSelectedMedicine();
+                        removeAllSelectedGuidelines();
                         for (MedicineDetails m : medi) {
-                            //lm.addElement(m);
                             addMedicineForEditing(m);
+                        }
+
+                        ArrayList<String> guidelines = database.getGuidelinesList(patient_report_number);
+                        if (guidelines != null) {
+                            for (String guideline : guidelines) {
+                                addGuidelineForEditing(guideline);
+                            }
                         }
 
                         setPrescriptionPagePatientDetailsObject(patientDetails);
@@ -4177,23 +4379,12 @@ public class Home extends javax.swing.JFrame {
     public void printReport(PatientDetails patientDetails) throws JRException {
 
         if (patientDetails != null) {
-
-            HashMap a = new HashMap();
-            a.put("pno", patientDetails.getPid());
-
-            Connection con = REPORTS_THREAD.getConnection();
-            if (con != null) {
-                JasperReport jr = REPORTS_THREAD.getCompiledPrescriptionReport();
-                if (jr != null) {
-                    JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
-                    JasperPrintManager.printReport(jp, false);
-
-                } else {
-
-                }
-                report_show_panel.revalidate();
-                report_show_panel.repaint();
+            JasperPrint jp = getCombinedPrescriptionPrint(patientDetails);
+            if (jp != null) {
+                JasperPrintManager.printReport(jp, false);
             }
+            report_show_panel.revalidate();
+            report_show_panel.repaint();
         } else {
             report_status.setText("No report is availalble");
             report_status.setForeground(Color.red);
@@ -4206,23 +4397,15 @@ public class Home extends javax.swing.JFrame {
 
             if (patientDetails != null) {
 
-                HashMap a = new HashMap();
-                a.put("pno", patientDetails.getPid());
-
-                Connection con = REPORTS_THREAD.getConnection();
-                if (con != null) {
-                    JasperReport jr = REPORTS_THREAD.getCompiledPrescriptionReport();
-                    if (jr != null) {
-                        JasperPrint jp = JasperFillManager.fillReport(jr, a, con);
-                        JasperPrintManager.printReport(jp, true);
-
-                    } else {
-                        report_status.setText("No report is availalble");
-                        report_status.setForeground(Color.red);
-                    }
-                    report_show_panel.revalidate();
-                    report_show_panel.repaint();
+                JasperPrint jp = getCombinedPrescriptionPrint(patientDetails);
+                if (jp != null) {
+                    JasperPrintManager.printReport(jp, true);
+                } else {
+                    report_status.setText("No report is availalble");
+                    report_status.setForeground(Color.red);
                 }
+                report_show_panel.revalidate();
+                report_show_panel.repaint();
             } else {
                 report_status.setText("No report is availalble");
                 report_status.setForeground(Color.red);
@@ -4405,15 +4588,19 @@ public class Home extends javax.swing.JFrame {
     private void medicine_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_inputKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            addMedicine();
+            if (is_guideline_mode) {
+                addGuideline();
+            } else {
+                addMedicine();
+            }
         }
 
-        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_DOWN) {
             medicine_list.grabFocus();
             medicine_list.setSelectedIndex(0);
 
         }
-        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_UP) {
 
             if (medicine_list.getSelectedIndex() == 0) {
                 medicine_input.grabFocus();
@@ -4426,12 +4613,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_medicine_inputKeyPressed
 
     private void medicine_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_listKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_ENTER) {
             addMedicine();
             medicine_input.grabFocus();
         }
 
-        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+        if (!is_guideline_mode && evt.getKeyCode() == KeyEvent.VK_UP) {
 
             if (medicine_list.getSelectedIndex() == 0) {
                 medicine_input.grabFocus();
@@ -4816,7 +5003,11 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_remove_all_medicineMouseExited
 
     private void remove_all_medicineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remove_all_medicineActionPerformed
-         removeAllSelectedMedicine();
+        if (is_guideline_mode) {
+            removeAllSelectedGuidelines();
+        } else {
+            removeAllSelectedMedicine();
+        }
     }//GEN-LAST:event_remove_all_medicineActionPerformed
 
     public void resetFeesSection() {
