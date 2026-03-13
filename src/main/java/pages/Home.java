@@ -1168,7 +1168,7 @@ public class Home extends javax.swing.JFrame {
         prescription_date_input = new com.toedter.calendar.JDateChooser();
         jLabel8 = new javax.swing.JLabel();
         medicine_input = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
+        medicine_label = new javax.swing.JLabel();
         add_medicine_btn = new javax.swing.JButton();
         selected_medicine_panel = new javax.swing.JPanel();
         prescription_delete_btn = new javax.swing.JButton();
@@ -1200,11 +1200,9 @@ public class Home extends javax.swing.JFrame {
         get_modicines_checkbox = new javax.swing.JCheckBox();
         remove_all_medicine = new javax.swing.JButton();
         get_all_records_checkbox = new javax.swing.JCheckBox();
-        prescription_foot_panel = new javax.swing.JPanel();
-        prescription_head_panel = new javax.swing.JPanel();
+        guidelines_label = new javax.swing.JLabel();
         prescription_panel_head1 = new javax.swing.JPanel();
         patient_panel_header_title1 = new javax.swing.JLabel();
-        prescrption_left_panel = new javax.swing.JPanel();
         prescrption_right_panel = new javax.swing.JPanel();
         Reports = new javax.swing.JPanel();
         reports_head_panel = new javax.swing.JPanel();
@@ -1667,7 +1665,6 @@ public class Home extends javax.swing.JFrame {
         prescription_form_panel.setLayout(new java.awt.BorderLayout(3, 3));
 
         prescription_form.setBackground(new java.awt.Color(251, 252, 224));
-        prescription_form.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         prescription_form.setForeground(new java.awt.Color(251, 252, 224));
         prescription_form.setPreferredSize(new java.awt.Dimension(900, 550));
 
@@ -1741,8 +1738,8 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel9.setText("Selected Medicine ");
+        medicine_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        medicine_label.setText("Medicine ");
 
         add_medicine_btn.setBackground(new java.awt.Color(0, 51, 255));
         add_medicine_btn.setForeground(new java.awt.Color(255, 255, 255));
@@ -2043,6 +2040,9 @@ public class Home extends javax.swing.JFrame {
         get_all_records_checkbox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         get_all_records_checkbox.setFocusPainted(false);
 
+        guidelines_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        guidelines_label.setText("Guidelines");
+
         javax.swing.GroupLayout prescription_formLayout = new javax.swing.GroupLayout(prescription_form);
         prescription_form.setLayout(prescription_formLayout);
         prescription_formLayout.setHorizontalGroup(
@@ -2132,10 +2132,12 @@ public class Home extends javax.swing.JFrame {
                                                 .addComponent(prescription_next_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
                                                 .addComponent(save_and_print_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(selected_medicine_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(selected_medicine_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)))
                                     .addGroup(prescription_formLayout.createSequentialGroup()
                                         .addGap(19, 19, 19)
-                                        .addComponent(jLabel9)
+                                        .addComponent(medicine_label)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(guidelines_label)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(55, 55, 55)
@@ -2188,9 +2190,10 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(get_all_records_checkbox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(medicine_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(guidelines_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(medicine_list_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2232,38 +2235,6 @@ public class Home extends javax.swing.JFrame {
 
         prescription_form_panel.add(prescription_form, java.awt.BorderLayout.LINE_START);
 
-        prescription_foot_panel.setBackground(new java.awt.Color(204, 255, 255));
-        prescription_foot_panel.setPreferredSize(new java.awt.Dimension(800, 8));
-
-        javax.swing.GroupLayout prescription_foot_panelLayout = new javax.swing.GroupLayout(prescription_foot_panel);
-        prescription_foot_panel.setLayout(prescription_foot_panelLayout);
-        prescription_foot_panelLayout.setHorizontalGroup(
-            prescription_foot_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        prescription_foot_panelLayout.setVerticalGroup(
-            prescription_foot_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 8, Short.MAX_VALUE)
-        );
-
-        prescription_form_panel.add(prescription_foot_panel, java.awt.BorderLayout.SOUTH);
-
-        prescription_head_panel.setBackground(new java.awt.Color(204, 255, 255));
-        prescription_head_panel.setPreferredSize(new java.awt.Dimension(800, 8));
-
-        javax.swing.GroupLayout prescription_head_panelLayout = new javax.swing.GroupLayout(prescription_head_panel);
-        prescription_head_panel.setLayout(prescription_head_panelLayout);
-        prescription_head_panelLayout.setHorizontalGroup(
-            prescription_head_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        prescription_head_panelLayout.setVerticalGroup(
-            prescription_head_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 8, Short.MAX_VALUE)
-        );
-
-        prescription_form_panel.add(prescription_head_panel, java.awt.BorderLayout.NORTH);
-
         Prescription.add(prescription_form_panel, java.awt.BorderLayout.CENTER);
 
         prescription_panel_head1.setBackground(new java.awt.Color(0, 0, 102));
@@ -2277,22 +2248,6 @@ public class Home extends javax.swing.JFrame {
         prescription_panel_head1.add(patient_panel_header_title1);
 
         Prescription.add(prescription_panel_head1, java.awt.BorderLayout.PAGE_START);
-
-        prescrption_left_panel.setBackground(new java.awt.Color(204, 255, 255));
-        prescrption_left_panel.setPreferredSize(new java.awt.Dimension(10, 400));
-
-        javax.swing.GroupLayout prescrption_left_panelLayout = new javax.swing.GroupLayout(prescrption_left_panel);
-        prescrption_left_panel.setLayout(prescrption_left_panelLayout);
-        prescrption_left_panelLayout.setHorizontalGroup(
-            prescrption_left_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
-        );
-        prescrption_left_panelLayout.setVerticalGroup(
-            prescrption_left_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1050, Short.MAX_VALUE)
-        );
-
-        Prescription.add(prescrption_left_panel, java.awt.BorderLayout.LINE_START);
 
         prescrption_right_panel.setBackground(new java.awt.Color(204, 255, 255));
         prescrption_right_panel.setPreferredSize(new java.awt.Dimension(10, 400));
@@ -4942,6 +4897,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.ButtonGroup gender_radio_group;
     private javax.swing.JCheckBox get_all_records_checkbox;
     private javax.swing.JCheckBox get_modicines_checkbox;
+    private javax.swing.JLabel guidelines_label;
     private javax.swing.JCheckBox headache_chk;
     private javax.swing.JLabel heade_label;
     private javax.swing.JPanel header;
@@ -4962,7 +4918,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
@@ -4981,6 +4936,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel medical_reports_dropdown_label;
     private javax.swing.JButton medicine_delete_btn;
     private javax.swing.JTextField medicine_input;
+    private javax.swing.JLabel medicine_label;
     private javax.swing.JList<String> medicine_list;
     private javax.swing.JPanel medicine_list_panel;
     private javax.swing.JPanel menu_panel;
@@ -5014,10 +4970,8 @@ public class Home extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser prescription_date_input;
     private javax.swing.JButton prescription_delete_btn;
     private javax.swing.JRadioButton prescription_female_btn;
-    private javax.swing.JPanel prescription_foot_panel;
     private javax.swing.JPanel prescription_form;
     private javax.swing.JPanel prescription_form_panel;
-    private javax.swing.JPanel prescription_head_panel;
     private javax.swing.JPanel prescription_icon;
     private javax.swing.JLabel prescription_label;
     private javax.swing.JRadioButton prescription_male_btn;
@@ -5031,7 +4985,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel prescription_reports_dropdown_label;
     private javax.swing.JButton prescription_save_btn;
     private javax.swing.JLabel prescription_status_label;
-    private javax.swing.JPanel prescrption_left_panel;
     private javax.swing.JPanel prescrption_right_panel;
     private javax.swing.JButton print;
     private javax.swing.JTextField pulse_input;
