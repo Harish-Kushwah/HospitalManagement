@@ -22,7 +22,7 @@
                 <textElement>
                     <font isBold="true"/>
                 </textElement>
-                <text><![CDATA[Diat / पथ्य]]></text>
+                <text><![CDATA[Diet / पथ्य]]></text>
             </staticText>
         </band>
     </pageHeader>

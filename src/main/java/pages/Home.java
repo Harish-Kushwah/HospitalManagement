@@ -1140,7 +1140,7 @@ public class Home extends javax.swing.JFrame {
             get_all_records_checkbox.setVisible(false);
             get_modicines_checkbox.setVisible(false);
             category_mode_checkbox.setVisible(false);
-            jLabel8.setText("Enter Guideline");
+            jLabel8.setText("Enter Diet");
             jLabel6.setVisible(false);
             jLabel7.setVisible(false);
             guidelines_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
@@ -1374,7 +1374,7 @@ public class Home extends javax.swing.JFrame {
             guideline_text = medicine_input.getText();
         }
         if (guideline_text == null || guideline_text.trim().isEmpty()) {
-            prescription_status_label.setText("Enter guideline text");
+            prescription_status_label.setText("Enter Diet text");
             prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
             return;
         }
@@ -2561,7 +2561,7 @@ public class Home extends javax.swing.JFrame {
         get_all_records_checkbox.setFocusPainted(false);
 
         guidelines_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        guidelines_label.setText("Guidelines");
+        guidelines_label.setText("Diet");
 
         exercise_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         exercise_label.setText("Exercise");
