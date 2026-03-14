@@ -16,36 +16,14 @@
         <band height="24" splitType="Stretch"/>
     </title>
     <pageHeader>
-        <band height="92" splitType="Stretch">
-            <textField>
-                <reportElement x="0" y="10" width="44" height="20" uuid="9ac77d5f-fcde-4d8f-96c6-01fc12336085"/>
-                <textFieldExpression><![CDATA[$F{pno}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="72" y="10" width="160" height="20" uuid="24e46dbe-0f74-4f65-85dc-cdd2a60dffbc"/>
-                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
-            </textField>
-            <textField pattern="dd/MM/yyyy h.mm a">
-                <reportElement x="315" y="10" width="55" height="20" uuid="edfc4b97-bdab-45b8-972f-a4f8e8db0ea3"/>
-                <textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
-            </textField>
+        <band height="38" splitType="Stretch">
             <staticText>
-                <reportElement x="0" y="40" width="105" height="20" uuid="5603f345-7d7e-4464-b9da-9f2cf7b2d1e6"/>
+                <reportElement x="0" y="8" width="190" height="20" uuid="5603f345-7d7e-4464-b9da-9f2cf7b2d1e6"/>
                 <textElement>
-                    <font size="15" isBold="true"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
-                <text><![CDATA[पथ्य]]></text>
+                <text><![CDATA[Guidelines / पथ्य]]></text>
             </staticText>
-            <staticText>
-                <reportElement x="278" y="10" width="37" height="20" uuid="6664f89c-b5d0-4bc6-bdec-763be8f2ff48"/>
-                <textElement>
-                    <font isBold="true"/>
-                </textElement>
-                <text><![CDATA[Date :]]></text>
-            </staticText>
-            <line>
-                <reportElement x="0" y="75" width="370" height="1" uuid="3a67ff73-50bb-4739-b1ea-9807950be4eb"/>
-            </line>
         </band>
     </pageHeader>
     <detail>
@@ -61,19 +39,16 @@
         </band>
     </detail>
     <summary>
-        <band height="60" splitType="Stretch">
-            <line>
-                <reportElement x="0" y="5" width="370" height="1" uuid="aa11bb22-cc33-4d44-e555-ff6677889900"/>
-            </line>
+        <band height="72" splitType="Stretch">
             <staticText>
-                <reportElement x="0" y="10" width="120" height="20" uuid="bb22cc33-dd44-4e55-f666-007788990011"/>
+                <reportElement x="0" y="10" width="200" height="20" uuid="bb22cc33-dd44-4e55-f666-007788990011"/>
                 <textElement>
-                    <font size="15" isBold="true"/>
+                    <font size="12" isBold="true"/>
                 </textElement>
-                <text><![CDATA[व्यायाम]]></text>
+                <text><![CDATA[Exercise / व्यायाम]]></text>
             </staticText>
             <subreport isUsingCache="false">
-                <reportElement x="0" y="35" width="370" height="20" uuid="cc33dd44-ee55-4f66-a777-008899001122"/>
+                <reportElement x="10" y="34" width="360" height="28" uuid="cc33dd44-ee55-4f66-a777-008899001122"/>
                 <subreportParameter name="pno">
                     <subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
                 </subreportParameter>

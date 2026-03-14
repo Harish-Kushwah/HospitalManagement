@@ -10,10 +10,6 @@
     </background>
     <detail>
         <band height="20" splitType="Stretch">
-            <staticText>
-                <reportElement x="0" y="2" width="14" height="16" uuid="e1f2a3b4-c5d6-4e7f-8a9b-c0d1e2f3a4b5"/>
-                <text><![CDATA[-]]></text>
-            </staticText>
             <textField isStretchWithOverflow="true">
                 <reportElement x="16" y="2" width="354" height="16" uuid="f1a2b3c4-d5e6-4f7a-8b9c-d0e1f2a3b4c5"/>
                 <textFieldExpression><![CDATA[$F{advice}]]></textFieldExpression>
