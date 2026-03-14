@@ -20,7 +20,7 @@
             <staticText>
                 <reportElement x="0" y="8" width="190" height="20" uuid="5603f345-7d7e-4464-b9da-9f2cf7b2d1e6"/>
                 <textElement>
-                    <font size="12" isBold="true"/>
+                    <font isBold="true"/>
                 </textElement>
                 <text><![CDATA[Guidelines / पथ्य]]></text>
             </staticText>
@@ -43,7 +43,7 @@
             <staticText>
                 <reportElement x="0" y="10" width="200" height="20" uuid="bb22cc33-dd44-4e55-f666-007788990011"/>
                 <textElement>
-                    <font size="12" isBold="true"/>
+                    <font isBold="true"/>
                 </textElement>
                 <text><![CDATA[Exercise / व्यायाम]]></text>
             </staticText>

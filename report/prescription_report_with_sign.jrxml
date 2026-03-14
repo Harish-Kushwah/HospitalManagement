@@ -211,24 +211,24 @@
 		<band height="13" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="190" splitType="Stretch">
+		<band height="132" splitType="Stretch">
 			<image>
-				<reportElement x="315" y="10" width="40" height="30" uuid="8ca9536e-7606-47c0-9db0-d4228bd0d470"/>
+				<reportElement x="315" y="2" width="40" height="30" uuid="8ca9536e-7606-47c0-9db0-d4228bd0d470"/>
 				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="300" y="40" width="70" height="16" uuid="b48bd1a1-7242-4a94-91ae-a6195a22ef78"/>
+				<reportElement x="300" y="30" width="70" height="16" uuid="b48bd1a1-7242-4a94-91ae-a6195a22ef78"/>
 				<text><![CDATA[Dr. Ajit Pawar]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="60" width="120" height="16" uuid="ee55ff66-aa77-4b88-c999-00aa01122334"/>
+				<reportElement x="0" y="50" width="120" height="16" uuid="ee55ff66-aa77-4b88-c999-00aa01122334"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Advice / सल्ला :]]></text>
 			</staticText>
 			<subreport isUsingCache="false">
-				<reportElement x="0" y="78" width="370" height="40" uuid="ff66aa77-bb88-4c99-d000-01bb02233445"/>
+				<reportElement x="0" y="66" width="370" height="20" uuid="ff66aa77-bb88-4c99-d000-01bb02233445"/>
 				<subreportParameter name="pno">
 					<subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -236,14 +236,14 @@
 				<subreportExpression><![CDATA[$P{ADVICE_SUBREPORT}]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="0" y="124" width="160" height="16" uuid="bb88cc99-dd00-4e11-f222-03dd04455667"/>
+				<reportElement x="0" y="88" width="160" height="16" uuid="bb88cc99-dd00-4e11-f222-03dd04455667"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Investigation / तपासण्या :]]></text>
 			</staticText>
 			<subreport isUsingCache="false">
-				<reportElement x="0" y="142" width="370" height="40" uuid="cc99dd00-ee11-4f22-a333-04ee05566778"/>
+				<reportElement x="0" y="106" width="370" height="20" uuid="cc99dd00-ee11-4f22-a333-04ee05566778"/>
 				<subreportParameter name="pno">
 					<subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
 				</subreportParameter>
