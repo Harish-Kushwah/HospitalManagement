@@ -16,6 +16,9 @@ public class MultithredingReports extends Thread {
 
     JasperReport jr;
     JasperReport prescriptionGuidelinesJr;
+        JasperReport exerciseSubreportJr;
+        JasperReport adviceSubreportJr;
+        JasperReport investigationSubreportJr;
     JasperReport testReportJr;
     JasperReport medicalReportJr;
     JasperReport medicalReportJrFormat2;
@@ -26,6 +29,9 @@ public class MultithredingReports extends Thread {
         try {
             this.jr = JasperCompileManager.compileReport(SystemReports.PRESCRIPTION_REPORT);
             this.prescriptionGuidelinesJr = JasperCompileManager.compileReport(SystemReports.PRESCRIPTION_GUIDELINES_REPORT);
+                this.exerciseSubreportJr = JasperCompileManager.compileReport(SystemReports.EXERCISE_SUBREPORT);
+                this.adviceSubreportJr = JasperCompileManager.compileReport(SystemReports.ADVICE_SUBREPORT);
+                this.investigationSubreportJr = JasperCompileManager.compileReport(SystemReports.INVESTIGATION_SUBREPORT);
             this.testReportJr = JasperCompileManager.compileReport(SystemReports.TEST_REPORT);
             this.medicalReportJr = JasperCompileManager.compileReport(SystemReports.REFEREL_LETTER_FORMAT_1);
             this.medicalReportJrFormat2 = JasperCompileManager.compileReport(SystemReports.REFEREL_LETTER_FORMAT_2);
@@ -42,6 +48,18 @@ public class MultithredingReports extends Thread {
     public JasperReport getCompiledPrescriptionGuidelinesReport() {
         return this.prescriptionGuidelinesJr;
     }
+
+        public JasperReport getCompiledExerciseSubreport() {
+            return this.exerciseSubreportJr;
+        }
+
+        public JasperReport getCompiledAdviceSubreport() {
+            return this.adviceSubreportJr;
+        }
+
+        public JasperReport getCompiledInvestigationSubreport() {
+            return this.investigationSubreportJr;
+        }
 
     public JasperReport getCompliedTestReport() {
         return this.testReportJr;

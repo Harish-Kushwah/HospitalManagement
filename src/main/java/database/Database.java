@@ -1042,7 +1042,223 @@ public class Database {
         }
 
     }
-    
+
+    // ==================== EXERCISE ====================
+    private void ensureExercisesTable() {
+        try { connect().prepareStatement(CREATE_EXERCISES_TABLE).execute(); } catch (SQLException e) { System.out.println(e); }
+    }
+    private void ensureExerciseMasterTable() {
+        try { connect().prepareStatement(CREATE_EXERCISE_MASTER_TABLE).execute(); } catch (SQLException e) { System.out.println(e); }
+    }
+    public void insertExercise(int pno, String pname, String exercise) {
+        try {
+            if (exercise == null || exercise.trim().isEmpty()) return;
+            ensureExercisesTable();
+            PreparedStatement ps = connect().prepareStatement(INSERT_EXERCISE_INFO);
+            ps.setInt(1, pno); ps.setString(2, pname); ps.setString(3, exercise.trim());
+            ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+    public void insertExerciseMaster(String exercise) {
+        try {
+            if (exercise == null || exercise.trim().isEmpty()) return;
+            ensureExerciseMasterTable();
+            PreparedStatement ps = connect().prepareStatement(INSERT_EXERCISE_MASTER);
+            ps.setString(1, exercise.trim()); ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+    public boolean removeExerciseMaster(String exercise) {
+        try {
+            if (exercise == null || exercise.trim().isEmpty()) return false;
+            ensureExerciseMasterTable();
+            PreparedStatement ps = connect().prepareStatement(DELETE_EXERCISE_MASTER);
+            ps.setString(1, exercise.trim());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) { System.out.println(e); return false; }
+    }
+    public ArrayList<String> getLikeExercise(String str) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureExerciseMasterTable();
+            PreparedStatement ps = connect().prepareStatement(FIND_LIKE_EXERCISE_MASTER);
+            ps.setString(1, "%" + str + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(rs.getString("exercise"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public ArrayList<String> getAllExercises() {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureExerciseMasterTable();
+            ResultSet rs = connect().prepareStatement(GET_ALL_EXERCISE_MASTER).executeQuery();
+            while (rs.next()) list.add(rs.getString("exercise"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public ArrayList<String> getExercisesList(int pno) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureExercisesTable();
+            PreparedStatement ps = connect().prepareStatement(FIND_EXERCISES_BY_PNO);
+            ps.setInt(1, pno);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(rs.getString("exercise"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public void removeAllExercisesOf(int pno) {
+        try {
+            ensureExercisesTable();
+            PreparedStatement ps = connect().prepareStatement(DELETE_EXERCISES_BY_PNO);
+            ps.setInt(1, pno); ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+
+    // ==================== ADVICE ====================
+    private void ensureAdviceTable() {
+        try { connect().prepareStatement(CREATE_ADVICE_TABLE).execute(); } catch (SQLException e) { System.out.println(e); }
+    }
+    private void ensureAdviceMasterTable() {
+        try { connect().prepareStatement(CREATE_ADVICE_MASTER_TABLE).execute(); } catch (SQLException e) { System.out.println(e); }
+    }
+    public void insertAdvice(int pno, String pname, String advice) {
+        try {
+            if (advice == null || advice.trim().isEmpty()) return;
+            ensureAdviceTable();
+            PreparedStatement ps = connect().prepareStatement(INSERT_ADVICE_INFO);
+            ps.setInt(1, pno); ps.setString(2, pname); ps.setString(3, advice.trim());
+            ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+    public void insertAdviceMaster(String advice) {
+        try {
+            if (advice == null || advice.trim().isEmpty()) return;
+            ensureAdviceMasterTable();
+            PreparedStatement ps = connect().prepareStatement(INSERT_ADVICE_MASTER);
+            ps.setString(1, advice.trim()); ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+    public boolean removeAdviceMaster(String advice) {
+        try {
+            if (advice == null || advice.trim().isEmpty()) return false;
+            ensureAdviceMasterTable();
+            PreparedStatement ps = connect().prepareStatement(DELETE_ADVICE_MASTER);
+            ps.setString(1, advice.trim());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) { System.out.println(e); return false; }
+    }
+    public ArrayList<String> getLikeAdvice(String str) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureAdviceMasterTable();
+            PreparedStatement ps = connect().prepareStatement(FIND_LIKE_ADVICE_MASTER);
+            ps.setString(1, "%" + str + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(rs.getString("advice"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public ArrayList<String> getAllAdvice() {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureAdviceMasterTable();
+            ResultSet rs = connect().prepareStatement(GET_ALL_ADVICE_MASTER).executeQuery();
+            while (rs.next()) list.add(rs.getString("advice"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public ArrayList<String> getAdviceList(int pno) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureAdviceTable();
+            PreparedStatement ps = connect().prepareStatement(FIND_ADVICE_BY_PNO);
+            ps.setInt(1, pno);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(rs.getString("advice"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public void removeAllAdviceOf(int pno) {
+        try {
+            ensureAdviceTable();
+            PreparedStatement ps = connect().prepareStatement(DELETE_ADVICE_BY_PNO);
+            ps.setInt(1, pno); ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+
+    // ==================== INVESTIGATION ====================
+    private void ensureInvestigationsTable() {
+        try { connect().prepareStatement(CREATE_INVESTIGATIONS_TABLE).execute(); } catch (SQLException e) { System.out.println(e); }
+    }
+    private void ensureInvestigationMasterTable() {
+        try { connect().prepareStatement(CREATE_INVESTIGATION_MASTER_TABLE).execute(); } catch (SQLException e) { System.out.println(e); }
+    }
+    public void insertInvestigation(int pno, String pname, String investigation) {
+        try {
+            if (investigation == null || investigation.trim().isEmpty()) return;
+            ensureInvestigationsTable();
+            PreparedStatement ps = connect().prepareStatement(INSERT_INVESTIGATION_INFO);
+            ps.setInt(1, pno); ps.setString(2, pname); ps.setString(3, investigation.trim());
+            ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+    public void insertInvestigationMaster(String investigation) {
+        try {
+            if (investigation == null || investigation.trim().isEmpty()) return;
+            ensureInvestigationMasterTable();
+            PreparedStatement ps = connect().prepareStatement(INSERT_INVESTIGATION_MASTER);
+            ps.setString(1, investigation.trim()); ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+    public boolean removeInvestigationMaster(String investigation) {
+        try {
+            if (investigation == null || investigation.trim().isEmpty()) return false;
+            ensureInvestigationMasterTable();
+            PreparedStatement ps = connect().prepareStatement(DELETE_INVESTIGATION_MASTER);
+            ps.setString(1, investigation.trim());
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) { System.out.println(e); return false; }
+    }
+    public ArrayList<String> getLikeInvestigation(String str) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureInvestigationMasterTable();
+            PreparedStatement ps = connect().prepareStatement(FIND_LIKE_INVESTIGATION_MASTER);
+            ps.setString(1, "%" + str + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(rs.getString("investigation"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public ArrayList<String> getAllInvestigations() {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureInvestigationMasterTable();
+            ResultSet rs = connect().prepareStatement(GET_ALL_INVESTIGATION_MASTER).executeQuery();
+            while (rs.next()) list.add(rs.getString("investigation"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public ArrayList<String> getInvestigationsList(int pno) {
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            ensureInvestigationsTable();
+            PreparedStatement ps = connect().prepareStatement(FIND_INVESTIGATIONS_BY_PNO);
+            ps.setInt(1, pno);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(rs.getString("investigation"));
+        } catch (SQLException e) { System.out.println(e); }
+        return list;
+    }
+    public void removeAllInvestigationsOf(int pno) {
+        try {
+            ensureInvestigationsTable();
+            PreparedStatement ps = connect().prepareStatement(DELETE_INVESTIGATIONS_BY_PNO);
+            ps.setInt(1, pno); ps.executeUpdate();
+        } catch (SQLException e) { System.out.println(e); }
+    }
+
     public boolean removeMedicine(String medicine_name)
     {
         boolean flag = false;
@@ -1459,9 +1675,36 @@ public class Database {
         }
         return null;
     }
+    private static final String CREATE_EXERCISES_TABLE = "CREATE TABLE IF NOT EXISTS `exercises` (`id` INT NOT NULL AUTO_INCREMENT, `pno` INT NOT NULL, `pname` VARCHAR(255), `exercise` TEXT NOT NULL, PRIMARY KEY (`id`))";
+    private static final String INSERT_EXERCISE_INFO = "INSERT INTO `exercises` (`pno`, `pname`, `exercise`) VALUES (?,?,?);";
+    private static final String FIND_EXERCISES_BY_PNO = "SELECT * FROM exercises WHERE pno = ?";
+    private static final String DELETE_EXERCISES_BY_PNO = "DELETE FROM exercises WHERE pno = ?";
+    private static final String CREATE_EXERCISE_MASTER_TABLE = "CREATE TABLE IF NOT EXISTS `exercise_list` (`id` INT NOT NULL AUTO_INCREMENT, `exercise` VARCHAR(500) NOT NULL UNIQUE, PRIMARY KEY (`id`))";
+    private static final String INSERT_EXERCISE_MASTER = "INSERT IGNORE INTO `exercise_list` (`exercise`) VALUES (?)";
+    private static final String DELETE_EXERCISE_MASTER = "DELETE FROM `exercise_list` WHERE exercise = ?";
+    private static final String FIND_LIKE_EXERCISE_MASTER = "SELECT exercise FROM exercise_list WHERE exercise LIKE ? ORDER BY exercise";
+    private static final String GET_ALL_EXERCISE_MASTER = "SELECT exercise FROM exercise_list ORDER BY exercise";
     
-    
+    private static final String CREATE_ADVICE_TABLE = "CREATE TABLE IF NOT EXISTS `advice` (`id` INT NOT NULL AUTO_INCREMENT, `pno` INT NOT NULL, `pname` VARCHAR(255), `advice` TEXT NOT NULL, PRIMARY KEY (`id`))";
+    private static final String INSERT_ADVICE_INFO = "INSERT INTO `advice` (`pno`, `pname`, `advice`) VALUES (?,?,?);";
+    private static final String FIND_ADVICE_BY_PNO = "SELECT * FROM advice WHERE pno = ?";
+    private static final String DELETE_ADVICE_BY_PNO = "DELETE FROM advice WHERE pno = ?";
+    private static final String CREATE_ADVICE_MASTER_TABLE = "CREATE TABLE IF NOT EXISTS `advice_list` (`id` INT NOT NULL AUTO_INCREMENT, `advice` VARCHAR(500) NOT NULL UNIQUE, PRIMARY KEY (`id`))";
+    private static final String INSERT_ADVICE_MASTER = "INSERT IGNORE INTO `advice_list` (`advice`) VALUES (?)";
+    private static final String DELETE_ADVICE_MASTER = "DELETE FROM `advice_list` WHERE advice = ?";
+    private static final String FIND_LIKE_ADVICE_MASTER = "SELECT advice FROM advice_list WHERE advice LIKE ? ORDER BY advice";
+    private static final String GET_ALL_ADVICE_MASTER = "SELECT advice FROM advice_list ORDER BY advice";
             
+    private static final String CREATE_INVESTIGATIONS_TABLE = "CREATE TABLE IF NOT EXISTS `investigations` (`id` INT NOT NULL AUTO_INCREMENT, `pno` INT NOT NULL, `pname` VARCHAR(255), `investigation` TEXT NOT NULL, PRIMARY KEY (`id`))";
+    private static final String INSERT_INVESTIGATION_INFO = "INSERT INTO `investigations` (`pno`, `pname`, `investigation`) VALUES (?,?,?);";
+    private static final String FIND_INVESTIGATIONS_BY_PNO = "SELECT * FROM investigations WHERE pno = ?";
+    private static final String DELETE_INVESTIGATIONS_BY_PNO = "DELETE FROM investigations WHERE pno = ?";
+    private static final String CREATE_INVESTIGATION_MASTER_TABLE = "CREATE TABLE IF NOT EXISTS `investigation_list` (`id` INT NOT NULL AUTO_INCREMENT, `investigation` VARCHAR(500) NOT NULL UNIQUE, PRIMARY KEY (`id`))";
+    private static final String INSERT_INVESTIGATION_MASTER = "INSERT IGNORE INTO `investigation_list` (`investigation`) VALUES (?)";
+    private static final String DELETE_INVESTIGATION_MASTER = "DELETE FROM `investigation_list` WHERE investigation = ?";
+    private static final String FIND_LIKE_INVESTIGATION_MASTER = "SELECT investigation FROM investigation_list WHERE investigation LIKE ? ORDER BY investigation";
+    private static final String GET_ALL_INVESTIGATION_MASTER = "SELECT investigation FROM investigation_list ORDER BY investigation";
+
     public int getDoctorID(String doctor_name) {
         try {
             Connection conn = connect();

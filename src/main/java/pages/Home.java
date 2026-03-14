@@ -9,6 +9,9 @@ import medcine.MedicineDetails;
 import medcine.GuidelineRowPanel;
 import medcine.MedicinePanelShortCutKey;
 import medcine.MedicineRowPanel;
+import medcine.ExerciseRowPanel;
+import medcine.AdviceRowPanel;
+import medcine.InvestigationRowPanel;
 import java.awt.CardLayout;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -66,7 +69,20 @@ public class Home extends javax.swing.JFrame {
 
     ArrayList<MedicineRowPanel> medicine_arraylist = new ArrayList<>();
     ArrayList<GuidelineRowPanel> guideline_arraylist = new ArrayList<>();
-    boolean is_guideline_mode = false;
+    ArrayList<ExerciseRowPanel> exercise_arraylist = new ArrayList<>();
+    ArrayList<AdviceRowPanel> advice_arraylist = new ArrayList<>();
+    ArrayList<InvestigationRowPanel> investigation_arraylist = new ArrayList<>();
+
+    static int total_exercise_selected = 0;
+    static int total_advice_selected = 0;
+    static int total_investigation_selected = 0;
+
+    JPanel exercise_main_list;
+    JPanel advice_main_list;
+    JPanel investigation_main_list;
+
+    String current_mode = "medicine";
+
     Dictionary<String, Integer> valid_patients_inputes = new Hashtable();
     Dictionary<String, Integer> valid_prescription_inputes = new Hashtable();
     Dictionary<String, Integer> valid_reports_inputes = new Hashtable();
@@ -108,20 +124,42 @@ public class Home extends javax.swing.JFrame {
 
         addMedicineRowInPanelForm();
         setMedicineOnMedicineInputField();
-        setPrescriptionEntryMode(false);
+        setPrescriptionEntryMode("medicine");
 
         medicine_label.setCursor(new Cursor(Cursor.HAND_CURSOR));
         guidelines_label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        exercise_label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        advice_label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        investigation_label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         medicine_label.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                setPrescriptionEntryMode(false);
+                setPrescriptionEntryMode("medicine");
             }
         });
         guidelines_label.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                setPrescriptionEntryMode(true);
+                setPrescriptionEntryMode("guideline");
+            }
+        });
+        exercise_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                setPrescriptionEntryMode("exercise");
+            }
+        });
+        advice_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                setPrescriptionEntryMode("advice");
+            }
+        });
+        investigation_label.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                setPrescriptionEntryMode("investigation");
             }
         });
 
@@ -622,6 +660,9 @@ public class Home extends javax.swing.JFrame {
                     if(get_modicines_checkbox.isSelected()){
                         removeAllSelectedMedicine();
                         removeAllSelectedGuidelines();
+                        removeAllSelectedExercise();
+                        removeAllSelectedAdvice();
+                        removeAllSelectedInvestigation();
                         ArrayList<MedicineDetails> medi = database.getMedicineList(selectedPatient.getPid());
                         if (medi != null) {
                             for (MedicineDetails m : medi) {
@@ -632,6 +673,24 @@ public class Home extends javax.swing.JFrame {
                         if (guidelines != null) {
                             for (String guideline : guidelines) {
                                 addGuidelineForEditing(guideline);
+                            }
+                        }
+                        ArrayList<String> exercises = database.getExercisesList(selectedPatient.getPid());
+                        if (exercises != null) {
+                            for (String exercise : exercises) {
+                                addExerciseForEditing(exercise);
+                            }
+                        }
+                        ArrayList<String> adviceList = database.getAdviceList(selectedPatient.getPid());
+                        if (adviceList != null) {
+                            for (String advice : adviceList) {
+                                addAdviceForEditing(advice);
+                            }
+                        }
+                        ArrayList<String> investigations = database.getInvestigationsList(selectedPatient.getPid());
+                        if (investigations != null) {
+                            for (String inv : investigations) {
+                                addInvestigationForEditing(inv);
                             }
                         }
                     }
@@ -991,12 +1050,22 @@ public class Home extends javax.swing.JFrame {
                 Database database = Database.getInstance();
                 String text = medicine_input.getText();
                 ArrayList<String> medi;
-                if (is_guideline_mode) {
+                if ("guideline".equals(current_mode)) {
                     medi = database.getLikeGuideline(text);
+                } else if ("exercise".equals(current_mode)) {
+                    medi = database.getLikeExercise(text);
+                } else if ("advice".equals(current_mode)) {
+                    medi = database.getLikeAdvice(text);
+                } else if ("investigation".equals(current_mode)) {
+                    medi = database.getLikeInvestigation(text);
                 } else if (category_mode_checkbox.isSelected()) {
                     medi = database.getLikeCategoryMedicine(text);
                 } else {
                     medi = database.getLikeMedicine(text);
+                }
+
+                if (medi == null) {
+                    medi = new ArrayList<>();
                 }
 
                 DefaultListModel<String> lm = new DefaultListModel<String>();
@@ -1018,6 +1087,15 @@ public class Home extends javax.swing.JFrame {
         guideline_main_list = new JPanel();
         guideline_main_list.setLayout(new GridBagLayout());
 
+        exercise_main_list = new JPanel();
+        exercise_main_list.setLayout(new GridBagLayout());
+
+        advice_main_list = new JPanel();
+        advice_main_list.setLayout(new GridBagLayout());
+
+        investigation_main_list = new JPanel();
+        investigation_main_list.setLayout(new GridBagLayout());
+
         main_list = medicine_main_list;
         setSelectedRowsPanel(medicine_main_list);
     }
@@ -1034,25 +1112,20 @@ public class Home extends javax.swing.JFrame {
         selected_medicine_panel.repaint();
     }
 
-    private void setPrescriptionEntryMode(boolean guidelineMode) {
-        is_guideline_mode = guidelineMode;
-        if (guidelineMode) {
-            main_list = guideline_main_list;
-            setSelectedRowsPanel(guideline_main_list);
-            medicine_list_panel.setVisible(true);
-            get_all_records_checkbox.setVisible(false);
-            get_modicines_checkbox.setVisible(false);
-            category_mode_checkbox.setVisible(false);
-            jLabel8.setText("Enter Guideline");
-            jLabel6.setVisible(false);
-            jLabel7.setVisible(false);
-            medicine_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
-            guidelines_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
-            resetGuidelineInputList();
-        } else {
+    private void setPrescriptionEntryMode(String mode) {
+        current_mode = mode;
+
+        medicine_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+        guidelines_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+        exercise_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+        advice_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+        investigation_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
+
+        medicine_list_panel.setVisible(true);
+
+        if ("medicine".equals(mode)) {
             main_list = medicine_main_list;
             setSelectedRowsPanel(medicine_main_list);
-            medicine_list_panel.setVisible(true);
             get_all_records_checkbox.setVisible(true);
             get_modicines_checkbox.setVisible(true);
             category_mode_checkbox.setVisible(true);
@@ -1060,9 +1133,53 @@ public class Home extends javax.swing.JFrame {
             jLabel6.setVisible(true);
             jLabel7.setVisible(true);
             medicine_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
-            guidelines_label.setForeground(SystemColor.REPORT_LABEL_COLOR);
             resetMedicineInputList();
+        } else if ("guideline".equals(mode)) {
+            main_list = guideline_main_list;
+            setSelectedRowsPanel(guideline_main_list);
+            get_all_records_checkbox.setVisible(false);
+            get_modicines_checkbox.setVisible(false);
+            category_mode_checkbox.setVisible(false);
+            jLabel8.setText("Enter Guideline");
+            jLabel6.setVisible(false);
+            jLabel7.setVisible(false);
+            guidelines_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
+            resetGuidelineInputList();
+        } else if ("exercise".equals(mode)) {
+            main_list = exercise_main_list;
+            setSelectedRowsPanel(exercise_main_list);
+            get_all_records_checkbox.setVisible(false);
+            get_modicines_checkbox.setVisible(false);
+            category_mode_checkbox.setVisible(false);
+            jLabel8.setText("Enter Exercise");
+            jLabel6.setVisible(false);
+            jLabel7.setVisible(false);
+            exercise_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
+            resetExerciseInputList();
+        } else if ("advice".equals(mode)) {
+            main_list = advice_main_list;
+            setSelectedRowsPanel(advice_main_list);
+            get_all_records_checkbox.setVisible(false);
+            get_modicines_checkbox.setVisible(false);
+            category_mode_checkbox.setVisible(false);
+            jLabel8.setText("Enter Advice");
+            jLabel6.setVisible(false);
+            jLabel7.setVisible(false);
+            advice_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
+            resetAdviceInputList();
+        } else {
+            main_list = investigation_main_list;
+            setSelectedRowsPanel(investigation_main_list);
+            get_all_records_checkbox.setVisible(false);
+            get_modicines_checkbox.setVisible(false);
+            category_mode_checkbox.setVisible(false);
+            jLabel8.setText("Enter Investigation");
+            jLabel6.setVisible(false);
+            jLabel7.setVisible(false);
+            investigation_label.setForeground(SystemColor.CLICKED_LABEL_COLOR);
+            resetInvestigationInputList();
         }
+
         validate();
         repaint();
     }
@@ -1126,6 +1243,87 @@ public class Home extends javax.swing.JFrame {
         }
         guideline_arraylist.clear();
         total_guideline_selected = 0;
+        validate();
+        repaint();
+    }
+
+    public void removeSelectedExercise() {
+        for (int i = 0; i < exercise_arraylist.size(); i++) {
+            ExerciseRowPanel p = exercise_arraylist.get(i);
+            if (p.getDeleteCheckStatus()) {
+                exercise_main_list.remove(p);
+                exercise_arraylist.remove(p);
+                if (total_exercise_selected > 0) {
+                    total_exercise_selected--;
+                }
+                i--;
+            }
+        }
+        validate();
+        repaint();
+    }
+
+    public void removeAllSelectedExercise() {
+        for (int i = 0; i < exercise_arraylist.size(); i++) {
+            ExerciseRowPanel p = exercise_arraylist.get(i);
+            exercise_main_list.remove(p);
+        }
+        exercise_arraylist.clear();
+        total_exercise_selected = 0;
+        validate();
+        repaint();
+    }
+
+    public void removeSelectedAdvice() {
+        for (int i = 0; i < advice_arraylist.size(); i++) {
+            AdviceRowPanel p = advice_arraylist.get(i);
+            if (p.getDeleteCheckStatus()) {
+                advice_main_list.remove(p);
+                advice_arraylist.remove(p);
+                if (total_advice_selected > 0) {
+                    total_advice_selected--;
+                }
+                i--;
+            }
+        }
+        validate();
+        repaint();
+    }
+
+    public void removeAllSelectedAdvice() {
+        for (int i = 0; i < advice_arraylist.size(); i++) {
+            AdviceRowPanel p = advice_arraylist.get(i);
+            advice_main_list.remove(p);
+        }
+        advice_arraylist.clear();
+        total_advice_selected = 0;
+        validate();
+        repaint();
+    }
+
+    public void removeSelectedInvestigation() {
+        for (int i = 0; i < investigation_arraylist.size(); i++) {
+            InvestigationRowPanel p = investigation_arraylist.get(i);
+            if (p.getDeleteCheckStatus()) {
+                investigation_main_list.remove(p);
+                investigation_arraylist.remove(p);
+                if (total_investigation_selected > 0) {
+                    total_investigation_selected--;
+                }
+                i--;
+            }
+        }
+        validate();
+        repaint();
+    }
+
+    public void removeAllSelectedInvestigation() {
+        for (int i = 0; i < investigation_arraylist.size(); i++) {
+            InvestigationRowPanel p = investigation_arraylist.get(i);
+            investigation_main_list.remove(p);
+        }
+        investigation_arraylist.clear();
+        total_investigation_selected = 0;
         validate();
         repaint();
     }
@@ -1202,6 +1400,96 @@ public class Home extends javax.swing.JFrame {
         repaint();
     }
 
+    private void addExercise() {
+        String text = medicine_list.getSelectedValue();
+        if (text == null || text.trim().isEmpty()) {
+            text = medicine_input.getText();
+        }
+        if (text == null || text.trim().isEmpty()) {
+            prescription_status_label.setText("Enter exercise text");
+            prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            return;
+        }
+
+        database.insertExerciseMaster(text);
+        medicine_input.setText("");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.weighty = -1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        ExerciseRowPanel p = new ExerciseRowPanel(text);
+        exercise_arraylist.add(p);
+        exercise_main_list.add(exercise_arraylist.get(total_exercise_selected), gbc);
+        total_exercise_selected++;
+
+        resetExerciseInputList();
+        validate();
+        repaint();
+    }
+
+    private void addAdvice() {
+        String text = medicine_list.getSelectedValue();
+        if (text == null || text.trim().isEmpty()) {
+            text = medicine_input.getText();
+        }
+        if (text == null || text.trim().isEmpty()) {
+            prescription_status_label.setText("Enter advice text");
+            prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            return;
+        }
+
+        database.insertAdviceMaster(text);
+        medicine_input.setText("");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.weighty = -1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        AdviceRowPanel p = new AdviceRowPanel(text);
+        advice_arraylist.add(p);
+        advice_main_list.add(advice_arraylist.get(total_advice_selected), gbc);
+        total_advice_selected++;
+
+        resetAdviceInputList();
+        validate();
+        repaint();
+    }
+
+    private void addInvestigation() {
+        String text = medicine_list.getSelectedValue();
+        if (text == null || text.trim().isEmpty()) {
+            text = medicine_input.getText();
+        }
+        if (text == null || text.trim().isEmpty()) {
+            prescription_status_label.setText("Enter investigation text");
+            prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            return;
+        }
+
+        database.insertInvestigationMaster(text);
+        medicine_input.setText("");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.weighty = -1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        InvestigationRowPanel p = new InvestigationRowPanel(text);
+        investigation_arraylist.add(p);
+        investigation_main_list.add(investigation_arraylist.get(total_investigation_selected), gbc);
+        total_investigation_selected++;
+
+        resetInvestigationInputList();
+        validate();
+        repaint();
+    }
+
     public void addMedicine(String medicine_name) {
         if (medicine_name == null) {
             medicine_name = medicine_input.getText();
@@ -1255,6 +1543,84 @@ public class Home extends javax.swing.JFrame {
         total_guideline_selected++;
         validate();
         repaint();
+    }
+
+    public void addExerciseForEditing(String exercise) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        exercise_arraylist.add(new ExerciseRowPanel(exercise));
+        exercise_main_list.add(exercise_arraylist.get(total_exercise_selected), gbc, 0);
+        total_exercise_selected++;
+        validate();
+        repaint();
+    }
+
+    public void addAdviceForEditing(String advice) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        advice_arraylist.add(new AdviceRowPanel(advice));
+        advice_main_list.add(advice_arraylist.get(total_advice_selected), gbc, 0);
+        total_advice_selected++;
+        validate();
+        repaint();
+    }
+
+    public void addInvestigationForEditing(String investigation) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        investigation_arraylist.add(new InvestigationRowPanel(investigation));
+        investigation_main_list.add(investigation_arraylist.get(total_investigation_selected), gbc, 0);
+        total_investigation_selected++;
+        validate();
+        repaint();
+    }
+
+    private void addCurrentModeEntry() {
+        if ("guideline".equals(current_mode)) {
+            addGuideline();
+        } else if ("exercise".equals(current_mode)) {
+            addExercise();
+        } else if ("advice".equals(current_mode)) {
+            addAdvice();
+        } else if ("investigation".equals(current_mode)) {
+            addInvestigation();
+        } else {
+            addMedicine();
+        }
+    }
+
+    private void removeSelectedCurrentModeEntry() {
+        if ("guideline".equals(current_mode)) {
+            removeSelectedGuideline();
+        } else if ("exercise".equals(current_mode)) {
+            removeSelectedExercise();
+        } else if ("advice".equals(current_mode)) {
+            removeSelectedAdvice();
+        } else if ("investigation".equals(current_mode)) {
+            removeSelectedInvestigation();
+        } else {
+            removeSelectedMedicine();
+        }
+    }
+
+    private void removeAllCurrentModeEntries() {
+        if ("guideline".equals(current_mode)) {
+            removeAllSelectedGuidelines();
+        } else if ("exercise".equals(current_mode)) {
+            removeAllSelectedExercise();
+        } else if ("advice".equals(current_mode)) {
+            removeAllSelectedAdvice();
+        } else if ("investigation".equals(current_mode)) {
+            removeAllSelectedInvestigation();
+        } else {
+            removeAllSelectedMedicine();
+        }
     }
 
     public ArrayList<MedicineRowPanel> getMedicineList() {
@@ -1352,6 +1718,9 @@ public class Home extends javax.swing.JFrame {
         remove_all_medicine = new javax.swing.JButton();
         get_all_records_checkbox = new javax.swing.JCheckBox();
         guidelines_label = new javax.swing.JLabel();
+        exercise_label = new javax.swing.JLabel();
+        advice_label = new javax.swing.JLabel();
+        investigation_label = new javax.swing.JLabel();
         prescription_panel_head1 = new javax.swing.JPanel();
         patient_panel_header_title1 = new javax.swing.JLabel();
         prescrption_right_panel = new javax.swing.JPanel();
@@ -2194,6 +2563,15 @@ public class Home extends javax.swing.JFrame {
         guidelines_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         guidelines_label.setText("Guidelines");
 
+        exercise_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        exercise_label.setText("Exercise");
+
+        advice_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        advice_label.setText("Advice");
+
+        investigation_label.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        investigation_label.setText("Investigation");
+
         javax.swing.GroupLayout prescription_formLayout = new javax.swing.GroupLayout(prescription_form);
         prescription_form.setLayout(prescription_formLayout);
         prescription_formLayout.setHorizontalGroup(
@@ -2289,6 +2667,12 @@ public class Home extends javax.swing.JFrame {
                                         .addComponent(medicine_label)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(guidelines_label)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(exercise_label)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(advice_label)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(investigation_label)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(55, 55, 55)
@@ -2344,7 +2728,10 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(medicine_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(guidelines_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(guidelines_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(exercise_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(advice_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(investigation_label, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(prescription_formLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(medicine_list_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -3749,6 +4136,9 @@ public class Home extends javax.swing.JFrame {
     public void resetPrescriptionPage() {
         removeAllSelectedMedicine();
         removeAllSelectedGuidelines();
+        removeAllSelectedExercise();
+        removeAllSelectedAdvice();
+        removeAllSelectedInvestigation();
         medicine_input.setText("");
         prescription_name_input.setText("");
         prescription_date_input.setDate(getCurrentDate());
@@ -3757,7 +4147,7 @@ public class Home extends javax.swing.JFrame {
         prescription_save_btn.setVisible(false);
         prescription_mobile_number_input.setText("");
         new_patient = true;
-        setPrescriptionEntryMode(false);
+        setPrescriptionEntryMode("medicine");
 
         validate();
         repaint();
@@ -3914,8 +4304,7 @@ public class Home extends javax.swing.JFrame {
                         }
 
                         if (prescription_patient_object != null) {
-                            //Issue
-                            //add medicine and guideline details
+                            // Add medicine/guideline/exercise/advice/investigation details
                             boolean hasPrescriptionData = false;
                             if (!medicine_arraylist.isEmpty()) {
                                 int size = medicine_arraylist.size();
@@ -3952,12 +4341,45 @@ public class Home extends javax.swing.JFrame {
                                 }
                             }
 
+                            if (!exercise_arraylist.isEmpty()) {
+                                for (ExerciseRowPanel row : exercise_arraylist) {
+                                    String exercise = row.getExerciseText();
+                                    if (is_patient_exists && exercise.length() > 0) {
+                                        Database database = Database.getInstance();
+                                        database.insertExercise(prescription_patient_object.getPid(), prescription_patient_object.getName(), exercise);
+                                        hasPrescriptionData = true;
+                                    }
+                                }
+                            }
+
+                            if (!advice_arraylist.isEmpty()) {
+                                for (AdviceRowPanel row : advice_arraylist) {
+                                    String advice = row.getAdviceText();
+                                    if (is_patient_exists && advice.length() > 0) {
+                                        Database database = Database.getInstance();
+                                        database.insertAdvice(prescription_patient_object.getPid(), prescription_patient_object.getName(), advice);
+                                        hasPrescriptionData = true;
+                                    }
+                                }
+                            }
+
+                            if (!investigation_arraylist.isEmpty()) {
+                                for (InvestigationRowPanel row : investigation_arraylist) {
+                                    String investigation = row.getInvestigationText();
+                                    if (is_patient_exists && investigation.length() > 0) {
+                                        Database database = Database.getInstance();
+                                        database.insertInvestigation(prescription_patient_object.getPid(), prescription_patient_object.getName(), investigation);
+                                        hasPrescriptionData = true;
+                                    }
+                                }
+                            }
+
                             if (hasPrescriptionData) {
                                 prescription_status_label.setText("Saved Susscessfuly..!");
                                 new_patient = false;
                                 return true;
                             } else {
-                                prescription_status_label.setText("No Medicine/Guideline added..!");
+                                prescription_status_label.setText("No prescription entries added..!");
                                 prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
                             }
                         } else {
@@ -3995,6 +4417,9 @@ public class Home extends javax.swing.JFrame {
 
         database.removeAllMedicinesOf(patientDetails.getPid());
         database.removeAllGuidelinesOf(patientDetails.getPid());
+        database.removeAllExercisesOf(patientDetails.getPid());
+        database.removeAllAdviceOf(patientDetails.getPid());
+        database.removeAllInvestigationsOf(patientDetails.getPid());
 
         patientDetails.setDate(prescription_date_input.getDate());
         patientDetails.setMobileNo(prescription_mobile_number_input.getText());
@@ -4037,6 +4462,36 @@ public class Home extends javax.swing.JFrame {
             }
         }
 
+        if (!exercise_arraylist.isEmpty()) {
+            for (ExerciseRowPanel row : exercise_arraylist) {
+                String exercise = row.getExerciseText();
+                if (!exercise.isEmpty()) {
+                    database.insertExercise(patientDetails.getPid(), patientDetails.getName(), exercise);
+                    hasPrescriptionData = true;
+                }
+            }
+        }
+
+        if (!advice_arraylist.isEmpty()) {
+            for (AdviceRowPanel row : advice_arraylist) {
+                String advice = row.getAdviceText();
+                if (!advice.isEmpty()) {
+                    database.insertAdvice(patientDetails.getPid(), patientDetails.getName(), advice);
+                    hasPrescriptionData = true;
+                }
+            }
+        }
+
+        if (!investigation_arraylist.isEmpty()) {
+            for (InvestigationRowPanel row : investigation_arraylist) {
+                String investigation = row.getInvestigationText();
+                if (!investigation.isEmpty()) {
+                    database.insertInvestigation(patientDetails.getPid(), patientDetails.getName(), investigation);
+                    hasPrescriptionData = true;
+                }
+            }
+        }
+
         if (hasPrescriptionData) {
             prescription_status_label.setText("Updated Susscessfuly..!");
             prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
@@ -4045,17 +4500,13 @@ public class Home extends javax.swing.JFrame {
 //                    prescriptionNextBtnAction();
 
         } else {
-            prescription_status_label.setText("No Medicine/Guideline added..!");
+            prescription_status_label.setText("No prescription entries added..!");
             prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
         }
 
     }
     private void add_medicine_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_medicine_btnActionPerformed
-        if (is_guideline_mode) {
-            addGuideline();
-        } else {
-            addMedicine();
-        }
+        addCurrentModeEntry();
     }//GEN-LAST:event_add_medicine_btnActionPerformed
 
     private void medicine_inputMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_medicine_inputMouseEntered
@@ -4068,11 +4519,7 @@ public class Home extends javax.swing.JFrame {
 
 
     private void prescription_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prescription_delete_btnActionPerformed
-        if (is_guideline_mode) {
-            removeSelectedGuideline();
-        } else {
-            removeSelectedMedicine();
-        }
+        removeSelectedCurrentModeEntry();
 
     }//GEN-LAST:event_prescription_delete_btnActionPerformed
 
@@ -4106,10 +4553,8 @@ public class Home extends javax.swing.JFrame {
 
         if (!delete_mode_checkbox.isSelected()) {
             if (evt.getClickCount() == 1) {
-                if (is_guideline_mode) {
-                    addGuideline();
-                } else {
-                    addMedicine();
+                addCurrentModeEntry();
+                if ("medicine".equals(current_mode)) {
                     resetMedicineInputList();
                 }
                 medicine_input.grabFocus();
@@ -4221,6 +4666,8 @@ public class Home extends javax.swing.JFrame {
         }
         HashMap<String, Object> a = new HashMap<String, Object>();
         a.put("pno", patientDetails.getPid());
+        a.put("ADVICE_SUBREPORT", REPORTS_THREAD.getCompiledAdviceSubreport());
+        a.put("INVESTIGATION_SUBREPORT", REPORTS_THREAD.getCompiledInvestigationSubreport());
 
         Connection con = REPORTS_THREAD.getConnection();
         if (con == null) {
@@ -4236,7 +4683,10 @@ public class Home extends javax.swing.JFrame {
         database.getGuidelinesList(patientDetails.getPid());
         JasperReport guidelineReport = REPORTS_THREAD.getCompiledPrescriptionGuidelinesReport();
         if (guidelineReport != null) {
-            JasperPrint guidelinePrint = JasperFillManager.fillReport(guidelineReport, a, con);
+            HashMap<String, Object> g = new HashMap<String, Object>();
+            g.put("pno", patientDetails.getPid());
+            g.put("EXERCISE_SUBREPORT", REPORTS_THREAD.getCompiledExerciseSubreport());
+            JasperPrint guidelinePrint = JasperFillManager.fillReport(guidelineReport, g, con);
             if (guidelinePrint != null && !guidelinePrint.getPages().isEmpty()) {
                 medicinePrint.getPages().addAll(guidelinePrint.getPages());
             }
@@ -4278,6 +4728,9 @@ public class Home extends javax.swing.JFrame {
                     if (medi != null) {
                         removeAllSelectedMedicine();
                         removeAllSelectedGuidelines();
+                        removeAllSelectedExercise();
+                        removeAllSelectedAdvice();
+                        removeAllSelectedInvestigation();
                         for (MedicineDetails m : medi) {
                             addMedicineForEditing(m);
                         }
@@ -4286,6 +4739,24 @@ public class Home extends javax.swing.JFrame {
                         if (guidelines != null) {
                             for (String guideline : guidelines) {
                                 addGuidelineForEditing(guideline);
+                            }
+                        }
+                        ArrayList<String> exercises = database.getExercisesList(patient_report_number);
+                        if (exercises != null) {
+                            for (String exercise : exercises) {
+                                addExerciseForEditing(exercise);
+                            }
+                        }
+                        ArrayList<String> adviceList = database.getAdviceList(patient_report_number);
+                        if (adviceList != null) {
+                            for (String advice : adviceList) {
+                                addAdviceForEditing(advice);
+                            }
+                        }
+                        ArrayList<String> investigations = database.getInvestigationsList(patient_report_number);
+                        if (investigations != null) {
+                            for (String inv : investigations) {
+                                addInvestigationForEditing(inv);
                             }
                         }
 
@@ -4599,11 +5070,7 @@ public class Home extends javax.swing.JFrame {
     private void medicine_inputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_inputKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (is_guideline_mode) {
-                addGuideline();
-            } else {
-                addMedicine();
-            }
+            addCurrentModeEntry();
         }
 
         if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -4625,10 +5092,8 @@ public class Home extends javax.swing.JFrame {
 
     private void medicine_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicine_listKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (is_guideline_mode) {
-                addGuideline();
-            } else {
-                addMedicine();
+            addCurrentModeEntry();
+            if ("medicine".equals(current_mode)) {
                 resetMedicineInputList();
             }
             medicine_input.grabFocus();
@@ -4930,10 +5395,44 @@ public class Home extends javax.swing.JFrame {
         }
         medicine_list.setModel(lm);
     }
+
+    public void resetExerciseInputList() {
+        ArrayList<String> exercises = database.getAllExercises();
+        DefaultListModel lm = new DefaultListModel();
+        if (exercises != null) {
+            for (String exercise : exercises) {
+                lm.addElement(exercise);
+            }
+        }
+        medicine_list.setModel(lm);
+    }
+
+    public void resetAdviceInputList() {
+        ArrayList<String> adviceList = database.getAllAdvice();
+        DefaultListModel lm = new DefaultListModel();
+        if (adviceList != null) {
+            for (String advice : adviceList) {
+                lm.addElement(advice);
+            }
+        }
+        medicine_list.setModel(lm);
+    }
+
+    public void resetInvestigationInputList() {
+        ArrayList<String> investigations = database.getAllInvestigations();
+        DefaultListModel lm = new DefaultListModel();
+        if (investigations != null) {
+            for (String investigation : investigations) {
+                lm.addElement(investigation);
+            }
+        }
+        medicine_list.setModel(lm);
+    }
+
     private void medicine_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicine_delete_btnActionPerformed
         String selected_text = medicine_list.getSelectedValue();
         Database db = Database.getInstance();
-        if (is_guideline_mode) {
+        if ("guideline".equals(current_mode)) {
             if (!delete_mode_checkbox.isSelected()) {
                 prescription_status_label.setText("Enable Delete Mode to remove guideline suggestion");
                 prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
@@ -4943,6 +5442,42 @@ public class Home extends javax.swing.JFrame {
                 prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
             } else {
                 prescription_status_label.setText("Guideline Not Removed");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            }
+        } else if ("exercise".equals(current_mode)) {
+            if (!delete_mode_checkbox.isSelected()) {
+                prescription_status_label.setText("Enable Delete Mode to remove exercise suggestion");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            } else if (db.removeExerciseMaster(selected_text)) {
+                resetExerciseInputList();
+                prescription_status_label.setText("Successfully Exercise Removed");
+                prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
+            } else {
+                prescription_status_label.setText("Exercise Not Removed");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            }
+        } else if ("advice".equals(current_mode)) {
+            if (!delete_mode_checkbox.isSelected()) {
+                prescription_status_label.setText("Enable Delete Mode to remove advice suggestion");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            } else if (db.removeAdviceMaster(selected_text)) {
+                resetAdviceInputList();
+                prescription_status_label.setText("Successfully Advice Removed");
+                prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
+            } else {
+                prescription_status_label.setText("Advice Not Removed");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            }
+        } else if ("investigation".equals(current_mode)) {
+            if (!delete_mode_checkbox.isSelected()) {
+                prescription_status_label.setText("Enable Delete Mode to remove investigation suggestion");
+                prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
+            } else if (db.removeInvestigationMaster(selected_text)) {
+                resetInvestigationInputList();
+                prescription_status_label.setText("Successfully Investigation Removed");
+                prescription_status_label.setForeground(SystemColor.SUCCESS_COLOR);
+            } else {
+                prescription_status_label.setText("Investigation Not Removed");
                 prescription_status_label.setForeground(SystemColor.WARNING_COLOR);
             }
         } else {
@@ -5044,11 +5579,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_remove_all_medicineMouseExited
 
     private void remove_all_medicineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remove_all_medicineActionPerformed
-        if (is_guideline_mode) {
-            removeAllSelectedGuidelines();
-        } else {
-            removeAllSelectedMedicine();
-        }
+        removeAllCurrentModeEntries();
     }//GEN-LAST:event_remove_all_medicineActionPerformed
 
     public void resetFeesSection() {
@@ -5130,6 +5661,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JCheckBox get_all_records_checkbox;
     private javax.swing.JCheckBox get_modicines_checkbox;
     private javax.swing.JLabel guidelines_label;
+    private javax.swing.JLabel exercise_label;
+    private javax.swing.JLabel advice_label;
+    private javax.swing.JLabel investigation_label;
     private javax.swing.JCheckBox headache_chk;
     private javax.swing.JLabel heade_label;
     private javax.swing.JPanel header;

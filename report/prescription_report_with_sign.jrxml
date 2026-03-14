@@ -4,7 +4,9 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1" uuid="46b61a2e-03fe-498f-8d04-7aa47a7f39b9"/>
-	<parameter name="pno" class="java.lang.String"/>
+	<parameter name="pno" class="java.lang.Integer"/>
+	<parameter name="ADVICE_SUBREPORT" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="INVESTIGATION_SUBREPORT" class="net.sf.jasperreports.engine.JasperReport"/>
 	<queryString>
 		<![CDATA[SELECT * FROM medi INNER join pdetail on medi.pno =$P{pno} and pdetail.pno=$P{pno};]]>
 	</queryString>
@@ -209,7 +211,7 @@
 		<band height="13" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="56" splitType="Stretch">
+		<band height="190" splitType="Stretch">
 			<image>
 				<reportElement x="315" y="10" width="40" height="30" uuid="8ca9536e-7606-47c0-9db0-d4228bd0d470"/>
 				<imageExpression><![CDATA["./report/sign.jpg"]]></imageExpression>
@@ -218,6 +220,42 @@
 				<reportElement x="300" y="40" width="70" height="16" uuid="b48bd1a1-7242-4a94-91ae-a6195a22ef78"/>
 				<text><![CDATA[Dr. Ajit Pawar]]></text>
 			</staticText>
+			<line>
+				<reportElement x="0" y="58" width="370" height="1" uuid="dd44ee55-ff66-4a77-b888-009900112233"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="62" width="120" height="16" uuid="ee55ff66-aa77-4b88-c999-00aa01122334"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Advice / सल्ला :]]></text>
+			</staticText>
+			<subreport isUsingCache="false">
+				<reportElement x="0" y="80" width="370" height="40" uuid="ff66aa77-bb88-4c99-d000-01bb02233445"/>
+				<subreportParameter name="pno">
+					<subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{ADVICE_SUBREPORT}]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement x="0" y="123" width="370" height="1" uuid="aa77bb88-cc99-4d00-e111-02cc03344556"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="127" width="160" height="16" uuid="bb88cc99-dd00-4e11-f222-03dd04455667"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Investigation / तपासण्या :]]></text>
+			</staticText>
+			<subreport isUsingCache="false">
+				<reportElement x="0" y="145" width="370" height="40" uuid="cc99dd00-ee11-4f22-a333-04ee05566778"/>
+				<subreportParameter name="pno">
+					<subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{INVESTIGATION_SUBREPORT}]]></subreportExpression>
+			</subreport>
 		</band>
 	</summary>
 </jasperReport>

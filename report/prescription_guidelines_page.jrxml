@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prescription_guidelines_page" pageWidth="410" pageHeight="595" columnWidth="370" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="319f1d70-b116-4f90-a9a5-ae6ee56f598d">
     <parameter name="pno" class="java.lang.Integer"/>
+        <parameter name="EXERCISE_SUBREPORT" class="net.sf.jasperreports.engine.JasperReport"/>
     <queryString>
         <![CDATA[SELECT pdetail.pno, pdetail.name, pdetail.date, guidelines.guideline FROM guidelines INNER JOIN pdetail ON guidelines.pno = pdetail.pno WHERE guidelines.pno = $P{pno};]]>
     </queryString>
@@ -33,7 +34,7 @@
                 <textElement>
                     <font size="15" isBold="true"/>
                 </textElement>
-                <text><![CDATA[Guidelines]]></text>
+                <text><![CDATA[पथ्य]]></text>
             </staticText>
             <staticText>
                 <reportElement x="278" y="10" width="37" height="20" uuid="6664f89c-b5d0-4bc6-bdec-763be8f2ff48"/>
@@ -59,4 +60,26 @@
             </textField>
         </band>
     </detail>
+    <summary>
+        <band height="60" splitType="Stretch">
+            <line>
+                <reportElement x="0" y="5" width="370" height="1" uuid="aa11bb22-cc33-4d44-e555-ff6677889900"/>
+            </line>
+            <staticText>
+                <reportElement x="0" y="10" width="120" height="20" uuid="bb22cc33-dd44-4e55-f666-007788990011"/>
+                <textElement>
+                    <font size="15" isBold="true"/>
+                </textElement>
+                <text><![CDATA[व्यायाम]]></text>
+            </staticText>
+            <subreport isUsingCache="false">
+                <reportElement x="0" y="35" width="370" height="20" uuid="cc33dd44-ee55-4f66-a777-008899001122"/>
+                <subreportParameter name="pno">
+                    <subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
+                </subreportParameter>
+                <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+                <subreportExpression><![CDATA[$P{EXERCISE_SUBREPORT}]]></subreportExpression>
+            </subreport>
+        </band>
+    </summary>
 </jasperReport>
