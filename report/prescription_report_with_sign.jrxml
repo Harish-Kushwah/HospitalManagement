@@ -221,14 +221,14 @@
 				<text><![CDATA[Dr. Ajit Pawar]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="50" width="120" height="16" uuid="ee55ff66-aa77-4b88-c999-00aa01122334"/>
+				<reportElement positionType="Float" x="0" y="50" width="120" height="16" uuid="ee55ff66-aa77-4b88-c999-00aa01122334"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Advice / सल्ला :]]></text>
 			</staticText>
 			<subreport isUsingCache="false">
-				<reportElement x="0" y="66" width="370" height="20" uuid="ff66aa77-bb88-4c99-d000-01bb02233445"/>
+				<reportElement positionType="Float" x="0" y="66" width="370" height="20" uuid="ff66aa77-bb88-4c99-d000-01bb02233445"/>
 				<subreportParameter name="pno">
 					<subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -236,14 +236,14 @@
 				<subreportExpression><![CDATA[$P{ADVICE_SUBREPORT}]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="0" y="88" width="160" height="16" uuid="bb88cc99-dd00-4e11-f222-03dd04455667"/>
+				<reportElement positionType="Float" x="0" y="88" width="160" height="16" uuid="bb88cc99-dd00-4e11-f222-03dd04455667"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Investigation / तपासण्या :]]></text>
 			</staticText>
 			<subreport isUsingCache="false">
-				<reportElement x="0" y="106" width="370" height="20" uuid="cc99dd00-ee11-4f22-a333-04ee05566778"/>
+				<reportElement positionType="Float" x="0" y="106" width="370" height="20" uuid="cc99dd00-ee11-4f22-a333-04ee05566778"/>
 				<subreportParameter name="pno">
 					<subreportParameterExpression><![CDATA[$P{pno}]]></subreportParameterExpression>
 				</subreportParameter>
