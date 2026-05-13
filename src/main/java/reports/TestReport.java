@@ -21,11 +21,9 @@ import javax.swing.event.DocumentListener;
 import database.Database;
 import pages.Home;
 import javaswingdev.system.SystemStrings;
-import reports.MultithredingReports;
 import model.PatientDetails;
 import model.ReportInfomartion;
 import myutil.SetImageIcon;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
@@ -756,9 +754,10 @@ public class TestReport extends javax.swing.JPanel {
                 printActionPerformed(evt);
 
             }
-        } catch (JRException ex) {
+        } catch (Exception ex) {
             report_status.setText("Report not printed");
             report_status.setForeground(WARNING_COLOR);
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_printActionPerformed
 
@@ -1022,9 +1021,14 @@ public class TestReport extends javax.swing.JPanel {
                 }
 
             }
-        } catch (NumberFormatException | JRException ex) {
+        } catch (NumberFormatException ex) {
             report_status.setText("No report is availalble");
             report_status.setForeground(Color.red);
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            report_status.setText("No report is availalble");
+            report_status.setForeground(Color.red);
+            ex.printStackTrace();
         }
         report_show_panel.revalidate();
         report_show_panel.repaint();

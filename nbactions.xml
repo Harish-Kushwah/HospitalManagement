@@ -5,8 +5,7 @@
             <displayName>build myproject</displayName>
             <goals>
                 <goal>clean</goal>
-                <goal>compile</goal>
-                <goal>assembly:single</goal>
+                <goal>package</goal>
             </goals>
         </action>
         <action>

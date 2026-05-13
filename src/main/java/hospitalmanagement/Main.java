@@ -123,6 +123,11 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void main(String args[]) {
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            System.err.println("Uncaught exception on thread: " + thread.getName());
+            throwable.printStackTrace();
+        });
+
         Main sc = new Main();
         
         java.awt.EventQueue.invokeLater(new Runnable() {

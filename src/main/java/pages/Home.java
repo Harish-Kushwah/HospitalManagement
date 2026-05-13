@@ -12,7 +12,7 @@ import medcine.MedicineRowPanel;
 import medcine.ExerciseRowPanel;
 import medcine.AdviceRowPanel;
 import medcine.InvestigationRowPanel;
-import java.awt.CardLayout;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -28,7 +28,6 @@ import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
@@ -102,7 +101,13 @@ public class Home extends javax.swing.JFrame {
     public Home() {
 
         initComponents();
-        REPORTS_THREAD.start();
+        try{
+            REPORTS_THREAD.start();
+        }
+        catch(Exception e)
+        {
+            System.out.println("REPORTS_THREAD : Error in initializing report "+e);
+        }
 
         //make the frame of full page
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -276,21 +276,21 @@ mvn clean compile exec:java -Dexec.mainClass="hospitalmanagement.Main"
 
 ## 4. Build the Application JAR
 
-The project uses the **Maven Assembly Plugin** to create a fat JAR (JAR with all dependencies bundled).
+The project uses the **Maven Shade Plugin** to create a fat JAR (JAR with all dependencies bundled).
 
 ### Step 1: Build the Fat JAR
 
 Using Maven CLI:
 
 ```bash
-mvn clean compile assembly:single
+mvn clean package
 ```
 
 Or using the NetBeans custom action:
 
 1. Open NetBeans → Right-click the project.
 2. Select **"Custom"** → **"build myproject"**.
-3. This runs the goals: `clean` → `compile` → `assembly:single`.
+3. This runs the goals: `clean` → `package`.
 
 ### Step 2: Locate the Output JAR
 

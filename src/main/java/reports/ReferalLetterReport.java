@@ -24,10 +24,8 @@ import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import reports.MultithredingReports;
 import model.PatientDetails;
 import myutil.SetImageIcon;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
@@ -595,9 +593,10 @@ public class ReferalLetterReport extends javax.swing.JPanel {
                 // throw new JRException("No report avilable");
             }
 
-        } catch (JRException ex) {
+        } catch (Exception ex) {
             report_status.setText("Report not printed");
             report_status.setForeground(WARNING_COLOR);
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_printActionPerformed
 
@@ -650,8 +649,13 @@ public class ReferalLetterReport extends javax.swing.JPanel {
                 }
 
             }
-        } catch (NumberFormatException | JRException ex) {
+        } catch (NumberFormatException ex) {
             System.out.println(ex.getMessage());
+            report_status.setText("No report is availalble ");
+            report_status.setForeground(Color.red);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
             report_status.setText("No report is availalble ");
             report_status.setForeground(Color.red);
         }

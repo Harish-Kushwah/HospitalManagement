@@ -18,6 +18,8 @@
     <path>jar</path>
     <requiresJdk>false</requiresJdk>
     <requires64Bit>false</requires64Bit>
+    <initialHeapSize>512</initialHeapSize>
+    <maxHeapSize>1024</maxHeapSize>
     <minVersion></minVersion>
     <maxVersion></maxVersion>
   </jre>

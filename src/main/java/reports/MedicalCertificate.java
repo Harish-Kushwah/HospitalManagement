@@ -23,7 +23,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import model.PatientDetails;
 import myutil.SetImageIcon;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
@@ -729,9 +728,10 @@ public class MedicalCertificate extends javax.swing.JPanel {
                 printActionPerformed(evt);
 
             }
-        } catch (JRException ex) {
+        } catch (Exception ex) {
 //            report_status.setText("Report not printed");
 //            report_status.setForeground(WARNING_COLOR);
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_printActionPerformed
 
@@ -976,12 +976,15 @@ public class MedicalCertificate extends javax.swing.JPanel {
                 }
 
             }
-        } catch (NumberFormatException | JRException ex) {
+        } catch (NumberFormatException ex) {
             System.out.println(ex.getMessage());
-//            report_status.setText("No report is availalble ");
-//            report_status.setForeground(Color.red);
         } catch (ValidInputException exp) {
 //            report_status.setText("Enter valid inputs");
+//            report_status.setForeground(Color.red);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+//            report_status.setText("No report is availalble ");
 //            report_status.setForeground(Color.red);
         }
         report_show_panel.revalidate();
